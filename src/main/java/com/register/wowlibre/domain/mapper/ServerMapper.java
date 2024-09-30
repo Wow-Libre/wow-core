@@ -7,6 +7,8 @@ import com.register.wowlibre.infrastructure.entities.*;
 import java.time.*;
 
 public class ServerMapper {
+
+
     public static ServerModel toModel(ServerEntity server) {
         if (server == null) {
             return null;
@@ -45,7 +47,7 @@ public class ServerMapper {
         return serverEntity;
     }
 
-    public static ServerModel create(ServerDto server, String avatar, boolean status) {
+    public static ServerModel create(ServerDto server, String apiKey, String apiSecret, String avatar, boolean status) {
 
         if (server == null) {
             return null;
@@ -57,8 +59,8 @@ public class ServerMapper {
                 .version(server.getVersion())
                 .avatar(avatar)
                 .ip(server.getIp())
-                .apiKey("")
-                .apiSecret("")
+                .apiKey(apiKey)
+                .apiSecret(apiSecret)
                 .password(server.getPassword())
                 .creationDate(LocalDateTime.now())
                 .status(status)
