@@ -1,0 +1,14 @@
+package com.register.wowlibre.domain.port.out;
+
+import com.register.wowlibre.domain.model.*;
+
+import java.util.*;
+
+public interface JsonLoaderPort {
+    List<CountryModel> getJsonCountry(String transactionId);
+
+    List<FaqsModel> getJsonFaqs(String transactionId);
+
+    List<PlanModel> getJsonPlans(String language, String transactionId);
+
+}
