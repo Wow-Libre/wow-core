@@ -4,6 +4,7 @@ import com.register.wowlibre.domain.port.in.jwt.JwtPort;
 import com.register.wowlibre.domain.security.UserDetailsServiceCustom;
 import com.register.wowlibre.infrastructure.filter.AuthenticationFilter;
 import com.register.wowlibre.infrastructure.filter.JwtAuthenticationFilter;
+import com.register.wowlibre.infrastructure.util.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -85,6 +86,7 @@ public class SecurityConfiguration {
                                         "/api/resources/faqs",
                                         "/api/resources/bank/plans",
                                         "/api/resources/benefit",
+                                        "/api/server",
                                         //SWAGGER
                                         "/v2/api-docs",
                                         "/swagger-resources",
@@ -96,7 +98,7 @@ public class SecurityConfiguration {
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**")
                                 .permitAll()
-                                .requestMatchers("/api/account/create").hasAuthority("ROLE_ADMIN")
+                                .requestMatchers("/api/server/create").hasAuthority(Roles.SERVER.getRoleName())
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

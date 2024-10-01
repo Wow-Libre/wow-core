@@ -1,14 +1,14 @@
 package com.register.wowlibre.infrastructure.controller;
 
 import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.domain.mapper.*;
+import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.server.*;
 import com.register.wowlibre.domain.shared.*;
-import com.register.wowlibre.infrastructure.util.*;
 import jakarta.validation.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 import static com.register.wowlibre.domain.constant.Constants.*;
 
@@ -16,24 +16,58 @@ import static com.register.wowlibre.domain.constant.Constants.*;
 @RequestMapping("/api/server")
 public class ServerController {
     private final ServerPort serverPort;
-    private final RandomString randomString;
 
-    public ServerController(ServerPort serverPort, @Qualifier("random-string") RandomString randomString) {
+    public ServerController(ServerPort serverPort) {
         this.serverPort = serverPort;
-        this.randomString = randomString;
     }
 
     @PostMapping(path = "/create")
     public ResponseEntity<GenericResponse<Void>> create(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestBody @Valid ServerDto serverDto) {
+            @RequestBody @Valid ServerCreateDto serverCreateDto) {
 
-        final String apiKey = randomString.nextString();
-        final String apiSecret = randomString.nextString();
-
-        serverPort.create(ServerMapper.create(serverDto, apiKey, apiSecret, "", false), transactionId);
+        serverPort.create(serverCreateDto, transactionId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new GenericResponseBuilder<Void>(transactionId).created().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<GenericResponse<List<ServerModel>>> all(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
+
+        final List<ServerModel> serverList = serverPort.findByStatusIsTrue(transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(serverList, transactionId).ok().build());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<GenericResponse<ServerModel>> search(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestParam String emulator,
+            @RequestParam String name) {
+
+        final ServerModel server = serverPort.findByNameAndVersionAndStatusIsTrue(name, emulator, transactionId);
+
+        if (server == null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new GenericResponseBuilder<ServerModel>(transactionId).notContent().build());
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(server, transactionId).ok().build());
+    }
+
+    @PutMapping
+    public ResponseEntity<GenericResponse<Void>> update(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestBody @Valid ServerUpdateDto request) {
+
+        serverPort.update(request.getName(), "", request.getIp(),
+                request.getPassword(), request.getOldPassword(), request.getWebSite(), transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
 }

@@ -13,6 +13,8 @@ INSERT INTO accounts.rol (name, status)
 VALUES ('CLIENT', TRUE);
 INSERT INTO accounts.rol (name, status)
 VALUES ('SUPPORT', TRUE);
+INSERT INTO accounts.rol (name, status)
+VALUES ('SERVER', TRUE);
 
 
 CREATE TABLE accounts.user
@@ -58,9 +60,9 @@ CREATE TABLE accounts.server
     version       varchar(20) NOT NULL,
     ip            text,
     api_key       varchar(50) NOT NULL,
-    api_login     varchar(50) NOT NULL,
+    api_secret     varchar(50) NOT NULL,
     password      varchar(50) NOT NULL,
-    avatar_url    text,
+    avatar    text,
     creation_date date,
     web_site      text,
     status        boolean,

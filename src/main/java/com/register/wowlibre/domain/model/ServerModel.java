@@ -6,16 +6,16 @@ import java.time.*;
 
 @Builder
 public class ServerModel {
-    public final Long id;
-    public final String name;
-    public final boolean status;
-    public final String emulator;
-    public final String avatar;
-    public final String apiSecret;
-    public final String version;
-    public final String ip;
-    public final LocalDateTime creationDate;
-    public final String webSite;
-    public final String password;
-    public final String apiKey;
+    public Long id;
+    public String name;
+    public boolean status;
+    public String emulator;
+    public String avatar;
+    public String apiSecret;
+    public String version;
+    public String ip;
+    public LocalDateTime creationDate;
+    public String webSite;
+    public String password;
+    public String apiKey;
 }

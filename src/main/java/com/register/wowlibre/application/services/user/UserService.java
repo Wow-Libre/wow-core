@@ -11,6 +11,7 @@ import com.register.wowlibre.domain.port.out.user.*;
 import com.register.wowlibre.domain.security.*;
 import com.register.wowlibre.domain.shared.*;
 import com.register.wowlibre.infrastructure.entities.*;
+import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
@@ -21,7 +22,6 @@ import java.util.*;
 public class UserService implements UserPort {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
-    private static final String ROL_CLIENT_DEFAULT = "CLIENT";
     private static final String PICTURE_DEFAULT_PROFILE_WEB = "https://i.ibb.co/M8Kfq9X/icon-Default.png";
     private final ObtainUserPort obtainUserPort;
     private final SaveUserPort saveUserPort;
@@ -50,7 +50,7 @@ public class UserService implements UserPort {
 
         final String passwordEncode = passwordEncoder.encode(userDto.getPassword());
 
-        final RolModel rolModel = rolPort.findByName(ROL_CLIENT_DEFAULT, transactionId);
+        final RolModel rolModel = rolPort.findByName(Roles.CLIENT.getRoleName(), transactionId);
 
         if (rolModel == null) {
             LOGGER.error("An error occurred while assigning a role.  TransactionId: [{}]",

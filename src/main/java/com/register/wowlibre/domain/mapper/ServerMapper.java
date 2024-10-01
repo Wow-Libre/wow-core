@@ -13,17 +13,18 @@ public class ServerMapper {
         if (server == null) {
             return null;
         }
-        return ServerModel.builder().avatar(server.getAvatar()).name(server.getName())
+        return ServerModel.builder()
+                .id(server.getId())
+                .avatar(server.getAvatar())
+                .name(server.getName())
                 .creationDate(server.getCreationDate())
                 .ip(server.getIp())
                 .emulator(server.getEmulator())
                 .status(server.isStatus())
                 .version(server.getVersion())
-                .apiSecret(server.getApiSecret())
                 .webSite(server.getWebSite())
                 .avatar(server.getAvatar())
                 .apiKey(server.getApiKey())
-                .password(server.getPassword())
                 .build();
     }
 
@@ -44,10 +45,13 @@ public class ServerMapper {
         serverEntity.setPassword(server.password);
         serverEntity.setWebSite(server.webSite);
         serverEntity.setCreationDate(server.creationDate);
+        serverEntity.setApiSecret(server.apiSecret);
+
         return serverEntity;
     }
 
-    public static ServerModel create(ServerDto server, String apiKey, String apiSecret, String avatar, boolean status) {
+    public static ServerModel create(ServerCreateDto server, String apiKey, String apiSecret, String avatar,
+                                     boolean status) {
 
         if (server == null) {
             return null;
