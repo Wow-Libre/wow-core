@@ -21,14 +21,19 @@ public class JpaServerAdapter implements ObtainServerPort, SaveServerPort {
     }
 
     @Override
-    public Optional<ServerEntity> findByNameAndVersionAndStatusIsTrue(String name, String version,
+    public Optional<ServerEntity> findByNameAndExpansionAndStatusIsTrue(String name, String version,
                                                                       String transactionId) {
-        return serverRepository.findByNameAndVersionAndStatusIsTrue(name, version);
+        return serverRepository.findByNameAndExpansionAndStatusIsTrue(name, version);
     }
 
     @Override
-    public Optional<ServerEntity> findByNameAndVersion(String name, String version, String transactionId) {
-        return serverRepository.findByNameAndVersionAndStatusIsTrue(name, version);
+    public Optional<ServerEntity> findByApiKeyAndStatusIsTrue(String apikey, String transactionId) {
+        return serverRepository.findByApiKeyAndStatusIsTrue(apikey);
+    }
+
+    @Override
+    public Optional<ServerEntity> findByNameAndExpansion(String name, String expansion, String transactionId) {
+        return serverRepository.findByNameAndExpansionAndStatusIsTrue(name, expansion);
     }
 
     @Override

@@ -37,6 +37,11 @@ public class JwtPortService implements JwtPort {
         return extractClaim(token, Claims::getSubject);
     }
 
+    @Override
+    public Long extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get(HEADER_USER_ID, Long.class));
+    }
+
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -45,9 +50,9 @@ public class JwtPortService implements JwtPort {
     @Override
     public String generateToken(CustomUserDetails userDetails) {
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put(CONSTANT_ROL_JWT_PROP, userDetails.getAuthorities());
-        extraClaims.put(HEADER_ACCOUNT_WEB_ID_JWT, userDetails.getAccountWebId());
-        extraClaims.put(HEADER_LANGUAGE_JWT, userDetails.getAccountWebId());
+        extraClaims.put(CONSTANT_ROL, userDetails.getAuthorities());
+        extraClaims.put(HEADER_USER_ID, userDetails.getUserId());
+        extraClaims.put(HEADER_LANGUAGE, userDetails.getLanguage());
 
         return generateToken(extraClaims, userDetails);
     }
@@ -110,7 +115,7 @@ public class JwtPortService implements JwtPort {
     }
 
     private List<Map<String, String>> getRolesFromClaims(Claims claims) {
-        return Optional.ofNullable(claims.get(CONSTANT_ROL_JWT_PROP))
+        return Optional.ofNullable(claims.get(CONSTANT_ROL))
                 .filter(List.class::isInstance)
                 .map(List.class::cast)
                 .orElseGet(Collections::emptyList);

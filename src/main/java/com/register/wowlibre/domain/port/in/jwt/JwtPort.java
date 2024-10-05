@@ -11,6 +11,7 @@ public interface JwtPort {
   String generateToken(CustomUserDetails userDetails);
 
   String extractUsername(String token);
+  Long extractUserId(String token);
 
   boolean isTokenValid(String token);
 

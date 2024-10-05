@@ -8,9 +8,9 @@ import java.util.*;
 public interface ServerRepository extends CrudRepository<ServerEntity, Long> {
     List<ServerEntity> findByStatusIsTrue();
 
-    Optional<ServerEntity> findByNameAndVersionAndStatusIsTrue(String name, String version);
-    Optional<ServerEntity> findByNameAndVersion(String name, String version);
+    Optional<ServerEntity> findByNameAndExpansionAndStatusIsTrue(String name, String expansion);
+    Optional<ServerEntity> findByNameAndExpansion(String name, String expansion);
 
-    Optional<ServerEntity> findByApiKey(String apiKey);
+    Optional<ServerEntity> findByApiKeyAndStatusIsTrue(String apiKey);
 
 }

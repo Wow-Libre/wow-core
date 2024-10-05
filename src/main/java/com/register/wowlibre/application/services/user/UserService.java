@@ -94,9 +94,8 @@ public class UserService implements UserPort {
     }
 
     @Override
-    public UserModel findByUserId(Long userId, String transactionId) {
-        return obtainUserPort.findByUserIdAndStatusIsTrue(userId, transactionId).map(UserEntity::mapToModelEntity)
-                .orElse(null);
+    public Optional<UserEntity> findByUserId(Long userId, String transactionId) {
+        return obtainUserPort.findByUserIdAndStatusIsTrue(userId, transactionId);
     }
 
     private UserEntity mapToModel(UserDto userDto, RolModel rolModel) {

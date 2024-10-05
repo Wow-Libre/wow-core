@@ -21,7 +21,8 @@ public class ServerMapper {
                 .ip(server.getIp())
                 .emulator(server.getEmulator())
                 .status(server.isStatus())
-                .version(server.getVersion())
+                .apiSecret(server.getApiSecret())
+                .expansion(server.getExpansion())
                 .webSite(server.getWebSite())
                 .avatar(server.getAvatar())
                 .apiKey(server.getApiKey())
@@ -37,7 +38,7 @@ public class ServerMapper {
         serverEntity.setId(server.id);
         serverEntity.setName(server.name);
         serverEntity.setEmulator(server.emulator);
-        serverEntity.setVersion(server.version);
+        serverEntity.setExpansion(server.expansion);
         serverEntity.setAvatar(server.avatar);
         serverEntity.setIp(server.ip);
         serverEntity.setApiKey(server.apiKey);
@@ -60,7 +61,7 @@ public class ServerMapper {
         return ServerModel.builder()
                 .name(server.getName())
                 .emulator(server.getEmulator())
-                .version(server.getVersion())
+                .expansion(server.getExpansion())
                 .avatar(avatar)
                 .ip(server.getIp())
                 .apiKey(apiKey)

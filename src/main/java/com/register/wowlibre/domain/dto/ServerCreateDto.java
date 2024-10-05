@@ -13,8 +13,8 @@ public class ServerCreateDto {
     @Length(min = 5, max = 30)
     private String emulator;
     @NotNull
-    @Length(min = 2, max = 10)
-    private String version;
+    @Length(min = 1, max = 4)
+    private String expansion;
     @NotNull
     private String webSite;
     @NotNull

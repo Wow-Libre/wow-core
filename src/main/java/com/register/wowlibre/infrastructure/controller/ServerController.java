@@ -59,6 +59,23 @@ public class ServerController {
                 .body(new GenericResponseBuilder<>(server, transactionId).ok().build());
     }
 
+
+    @GetMapping("/key")
+    public ResponseEntity<GenericResponse<ServerModel>> apiKey(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestParam(name = "api_key") String apiKey) {
+
+        final ServerModel server = serverPort.findByApiKeyAndStatusIsTrue(apiKey, transactionId);
+
+        if (server == null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new GenericResponseBuilder<ServerModel>(transactionId).notContent().build());
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(server, transactionId).ok().build());
+    }
+
     @PutMapping
     public ResponseEntity<GenericResponse<Void>> update(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,

@@ -8,7 +8,9 @@ import java.util.*;
 public interface ServerPort {
     List<ServerModel> findByStatusIsTrue(String transactionId);
 
-    ServerModel findByNameAndVersionAndStatusIsTrue(String name, String emulator, String transactionId);
+    ServerModel findByNameAndVersionAndStatusIsTrue(String name, String version, String transactionId);
+
+    ServerModel findByApiKeyAndStatusIsTrue(String apiKey, String transactionId);
 
     void create(ServerCreateDto serverCreateDto, String transactionId);
 

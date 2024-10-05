@@ -15,6 +15,8 @@ import java.util.*;
 
 @Repository
 public class ServerService implements ServerPort {
+    private final String AVATAR_SERVER_DEFAULT = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/WoW_icon" +
+            ".svg/2048px-WoW_icon.svg.png";
     private final ObtainServerPort obtainServerPort;
     private final SaveServerPort saveServerPort;
 
@@ -37,15 +39,21 @@ public class ServerService implements ServerPort {
     @Override
     public ServerModel findByNameAndVersionAndStatusIsTrue(String name, String version,
                                                            String transactionId) {
-        return obtainServerPort.findByNameAndVersionAndStatusIsTrue(name, version, transactionId)
+        return obtainServerPort.findByNameAndExpansionAndStatusIsTrue(name, version, transactionId)
                 .map(ServerMapper::toModel).orElse(null);
+    }
+
+    @Override
+    public ServerModel findByApiKeyAndStatusIsTrue(String apiKey, String transactionId) {
+        return obtainServerPort.findByApiKeyAndStatusIsTrue(apiKey, transactionId).map(ServerMapper::toModel)
+                .orElse(null);
     }
 
     @Override
     public void create(ServerCreateDto serverCreateDto, String transactionId) {
 
 
-        if (obtainServerPort.findByNameAndVersion(serverCreateDto.getName(), serverCreateDto.getVersion(),
+        if (obtainServerPort.findByNameAndExpansion(serverCreateDto.getName(), serverCreateDto.getExpansion(),
                 transactionId).isPresent()) {
             throw new InternalException("It is not possible to create or configure a server with because one already " +
                     "exists with the same name and with the same version characteristics.", transactionId);
@@ -54,7 +62,7 @@ public class ServerService implements ServerPort {
         final String apiKey = randomString.nextString();
         final String apiSecret = randomString.nextString();
 
-        ServerModel serverDto = ServerMapper.create(serverCreateDto, apiKey, apiSecret, "", false);
+        ServerModel serverDto = ServerMapper.create(serverCreateDto, apiKey, apiSecret, AVATAR_SERVER_DEFAULT, false);
 
         saveServerPort.save(ServerMapper.toEntity(serverDto), transactionId);
     }

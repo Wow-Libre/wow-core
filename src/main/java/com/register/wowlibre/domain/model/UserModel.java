@@ -19,4 +19,5 @@ public class UserModel {
     public boolean verified;
     public String language;
     public RolModel rolModel;
+    public String avatar;
 }

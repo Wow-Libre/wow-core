@@ -1,59 +1,66 @@
 package com.register.wowlibre.application.services.account_game;
 
 import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.mapper.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.account_game.*;
+import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.server.*;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.out.account_game.*;
-import org.springframework.scheduling.annotation.*;
+import com.register.wowlibre.infrastructure.entities.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
 @Service
 public class AccountGameService implements AccountGamePort {
-    private final ObtainAccountGamePort obtainAccountGamePort;
     private final SaveAccountGamePort saveAccountGamePort;
     private final ServerPort serverPort;
     private final UserPort userPort;
+    private final IntegratorPort integratorPort;
 
-    public AccountGameService(ObtainAccountGamePort obtainAccountGamePort, SaveAccountGamePort saveAccountGamePort,
-                              ServerPort serverPort, UserPort userPort) {
-        this.obtainAccountGamePort = obtainAccountGamePort;
+    public AccountGameService(SaveAccountGamePort saveAccountGamePort, ServerPort serverPort, UserPort userPort,
+                              IntegratorPort integratorPort) {
         this.saveAccountGamePort = saveAccountGamePort;
         this.serverPort = serverPort;
         this.userPort = userPort;
+        this.integratorPort = integratorPort;
     }
 
     @Override
-    public List<AccountGameModel> accounts(Long userId, String transactionId) {
-        return null;
-    }
+    public void create(Long userId, String serverName, String expansion, String username, String password,
+                       boolean rebuildUsername, String transactionId) {
 
-    @Override
-    public void create(Long userId, String serverName, String expansion, Long accountId, String transactionId) {
-        UserModel userModel = userPort.findByUserId(userId, transactionId);
+        Optional<UserEntity> userModel = userPort.findByUserId(userId, transactionId);
 
-        if (userModel == null) {
+        if (userModel.isEmpty()) {
             throw new InternalException("The client is not available or does not exist", transactionId);
         }
 
-        if (!userModel.verified) {
+        UserEntity user = userModel.get();
+
+        if (!user.getVerified()) {
             throw new InternalException("Currently your account is not validated, please validate", transactionId);
         }
 
-        List<ServerModel> serverAvailable = serverPort.findByStatusIsTrue(transactionId);
+        ServerModel serverAvailable = serverPort.findByNameAndVersionAndStatusIsTrue(serverName, expansion,
+                transactionId);
 
-        if (serverAvailable.isEmpty()) {
+        if (serverAvailable == null) {
             throw new InternalException("It is not possible to register on any server, they are currently not " +
                     "available", transactionId);
         }
 
-    }
+        Long accountId = integratorPort.create(username, password, rebuildUsername, serverAvailable,
+                user.mapToModelEntity(),
+                transactionId);
 
-    @Async
-    public void registerServers(List<ServerModel> servers) {
-
+        AccountGameEntity accountGameEntity = new AccountGameEntity();
+        accountGameEntity.setAccountId(accountId);
+        accountGameEntity.setServerId(ServerMapper.toEntity(serverAvailable));
+        accountGameEntity.setUserId(user);
+        accountGameEntity.setStatus(true);
+        saveAccountGamePort.save(accountGameEntity, transactionId);
     }
 }

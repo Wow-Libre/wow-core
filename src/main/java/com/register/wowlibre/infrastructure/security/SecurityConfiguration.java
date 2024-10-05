@@ -98,7 +98,7 @@ public class SecurityConfiguration {
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**")
                                 .permitAll()
-                                .requestMatchers("/api/server/create").hasAuthority(Roles.SERVER.getRoleName())
+                                .requestMatchers("/api/server/create", "/api/server/key").hasAuthority(Roles.SERVER.getRoleName())
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

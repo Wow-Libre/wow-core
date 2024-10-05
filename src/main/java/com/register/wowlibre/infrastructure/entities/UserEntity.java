@@ -54,7 +54,8 @@ public class UserEntity {
 
 
     public UserModel mapToModelEntity() {
-        return UserModel.builder().id(id).country(country).firstName(firstName).rolModel(RolMapper.toModel(rolId))
+        return UserModel.builder().id(id)
+                .avatar(avatarUrl).country(country).firstName(firstName).rolModel(RolMapper.toModel(rolId))
                 .dateOfBirth(dateOfBirth).email(email).status(status).verified(verified)
                 .lastName(lastName).cellPhone(cellPhone).password(password).language(language).build();
     }

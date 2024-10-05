@@ -15,7 +15,7 @@ public class ServerEntity {
     private String name;
     private String emulator;
     private String avatar;
-    private String version;
+    private String expansion;
     private String ip;
     private String password;
     @Column(name = "api_key")

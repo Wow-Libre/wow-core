@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class CustomUserDetails implements UserDetails {
 
     @Getter
-    private final Long accountWebId;
+    private final Long userId;
     private final Collection<? extends GrantedAuthority> authorities;
     private final String password;
     private final String username;
@@ -36,14 +36,14 @@ public class CustomUserDetails implements UserDetails {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
-        this.accountWebId = accountWebId;
+        this.userId = accountWebId;
         this.avatarUrl = avatarUrl;
         this.language = language;
     }
 
     public CustomUserDetails(List<RolModel> authorities, String password, String username,
                              boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired,
-                             boolean enabled, Long accountWebId, String avatarUrl, String language) {
+                             boolean enabled, Long userId, String avatarUrl, String language) {
 
         this.authorities = authorities.stream()
                 .map(rolModel -> new SimpleGrantedAuthority(rolModel.name))
@@ -54,7 +54,7 @@ public class CustomUserDetails implements UserDetails {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
-        this.accountWebId = accountWebId;
+        this.userId = userId;
         this.avatarUrl = avatarUrl;
         this.language = language;
     }

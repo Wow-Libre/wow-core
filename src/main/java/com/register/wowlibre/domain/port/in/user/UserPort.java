@@ -3,6 +3,9 @@ package com.register.wowlibre.domain.port.in.user;
 import com.register.wowlibre.domain.dto.UserDto;
 import com.register.wowlibre.domain.model.UserModel;
 import com.register.wowlibre.domain.security.JwtDto;
+import com.register.wowlibre.infrastructure.entities.*;
+
+import java.util.*;
 
 public interface UserPort {
     JwtDto create(UserDto accountWebDto, String transactionId);
@@ -11,6 +14,6 @@ public interface UserPort {
 
     UserModel findByPhone(String cellPhone, String transactionId);
 
-    UserModel findByUserId(Long userId, String transactionId);
+    Optional<UserEntity> findByUserId(Long userId, String transactionId);
 
 }

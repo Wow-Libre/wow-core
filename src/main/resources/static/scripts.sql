@@ -57,7 +57,7 @@ CREATE TABLE accounts.server
     id            bigint auto_increment NOT NULL,
     name          varchar(40) NOT NULL,
     emulator      varchar(40) NOT NULL,
-    version       varchar(20) NOT NULL,
+    expansion     varchar(5) NOT NULL,
     ip            text,
     api_key       varchar(50) NOT NULL,
     api_secret     varchar(50) NOT NULL,

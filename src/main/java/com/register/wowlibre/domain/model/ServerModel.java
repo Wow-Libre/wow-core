@@ -12,7 +12,7 @@ public class ServerModel {
     public String emulator;
     public String avatar;
     public String apiSecret;
-    public String version;
+    public String expansion;
     public String ip;
     public LocalDateTime creationDate;
     public String webSite;
