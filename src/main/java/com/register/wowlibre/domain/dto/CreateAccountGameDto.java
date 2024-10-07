@@ -14,8 +14,6 @@ public class CreateAccountGameDto {
     @NotNull
     private String serverName;
     @NotNull
-    private boolean rebuildUsername;
-    @NotNull
     @Length(min = 1, max = 10)
     private String expansion;
 }

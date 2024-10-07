@@ -1,10 +1,7 @@
 package com.register.wowlibre.domain.mapper;
 
-import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.infrastructure.entities.*;
-
-import java.time.*;
 
 public class ServerMapper {
 
@@ -25,7 +22,11 @@ public class ServerMapper {
                 .expansion(server.getExpansion())
                 .webSite(server.getWebSite())
                 .avatar(server.getAvatar())
+                .password(server.getPassword())
                 .apiKey(server.getApiKey())
+                .jwt(server.getJwt())
+                .expirationDate(server.getExpirationDate())
+                .refreshToken(server.getRefreshToken())
                 .build();
     }
 
@@ -47,30 +48,10 @@ public class ServerMapper {
         serverEntity.setWebSite(server.webSite);
         serverEntity.setCreationDate(server.creationDate);
         serverEntity.setApiSecret(server.apiSecret);
-
+        serverEntity.setRefreshToken(server.refreshToken);
+        serverEntity.setJwt(server.jwt);
+        serverEntity.setExpirationDate(server.expirationDate);
         return serverEntity;
-    }
-
-    public static ServerModel create(ServerCreateDto server, String apiKey, String apiSecret, String avatar,
-                                     boolean status) {
-
-        if (server == null) {
-            return null;
-        }
-
-        return ServerModel.builder()
-                .name(server.getName())
-                .emulator(server.getEmulator())
-                .expansion(server.getExpansion())
-                .avatar(avatar)
-                .ip(server.getIp())
-                .apiKey(apiKey)
-                .apiSecret(apiSecret)
-                .password(server.getPassword())
-                .creationDate(LocalDateTime.now())
-                .status(status)
-                .webSite(server.getWebSite())
-                .build();
     }
 
 

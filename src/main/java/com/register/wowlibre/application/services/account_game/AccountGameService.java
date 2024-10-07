@@ -1,5 +1,8 @@
 package com.register.wowlibre.application.services.account_game;
 
+import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.client.*;
+import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.mapper.*;
 import com.register.wowlibre.domain.model.*;
@@ -9,6 +12,7 @@ import com.register.wowlibre.domain.port.in.server.*;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.out.account_game.*;
 import com.register.wowlibre.infrastructure.entities.*;
+import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -16,21 +20,27 @@ import java.util.*;
 @Service
 public class AccountGameService implements AccountGamePort {
     private final SaveAccountGamePort saveAccountGamePort;
+    private final ObtainAccountGamePort obtainAccountGamePort;
+
     private final ServerPort serverPort;
     private final UserPort userPort;
     private final IntegratorPort integratorPort;
+    private final PasswordEncoder passwordEncoder;
 
-    public AccountGameService(SaveAccountGamePort saveAccountGamePort, ServerPort serverPort, UserPort userPort,
-                              IntegratorPort integratorPort) {
+    public AccountGameService(SaveAccountGamePort saveAccountGamePort, ObtainAccountGamePort obtainAccountGamePort,
+                              ServerPort serverPort, UserPort userPort,
+                              IntegratorPort integratorPort, PasswordEncoder passwordEncoder) {
         this.saveAccountGamePort = saveAccountGamePort;
+        this.obtainAccountGamePort = obtainAccountGamePort;
         this.serverPort = serverPort;
         this.userPort = userPort;
         this.integratorPort = integratorPort;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void create(Long userId, String serverName, String expansion, String username, String password,
-                       boolean rebuildUsername, String transactionId) {
+                       String transactionId) {
 
         Optional<UserEntity> userModel = userPort.findByUserId(userId, transactionId);
 
@@ -52,7 +62,7 @@ public class AccountGameService implements AccountGamePort {
                     "available", transactionId);
         }
 
-        Long accountId = integratorPort.create(username, password, rebuildUsername, serverAvailable,
+        Long accountId = integratorPort.create(username, password, serverAvailable,
                 user.mapToModelEntity(),
                 transactionId);
 
@@ -60,7 +70,219 @@ public class AccountGameService implements AccountGamePort {
         accountGameEntity.setAccountId(accountId);
         accountGameEntity.setServerId(ServerMapper.toEntity(serverAvailable));
         accountGameEntity.setUserId(user);
+        accountGameEntity.setUsername(username);
         accountGameEntity.setStatus(true);
         saveAccountGamePort.save(accountGameEntity, transactionId);
+    }
+
+    @Override
+    public AccountsDto accounts(Long userId, int page, int size, String transactionId) {
+
+
+        if (userPort.findByUserId(userId, transactionId).isEmpty()) {
+            throw new InternalException("The client is not available or does not exist", transactionId);
+        }
+
+        Long sizeAccounts = obtainAccountGamePort.accounts(userId);
+
+        List<AccountGameModel> accountsGame = obtainAccountGamePort.findByUserIdAndStatusIsTrue(userId,
+                page, size, transactionId).stream().map(this::mapToModel).toList();
+
+        return new AccountsDto(accountsGame, sizeAccounts);
+    }
+
+    @Override
+    public VerifierAccountDto verify(Long userId, Long accountId, Long serverId, String transactionId) {
+
+        Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
+
+        if (server.isEmpty()) {
+            throw new InternalException("The server where your character is currently located is not available",
+                    transactionId);
+        }
+
+        Optional<AccountGameEntity> accountGame =
+                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
+
+        if (accountGame.isEmpty()) {
+            throw new InternalException("Currently your account is not found or is not available, please contact " +
+                    "support",
+                    transactionId);
+        }
+
+        return new VerifierAccountDto(server.get(), accountGame.get());
+    }
+
+    @Override
+    public AccountDetailDto account(Long userId, Long accountId, Long serverId, String transactionId) {
+        Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
+
+        if (server.isEmpty() || !server.get().isStatus()) {
+            throw new InternalException("The server where your character is currently located is not available",
+                    transactionId);
+        }
+
+        final ServerEntity serverRequest = server.get();
+
+        Optional<AccountGameEntity> accountGame =
+                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
+
+        if (accountGame.isEmpty()) {
+            throw new InternalException("Currently your account is not found or is not available, please contact " +
+                    "support",
+                    transactionId);
+        }
+
+        AccountDetailResponse account = integratorPort.account(serverRequest.getIp(),
+                serverRequest.getJwt(), accountId, transactionId);
+
+
+        return AccountDetailDto.builder()
+                .username(account.username())
+                .expansion(account.expansion())
+                .id(account.id())
+                .email(account.email())
+                .os(account.os())
+                .lastIp(account.lastIp())
+                .lastLogin(account.lastLogin())
+                .joinDate(account.joinDate())
+                .muteBy(account.muteBy())
+                .muteReason(account.muteReason())
+                .mute(account.mute())
+                .online(account.online())
+                .server(serverRequest.getName())
+                .failedLogins(account.failedLogins())
+                .accountBanned(account.accountBanned()).build();
+    }
+
+    @Override
+    public MailsDto mails(Long userId, Long accountId, Long characterId, Long serverId, String transactionId) {
+
+        Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
+
+        if (server.isEmpty()) {
+            throw new InternalException("The server where your character is currently located is not available",
+                    transactionId);
+        }
+
+        if (!server.get().isStatus()) {
+            // TODO : FUTURA INTEGRACION PARA VALIDAR SI TIENE UNA SUBSCRIPCION Y MOSTRAR LO QUE TIENE GUARDADO.
+            return new MailsDto(new ArrayList<>(), 0);
+        }
+
+        final ServerEntity serverRequest = server.get();
+
+        Optional<AccountGameEntity> accountGame =
+                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
+
+        if (accountGame.isEmpty()) {
+            throw new InternalException("Currently your account is not found or is not available, please contact " +
+                    "support",
+                    transactionId);
+        }
+
+        return integratorPort.mails(serverRequest.getIp(), serverRequest.getJwt(), characterId, transactionId);
+    }
+
+    @Override
+    public CharacterSocialDto friends(Long userId, Long accountId, Long characterId, Long serverId,
+                                      String transactionId) {
+
+        Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
+
+        if (server.isEmpty()) {
+            throw new InternalException("The server where your character is currently located is not available",
+                    transactionId);
+        }
+
+        if (!server.get().isStatus()) {
+            // TODO : FUTURA INTEGRACION PARA VALIDAR SI TIENE UNA SUBSCRIPCION Y MOSTRAR LO QUE TIENE GUARDADO.
+            return new CharacterSocialDto(new ArrayList<>(), 0);
+        }
+
+        final ServerEntity serverRequest = server.get();
+
+        Optional<AccountGameEntity> accountGame =
+                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
+
+        if (accountGame.isEmpty()) {
+            throw new InternalException("Currently your account is not found or is not available, please contact " +
+                    "support", transactionId);
+        }
+
+        return integratorPort.friends(serverRequest.getIp(), serverRequest.getJwt(), characterId, transactionId);
+    }
+
+    @Override
+    public void deleteFriend(Long userId, Long accountId, Long characterId, Long friendId, Long serverId,
+                             String transactionId) {
+
+        Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
+
+        if (server.isEmpty() || !server.get().isStatus()) {
+            throw new InternalException("The server where your character is currently located is not available",
+                    transactionId);
+        }
+
+        final ServerEntity serverRequest = server.get();
+
+        Optional<AccountGameEntity> accountGame =
+                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
+
+        if (accountGame.isEmpty()) {
+            throw new InternalException("Currently your account is not found or is not available, please contact " +
+                    "support", transactionId);
+        }
+
+        integratorPort.deleteFriend(serverRequest.getIp(), serverRequest.getJwt(), characterId, friendId, accountId,
+                transactionId);
+    }
+
+    @Override
+    public void changePassword(Long userId, Long accountId, Long serverId, String password, String newPassword,
+                               String transactionId) {
+
+        Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
+
+        if (server.isEmpty() || !server.get().isStatus()) {
+            throw new InternalException("The server where your character is currently located is not available",
+                    transactionId);
+        }
+
+        final ServerEntity serverRequest = server.get();
+
+        Optional<AccountGameEntity> accountGame =
+                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
+
+        if (accountGame.isEmpty()) {
+            throw new InternalException("Currently your account is not found or is not available, please contact " +
+                    "support", transactionId);
+        }
+
+        AccountGameEntity accountGameModel = accountGame.get();
+
+        Optional<UserEntity> userEntity = userPort.findByUserId(accountGameModel.getUserId().getId(), transactionId);
+
+        if (userEntity.isEmpty()) {
+            throw new InternalException("Currently your account is not found or is not available, please contact " +
+                    "support", transactionId);
+        }
+
+        if (!passwordEncoder.matches(password, userEntity.get().getPassword())) {
+            throw new InternalException("The password is invalid", transactionId);
+        }
+
+
+    }
+
+    private AccountGameModel mapToModel(AccountGameEntity accountGameEntity) {
+        boolean status = accountGameEntity.isStatus() && accountGameEntity.getServerId().isStatus();
+        Expansion expansion = Expansion.getById(Integer.parseInt(accountGameEntity.getServerId().getExpansion()));
+        return new AccountGameModel(accountGameEntity.getId(), accountGameEntity.getUsername(),
+                accountGameEntity.getAccountId(), accountGameEntity.getUserId().getEmail(),
+                accountGameEntity.getServerId().getName(), accountGameEntity.getServerId().getId(),
+                expansion.getDisplayName()
+                , accountGameEntity.getServerId().getAvatar(),
+                accountGameEntity.getServerId().getWebSite(), status);
     }
 }

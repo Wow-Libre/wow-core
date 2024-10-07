@@ -10,7 +10,13 @@ public class Constants {
     /* JWT HEADERS */
     public static final String HEADER_EMAIL = "x-email";
     public static final String HEADER_USER_ID= "x-user-id";
+
     public static final String HEADER_LANGUAGE = "x-language";
+
+
+    public static final String PARAM_ACCOUNT_ID = "account_id";
+    public static final String PARAM_SERVER_ID = "server_id";
+
 
     public static class Errors {
         public static final String CONSTANT_GENERIC_ERROR_MESSAGE = "An unexpected error has occurred and it was not " +

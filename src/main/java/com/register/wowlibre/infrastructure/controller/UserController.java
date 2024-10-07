@@ -22,7 +22,6 @@ public class UserController {
         this.userPort = userPort;
     }
 
-
     @PostMapping(path = "/create")
     public ResponseEntity<GenericResponse<JwtDto>> create(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
@@ -48,11 +47,32 @@ public class UserController {
         if (email != null) {
             exists = Optional.ofNullable(userPort.findByEmail(email, transactionId)).isPresent();
         } else {
-            exists = Optional.ofNullable(userPort.findByPhone(cellPhone,transactionId)).isPresent();
+            exists = Optional.ofNullable(userPort.findByPhone(cellPhone, transactionId)).isPresent();
         }
 
         SearchModel searchResult = new SearchModel(exists);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<SearchModel>(transactionId).ok(searchResult).build());
+    }
+
+
+    @GetMapping
+    public ResponseEntity<GenericResponse<UserResponse>> detail(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId) {
+
+
+        UserResponse userResponse = userPort.findByUserId(userId, transactionId).map(model ->
+                new UserResponse(model.getId(), model.getCountry(), model.getDateOfBirth(), model.getFirstName(),
+                        model.getLastName(), model.getCellPhone(), model.getEmail(), model.getRolId().getName(),
+                        model.getStatus(), model.getVerified())).orElse(null);
+
+        if (userResponse == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new GenericResponseBuilder<UserResponse>(transactionId).build());
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<UserResponse>(transactionId).ok(userResponse).build());
     }
 }

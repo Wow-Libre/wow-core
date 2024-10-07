@@ -11,6 +11,7 @@ public interface ObtainServerPort {
 
     Optional<ServerEntity> findByApiKeyAndStatusIsTrue(String apikey, String transactionId);
 
+    Optional<ServerEntity> findById(Long id, String transactionId);
 
     Optional<ServerEntity> findByNameAndExpansion(String name, String expansion, String transactionId);
 }

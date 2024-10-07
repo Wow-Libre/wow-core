@@ -24,6 +24,11 @@ public class ServerEntity {
     private String apiSecret;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+    private String jwt;
+    @Column(name = "refresh_token")
+    private String refreshToken;
+    @Column(name = "expiration_date")
+    private LocalDateTime expirationDate;
     @Column(name = "web_site")
     private String webSite;
     private boolean status;

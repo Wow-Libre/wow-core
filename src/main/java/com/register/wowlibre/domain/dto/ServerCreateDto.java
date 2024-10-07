@@ -16,6 +16,7 @@ public class ServerCreateDto {
     @Length(min = 1, max = 4)
     private String expansion;
     @NotNull
+    @Length(min = 1, max = 30)
     private String webSite;
     @NotNull
     @Length(min = 2, max = 50)

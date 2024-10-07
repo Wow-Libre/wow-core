@@ -41,10 +41,11 @@ CREATE TABLE accounts.user
 CREATE TABLE accounts.account_game
 (
     id         bigint auto_increment NOT NULL,
-    server_id  bigint NOT NULL,
-    account_id bigint NOT NULL,
+    server_id  bigint      NOT NULL,
+    account_id bigint      NOT NULL,
+    username   varchar(40) NOT NULL,
     status     boolean,
-    user_id    bigint NOT NULL,
+    user_id    bigint      NOT NULL,
 
     CONSTRAINT fk_account_game_user_id FOREIGN KEY (user_id) REFERENCES accounts.user (id),
     CONSTRAINT uq_server_and_account_and_user UNIQUE (server_id, account_id),
@@ -54,18 +55,21 @@ CREATE TABLE accounts.account_game
 
 CREATE TABLE accounts.server
 (
-    id            bigint auto_increment NOT NULL,
-    name          varchar(40) NOT NULL,
-    emulator      varchar(40) NOT NULL,
-    expansion     varchar(5) NOT NULL,
-    ip            text,
-    api_key       varchar(50) NOT NULL,
-    api_secret     varchar(50) NOT NULL,
-    password      varchar(50) NOT NULL,
-    avatar    text,
-    creation_date date,
-    web_site      text,
-    status        boolean,
+    id              bigint auto_increment NOT NULL,
+    name            varchar(40) NOT NULL,
+    emulator        varchar(40) NOT NULL,
+    expansion       varchar(5)  NOT NULL,
+    ip              text,
+    api_key         varchar(50) NOT NULL,
+    api_secret      varchar(50) NOT NULL,
+    password        varchar(50) NOT NULL,
+    jwt             text,
+    expiration_date date,
+    refresh_token   text,
+    avatar          text,
+    creation_date   date,
+    web_site        text,
+    status          boolean,
 
     CONSTRAINT uq_email UNIQUE (name, version),
     PRIMARY KEY (id)

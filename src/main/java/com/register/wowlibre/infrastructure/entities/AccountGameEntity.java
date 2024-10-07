@@ -12,6 +12,7 @@ public class AccountGameEntity {
     private Long id;
     @Column(name = "account_id")
     private Long accountId;
+    private String username;
     private boolean status;
     @JoinColumn(
             name = "user_id",
