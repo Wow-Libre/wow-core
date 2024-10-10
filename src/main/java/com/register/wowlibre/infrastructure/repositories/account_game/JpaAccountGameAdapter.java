@@ -2,6 +2,7 @@ package com.register.wowlibre.infrastructure.repositories.account_game;
 
 import com.register.wowlibre.domain.port.out.account_game.*;
 import com.register.wowlibre.infrastructure.entities.*;
+import org.springframework.cache.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 

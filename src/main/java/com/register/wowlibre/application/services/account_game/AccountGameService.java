@@ -12,7 +12,6 @@ import com.register.wowlibre.domain.port.in.server.*;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.out.account_game.*;
 import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -25,17 +24,15 @@ public class AccountGameService implements AccountGamePort {
     private final ServerPort serverPort;
     private final UserPort userPort;
     private final IntegratorPort integratorPort;
-    private final PasswordEncoder passwordEncoder;
 
     public AccountGameService(SaveAccountGamePort saveAccountGamePort, ObtainAccountGamePort obtainAccountGamePort,
                               ServerPort serverPort, UserPort userPort,
-                              IntegratorPort integratorPort, PasswordEncoder passwordEncoder) {
+                              IntegratorPort integratorPort) {
         this.saveAccountGamePort = saveAccountGamePort;
         this.obtainAccountGamePort = obtainAccountGamePort;
         this.serverPort = serverPort;
         this.userPort = userPort;
         this.integratorPort = integratorPort;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -92,7 +89,7 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
-    public VerifierAccountDto verify(Long userId, Long accountId, Long serverId, String transactionId) {
+    public AccountVerificationDto verify(Long userId, Long accountId, Long serverId, String transactionId) {
 
         Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
 
@@ -110,19 +107,12 @@ public class AccountGameService implements AccountGamePort {
                     transactionId);
         }
 
-        return new VerifierAccountDto(server.get(), accountGame.get());
+        return new AccountVerificationDto(server.get(), accountGame.get());
     }
 
     @Override
     public AccountDetailDto account(Long userId, Long accountId, Long serverId, String transactionId) {
-        Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
-
-        if (server.isEmpty() || !server.get().isStatus()) {
-            throw new InternalException("The server where your character is currently located is not available",
-                    transactionId);
-        }
-
-        final ServerEntity serverRequest = server.get();
+        final ServerEntity serverRequest = getServer(serverId, transactionId);
 
         Optional<AccountGameEntity> accountGame =
                 obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
@@ -155,68 +145,7 @@ public class AccountGameService implements AccountGamePort {
                 .accountBanned(account.accountBanned()).build();
     }
 
-    @Override
-    public MailsDto mails(Long userId, Long accountId, Long characterId, Long serverId, String transactionId) {
-
-        Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
-
-        if (server.isEmpty()) {
-            throw new InternalException("The server where your character is currently located is not available",
-                    transactionId);
-        }
-
-        if (!server.get().isStatus()) {
-            // TODO : FUTURA INTEGRACION PARA VALIDAR SI TIENE UNA SUBSCRIPCION Y MOSTRAR LO QUE TIENE GUARDADO.
-            return new MailsDto(new ArrayList<>(), 0);
-        }
-
-        final ServerEntity serverRequest = server.get();
-
-        Optional<AccountGameEntity> accountGame =
-                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
-
-        if (accountGame.isEmpty()) {
-            throw new InternalException("Currently your account is not found or is not available, please contact " +
-                    "support",
-                    transactionId);
-        }
-
-        return integratorPort.mails(serverRequest.getIp(), serverRequest.getJwt(), characterId, transactionId);
-    }
-
-    @Override
-    public CharacterSocialDto friends(Long userId, Long accountId, Long characterId, Long serverId,
-                                      String transactionId) {
-
-        Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
-
-        if (server.isEmpty()) {
-            throw new InternalException("The server where your character is currently located is not available",
-                    transactionId);
-        }
-
-        if (!server.get().isStatus()) {
-            // TODO : FUTURA INTEGRACION PARA VALIDAR SI TIENE UNA SUBSCRIPCION Y MOSTRAR LO QUE TIENE GUARDADO.
-            return new CharacterSocialDto(new ArrayList<>(), 0);
-        }
-
-        final ServerEntity serverRequest = server.get();
-
-        Optional<AccountGameEntity> accountGame =
-                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
-
-        if (accountGame.isEmpty()) {
-            throw new InternalException("Currently your account is not found or is not available, please contact " +
-                    "support", transactionId);
-        }
-
-        return integratorPort.friends(serverRequest.getIp(), serverRequest.getJwt(), characterId, transactionId);
-    }
-
-    @Override
-    public void deleteFriend(Long userId, Long accountId, Long characterId, Long friendId, Long serverId,
-                             String transactionId) {
-
+    private ServerEntity getServer(Long serverId, String transactionId) {
         Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
 
         if (server.isEmpty() || !server.get().isStatus()) {
@@ -224,55 +153,7 @@ public class AccountGameService implements AccountGamePort {
                     transactionId);
         }
 
-        final ServerEntity serverRequest = server.get();
-
-        Optional<AccountGameEntity> accountGame =
-                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
-
-        if (accountGame.isEmpty()) {
-            throw new InternalException("Currently your account is not found or is not available, please contact " +
-                    "support", transactionId);
-        }
-
-        integratorPort.deleteFriend(serverRequest.getIp(), serverRequest.getJwt(), characterId, friendId, accountId,
-                transactionId);
-    }
-
-    @Override
-    public void changePassword(Long userId, Long accountId, Long serverId, String password, String newPassword,
-                               String transactionId) {
-
-        Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
-
-        if (server.isEmpty() || !server.get().isStatus()) {
-            throw new InternalException("The server where your character is currently located is not available",
-                    transactionId);
-        }
-
-        final ServerEntity serverRequest = server.get();
-
-        Optional<AccountGameEntity> accountGame =
-                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
-
-        if (accountGame.isEmpty()) {
-            throw new InternalException("Currently your account is not found or is not available, please contact " +
-                    "support", transactionId);
-        }
-
-        AccountGameEntity accountGameModel = accountGame.get();
-
-        Optional<UserEntity> userEntity = userPort.findByUserId(accountGameModel.getUserId().getId(), transactionId);
-
-        if (userEntity.isEmpty()) {
-            throw new InternalException("Currently your account is not found or is not available, please contact " +
-                    "support", transactionId);
-        }
-
-        if (!passwordEncoder.matches(password, userEntity.get().getPassword())) {
-            throw new InternalException("The password is invalid", transactionId);
-        }
-
-
+        return server.get();
     }
 
     private AccountGameModel mapToModel(AccountGameEntity accountGameEntity) {

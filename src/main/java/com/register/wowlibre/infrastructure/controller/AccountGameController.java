@@ -62,44 +62,6 @@ public class AccountGameController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping(path = "/mails")
-    public ResponseEntity<GenericResponse<MailsDto>> mails(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_USER_ID) final Long userId,
-            @RequestParam(name = "account_id") final Long accountId,
-            @RequestParam(name = "server_id") final Long serverId,
-            @RequestParam(name = "character_id") final Long characterId) {
 
-        final MailsDto mails = accountGamePort.mails(userId, accountId, characterId, serverId,
-                transactionId);
-
-        if (mails != null) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(new GenericResponseBuilder<MailsDto>(transactionId).ok(mails).build());
-        }
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @GetMapping(path = "/social/friends")
-    public ResponseEntity<GenericResponse<CharacterSocialDto>> friends(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_USER_ID) final Long userId,
-            @RequestParam(name = "account_id") final Long accountId,
-            @RequestParam(name = "server_id") final Long serverId,
-            @RequestParam(name = "character_id") final Long characterId) {
-
-        final CharacterSocialDto characterSocialDto = accountGamePort.friends(userId, accountId, characterId, serverId,
-                transactionId);
-
-        if (characterSocialDto != null) {
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(new GenericResponseBuilder<CharacterSocialDto>(transactionId).ok(characterSocialDto).build());
-        }
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
 
 }

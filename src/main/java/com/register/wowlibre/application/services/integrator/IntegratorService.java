@@ -8,9 +8,11 @@ import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.infrastructure.client.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.*;
 
 import javax.crypto.*;
+import java.util.*;
 
 @Service
 public class IntegratorService implements IntegratorPort {
@@ -51,14 +53,14 @@ public class IntegratorService implements IntegratorPort {
 
     }
 
+
     @Override
-    public CharactersDto characters(ServerModel server, Long accountId, Long userId, String transactionId) {
-        CharactersResponse response = integratorClient.characters(server.ip, server.jwt, accountId,
-                transactionId);
+    public CharactersDto characters(String host, String jwt, Long accountId, Long userId, String transactionId) {
+        CharactersResponse response = integratorClient.characters(host, jwt, accountId, transactionId);
 
         if (response == null) {
-            LOGGER.error("It was not possible to get the characters from the server. name: {} Host: {} userId: {}",
-                    server.name, server.ip, userId);
+            LOGGER.error("It was not possible to get the characters from the server.  Host: {} userId: {}",
+                    host, userId);
             throw new InternalException("It was not possible to get the characters from the server.", transactionId);
         }
 
@@ -83,6 +85,7 @@ public class IntegratorService implements IntegratorPort {
         return accountDetailResponse;
     }
 
+    @Cacheable(value = "mails", key = "#characterId")
     @Override
     public MailsDto mails(String host, String jwt, Long characterId, String transactionId) {
         MailsResponse mailsResponse = integratorClient.mails(host, jwt, characterId, transactionId);
@@ -98,9 +101,9 @@ public class IntegratorService implements IntegratorPort {
     }
 
     @Override
-    public void deleteFriend(String host, String jwt, Long characterId, Long friendId, Long accountId,
+    public void deleteFriend(String host, String jwt, Long characterId, Long friendId, Long accountId, Long userId,
                              String transactionId) {
-        integratorClient.deleteFriend(host, jwt, characterId, friendId, accountId, transactionId);
+        integratorClient.deleteFriend(host, jwt, characterId, friendId, accountId, userId, transactionId);
     }
 
     @Override
@@ -109,7 +112,8 @@ public class IntegratorService implements IntegratorPort {
                 transactionId);
 
         if (characterSocialResponse == null) {
-            LOGGER.error("It was not possible to obtain the list of friends on this server.  Host: {} characterId: {} " +
+            LOGGER.error("It was not possible to obtain the list of friends on this server.  Host: {} characterId: {}" +
+                    " " +
                     "transactionId {}", host, characterId, transactionId);
             throw new InternalException("It was not possible to obtain the list of friends on this server",
                     transactionId);
@@ -119,7 +123,45 @@ public class IntegratorService implements IntegratorPort {
     }
 
     @Override
-    public void changePassword(String host, String jwt, Long accountId, String transactionId) {
+    public void changePassword(String host, String apiSecret, String jwt, Long accountId, Long userId, String password,
+                               String transactionId) {
+        try {
+            byte[] salt = KeyDerivationUtil.generateSalt();
+            SecretKey derivedKey = KeyDerivationUtil.deriveKeyFromPassword(apiSecret, salt);
+            String encryptedMessage = EncryptionUtil.encrypt(password, derivedKey);
+
+            integratorClient.changePasswordGame(host, jwt, accountId, userId, encryptedMessage, salt, transactionId);
+        } catch (Exception e) {
+            LOGGER.error("Failed to update game account password");
+            throw new InternalException("Failed to update game account password", transactionId);
+        }
 
     }
+
+    @Override
+    public List<CharacterProfessionsDto> professions(String host, String jwt, Long accountId, Long characterId,
+                                                     String transactionId) {
+        return integratorClient.professions(host, jwt, accountId, characterId, transactionId)
+                .stream().map(data -> new CharacterProfessionsDto(data.id(), data.logo(), data.name(), data.value(),
+                        data.max())).toList();
+    }
+
+    @Override
+    public void sendMoney(String host, String jwt, Long accountId, Long userId, Long characterId, Long friendId,
+                          Long money, Double cost, String transactionId) {
+
+        SendMoneyRequest sendMoneyRequest = new SendMoneyRequest(characterId, friendId, accountId, userId, money, cost);
+        integratorClient.sendMoney(host, jwt, sendMoneyRequest, transactionId);
+    }
+
+    @Override
+    public void sendLevel(String host, String jwt, Long accountId, Long userId, Long characterId, Long friendId,
+                          Integer level, Double cost, String transactionId) {
+
+        SendLevelRequest request = new SendLevelRequest(characterId, friendId, accountId, userId, level, cost);
+        integratorClient.sendLevel(host, jwt, request, transactionId);
+
+    }
+
+
 }

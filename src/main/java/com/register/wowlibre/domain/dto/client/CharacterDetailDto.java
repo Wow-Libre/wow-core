@@ -3,8 +3,10 @@ package com.register.wowlibre.domain.dto.client;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
+import java.io.*;
+
 @Data
-public class CharacterDetailDto {
+public class CharacterDetailDto  implements Serializable {
     private Long id;
     private String name;
     @JsonProperty("race_id")

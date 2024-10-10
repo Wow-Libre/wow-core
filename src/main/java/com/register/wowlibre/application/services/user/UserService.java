@@ -82,22 +82,6 @@ public class UserService implements UserPort {
                 customUserDetails.getLanguage());
     }
 
-    @Override
-    public UserModel findByEmail(String email, String transactionId) {
-        return obtainUserPort.findByEmailAndStatusIsTrue(email).map(UserEntity::mapToModelEntity).orElse(null);
-    }
-
-    @Override
-    public UserModel findByPhone(String cellPhone, String transactionId) {
-        return obtainUserPort.findByCellPhoneAndStatusIsTrue(cellPhone, transactionId).map(UserEntity::mapToModelEntity)
-                .orElse(null);
-    }
-
-    @Override
-    public Optional<UserEntity> findByUserId(Long userId, String transactionId) {
-        return obtainUserPort.findByUserIdAndStatusIsTrue(userId, transactionId);
-    }
-
     private UserEntity mapToModel(UserDto userDto, RolModel rolModel) {
         UserEntity user = new UserEntity();
         user.setAvatarUrl(PICTURE_DEFAULT_PROFILE_WEB);
@@ -114,4 +98,22 @@ public class UserService implements UserPort {
         user.setRolId(RolMapper.toEntity(rolModel));
         return user;
     }
+
+    @Override
+    public UserModel findByEmail(String email, String transactionId) {
+        return obtainUserPort.findByEmailAndStatusIsTrue(email).map(UserEntity::mapToModelEntity).orElse(null);
+    }
+
+    @Override
+    public UserModel findByPhone(String cellPhone, String transactionId) {
+        return obtainUserPort.findByCellPhoneAndStatusIsTrue(cellPhone, transactionId).map(UserEntity::mapToModelEntity)
+                .orElse(null);
+    }
+
+    @Override
+    public Optional<UserEntity> findByUserId(Long userId, String transactionId) {
+        return obtainUserPort.findByUserIdAndStatusIsTrue(userId, transactionId);
+    }
+
+
 }

@@ -10,7 +10,6 @@ import java.util.*;
 public class JpaServerAdapter implements ObtainServerPort, SaveServerPort {
     private final ServerRepository serverRepository;
 
-
     public JpaServerAdapter(ServerRepository serverRepository) {
         this.serverRepository = serverRepository;
     }

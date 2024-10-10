@@ -3,9 +3,11 @@ package com.register.wowlibre.domain.model;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
+import java.io.*;
 import java.util.*;
+
 @Data
-public class MailModel {
+public class MailModel implements Serializable {
     private Long id;
     @JsonProperty("message_type")
     private Long messageType;
@@ -27,7 +29,7 @@ public class MailModel {
 
     @Data
     @AllArgsConstructor
-    public static class Items {
+    public static class Items implements Serializable {
         @JsonProperty("mail_id")
         private Long mailId;
         @JsonProperty("item_id")

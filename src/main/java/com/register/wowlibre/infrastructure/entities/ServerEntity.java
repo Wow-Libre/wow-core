@@ -3,12 +3,13 @@ package com.register.wowlibre.infrastructure.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.*;
 import java.time.*;
 
 @Data
 @Entity
 @Table(name = "server")
-public class ServerEntity {
+public class ServerEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

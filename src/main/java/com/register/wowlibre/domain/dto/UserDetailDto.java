@@ -6,7 +6,7 @@ import java.time.*;
 
 @Getter
 @AllArgsConstructor
-public class UserResponse {
+public class UserDetailDto {
     private Long id;
     private String country;
     private LocalDate dateOfBirth;

@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.*;
 
 @Builder
-public class ServerModel {
+public class ServerModel  {
     public Long id;
     public String name;
     public boolean status;
