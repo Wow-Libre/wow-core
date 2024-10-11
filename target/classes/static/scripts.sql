@@ -69,6 +69,7 @@ CREATE TABLE accounts.server
     avatar          text,
     creation_date   date,
     web_site        text,
+    realmlist       varchar(80),
     status          boolean,
 
     CONSTRAINT uq_email UNIQUE (name, version),

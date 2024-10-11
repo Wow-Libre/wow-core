@@ -24,4 +24,7 @@ public class ServerCreateDto {
     @NotNull
     @Length(min = 2, max = 20)
     private String password;
+    @NotNull
+    @Length(min = 5, max = 80)
+    private String realmlist;
 }

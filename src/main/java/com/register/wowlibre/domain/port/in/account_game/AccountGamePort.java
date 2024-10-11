@@ -7,7 +7,8 @@ public interface AccountGamePort {
     void create(Long userId, String serverName, String expansion, String username, String password,
                 String transactionId);
 
-    AccountsDto accounts(Long userId, int page, int size, String transactionId);
+    AccountsDto accounts(Long userId, int page, int size, String searchUsername, String serverName,
+                         String transactionId);
 
     AccountVerificationDto verify(Long userId, Long accountId, Long serverId, String transactionId);
 

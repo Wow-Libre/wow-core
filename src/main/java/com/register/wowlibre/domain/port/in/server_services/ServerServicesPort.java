@@ -1,0 +1,11 @@
+package com.register.wowlibre.domain.port.in.server_services;
+
+import com.register.wowlibre.domain.model.*;
+
+import java.util.*;
+
+public interface ServerServicesPort {
+    List<ServerServicesModel> findByServerId(Long serverId, String transactionId);
+
+    ServerServicesModel findByName(String name, String transactionId);
+}

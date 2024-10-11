@@ -2,7 +2,6 @@ package com.register.wowlibre.infrastructure.repositories.account_game;
 
 import com.register.wowlibre.domain.port.out.account_game.*;
 import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.cache.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
@@ -30,6 +29,15 @@ public class JpaAccountGameAdapter implements ObtainAccountGamePort, SaveAccount
     @Override
     public Long accounts(Long userId) {
         return accountGameRepository.countByUserId(userId);
+    }
+
+    @Override
+    public List<AccountGameEntity> findByUserIdAndServerNameAndUsernameStatusIsTrue(Long userId, int page, int size,
+                                                                                    String serverName,
+                                                                                    String username,
+                                                                                    String transactionId) {
+        return accountGameRepository.findByUserId_IdAndStatusIsTrueAndServerNameAndUsername(
+                serverName, userId, username, PageRequest.of(page, size)).stream().toList();
     }
 
     @Override

@@ -18,11 +18,9 @@ import java.util.*;
 @Repository
 public class ServerService implements ServerPort {
     private static final String AVATAR_SERVER_DEFAULT = "https://upload.wikimedia" +
-            ".org/wikipedia/commons/thumb/e/eb/WoW_icon" +
-            ".svg/2048px-WoW_icon.svg.png";
+            ".org/wikipedia/commons/thumb/e/eb/WoW_icon.svg/2048px-WoW_icon.svg.png";
     private final ObtainServerPort obtainServerPort;
     private final SaveServerPort saveServerPort;
-
     private final RandomString randomString;
 
     public ServerService(ObtainServerPort obtainServerPort, SaveServerPort saveServerPort,
@@ -68,10 +66,16 @@ public class ServerService implements ServerPort {
                 .password(serverCreateDto.getPassword())
                 .creationDate(LocalDateTime.now())
                 .status(false)
+                .realmlist(serverCreateDto.getRealmlist())
                 .webSite(serverCreateDto.getWebSite())
                 .build();
 
         saveServerPort.save(ServerMapper.toEntity(serverDto), transactionId);
+    }
+
+    @Override
+    public void update(String name, String avatar, String ip, String password, String oldPassword, String website, String transactionId) {
+        
     }
 
     @Override
@@ -102,9 +106,5 @@ public class ServerService implements ServerPort {
     }
 
 
-    @Override
-    public void update(String name, String avatar, String ip, String password, String oldPassword, String website,
-                       String transactionId) {
 
-    }
 }

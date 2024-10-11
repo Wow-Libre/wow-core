@@ -27,6 +27,7 @@ public class ServerMapper {
                 .jwt(server.getJwt())
                 .expirationDate(server.getExpirationDate())
                 .refreshToken(server.getRefreshToken())
+                .realmlist(server.getRealmlist())
                 .build();
     }
 
@@ -51,6 +52,7 @@ public class ServerMapper {
         serverEntity.setRefreshToken(server.refreshToken);
         serverEntity.setJwt(server.jwt);
         serverEntity.setExpirationDate(server.expirationDate);
+        serverEntity.setRealmlist(server.realmlist);
         return serverEntity;
     }
 

@@ -15,4 +15,19 @@ public interface AccountGameRepository extends CrudRepository<AccountGameEntity,
 
     @Query("SELECT COUNT(a) FROM AccountGameEntity a WHERE a.userId.id = :userId")
     long countByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT a FROM AccountGameEntity a " +
+            "INNER JOIN a.serverId s " +
+            "INNER JOIN a.userId us " +
+            "WHERE s.name LIKE %:serverName% " +
+            "AND us.id = :userId " +
+            "AND a.status = true " +
+            "AND a.username LIKE %:username%")
+    Page<AccountGameEntity> findByUserId_IdAndStatusIsTrueAndServerNameAndUsername(
+            @Param("serverName") String serverName,
+            @Param("userId") Long userId,
+            @Param("username") String username,
+            Pageable pageable);
+
+
 }

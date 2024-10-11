@@ -5,7 +5,7 @@ import lombok.*;
 import java.time.*;
 
 @Builder
-public class ServerModel  {
+public class ServerModel {
     public Long id;
     public String name;
     public boolean status;
@@ -21,4 +21,5 @@ public class ServerModel  {
     public String webSite;
     public String password;
     public String apiKey;
+    public String realmlist;
 }

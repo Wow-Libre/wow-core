@@ -73,7 +73,8 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
-    public AccountsDto accounts(Long userId, int page, int size, String transactionId) {
+    public AccountsDto accounts(Long userId, int page, int size, String searchUsername, String serverName,
+                                String transactionId) {
 
 
         if (userPort.findByUserId(userId, transactionId).isEmpty()) {
@@ -81,9 +82,19 @@ public class AccountGameService implements AccountGamePort {
         }
 
         Long sizeAccounts = obtainAccountGamePort.accounts(userId);
+        List<AccountGameModel> accountsGame = new ArrayList<>();
 
-        List<AccountGameModel> accountsGame = obtainAccountGamePort.findByUserIdAndStatusIsTrue(userId,
-                page, size, transactionId).stream().map(this::mapToModel).toList();
+        if (sizeAccounts > 0) {
+            if (searchUsername != null || serverName != null) {
+                accountsGame = obtainAccountGamePort.findByUserIdAndServerNameAndUsernameStatusIsTrue(userId, page,
+                        size, serverName
+                        , searchUsername, transactionId).stream().map(this::mapToModel).toList();
+            } else {
+                accountsGame = obtainAccountGamePort.findByUserIdAndStatusIsTrue(userId,
+                        page, size, transactionId).stream().map(this::mapToModel).toList();
+            }
+        }
+
 
         return new AccountsDto(accountsGame, sizeAccounts);
     }

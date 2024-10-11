@@ -35,9 +35,11 @@ public class AccountGameController {
     public ResponseEntity<GenericResponse<AccountsDto>> accounts(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_USER_ID) final Long userId,
-            @RequestParam final int page, @RequestParam final int size) {
+            @RequestParam final int page, @RequestParam final int size,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String server) {
 
-        AccountsDto accounts = accountGamePort.accounts(userId, page, size, transactionId);
+        AccountsDto accounts = accountGamePort.accounts(userId, page, size, username, server, transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(accounts, transactionId).created().build());
@@ -61,7 +63,6 @@ public class AccountGameController {
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 
 
 }

@@ -32,5 +32,6 @@ public class ServerEntity implements Serializable {
     private LocalDateTime expirationDate;
     @Column(name = "web_site")
     private String webSite;
+    private String realmlist;
     private boolean status;
 }
