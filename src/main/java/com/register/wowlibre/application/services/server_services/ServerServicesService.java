@@ -22,12 +22,18 @@ public class ServerServicesService implements ServerServicesPort {
     }
 
     @Override
-    public ServerServicesModel findByName(String name, String transactionId) {
-        return obtainServiceServices.findByName(name, transactionId).map(this::mapToModel).orElse(null);
+    public ServerServicesModel findByNameAndServerId(String name, Long serverId, String transactionId) {
+        return obtainServiceServices.findByNameAndServerId(name, serverId, transactionId).map(this::mapToModel).orElse(null);
+    }
+
+    @Override
+    public List<ServerServicesModel> findByServersAvailableLoa(String transactionId) {
+        return obtainServiceServices.findByServersAvailableRequestLoa(transactionId).stream().map(this::mapToModel).toList();
     }
 
     private ServerServicesModel mapToModel(ServerServicesEntity serverServicesEntity) {
         return new ServerServicesModel(serverServicesEntity.getId(), serverServicesEntity.getName(),
-                serverServicesEntity.getAmount(), serverServicesEntity.getServerId().getId());
+                serverServicesEntity.getAmount(), serverServicesEntity.getServerId().getId(),
+                serverServicesEntity.getServerId().getName());
     }
 }

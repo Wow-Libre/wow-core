@@ -38,6 +38,25 @@ public class CharactersController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @GetMapping("/loan/bank")
+    public ResponseEntity<GenericResponse<CharactersDto>> loanApplicationCharacters(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestParam(name = PARAM_ACCOUNT_ID) final Long accountId,
+            @RequestParam(name = PARAM_SERVER_ID) final Long serverId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId) {
+
+        CharactersDto characters = charactersPort.loanApplicationCharacters(userId, accountId, serverId, transactionId);
+
+        if (characters != null) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new GenericResponseBuilder<CharactersDto>
+                            (transactionId).ok(characters).build());
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
     @DeleteMapping("/friend")
     public ResponseEntity<GenericResponse<Void>> deleteFriend(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,

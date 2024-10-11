@@ -7,5 +7,8 @@ import java.util.*;
 public interface ServerServicesPort {
     List<ServerServicesModel> findByServerId(Long serverId, String transactionId);
 
-    ServerServicesModel findByName(String name, String transactionId);
+    ServerServicesModel findByNameAndServerId(String name, Long serverId, String transactionId);
+
+    List<ServerServicesModel> findByServersAvailableLoa(String transactionId);
+
 }

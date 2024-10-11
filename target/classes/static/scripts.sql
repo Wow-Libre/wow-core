@@ -48,6 +48,7 @@ CREATE TABLE accounts.account_game
     user_id    bigint      NOT NULL,
 
     CONSTRAINT fk_account_game_user_id FOREIGN KEY (user_id) REFERENCES accounts.user (id),
+    CONSTRAINT fk_account_game_server_id FOREIGN KEY (server_id) REFERENCES accounts.server (id),
     CONSTRAINT uq_server_and_account_and_user UNIQUE (server_id, account_id),
     PRIMARY KEY (id)
 );
@@ -73,5 +74,39 @@ CREATE TABLE accounts.server
     status          boolean,
 
     CONSTRAINT uq_email UNIQUE (name, version),
+    PRIMARY KEY (id)
+);
+
+
+CREATE TABLE accounts.server_services
+(
+    id        bigint auto_increment NOT NULL,
+    name      varchar(50) NOT NULL,
+    amount double NOT NULL,
+    server_id bigint      NOT NULL,
+
+    CONSTRAINT fk_server_services_server_id FOREIGN KEY (server_id) REFERENCES accounts.server (id),
+    CONSTRAINT uq_name_server_id UNIQUE (name, server_id),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE accounts.credit_loans
+(
+    id      bigint auto_increment NOT NULL,
+    user_id bigint NOT NULL,
+    reference_serial varchar(60) NOT NULL,
+    account_id bigint,
+    character_id bigint,
+    server_id bigint,
+    amount_transferred double NOT NULL,
+    debt_to_pay double NOT NULL,
+    transaction_date date NOT NULL,
+    payment_date date NOT NULL,
+    interests INTEGER NOT NULL,
+    status boolean  NOT NULL,
+    send boolean  NOT NULL,
+
+    CONSTRAINT fk_credit_loans_user_id FOREIGN KEY (user_id) REFERENCES accounts.user (id),
+    CONSTRAINT uq_credit_loans_reference_serial UNIQUE (reference_serial),
     PRIMARY KEY (id)
 );

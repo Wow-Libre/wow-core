@@ -37,6 +37,16 @@ public class CharactersService implements CharactersPort {
     }
 
     @Override
+    public CharactersDto loanApplicationCharacters(Long userId, Long accountId, Long serverId, String transactionId) {
+        AccountVerificationDto accountVerificationDto = accountGamePort.verify(userId, accountId, serverId,
+                transactionId);
+
+        return integratorService.loanApplicationCharacters(accountVerificationDto.server().getIp(),
+                accountVerificationDto.server().getJwt(),
+                accountId, userId, transactionId);
+    }
+
+    @Override
     public void deleteFriend(Long userId, Long accountId, Long serverId, Long characterId, Long friendId,
                              String transactionId) {
 

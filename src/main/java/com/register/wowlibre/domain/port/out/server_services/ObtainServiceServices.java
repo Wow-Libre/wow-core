@@ -7,5 +7,8 @@ import java.util.*;
 public interface ObtainServiceServices {
     List<ServerServicesEntity> findByServerId(Long serverId, String transactionId);
 
-    Optional<ServerServicesEntity> findByName(String name, String transactionId);
+    Optional<ServerServicesEntity> findByNameAndServerId(String name, Long serverId, String transactionId);
+
+    List<ServerServicesEntity> findByServersAvailableRequestLoa(String transactionId);
+
 }

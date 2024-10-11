@@ -8,6 +8,7 @@ import org.springframework.data.redis.connection.*;
 import org.springframework.data.redis.connection.jedis.*;
 
 import java.time.*;
+import java.util.*;
 
 @Configuration
 @EnableCaching
@@ -18,8 +19,29 @@ public class RedisConfig {
     }
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-        RedisCacheConfiguration redisCacheConfiguration =
-                RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(2));
-        return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(redisCacheConfiguration).build();
+        // Configuración general de cache
+        RedisCacheConfiguration defaultCacheConfig =
+                RedisCacheConfiguration.defaultCacheConfig()
+                        .entryTtl(Duration.ofMinutes(2)); // TTL predeterminado
+
+        // Configuración específica para otros caches
+        RedisCacheConfiguration userCacheConfig =
+                RedisCacheConfiguration.defaultCacheConfig()
+                        .entryTtl(Duration.ofSeconds(60)); // TTL para findByUserId
+
+        RedisCacheConfiguration mailsConfig =
+                RedisCacheConfiguration.defaultCacheConfig()
+                        .entryTtl(Duration.ofSeconds(30));
+
+        // Map de configuraciones para caches específicos
+        Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
+        cacheConfigurations.put("findByUserId", userCacheConfig);
+        cacheConfigurations.put("mails", mailsConfig);
+
+        // Construcción del RedisCacheManager con configuraciones específicas
+        return RedisCacheManager.builder(redisConnectionFactory)
+                .cacheDefaults(defaultCacheConfig)  // Configuración por defecto
+                .withInitialCacheConfigurations(cacheConfigurations)  // Configuraciones personalizadas
+                .build();
     }
 }

@@ -163,5 +163,23 @@ public class IntegratorService implements IntegratorPort {
 
     }
 
+    @Override
+    public CharactersDto loanApplicationCharacters(String host, String jwt, Long accountId, Long userId,
+                                                   String transactionId) {
+        CharactersResponse response = integratorClient.loanApplicationCharacters(host, jwt, accountId, transactionId);
+
+        if (response == null) {
+            LOGGER.error("It was not possible to get the characters from the server.  Host: {} userId: {}",
+                    host, userId);
+            throw new InternalException("It was not possible to get the characters from the server.", transactionId);
+        }
+
+        CharactersDto characters = new CharactersDto();
+        characters.setCharacters(response.getCharacters());
+        characters.setTotalQuantity(response.getTotalQuantity());
+
+        return characters;
+    }
+
 
 }

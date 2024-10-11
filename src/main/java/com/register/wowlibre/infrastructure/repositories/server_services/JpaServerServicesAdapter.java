@@ -21,7 +21,12 @@ public class JpaServerServicesAdapter implements ObtainServiceServices {
     }
 
     @Override
-    public Optional<ServerServicesEntity> findByName(String name, String transactionId) {
-        return serverServicesRepository.findByName(name);
+    public Optional<ServerServicesEntity> findByNameAndServerId(String name, Long serverId, String transactionId) {
+        return serverServicesRepository.findByNameAndServerId_id(name, serverId);
+    }
+
+    @Override
+    public List<ServerServicesEntity> findByServersAvailableRequestLoa(String transactionId) {
+        return serverServicesRepository.findActiveServerServicesWithAmountGreaterThanZero();
     }
 }

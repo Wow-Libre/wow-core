@@ -73,10 +73,6 @@ public class ServerService implements ServerPort {
         saveServerPort.save(ServerMapper.toEntity(serverDto), transactionId);
     }
 
-    @Override
-    public void update(String name, String avatar, String ip, String password, String oldPassword, String website, String transactionId) {
-        
-    }
 
     @Override
     public List<ServersDto> findByStatusIsTrue(String transactionId) {
@@ -104,7 +100,6 @@ public class ServerService implements ServerPort {
         return obtainServerPort.findByNameAndExpansionAndStatusIsTrue(name, version, transactionId)
                 .map(ServerMapper::toModel).orElse(null);
     }
-
 
 
 }

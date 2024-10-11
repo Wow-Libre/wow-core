@@ -3,7 +3,7 @@ package com.register.wowlibre.infrastructure.entities;
 import com.register.wowlibre.domain.mapper.*;
 import com.register.wowlibre.domain.model.UserModel;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Data
 @Entity
 @Table(name = "user")
+@NoArgsConstructor
 public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

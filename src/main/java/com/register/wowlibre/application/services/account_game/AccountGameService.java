@@ -76,7 +76,6 @@ public class AccountGameService implements AccountGamePort {
     public AccountsDto accounts(Long userId, int page, int size, String searchUsername, String serverName,
                                 String transactionId) {
 
-
         if (userPort.findByUserId(userId, transactionId).isEmpty()) {
             throw new InternalException("The client is not available or does not exist", transactionId);
         }

@@ -11,7 +11,10 @@
         "Préstamo de 1k de oro",
         "Pago máximo: 1 mes"
       ],
-      "button": "Solicitar Préstamo"
+      "button": "Solicitar Préstamo",
+      "interest": 20,
+      "month_payment_period": 1,
+      "gold": 20000.0
     },
     {
       "id": 2,
@@ -24,7 +27,10 @@
         "Préstamo de 40k de oro",
         "Pago máximo: 1 meses"
       ],
-      "button": "Solicitar Préstamo"
+      "button": "Solicitar Préstamo",
+      "interest": 20,
+      "month_payment_period": 1,
+      "gold": 20000.0
     },
     {
       "id": 3,
@@ -37,7 +43,10 @@
         "Préstamo de 10k de oro",
         "Pago máximo: 1 mes"
       ],
-      "button": "Solicitar Préstamo"
+      "button": "Solicitar Préstamo",
+      "interest": 20,
+      "month_payment_period": 1,
+      "gold": 20000.0
     }
   ],
   "en": [
@@ -52,7 +61,10 @@
         "1k gold loan",
         "Maximum payment: 1 month"
       ],
-      "button": "Apply for Loan"
+      "button": "Apply for Loan",
+      "interest": 20,
+      "month_payment_period": 1,
+      "gold": 20000.0
     },
     {
       "id": 2,
@@ -65,7 +77,10 @@
         "40k gold loan",
         "Maximum payment: 1 months"
       ],
-      "button": "Apply for Loan"
+      "button": "Apply for Loan",
+      "interest": 20,
+      "month_payment_period": 1,
+      "gold": 20000.0
     },
     {
       "id": 3,
@@ -78,7 +93,10 @@
         "10k gold loan",
         "Maximum payment: 1 month"
       ],
-      "button": "Apply for Loan"
+      "button": "Apply for Loan",
+      "interest": 20,
+      "month_payment_period": 1,
+      "gold": 20000.0
     }
   ],
   "pt": [
@@ -93,7 +111,10 @@
         "Empréstimo de 1k de ouro",
         "Pagamento máximo: 1 mês"
       ],
-      "button": "Solicitar Empréstimo"
+      "button": "Solicitar Empréstimo",
+      "interest": 20,
+      "month_payment_period": 1,
+      "gold": 20000.0
     },
     {
       "id": 2,
@@ -106,7 +127,10 @@
         "Empréstimo de 40k de ouro",
         "Pagamento máximo: 1 meses"
       ],
-      "button": "Solicitar Empréstimo"
+      "button": "Solicitar Empréstimo",
+      "interest": 20,
+      "month_payment_period": 1,
+      "gold": 20000.0
     },
     {
       "id": 3,
@@ -119,7 +143,10 @@
         "Empréstimo de 10k de ouro",
         "Pagamento máximo: 1 mês"
       ],
-      "button": "Solicitar Empréstimo"
+      "button": "Solicitar Empréstimo",
+      "interest": 20,
+      "month_payment_period": 1,
+      "gold": 20000.0
     }
   ]
 }

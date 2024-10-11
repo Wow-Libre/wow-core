@@ -11,4 +11,9 @@ public class ConfigRandomSerial {
         return new RandomString(15, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
+    @Bean("reference-serial-bank")
+    public RandomString referenceSerial() {
+        return new RandomString(20, "abcdefghijklmnopqrstuvwxyz0123456789");
+    }
+
 }

@@ -17,6 +17,5 @@ public interface ServerPort {
 
     void create(ServerCreateDto serverCreateDto, String transactionId);
 
-    void update(String name, String avatar, String ip, String password, String oldPassword, String website,
-                String transactionId);
+
 }

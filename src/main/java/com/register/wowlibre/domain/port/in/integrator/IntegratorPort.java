@@ -32,4 +32,7 @@ public interface IntegratorPort {
 
     void sendLevel(String host, String jwt, Long accountId, Long userId, Long characterId, Long friendId,
                    Integer level, Double cost, String transactionId);
+
+    CharactersDto loanApplicationCharacters(String host, String jwt, Long accountId, Long userId, String transactionId);
+
 }

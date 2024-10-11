@@ -389,4 +389,42 @@ public class IntegratorClient {
 
     }
 
+    public CharactersResponse loanApplicationCharacters(String host, String jwt, Long accountId, String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/characters/loan/bank", host))
+                .queryParam(PARAM_ACCOUNT_ID, accountId)
+                .queryParam("time", 300)
+                .queryParam("level", 80)
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<CharactersResponse>> response = restTemplate.exchange(url, HttpMethod.GET,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody()).getData();
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("Client/Server Error: {}. The request failed with a client or server error. " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException("Transaction failed due to client or server error", transactionId);
+        } catch (Exception e) {
+            LOGGER.error("Unexpected Error: {}. An unexpected error occurred during the transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
+
+
 }

@@ -5,12 +5,13 @@ import lombok.*;
 
 @Data
 @Entity
-@Table(name = "server")
+@Table(name = "server_services")
 public class ServerServicesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(name = "amount")
     private Double amount;
     @JoinColumn(
             name = "server_id",

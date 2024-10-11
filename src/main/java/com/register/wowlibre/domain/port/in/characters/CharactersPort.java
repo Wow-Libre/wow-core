@@ -6,6 +6,7 @@ import java.util.*;
 
 public interface CharactersPort {
     CharactersDto characters(Long userId, Long accountId, Long serverId, String transactionId);
+    CharactersDto loanApplicationCharacters(Long userId, Long accountId, Long serverId, String transactionId);
 
     void deleteFriend(Long userId, Long accountId, Long serverId, Long characterId, Long friendId,
                       String transactionId);

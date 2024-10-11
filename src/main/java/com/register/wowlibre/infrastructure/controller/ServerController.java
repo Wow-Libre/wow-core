@@ -76,16 +76,4 @@ public class ServerController {
                 .body(new GenericResponseBuilder<>(server, transactionId).ok().build());
     }
 
-
-    @PutMapping
-    public ResponseEntity<GenericResponse<Void>> update(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestBody @Valid ServerUpdateDto request) {
-
-        serverPort.update(request.getName(), "", request.getIp(),
-                request.getPassword(), request.getOldPassword(), request.getWebSite(), transactionId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
-    }
 }
