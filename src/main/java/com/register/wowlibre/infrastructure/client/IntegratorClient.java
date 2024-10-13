@@ -502,5 +502,128 @@ public class IntegratorClient {
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
 
+    public void attachGuild(String host, String jwt, Long guildId, Long accountId,
+                            Long characterId, String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds/attach", host))
+                .queryParam("account_id", accountId)
+                .queryParam("guild_id", guildId)
+                .queryParam("character_id", characterId)
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<GuildResponse>> response = restTemplate.exchange(url, HttpMethod.PUT,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return;
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [attachGuild] Client/Server Error: {}. Error with server client getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException("Transaction failed due to client or server error", transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [attachGuild] Unexpected Error: {}. An unexpected error occurred during " +
+                            "the " +
+                            "transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
+
+    public GuildDetailMemberResponse guildMember(String host, String jwt, Long characterId,
+                                                 Long guildId, Long accountId, String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds/member", host))
+                .queryParam("account_id", accountId)
+                .queryParam("guild_id", guildId)
+                .queryParam("character_id", characterId)
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<GuildDetailMemberResponse>> response = restTemplate.exchange(url,
+                    HttpMethod.GET,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody()).getData();
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [attachGuild] Client/Server Error: {}. Error with server client getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException("Transaction failed due to client or server error", transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [attachGuild] Unexpected Error: {}. An unexpected error occurred during " +
+                            "the " +
+                            "transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
+
+    public void unInviteGuild(String host, String jwt, Long accountId,
+                              Long characterId, Long guildId, String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds/member", host))
+                .queryParam("account_id", accountId)
+                .queryParam("guild_id", guildId)
+                .queryParam("character_id", characterId)
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<GuildResponse>> response = restTemplate.exchange(url, HttpMethod.DELETE,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return;
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [attachGuild] Client/Server Error: {}. Error with server client getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException("Transaction failed due to client or server error", transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [attachGuild] Unexpected Error: {}. An unexpected error occurred during " +
+                            "the " +
+                            "transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
 
 }

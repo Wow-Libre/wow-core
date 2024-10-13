@@ -4,6 +4,9 @@ import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.mapper.*;
 import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.*;
+import com.register.wowlibre.domain.port.in.account_game.*;
+import com.register.wowlibre.domain.port.in.benefit_guild.*;
 import com.register.wowlibre.domain.port.in.guild.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.server.*;
@@ -17,10 +20,17 @@ public class GuildService implements GuildPort {
 
     private final IntegratorPort integratorPort;
     private final ServerPort serverPort;
+    private final ResourcesPort resourcesPort;
+    private final BenefitGuildPort benefitGuildPort;
+    private final AccountGamePort accountGamePort;
 
-    public GuildService(IntegratorPort integratorPort, ServerPort serverPort) {
+    public GuildService(IntegratorPort integratorPort, ServerPort serverPort, ResourcesPort resourcesPort,
+                        BenefitGuildPort benefitGuildPort, AccountGamePort accountGamePort) {
         this.integratorPort = integratorPort;
         this.serverPort = serverPort;
+        this.resourcesPort = resourcesPort;
+        this.benefitGuildPort = benefitGuildPort;
+        this.accountGamePort = accountGamePort;
     }
 
     @Override
@@ -28,7 +38,7 @@ public class GuildService implements GuildPort {
                              String transactionId) {
         ServerModel server;
 
-        if (serverName != null && expansion != null) {
+        if (serverName != null && !serverName.isEmpty() && expansion != null) {
             server = serverPort.findByNameAndVersionAndStatusIsTrue(serverName, expansion, transactionId);
 
             if (server == null) {
@@ -47,18 +57,46 @@ public class GuildService implements GuildPort {
         }
 
 
-        return integratorPort.guilds(server.ip, server.jwt, size, page, search, transactionId);
+        return integratorPort.guilds(server.name, server.id, server.ip, server.jwt, size, page, search, transactionId);
     }
 
     @Override
     public GuildDto detail(Long serverId, Long guildId, String transactionId) {
+
         Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
 
         if (server.isEmpty() || !server.get().isStatus()) {
             throw new InternalException("", transactionId);
         }
+
         ServerEntity serverModel = server.get();
 
-        return integratorPort.guild(serverModel.getIp(), serverModel.getJwt(), guildId, transactionId);
+        GuildDto guildDto = integratorPort.guild(serverModel.getName(), serverModel.getId(), serverModel.getIp(),
+                serverModel.getJwt(), guildId,
+                transactionId);
+
+        List<BenefitModel> beneficios = resourcesPort.getBenefitsGuild("es", transactionId);
+
+        List<BenefitGuildModel> beneficiosObtenidos = benefitGuildPort.benefits(serverModel.getId(), guildId,
+                transactionId);
+
+        List<BenefitModel> beneficiosFiltrados = beneficios.stream()
+                .filter(beneficio -> beneficiosObtenidos.stream()
+                        .anyMatch(beneficioObtenido -> beneficioObtenido.benefitId.equals(beneficio.id)))
+                .toList();
+
+        guildDto.setBenefits(beneficiosFiltrados);
+
+        return guildDto;
+    }
+
+    @Override
+    public void attach(Long serverId, Long userId, Long accountId, Long characterId, Long guildId,
+                       String transactionId) {
+
+        AccountVerificationDto verificationDto = accountGamePort.verify(userId, accountId, serverId, transactionId);
+
+        integratorPort.attachGuild(verificationDto.server().getIp(), verificationDto.server().getJwt(),
+                verificationDto.accountGame().getAccountId(), guildId, characterId, transactionId);
     }
 }

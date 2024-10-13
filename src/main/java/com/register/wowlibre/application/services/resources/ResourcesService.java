@@ -31,4 +31,9 @@ public class ResourcesService implements ResourcesPort {
         return jsonLoaderPort.getJsonPlans(language, transactionId);
     }
 
+    @Override
+    public List<BenefitModel> getBenefitsGuild(String language, String transactionId) {
+        return jsonLoaderPort.getJsonBenefitsGuild(language, transactionId);
+    }
+
 }

@@ -45,6 +45,18 @@ public class AccountGameController {
                 .body(new GenericResponseBuilder<>(accounts, transactionId).created().build());
     }
 
+    @GetMapping
+    public ResponseEntity<GenericResponse<AccountsDto>> accountsByServerId(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam(name = "server_id") Long serverId) {
+
+        AccountsDto accounts = accountGamePort.accounts(userId, serverId, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(accounts, transactionId).created().build());
+    }
+
 
     @GetMapping(path = "/{account_id}/{server_id}")
     public ResponseEntity<GenericResponse<AccountDetailDto>> account(

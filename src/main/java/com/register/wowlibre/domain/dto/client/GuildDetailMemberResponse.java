@@ -1,13 +1,12 @@
-package com.register.wowlibre.domain.model;
+package com.register.wowlibre.domain.dto.client;
 
 import com.fasterxml.jackson.annotation.*;
-import com.register.wowlibre.domain.dto.client.*;
 import lombok.*;
 
 import java.util.*;
 
 @Data
-public class GuildModel {
+public class GuildDetailMemberResponse {
     private Long id;
     private String name;
     @JsonProperty("leader_name")
@@ -29,6 +28,6 @@ public class GuildModel {
     private Long members;
     @JsonProperty("public_access")
     private boolean publicAccess;
-    private Cta cta;
-    private String formattedBankMoney;
+    public Cta cta;
+    public String formattedBankMoney;
 }

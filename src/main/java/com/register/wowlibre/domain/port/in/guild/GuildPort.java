@@ -7,4 +7,6 @@ public interface GuildPort {
                       String transactionId);
 
     GuildDto detail(Long serverId, Long guildId, String transactionId);
+
+    void attach(Long serverId, Long userId, Long accountId, Long characterId, Long guildId, String transactionId);
 }

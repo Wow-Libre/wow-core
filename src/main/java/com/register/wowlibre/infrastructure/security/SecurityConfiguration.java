@@ -86,6 +86,7 @@ public class SecurityConfiguration {
                                         "/api/resources/faqs",
                                         "/api/resources/bank/plans",
                                         "/api/resources/benefit",
+                                        "/api/resources/benefits-guild",
                                         "/api/server",
                                         "/api/guilds",
                                         "/api/guilds/{id}",

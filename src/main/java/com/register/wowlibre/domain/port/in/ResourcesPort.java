@@ -11,5 +11,6 @@ public interface ResourcesPort {
     List<FaqsModel> getFaqs(String transactionId);
 
     List<PlanModel> getPlansBank(String language, String transactionId);
+    List<BenefitModel> getBenefitsGuild(String language, String transactionId);
 
 }

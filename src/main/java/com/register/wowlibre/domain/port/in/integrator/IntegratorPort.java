@@ -36,7 +36,15 @@ public interface IntegratorPort {
     CharactersDto loanApplicationCharacters(String host, String jwt, Long accountId, Long userId, String transactionId);
 
 
-    GuildsDto guilds(String host, String jwt, int size, int page, String search, String transactionId);
+    GuildsDto guilds(String serverName, Long serverId, String host, String jwt, int size, int page, String search,
+                     String transactionId);
 
-    GuildDto guild(String host, String jwt, Long guid, String transactionId);
+    GuildDto guild(String serverName, Long serverId, String host, String jwt, Long guid, String transactionId);
+
+    void attachGuild(String host, String jwt, Long accountId, Long guildId, Long characterId, String transactionId);
+
+
+    void unInviteGuild(String host, String jwt, Long userId, Long accountId, Long characterId, Long guildId,
+                       String transactionId);
+
 }

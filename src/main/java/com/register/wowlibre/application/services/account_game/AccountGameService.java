@@ -98,6 +98,19 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
+    public AccountsDto accounts(Long userId, Long serverId, String transactionId) {
+        if (userPort.findByUserId(userId, transactionId).isEmpty()) {
+            throw new InternalException("The client is not available or does not exist", transactionId);
+        }
+
+        Long sizeAccounts = obtainAccountGamePort.accounts(userId);
+        List<AccountGameModel> accountsGame = obtainAccountGamePort.findByUserIdAndServerId(userId, serverId,
+                transactionId).stream().map(this::mapToModel).toList();
+
+        return new AccountsDto(accountsGame, sizeAccounts);
+    }
+
+    @Override
     public AccountVerificationDto verify(Long userId, Long accountId, Long serverId, String transactionId) {
 
         Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);

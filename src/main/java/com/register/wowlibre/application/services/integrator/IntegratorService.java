@@ -183,7 +183,8 @@ public class IntegratorService implements IntegratorPort {
     }
 
     @Override
-    public GuildsDto guilds(String host, String jwt, int size, int page, String search,
+    public GuildsDto guilds(String serverName, Long serverId, String host, String jwt, int size, int page,
+                            String search,
                             String transactionId) {
 
         GuildsResponse response = integratorClient.guilds(host, jwt, size, page, search, transactionId);
@@ -196,11 +197,14 @@ public class IntegratorService implements IntegratorPort {
                     transactionId);
         }
 
-        return new GuildsDto(response.getGuilds(), response.getSize());
+        List<GuildDto> guilds =
+                response.getGuilds().stream().filter(GuildModel::isPublicAccess).map(guildModel -> new GuildDto(guildModel, serverName, serverId)).toList();
+
+        return new GuildsDto(guilds, response.getSize());
     }
 
     @Override
-    public GuildDto guild(String host, String jwt, Long guid, String transactionId) {
+    public GuildDto guild(String serverName, Long serverId, String host, String jwt, Long guid, String transactionId) {
 
         GuildResponse response = integratorClient.guild(host, jwt, guid, transactionId);
 
@@ -212,7 +216,13 @@ public class IntegratorService implements IntegratorPort {
                     transactionId);
         }
 
-        return new GuildDto(response);
+        return new GuildDto(response, serverName, serverId);
+    }
+
+    @Override
+    public void attachGuild(String host, String jwt, Long accountId, Long guildId, Long characterId,
+                            String transactionId) {
+        integratorClient.attachGuild(host, jwt, guildId, accountId, characterId, transactionId);
     }
 
 }

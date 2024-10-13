@@ -29,5 +29,6 @@ public interface AccountGameRepository extends CrudRepository<AccountGameEntity,
             @Param("username") String username,
             Pageable pageable);
 
+    List<AccountGameEntity> findByUserId_IdAndServerId_IdAndStatusIsTrue(Long userId, Long serverId);
 
 }

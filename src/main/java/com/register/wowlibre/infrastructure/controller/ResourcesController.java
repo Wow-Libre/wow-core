@@ -48,4 +48,14 @@ public class ResourcesController {
                 .status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(countryModelList, transactionId).ok().build());
     }
+
+    @GetMapping("/benefits-guild")
+    public ResponseEntity<GenericResponse<List<BenefitModel>>> benefitsGuild(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestParam(name = "language", defaultValue = "es") final String language) {
+        final List<BenefitModel> benefitsGuild = resourcesPort.getBenefitsGuild(language, transactionId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(benefitsGuild, transactionId).ok().build());
+    }
 }

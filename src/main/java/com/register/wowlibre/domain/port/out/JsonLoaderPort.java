@@ -11,4 +11,5 @@ public interface JsonLoaderPort {
 
     List<PlanModel> getJsonPlans(String language, String transactionId);
 
+    List<BenefitModel> getJsonBenefitsGuild(String language, String transactionId);
 }

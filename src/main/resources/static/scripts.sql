@@ -92,21 +92,51 @@ CREATE TABLE accounts.server_services
 
 CREATE TABLE accounts.credit_loans
 (
-    id      bigint auto_increment NOT NULL,
-    user_id bigint NOT NULL,
+    id               bigint auto_increment NOT NULL,
+    user_id          bigint      NOT NULL,
     reference_serial varchar(60) NOT NULL,
-    account_id bigint,
-    character_id bigint,
-    server_id bigint,
+    account_id       bigint,
+    character_id     bigint,
+    server_id        bigint,
     amount_transferred double NOT NULL,
     debt_to_pay double NOT NULL,
-    transaction_date date NOT NULL,
-    payment_date date NOT NULL,
-    interests INTEGER NOT NULL,
-    status boolean  NOT NULL,
-    send boolean  NOT NULL,
+    transaction_date date        NOT NULL,
+    payment_date     date        NOT NULL,
+    interests        INTEGER     NOT NULL,
+    status           boolean     NOT NULL,
+    send             boolean     NOT NULL,
 
     CONSTRAINT fk_credit_loans_user_id FOREIGN KEY (user_id) REFERENCES accounts.user (id),
     CONSTRAINT uq_credit_loans_reference_serial UNIQUE (reference_serial),
     PRIMARY KEY (id)
 );
+
+
+
+create table benefit_guild
+(
+    id         bigint auto_increment NOT NULL,
+    server_id  bigint      not null,
+    guild_name varchar(70) not null,
+    guild_id   bigint      not null,
+    benefit_id bigint      not null,
+    status     boolean     not null,
+    CONSTRAINT uq_benefit_guild_server_id_guild_id_benefit_id UNIQUE (server_id, guild_id, benefit_id),
+    CONSTRAINT fk_benefit_guild_server_id FOREIGN KEY (server_id) REFERENCES accounts.server (id),
+    PRIMARY KEY (id)
+
+);
+
+create table character_benefit_guild
+(
+    id               bigint auto_increment NOT NULL,
+    character_id     bigint not null,
+    account_id       bigint not null,
+    benefit_guild_id bigint not null,
+    benefit_send     boolean,
+
+    CONSTRAINT uq_character_and_account_and_benefit_id UNIQUE (character_id, account_id, benefit_guild_id),
+    CONSTRAINT fk_benefit_guild_id FOREIGN KEY (benefit_guild_id) REFERENCES accounts.benefit_guild (id),
+    PRIMARY KEY (id)
+
+)
