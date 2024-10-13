@@ -20,7 +20,6 @@ import java.util.*;
 public class AccountGameService implements AccountGamePort {
     private final SaveAccountGamePort saveAccountGamePort;
     private final ObtainAccountGamePort obtainAccountGamePort;
-
     private final ServerPort serverPort;
     private final UserPort userPort;
     private final IntegratorPort integratorPort;
@@ -42,7 +41,7 @@ public class AccountGameService implements AccountGamePort {
         Optional<UserEntity> userModel = userPort.findByUserId(userId, transactionId);
 
         if (userModel.isEmpty()) {
-            throw new InternalException("The client is not available or does not exist", transactionId);
+            throw new UnauthorizedException("The client is not available or does not exist", transactionId);
         }
 
         UserEntity user = userModel.get();

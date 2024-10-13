@@ -16,6 +16,7 @@ public interface ServerPort {
     Optional<ServerEntity> findById(Long id, String transactionId);
 
     void create(ServerCreateDto serverCreateDto, String transactionId);
+    List<ServerEntity> findByStatusIsTrueServers(String transactionId);
 
 
 }

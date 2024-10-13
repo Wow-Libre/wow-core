@@ -1,0 +1,10 @@
+package com.register.wowlibre.domain.port.in.guild;
+
+import com.register.wowlibre.domain.dto.*;
+
+public interface GuildPort {
+    GuildsDto findAll(Integer size, Integer page, String search, String serverName, String expansion,
+                      String transactionId);
+
+    GuildDto detail(Long serverId, Long guildId, String transactionId);
+}

@@ -35,4 +35,8 @@ public interface IntegratorPort {
 
     CharactersDto loanApplicationCharacters(String host, String jwt, Long accountId, Long userId, String transactionId);
 
+
+    GuildsDto guilds(String host, String jwt, int size, int page, String search, String transactionId);
+
+    GuildDto guild(String host, String jwt, Long guid, String transactionId);
 }

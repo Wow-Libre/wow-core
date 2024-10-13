@@ -169,7 +169,8 @@ public class IntegratorService implements IntegratorPort {
         CharactersResponse response = integratorClient.loanApplicationCharacters(host, jwt, accountId, transactionId);
 
         if (response == null) {
-            LOGGER.error("It was not possible to get the characters from the server.  Host: {} userId: {}",
+            LOGGER.error("[IntegratorService] [loanApplicationCharacters] It was not possible to get the characters " +
+                            "from the server.  Host: {} userId: {}",
                     host, userId);
             throw new InternalException("It was not possible to get the characters from the server.", transactionId);
         }
@@ -181,5 +182,37 @@ public class IntegratorService implements IntegratorPort {
         return characters;
     }
 
+    @Override
+    public GuildsDto guilds(String host, String jwt, int size, int page, String search,
+                            String transactionId) {
+
+        GuildsResponse response = integratorClient.guilds(host, jwt, size, page, search, transactionId);
+
+        if (response == null) {
+            LOGGER.error("[IntegratorService] [guilds] It was not possible to obtain the guilds associated with the " +
+                            "server.  Host: {} transactionId{}",
+                    host, transactionId);
+            throw new InternalException("It was not possible to obtain the guilds associated with the server.",
+                    transactionId);
+        }
+
+        return new GuildsDto(response.getGuilds(), response.getSize());
+    }
+
+    @Override
+    public GuildDto guild(String host, String jwt, Long guid, String transactionId) {
+
+        GuildResponse response = integratorClient.guild(host, jwt, guid, transactionId);
+
+        if (response == null) {
+            LOGGER.error("[IntegratorService] [guild] It was not possible to obtain the guilds associated with the " +
+                            "server.  Host: {} transactionId{}",
+                    host, transactionId);
+            throw new InternalException("It was not possible to obtain the guilds associated with the server.",
+                    transactionId);
+        }
+
+        return new GuildDto(response);
+    }
 
 }

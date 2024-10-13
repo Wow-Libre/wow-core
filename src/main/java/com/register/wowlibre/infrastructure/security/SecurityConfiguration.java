@@ -87,6 +87,8 @@ public class SecurityConfiguration {
                                         "/api/resources/bank/plans",
                                         "/api/resources/benefit",
                                         "/api/server",
+                                        "/api/guilds",
+                                        "/api/guilds/{id}",
                                         //SWAGGER
                                         "/v2/api-docs",
                                         "/swagger-resources",

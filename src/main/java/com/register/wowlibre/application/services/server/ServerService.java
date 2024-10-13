@@ -73,11 +73,15 @@ public class ServerService implements ServerPort {
         saveServerPort.save(ServerMapper.toEntity(serverDto), transactionId);
     }
 
+    @Override
+    public List<ServerEntity> findByStatusIsTrueServers(String transactionId) {
+        return obtainServerPort.findByStatusIsTrue(transactionId);
+    }
+
 
     @Override
     public List<ServersDto> findByStatusIsTrue(String transactionId) {
-        List<ServerEntity> servers = obtainServerPort.findByStatusIsTrue(transactionId);
-        return servers.stream().map(this::mapToModel).toList();
+        return findByStatusIsTrueServers(transactionId).stream().map(this::mapToModel).toList();
     }
 
     private ServersDto mapToModel(ServerEntity server) {
