@@ -1,6 +1,7 @@
 package com.register.wowlibre.application.services.guild;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.mapper.*;
 import com.register.wowlibre.domain.model.*;
@@ -98,5 +99,41 @@ public class GuildService implements GuildPort {
 
         integratorPort.attachGuild(verificationDto.server().getIp(), verificationDto.server().getJwt(),
                 verificationDto.accountGame().getAccountId(), guildId, characterId, transactionId);
+    }
+
+    @Override
+    public void unInviteGuild(Long serverId, Long userId, Long accountId, Long characterId, String transactionId) {
+
+        AccountVerificationDto verificationDto = accountGamePort.verify(userId, accountId, serverId, transactionId);
+
+        integratorPort.unInviteGuild(verificationDto.server().getIp(), verificationDto.server().getJwt(), userId,
+                accountId, characterId, transactionId);
+    }
+
+    @Override
+    public GuildMemberDetailDto guildMember(Long serverId, Long userId, Long accountId, Long characterId,
+                                            String transactionId) {
+        AccountVerificationDto verificationDto = accountGamePort.verify(userId, accountId, serverId, transactionId);
+
+        GuildDetailMemberResponse response = integratorPort.guildMember(verificationDto.server().getIp(),
+                verificationDto.server().getJwt(), userId,
+                accountId, characterId, transactionId);
+
+
+        return GuildMemberDetailDto.builder()
+                .id(response.getId())
+                .name(response.getName())
+                .leaderName(response.getLeaderName())
+                .emblemColor(response.getEmblemColor())
+                .borderStyle(response.getBorderStyle())
+                .borderColor(response.getBorderColor())
+                .info(response.getInfo())
+                .motd(response.getMotd())
+                .createDate(response.getCreateDate())
+                .bankMoney(response.getBankMoney())
+                .members(response.getMembers())
+                .publicAccess(response.isPublicAccess())
+                .formattedBankMoney(response.formattedBankMoney)
+                .members(response.getMembers()).build();
     }
 }

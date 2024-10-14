@@ -9,4 +9,9 @@ public interface GuildPort {
     GuildDto detail(Long serverId, Long guildId, String transactionId);
 
     void attach(Long serverId, Long userId, Long accountId, Long characterId, Long guildId, String transactionId);
+
+    void unInviteGuild(Long serverId, Long userId, Long accountId, Long characterId, String transactionId);
+
+    GuildMemberDetailDto guildMember(Long serverId, Long userId, Long accountId, Long characterId,
+                                     String transactionId);
 }

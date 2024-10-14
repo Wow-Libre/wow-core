@@ -225,4 +225,22 @@ public class IntegratorService implements IntegratorPort {
         integratorClient.attachGuild(host, jwt, guildId, accountId, characterId, transactionId);
     }
 
+    @Override
+    public void unInviteGuild(String host, String jwt, Long userId, Long accountId, Long characterId, String transactionId) {
+        integratorClient.unInviteGuild(host, jwt, userId, accountId, characterId, transactionId);
+    }
+
+    @Override
+    public GuildDetailMemberResponse guildMember(String host, String jwt, Long userId, Long accountId, Long characterId,
+                                                 String transactionId) {
+        GuildDetailMemberResponse response = integratorClient.guildMember(host, jwt, userId, accountId, characterId,
+                transactionId);
+
+        if (response == null) {
+            throw new InternalException("guildmember error", transactionId);
+        }
+
+        return response;
+    }
+
 }

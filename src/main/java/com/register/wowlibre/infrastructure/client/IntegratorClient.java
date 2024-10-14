@@ -543,8 +543,8 @@ public class IntegratorClient {
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
 
-    public GuildDetailMemberResponse guildMember(String host, String jwt, Long characterId,
-                                                 Long guildId, Long accountId, String transactionId) {
+    public GuildDetailMemberResponse guildMember(String host, String jwt, Long userId, Long accountId, Long characterId,
+                                                 String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -554,7 +554,6 @@ public class IntegratorClient {
 
         String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds/member", host))
                 .queryParam("account_id", accountId)
-                .queryParam("guild_id", guildId)
                 .queryParam("character_id", characterId)
                 .toUriString();
 
@@ -575,7 +574,7 @@ public class IntegratorClient {
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or server error", transactionId);
         } catch (Exception e) {
-            LOGGER.error("[IntegratorClient] [attachGuild] Unexpected Error: {}. An unexpected error occurred during " +
+            LOGGER.error("[IntegratorClient] [guildMember] Unexpected Error: {}. An unexpected error occurred during " +
                             "the " +
                             "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
@@ -585,8 +584,8 @@ public class IntegratorClient {
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
 
-    public void unInviteGuild(String host, String jwt, Long accountId,
-                              Long characterId, Long guildId, String transactionId) {
+    public void unInviteGuild(String host, String jwt, Long userId, Long accountId,
+                              Long characterId, String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -595,8 +594,8 @@ public class IntegratorClient {
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
         String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds/member", host))
+                .queryParam("user_id", userId)
                 .queryParam("account_id", accountId)
-                .queryParam("guild_id", guildId)
                 .queryParam("character_id", characterId)
                 .toUriString();
 
@@ -610,13 +609,14 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("[IntegratorClient] [attachGuild] Client/Server Error: {}. Error with server client getting " +
+            LOGGER.error("[IntegratorClient] [unInviteGuild] Client/Server Error: {}. Error with server client " +
+                            "getting " +
                             "associated guilds. " +
                             "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or server error", transactionId);
         } catch (Exception e) {
-            LOGGER.error("[IntegratorClient] [attachGuild] Unexpected Error: {}. An unexpected error occurred during " +
+            LOGGER.error("[IntegratorClient] [unInviteGuild] Unexpected Error: {}. An unexpected error occurred during " +
                             "the " +
                             "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);

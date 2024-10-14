@@ -67,4 +67,33 @@ public class GuildController {
                 .status(HttpStatus.NO_CONTENT)
                 .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
+
+    @GetMapping(path = "/member")
+    public ResponseEntity<GenericResponse<GuildMemberDetailDto>> memberGuild(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestParam(name = "server_id") final Long serverId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam(name = "account_id") final Long accountId,
+            @RequestParam(name = "character_id") final Long characterId) {
+
+        GuildMemberDetailDto response = guildPort.guildMember(serverId, userId, accountId, characterId, transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(response, transactionId).ok().build());
+    }
+
+    @DeleteMapping("/attach")
+    public ResponseEntity<GenericResponse<Void>> unInviteGuild(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestBody @Valid UnInviteGuildDto request) {
+
+        guildPort.unInviteGuild(request.getServerId(), userId, request.getAccountId(), request.getCharacterId(),
+                transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
 }

@@ -44,7 +44,8 @@ public interface IntegratorPort {
     void attachGuild(String host, String jwt, Long accountId, Long guildId, Long characterId, String transactionId);
 
 
-    void unInviteGuild(String host, String jwt, Long userId, Long accountId, Long characterId, Long guildId,
-                       String transactionId);
+    void unInviteGuild(String host, String jwt, Long userId, Long accountId, Long characterId, String transactionId);
 
+    GuildDetailMemberResponse guildMember(String host, String jwt, Long userId, Long accountId, Long characterId,
+                                     String transactionId);
 }
