@@ -10,5 +10,4 @@ import java.util.*;
 public class AccountsDto {
     private List<AccountGameModel> accounts;
     private Long size;
-
 }

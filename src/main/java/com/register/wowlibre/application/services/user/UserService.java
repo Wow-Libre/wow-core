@@ -10,9 +10,11 @@ import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.out.user.*;
 import com.register.wowlibre.domain.security.*;
 import com.register.wowlibre.domain.shared.*;
+import com.register.wowlibre.infrastructure.config.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
+import org.springframework.scheduling.annotation.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 
@@ -21,7 +23,6 @@ import java.util.*;
 @Service
 public class UserService implements UserPort {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
-
     private static final String PICTURE_DEFAULT_PROFILE_WEB = "https://i.ibb.co/M8Kfq9X/icon-Default.png";
     private final ObtainUserPort obtainUserPort;
     private final SaveUserPort saveUserPort;
@@ -29,10 +30,9 @@ public class UserService implements UserPort {
     private final JwtPort jwtPort;
     private final RolPort rolPort;
 
-
     public UserService(ObtainUserPort obtainUserPort, SaveUserPort saveUserPort, PasswordEncoder passwordEncoder,
                        JwtPort jwtPort,
-                       RolPort rolPort) {
+                       RolPort rolPort, MailSend mailSend) {
         this.obtainUserPort = obtainUserPort;
         this.saveUserPort = saveUserPort;
         this.passwordEncoder = passwordEncoder;
@@ -42,7 +42,8 @@ public class UserService implements UserPort {
 
 
     @Override
-    public JwtDto create(UserDto userDto, String transactionId) {
+    public JwtDto create(UserDto userDto, Locale locale, String transactionId) {
+        final String email = userDto.getEmail();
 
         if (findByEmail(userDto.getEmail(), transactionId) != null) {
             throw new FoundException("There is already a registered client with this data", transactionId);
@@ -53,9 +54,9 @@ public class UserService implements UserPort {
         final RolModel rolModel = rolPort.findByName(Roles.CLIENT.getRoleName(), transactionId);
 
         if (rolModel == null) {
-            LOGGER.error("An error occurred while assigning a role.  TransactionId: [{}]",
+            LOGGER.error("An error occurred while assigning a role. email {} transactionId: {}", email,
                     transactionId);
-            throw new NotFoundException("An error occurred while assigning a role.", transactionId);
+            throw new InternalException("An error occurred while assigning a role.", transactionId);
         }
 
         userDto.setPassword(passwordEncode);
@@ -81,6 +82,8 @@ public class UserService implements UserPort {
         return new JwtDto(token, refreshToken, expiration, PICTURE_DEFAULT_PROFILE_WEB,
                 customUserDetails.getLanguage());
     }
+
+
 
     private UserEntity mapToModel(UserDto userDto, RolModel rolModel) {
         UserEntity user = new UserEntity();

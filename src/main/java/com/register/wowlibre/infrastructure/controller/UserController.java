@@ -24,8 +24,10 @@ public class UserController {
     @PostMapping(path = "/create")
     public ResponseEntity<GenericResponse<JwtDto>> createUser(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE, required = false) Locale locale,
             @RequestBody @Valid UserDto accountWeb) {
-        JwtDto jwtDto = userPort.create(accountWeb, transactionId);
+
+        final JwtDto jwtDto = userPort.create(accountWeb, locale, transactionId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new GenericResponseBuilder<>(jwtDto, transactionId).created().build());
@@ -61,7 +63,8 @@ public class UserController {
             @RequestHeader(name = HEADER_USER_ID) final Long userId) {
 
         UserDetailDto userResponse = userPort.findByUserId(userId, transactionId)
-                .map(model -> new UserDetailDto(model.getId(), model.getCountry(), model.getDateOfBirth(), model.getFirstName(),
+                .map(model -> new UserDetailDto(model.getId(), model.getCountry(), model.getDateOfBirth(),
+                        model.getFirstName(),
                         model.getLastName(), model.getCellPhone(), model.getEmail(), model.getRolId().getName(),
                         model.getStatus(), model.getVerified())).orElse(null);
 

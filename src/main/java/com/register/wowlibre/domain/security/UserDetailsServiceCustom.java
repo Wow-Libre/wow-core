@@ -1,6 +1,6 @@
 package com.register.wowlibre.domain.security;
 
-import com.register.wowlibre.domain.exception.BadRequestException;
+import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.port.out.user.ObtainUserPort;
 import com.register.wowlibre.domain.shared.CustomUserDetails;
 import com.register.wowlibre.infrastructure.entities.UserEntity;
@@ -27,7 +27,7 @@ public class UserDetailsServiceCustom implements UserDetailsService {
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserEntity account = obtainUserPort.findByEmailAndStatusIsTrue(username)
-                .orElseThrow(() -> new BadRequestException(CONSTANT_GENERIC_ERROR_ACCOUNT_IS_NOT_AVAILABLE + username
+                .orElseThrow(() -> new UnauthorizedException(CONSTANT_GENERIC_ERROR_ACCOUNT_IS_NOT_AVAILABLE + username
                         , ""));
 
         return new CustomUserDetails(assignRol(account.getRolId().getName()), account.getPassword(),
@@ -35,7 +35,7 @@ public class UserDetailsServiceCustom implements UserDetailsService {
                 true,
                 true,
                 true,
-                true,
+                account.getStatus(),
                 account.getId(),
                 account.getAvatarUrl(),
                 account.getLanguage()

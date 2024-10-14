@@ -6,6 +6,7 @@ public class Constants {
     public static final String CONSTANT_ROL = "x-roles";
     // HEADERS
     public static final String HEADER_TRANSACTION_ID = "transaction_id";
+    public static final String HEADER_ACCEPT_LANGUAGE = "Accept-Language";
 
     /* JWT HEADERS */
     public static final String HEADER_EMAIL = "x-email";

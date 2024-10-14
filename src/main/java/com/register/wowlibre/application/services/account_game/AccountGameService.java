@@ -35,6 +35,32 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
+    public AccountsDto accounts(Long userId, int page, int size, String searchUsername, String serverName,
+                                String transactionId) {
+
+        if (userPort.findByUserId(userId, transactionId).isEmpty()) {
+            throw new UnauthorizedException("The client is not available or does not exist", transactionId);
+        }
+
+        Long sizeAccounts = obtainAccountGamePort.accounts(userId);
+        List<AccountGameModel> accountsGame = new ArrayList<>();
+
+        if (sizeAccounts > 0) {
+            if (searchUsername != null || serverName != null) {
+                accountsGame = obtainAccountGamePort.findByUserIdAndServerNameAndUsernameStatusIsTrue(userId, page,
+                        size, serverName
+                        , searchUsername, transactionId).stream().map(this::mapToModel).toList();
+            } else {
+                accountsGame = obtainAccountGamePort.findByUserIdAndStatusIsTrue(userId,
+                        page, size, transactionId).stream().map(this::mapToModel).toList();
+            }
+        }
+
+
+        return new AccountsDto(accountsGame, sizeAccounts);
+    }
+
+    @Override
     public void create(Long userId, String serverName, String expansion, String username, String password,
                        String transactionId) {
 
@@ -71,31 +97,6 @@ public class AccountGameService implements AccountGamePort {
         saveAccountGamePort.save(accountGameEntity, transactionId);
     }
 
-    @Override
-    public AccountsDto accounts(Long userId, int page, int size, String searchUsername, String serverName,
-                                String transactionId) {
-
-        if (userPort.findByUserId(userId, transactionId).isEmpty()) {
-            throw new InternalException("The client is not available or does not exist", transactionId);
-        }
-
-        Long sizeAccounts = obtainAccountGamePort.accounts(userId);
-        List<AccountGameModel> accountsGame = new ArrayList<>();
-
-        if (sizeAccounts > 0) {
-            if (searchUsername != null || serverName != null) {
-                accountsGame = obtainAccountGamePort.findByUserIdAndServerNameAndUsernameStatusIsTrue(userId, page,
-                        size, serverName
-                        , searchUsername, transactionId).stream().map(this::mapToModel).toList();
-            } else {
-                accountsGame = obtainAccountGamePort.findByUserIdAndStatusIsTrue(userId,
-                        page, size, transactionId).stream().map(this::mapToModel).toList();
-            }
-        }
-
-
-        return new AccountsDto(accountsGame, sizeAccounts);
-    }
 
     @Override
     public AccountsDto accounts(Long userId, Long serverId, String transactionId) {

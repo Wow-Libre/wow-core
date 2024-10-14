@@ -1,4 +1,11 @@
 spring:
+  messages:
+    basename: messages,config.i18n.messages
+    always-use-message-format: false
+    cache-duration:
+    encoding: UTF-8
+    fallback-to-system-locale: true
+    use-code-as-default-message: false
   data:
     redis:
       host: localhost
@@ -31,6 +38,8 @@ server:
   port: 8090
 application:
   security:
+    mail:
+      api-key: 'mlsn.0ebc57351a0ce3a6b78a6e2e80f0233d8b826f34cdccc052e3946909de563769'
     jwt:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
       expiration: 86400000 # a day

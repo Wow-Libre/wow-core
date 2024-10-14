@@ -4,6 +4,7 @@ import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.shared.*;
 import org.springframework.http.*;
 import org.springframework.http.converter.*;
+import org.springframework.security.authentication.*;
 import org.springframework.validation.*;
 import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.*;
@@ -84,4 +85,5 @@ public class ManagerExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+
 }

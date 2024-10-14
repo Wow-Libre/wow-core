@@ -18,6 +18,21 @@ public class AccountGameController {
         this.accountGamePort = accountGamePort;
     }
 
+    @GetMapping(path = "/available")
+    public ResponseEntity<GenericResponse<AccountsDto>> accounts(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam final int page,
+            @RequestParam final int size,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String server) {
+
+        AccountsDto accounts = accountGamePort.accounts(userId, page, size, username, server, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(accounts, transactionId).created().build());
+    }
+
     @PostMapping(path = "/create")
     public ResponseEntity<GenericResponse<Void>> create(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
@@ -31,19 +46,6 @@ public class AccountGameController {
                 .body(new GenericResponseBuilder<Void>(transactionId).created().build());
     }
 
-    @GetMapping(path = "/available")
-    public ResponseEntity<GenericResponse<AccountsDto>> accounts(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_USER_ID) final Long userId,
-            @RequestParam final int page, @RequestParam final int size,
-            @RequestParam(required = false) String username,
-            @RequestParam(required = false) String server) {
-
-        AccountsDto accounts = accountGamePort.accounts(userId, page, size, username, server, transactionId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(accounts, transactionId).created().build());
-    }
 
     @GetMapping
     public ResponseEntity<GenericResponse<AccountsDto>> accountsByServerId(
