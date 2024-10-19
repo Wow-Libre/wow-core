@@ -2,13 +2,12 @@ package com.register.wowlibre.domain.port.in.integrator;
 
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.dto.client.*;
-import com.register.wowlibre.domain.model.*;
 
 import java.util.*;
 
 public interface IntegratorPort {
-    Long create(String username, String password, ServerModel server, UserModel userModel,
-                String transactionId);
+    Long create(String host, String apiSecret, String expansion, String username, String password,
+                String email, Long userId, String transactionId);
 
     CharactersDto characters(String host, String jwt, Long accountId, Long userId, String transactionId);
 
@@ -47,5 +46,5 @@ public interface IntegratorPort {
     void unInviteGuild(String host, String jwt, Long userId, Long accountId, Long characterId, String transactionId);
 
     GuildDetailMemberResponse guildMember(String host, String jwt, Long userId, Long accountId, Long characterId,
-                                     String transactionId);
+                                          String transactionId);
 }

@@ -48,8 +48,7 @@ public class AccountGameService implements AccountGamePort {
         if (sizeAccounts > 0) {
             if (searchUsername != null || serverName != null) {
                 accountsGame = obtainAccountGamePort.findByUserIdAndServerNameAndUsernameStatusIsTrue(userId, page,
-                        size, serverName
-                        , searchUsername, transactionId).stream().map(this::mapToModel).toList();
+                        size, serverName, searchUsername, transactionId).stream().map(this::mapToModel).toList();
             } else {
                 accountsGame = obtainAccountGamePort.findByUserIdAndStatusIsTrue(userId,
                         page, size, transactionId).stream().map(this::mapToModel).toList();
@@ -84,9 +83,8 @@ public class AccountGameService implements AccountGamePort {
                     "available", transactionId);
         }
 
-        Long accountId = integratorPort.create(username, password, serverAvailable,
-                user.mapToModelEntity(),
-                transactionId);
+        Long accountId = integratorPort.create(serverAvailable.ip, serverAvailable.apiSecret, serverAvailable.expansion,
+                username, password, user.getEmail(), user.getId(), transactionId);
 
         AccountGameEntity accountGameEntity = new AccountGameEntity();
         accountGameEntity.setAccountId(accountId);
@@ -100,6 +98,7 @@ public class AccountGameService implements AccountGamePort {
 
     @Override
     public AccountsDto accounts(Long userId, Long serverId, String transactionId) {
+
         if (userPort.findByUserId(userId, transactionId).isEmpty()) {
             throw new InternalException("The client is not available or does not exist", transactionId);
         }

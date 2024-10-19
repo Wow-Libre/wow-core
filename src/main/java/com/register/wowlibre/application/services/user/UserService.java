@@ -4,17 +4,17 @@ import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.mapper.*;
 import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.account_validation.*;
 import com.register.wowlibre.domain.port.in.jwt.*;
+import com.register.wowlibre.domain.port.in.mail.*;
 import com.register.wowlibre.domain.port.in.rol.*;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.out.user.*;
 import com.register.wowlibre.domain.security.*;
 import com.register.wowlibre.domain.shared.*;
-import com.register.wowlibre.infrastructure.config.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
-import org.springframework.scheduling.annotation.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 
@@ -29,15 +29,19 @@ public class UserService implements UserPort {
     private final PasswordEncoder passwordEncoder;
     private final JwtPort jwtPort;
     private final RolPort rolPort;
+    private final MailPort mailPort;
+    private final AccountValidationPort accountValidationPort;
 
     public UserService(ObtainUserPort obtainUserPort, SaveUserPort saveUserPort, PasswordEncoder passwordEncoder,
-                       JwtPort jwtPort,
-                       RolPort rolPort, MailSend mailSend) {
+                       JwtPort jwtPort, RolPort rolPort, MailPort mailPort,
+                       AccountValidationPort accountValidationPort) {
         this.obtainUserPort = obtainUserPort;
         this.saveUserPort = saveUserPort;
         this.passwordEncoder = passwordEncoder;
         this.jwtPort = jwtPort;
         this.rolPort = rolPort;
+        this.mailPort = mailPort;
+        this.accountValidationPort = accountValidationPort;
     }
 
 
@@ -78,11 +82,14 @@ public class UserService implements UserPort {
         final String token = jwtPort.generateToken(customUserDetails);
         final Date expiration = jwtPort.extractExpiration(token);
         final String refreshToken = jwtPort.generateRefreshToken(customUserDetails);
+        final String code = accountValidationPort.generateCodeMail(email);
+
+        mailPort.sendCodeMail(email, "Bienvenido, Su cuenta ha sido creada exitosamente, Por favor verifique su " +
+                "correo", code, locale, transactionId);
 
         return new JwtDto(token, refreshToken, expiration, PICTURE_DEFAULT_PROFILE_WEB,
                 customUserDetails.getLanguage());
     }
-
 
 
     private UserEntity mapToModel(UserDto userDto, RolModel rolModel) {
@@ -104,7 +111,7 @@ public class UserService implements UserPort {
 
     @Override
     public UserModel findByEmail(String email, String transactionId) {
-        return obtainUserPort.findByEmailAndStatusIsTrue(email).map(UserEntity::mapToModelEntity).orElse(null);
+        return findByEmailEntity(email, transactionId).map(UserEntity::mapToModelEntity).orElse(null);
     }
 
     @Override
@@ -116,6 +123,33 @@ public class UserService implements UserPort {
     @Override
     public Optional<UserEntity> findByUserId(Long userId, String transactionId) {
         return obtainUserPort.findByUserIdAndStatusIsTrue(userId, transactionId);
+    }
+
+    @Override
+    public Optional<UserEntity> findByEmailEntity(String email, String transactionId) {
+        return obtainUserPort.findByEmailAndStatusIsTrue(email);
+    }
+
+    @Override
+    public void validationAccount(Long userId, String code, String transactionId) {
+
+        Optional<UserEntity> userFound = findByUserId(userId, transactionId);
+
+        if (userFound.isEmpty() || userFound.get().getVerified() || !userFound.get().getStatus()) {
+            throw new InternalException("It was not possible to validate your code, the account is disabled or " +
+                    "does not exist.", transactionId);
+        }
+
+        UserEntity userModel = userFound.get();
+
+        String obtainedCode = accountValidationPort.retrieveEmailCode(userModel.getEmail());
+
+        if (obtainedCode != null && obtainedCode.equals(code)) {
+            userModel.setVerified(true);
+            saveUserPort.save(userModel, transactionId);
+        } else {
+            throw new InternalException("The codes are invalid", transactionId);
+        }
     }
 
 

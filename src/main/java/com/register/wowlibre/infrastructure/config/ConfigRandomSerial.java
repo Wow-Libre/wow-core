@@ -16,4 +16,9 @@ public class ConfigRandomSerial {
         return new RandomString(20, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
+    @Bean("random-code")
+    public RandomString randomCodeString() {
+        return new RandomString(28, "abcdefghijklmnopqrstuvwxyz0123456789");
+    }
+
 }

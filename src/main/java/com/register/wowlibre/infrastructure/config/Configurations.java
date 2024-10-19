@@ -9,4 +9,6 @@ import org.springframework.context.annotation.*;
 public class Configurations {
     @Value("${application.security.mail.api-key}")
     private String apiKeyMail;
+    @Value("${application.host.wow-libre}")
+    private String hostWowLibre;
 }

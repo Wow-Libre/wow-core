@@ -2,10 +2,11 @@ package com.register.wowlibre;
 
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
-import org.springframework.data.redis.repository.configuration.*;
+import org.springframework.cache.annotation.*;
 import org.springframework.scheduling.annotation.*;
 
 @EnableAsync
+@EnableCaching
 @SpringBootApplication
 public class WowlibreApplication {
 

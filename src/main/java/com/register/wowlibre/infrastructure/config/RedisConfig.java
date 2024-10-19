@@ -17,6 +17,7 @@ public class RedisConfig {
     JedisConnectionFactory jedisConnectionFactory() {
         return new JedisConnectionFactory();
     }
+
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         // Configuración general de cache
@@ -24,24 +25,21 @@ public class RedisConfig {
                 RedisCacheConfiguration.defaultCacheConfig()
                         .entryTtl(Duration.ofMinutes(2)); // TTL predeterminado
 
-        // Configuración específica para otros caches
-        RedisCacheConfiguration userCacheConfig =
-                RedisCacheConfiguration.defaultCacheConfig()
-                        .entryTtl(Duration.ofSeconds(60)); // TTL para findByUserId
-
-        RedisCacheConfiguration mailsConfig =
-                RedisCacheConfiguration.defaultCacheConfig()
-                        .entryTtl(Duration.ofSeconds(30));
-
         // Map de configuraciones para caches específicos
         Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
-        cacheConfigurations.put("findByUserId", userCacheConfig);
-        cacheConfigurations.put("mails", mailsConfig);
+        cacheConfigurations.put("findByUserId", configurationTtl(Duration.ofSeconds(60)));
+        cacheConfigurations.put("mails", configurationTtl(Duration.ofMinutes(30)));
+        cacheConfigurations.put("emailCodeCache", configurationTtl(Duration.ofMinutes(30)));
 
         // Construcción del RedisCacheManager con configuraciones específicas
         return RedisCacheManager.builder(redisConnectionFactory)
-                .cacheDefaults(defaultCacheConfig)  // Configuración por defecto
-                .withInitialCacheConfigurations(cacheConfigurations)  // Configuraciones personalizadas
+                .cacheDefaults(defaultCacheConfig)
+                .withInitialCacheConfigurations(cacheConfigurations)
                 .build();
+    }
+
+    private RedisCacheConfiguration configurationTtl(Duration duration) {
+        return RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(duration);
     }
 }

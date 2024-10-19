@@ -76,4 +76,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok(userResponse).build());
     }
+
+
+    @PutMapping("/confirm-email")
+    public ResponseEntity<GenericResponse<UserDetailDto>> confirmEmail(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam final String code) {
+
+        userPort.validationAccount(userId, code, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok().build());
+    }
 }

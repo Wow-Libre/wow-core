@@ -3,6 +3,6 @@ package com.register.wowlibre.domain.port.in.mail;
 import java.util.*;
 
 public interface MailPort {
-    void sendCodeMail(String mail, String subject, Locale locale, String transactionId);
+    void sendCodeMail(String mail, String subject, String code, Locale locale, String transactionId);
 
 }

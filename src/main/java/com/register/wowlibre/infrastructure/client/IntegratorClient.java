@@ -34,23 +34,20 @@ public class IntegratorClient {
 
         try {
             ResponseEntity<GenericResponse<Long>> response = restTemplate.exchange(String.format("%s/api/account"
-                                    + "/create",
-                            host),
-                    HttpMethod.POST, entity,
-                    new ParameterizedTypeReference<>() {
-                    });
+                    + "/create", host), HttpMethod.POST, entity, new ParameterizedTypeReference<>() {
+            });
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 return Objects.requireNonNull(response.getBody()).getData();
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("Client/Server Error: {}. The request failed with a client or server error. " +
+            LOGGER.error("[IntegratorClient] [createAccountGame] Client/Server Error: {}. The request failed with a client or server error. " +
                             "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or server error", transactionId);
         } catch (Exception e) {
-            LOGGER.error("Unexpected Error: {}. An unexpected error occurred during the transaction with ID: {}.",
+            LOGGER.error("[IntegratorClient] [createAccountGame] Unexpected Error: {}. An unexpected error occurred during the transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -81,12 +78,12 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("Client/Server Error: {}. The request failed with a client or server error. " +
+            LOGGER.error("[IntegratorClient] [characters] Client/Server Error: {}. The request failed with a client or server error. " +
                             "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or server error", transactionId);
         } catch (Exception e) {
-            LOGGER.error("Unexpected Error: {}. An unexpected error occurred during the transaction with ID: {}.",
+            LOGGER.error("[IntegratorClient] [characters] Unexpected Error: {}. An unexpected error occurred during the transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -616,7 +613,8 @@ public class IntegratorClient {
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or server error", transactionId);
         } catch (Exception e) {
-            LOGGER.error("[IntegratorClient] [unInviteGuild] Unexpected Error: {}. An unexpected error occurred during " +
+            LOGGER.error("[IntegratorClient] [unInviteGuild] Unexpected Error: {}. An unexpected error occurred " +
+                            "during " +
                             "the " +
                             "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);

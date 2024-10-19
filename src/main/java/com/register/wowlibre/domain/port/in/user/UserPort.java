@@ -16,4 +16,7 @@ public interface UserPort {
 
     Optional<UserEntity> findByUserId(Long userId, String transactionId);
 
+    Optional<UserEntity> findByEmailEntity(String email, String transactionId);
+
+    void validationAccount(Long userId, String code, String transactionId);
 }
