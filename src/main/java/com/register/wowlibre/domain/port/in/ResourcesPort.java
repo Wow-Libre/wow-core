@@ -12,5 +12,6 @@ public interface ResourcesPort {
 
     List<PlanModel> getPlansBank(String language, String transactionId);
     List<BenefitModel> getBenefitsGuild(String language, String transactionId);
+    List<ServersPromotions> getJsonServersPromoGuild(String language, String transactionId);
 
 }

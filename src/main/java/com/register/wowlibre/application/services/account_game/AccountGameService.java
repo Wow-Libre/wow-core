@@ -37,6 +37,9 @@ public class AccountGameService implements AccountGamePort {
     @Override
     public AccountsDto accounts(Long userId, int page, int size, String searchUsername, String serverName,
                                 String transactionId) {
+        if (size > 30) {
+            size = 30;
+        }
 
         if (userPort.findByUserId(userId, transactionId).isEmpty()) {
             throw new UnauthorizedException("The client is not available or does not exist", transactionId);

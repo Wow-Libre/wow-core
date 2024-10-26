@@ -20,23 +20,25 @@ public class JsonLoader implements JsonLoaderPort {
     private final Resource faqsJsonFile;
     private final Resource bankPlans;
     private final Resource benefitsGuild;
-
+    private final Resource serversPromos;
     private List<CountryModel> jsonCountryModel;
     private List<FaqsModel> jsonFaqsModel;
     private Map<String, List<PlanModel>> jsonPlanModel;
-
     private Map<String, List<BenefitModel>> jsonBenefits;
+    private Map<String, List<ServersPromotions>> jsonServerPromos;
 
     public JsonLoader(ObjectMapper objectMapper,
                       @Value("classpath:/static/countryAvailable.json") Resource jsonFile,
                       @Value("classpath:/static/faqs.json") Resource faqsJsonFile,
                       @Value("classpath:/static/bank_plans.json") Resource bankPlans,
-                      @Value("classpath:/static/benefit_guild.json") Resource benefitsGuild) {
+                      @Value("classpath:/static/benefit_guild.json") Resource benefitsGuild,
+                      @Value("classpath:/static/servers_promotions.json") Resource serverPromos) {
         this.objectMapper = objectMapper;
         this.jsonFile = jsonFile;
         this.faqsJsonFile = faqsJsonFile;
         this.bankPlans = bankPlans;
         this.benefitsGuild = benefitsGuild;
+        this.serversPromos = serverPromos;
     }
 
     @PostConstruct
@@ -49,6 +51,8 @@ public class JsonLoader implements JsonLoaderPort {
             jsonPlanModel = objectMapper.readValue(bankPlans.getInputStream(), new TypeReference<>() {
             });
             jsonBenefits = objectMapper.readValue(benefitsGuild.getInputStream(), new TypeReference<>() {
+            });
+            jsonServerPromos= objectMapper.readValue(serversPromos.getInputStream(), new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -73,6 +77,11 @@ public class JsonLoader implements JsonLoaderPort {
     @Override
     public List<BenefitModel> getJsonBenefitsGuild(String language, String transactionId) {
         return Optional.of(jsonBenefits.get(language)).orElse(jsonBenefits.get("es"));
+    }
+
+    @Override
+    public List<ServersPromotions> getJsonServersPromoGuild(String language, String transactionId) {
+        return Optional.of(jsonServerPromos.get(language)).orElse(jsonServerPromos.get("es"));
     }
 
 
