@@ -51,7 +51,7 @@ public class BankService implements BankPort {
     public void applyForLoan(Long userId, Long accountId, Long characterId, Long serverId, Long planId,
                              String transactionId) {
 
-        AccountVerificationDto verificationDto = accountGamePort.verify(userId, accountId, serverId, transactionId);
+        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId, transactionId);
 
         ServerEntity server = verificationDto.server();
 

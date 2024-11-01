@@ -95,7 +95,7 @@ public class GuildService implements GuildPort {
     public void attach(Long serverId, Long userId, Long accountId, Long characterId, Long guildId,
                        String transactionId) {
 
-        AccountVerificationDto verificationDto = accountGamePort.verify(userId, accountId, serverId, transactionId);
+        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId, transactionId);
 
         integratorPort.attachGuild(verificationDto.server().getIp(), verificationDto.server().getJwt(),
                 verificationDto.accountGame().getAccountId(), guildId, characterId, transactionId);
@@ -104,7 +104,7 @@ public class GuildService implements GuildPort {
     @Override
     public void unInviteGuild(Long serverId, Long userId, Long accountId, Long characterId, String transactionId) {
 
-        AccountVerificationDto verificationDto = accountGamePort.verify(userId, accountId, serverId, transactionId);
+        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId, transactionId);
 
         integratorPort.unInviteGuild(verificationDto.server().getIp(), verificationDto.server().getJwt(), userId,
                 accountId, characterId, transactionId);
@@ -113,7 +113,7 @@ public class GuildService implements GuildPort {
     @Override
     public GuildMemberDetailDto guildMember(Long serverId, Long userId, Long accountId, Long characterId,
                                             String transactionId) {
-        AccountVerificationDto verificationDto = accountGamePort.verify(userId, accountId, serverId, transactionId);
+        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId, transactionId);
 
         GuildDetailMemberResponse response = integratorPort.guildMember(verificationDto.server().getIp(),
                 verificationDto.server().getJwt(), userId,

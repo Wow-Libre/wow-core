@@ -10,6 +10,7 @@ import com.register.wowlibre.domain.port.out.server.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.time.*;
@@ -37,6 +38,7 @@ public class ServerService implements ServerPort {
                 .orElse(null);
     }
 
+    @Cacheable(value = "serversFindById", key = "#id")
     @Override
     public Optional<ServerEntity> findById(Long id, String transactionId) {
         return obtainServerPort.findById(id, transactionId);

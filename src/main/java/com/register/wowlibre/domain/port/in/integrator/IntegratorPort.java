@@ -2,6 +2,7 @@ package com.register.wowlibre.domain.port.in.integrator;
 
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.dto.client.*;
+import com.register.wowlibre.domain.model.*;
 
 import java.util.*;
 
@@ -47,4 +48,12 @@ public interface IntegratorPort {
 
     GuildDetailMemberResponse guildMember(String host, String jwt, Long userId, Long accountId, Long characterId,
                                           String transactionId);
+
+    void executeCommand(String host, String jwt, String message, byte[] salt, String transactionId);
+
+    Double collectGold(String host, String jwt, Long userId, Double moneyToPay, String transactionId);
+
+    void purchase(String host, String jwt, Long userId, Long accountId, String reference,
+                  List<ItemQuantityModel> items,
+                  String transactionId);
 }

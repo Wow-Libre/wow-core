@@ -243,4 +243,22 @@ public class IntegratorService implements IntegratorPort {
         return response;
     }
 
+    @Override
+    public void executeCommand(String host, String jwt, String message, byte[] salt, String transactionId) {
+        integratorClient.sendCommand(host, jwt, message, salt, transactionId);
+    }
+
+    @Override
+    public Double collectGold(String host, String jwt, Long userId, Double moneyToPay, String transactionId) {
+        return Optional.ofNullable(integratorClient.collectGold(host, jwt, userId, moneyToPay, transactionId))
+                .orElse(moneyToPay);
+    }
+
+    @Override
+    public void purchase(String host, String jwt, Long userId, Long accountId, String reference,
+                         List<ItemQuantityModel> items,
+                         String transactionId) {
+        integratorClient.purchase(host, jwt, userId, accountId, reference, items, transactionId);
+    }
+
 }

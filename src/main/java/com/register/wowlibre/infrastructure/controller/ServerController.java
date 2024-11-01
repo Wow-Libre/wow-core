@@ -59,21 +59,6 @@ public class ServerController {
                 .body(new GenericResponseBuilder<>(serverList, transactionId).ok().build());
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<GenericResponse<ServerModel>> search(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestParam String emulator,
-            @RequestParam String name) {
 
-        final ServerModel server = serverPort.findByNameAndVersionAndStatusIsTrue(name, emulator, transactionId);
-
-        if (server == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                    .body(new GenericResponseBuilder<ServerModel>(transactionId).notContent().build());
-        }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(server, transactionId).ok().build());
-    }
 
 }

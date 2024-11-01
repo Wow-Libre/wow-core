@@ -114,7 +114,7 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
-    public AccountVerificationDto verify(Long userId, Long accountId, Long serverId, String transactionId) {
+    public AccountVerificationDto verifyAccount(Long userId, Long accountId, Long serverId, String transactionId) {
 
         Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
 

@@ -12,7 +12,7 @@ public interface AccountGamePort {
 
     AccountsDto accounts(Long userId, Long serverId, String transactionId);
 
-    AccountVerificationDto verify(Long userId, Long accountId, Long serverId, String transactionId);
+    AccountVerificationDto verifyAccount(Long userId, Long accountId, Long serverId, String transactionId);
 
     AccountDetailDto account(Long userId, Long accountId, Long serverId, String transactionId);
 

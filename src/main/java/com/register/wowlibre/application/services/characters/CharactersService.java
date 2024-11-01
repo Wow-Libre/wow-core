@@ -28,7 +28,7 @@ public class CharactersService implements CharactersPort {
     @Override
     public CharactersDto characters(Long userId, Long accountId, Long serverId, String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verify(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         return integratorService.characters(accountVerificationDto.server().getIp(),
@@ -38,7 +38,7 @@ public class CharactersService implements CharactersPort {
 
     @Override
     public CharactersDto loanApplicationCharacters(Long userId, Long accountId, Long serverId, String transactionId) {
-        AccountVerificationDto accountVerificationDto = accountGamePort.verify(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         return integratorService.loanApplicationCharacters(accountVerificationDto.server().getIp(),
@@ -50,7 +50,7 @@ public class CharactersService implements CharactersPort {
     public void deleteFriend(Long userId, Long accountId, Long serverId, Long characterId, Long friendId,
                              String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verify(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
 
@@ -63,7 +63,7 @@ public class CharactersService implements CharactersPort {
     @Override
     public MailsDto mails(Long userId, Long accountId, Long serverId, Long characterId, String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verify(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         return integratorService.mails(accountVerificationDto.server().getIp(),
@@ -74,7 +74,7 @@ public class CharactersService implements CharactersPort {
     public CharacterSocialDto friends(Long userId, Long accountId, Long serverId, Long characterId,
                                       String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verify(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         return integratorService.friends(accountVerificationDto.server().getIp(),
@@ -86,7 +86,7 @@ public class CharactersService implements CharactersPort {
     public void changePassword(Long userId, Long accountId, Long serverId, String password, String newPassword,
                                String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verify(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         AccountGameEntity accountGameModel = accountVerificationDto.accountGame();
@@ -107,7 +107,7 @@ public class CharactersService implements CharactersPort {
     public List<CharacterProfessionsDto> professions(Long userId, Long accountId, Long serverId, Long characterId,
                                                      String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verify(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         return integratorService.professions(accountVerificationDto.server().getIp(),
@@ -118,27 +118,38 @@ public class CharactersService implements CharactersPort {
     public void sendLevel(Long userId, Long accountId, Long serverId, Long characterId, Long friendId, Integer level,
                           String transactionId) {
 
-        AccountVerificationDto verifyData = accountGamePort.verify(userId, accountId, serverId,
+        AccountVerificationDto verifyAccount = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
-        final ServerEntity serverModel = verifyData.server();
-        final AccountGameEntity accountGame = verifyData.accountGame();
+        final ServerEntity serverModel = verifyAccount.server();
+        final AccountGameEntity accountGame = verifyAccount.accountGame();
 
+        if (!serverModel.isStatus()) {
+            throw new InternalException("The server is currently not verified", transactionId);
+        }
+
+        //TODO : Ajustar el cobro de la transaction de la tabla  los server services
         integratorService.sendLevel(serverModel.getIp(), serverModel.getJwt(), accountGame.getAccountId(),
-                accountGame.getUserId().getId(), characterId, friendId, level, 1.0, transactionId);
+                accountGame.getUserId().getId(), characterId, friendId, level, 0.0, transactionId);
     }
 
     @Override
     public void sendMoney(Long userId, Long accountId, Long serverId, Long characterId, Long friendId, Long money,
                           String transactionId) {
-        AccountVerificationDto verifyData = accountGamePort.verify(userId, accountId, serverId,
+        AccountVerificationDto verifyData = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         final ServerEntity serverModel = verifyData.server();
         final AccountGameEntity accountGame = verifyData.accountGame();
 
+        if (!serverModel.isStatus()) {
+            throw new InternalException("The server is currently not verified", transactionId);
+        }
+
+
+        //TODO : Ajustar el cobro de la transaction de la tabla  los server services
         integratorService.sendMoney(serverModel.getIp(), serverModel.getJwt(), accountGame.getAccountId(),
-                accountGame.getUserId().getId(), characterId, friendId, money, 1.0, transactionId);
+                accountGame.getUserId().getId(), characterId, friendId, money, 0.0, transactionId);
     }
 
 }

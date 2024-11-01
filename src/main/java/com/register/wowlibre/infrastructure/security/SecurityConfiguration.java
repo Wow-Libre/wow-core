@@ -103,6 +103,7 @@ public class SecurityConfiguration {
                                         "/swagger-ui/**")
                                 .permitAll()
                                 .requestMatchers("/api/server/create", "/api/server/key").hasAuthority(Roles.SERVER.getRoleName())
+                                .requestMatchers("/api/transaction/purchase").hasAuthority(Roles.ADMIN.getRoleName())
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
