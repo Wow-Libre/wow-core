@@ -22,7 +22,7 @@ public class JsonLoader implements JsonLoaderPort {
     private final Resource benefitsGuild;
     private final Resource serversPromos;
     private List<CountryModel> jsonCountryModel;
-    private List<FaqsModel> jsonFaqsModel;
+    private  Map<String, List<FaqsModel>> jsonFaqsModel;
     private Map<String, List<PlanModel>> jsonPlanModel;
     private Map<String, List<BenefitModel>> jsonBenefits;
     private Map<String, List<ServersPromotions>> jsonServerPromos;
@@ -52,7 +52,7 @@ public class JsonLoader implements JsonLoaderPort {
             });
             jsonBenefits = objectMapper.readValue(benefitsGuild.getInputStream(), new TypeReference<>() {
             });
-            jsonServerPromos= objectMapper.readValue(serversPromos.getInputStream(), new TypeReference<>() {
+            jsonServerPromos = objectMapper.readValue(serversPromos.getInputStream(), new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -65,8 +65,9 @@ public class JsonLoader implements JsonLoaderPort {
     }
 
     @Override
-    public List<FaqsModel> getJsonFaqs(String transactionId) {
-        return jsonFaqsModel;
+    public List<FaqsModel> getJsonFaqs(String language, String transactionId) {
+        return Optional.of(jsonFaqsModel.get(language)).orElse(jsonFaqsModel.get("es"));
+
     }
 
     @Override

@@ -31,8 +31,9 @@ public class ResourcesController {
 
     @GetMapping("/faqs")
     public ResponseEntity<GenericResponse<List<FaqsModel>>> faqs(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
-        final List<FaqsModel> countryModelList = resourcesPort.getFaqs(transactionId);
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE, required = false) Locale locale) {
+        final List<FaqsModel> countryModelList = resourcesPort.getFaqs(locale.getLanguage(), transactionId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(countryModelList, transactionId).ok().build());
