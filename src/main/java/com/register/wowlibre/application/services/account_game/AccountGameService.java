@@ -170,6 +170,8 @@ public class AccountGameService implements AccountGamePort {
                 .accountBanned(account.accountBanned()).build();
     }
 
+
+
     private ServerEntity getServer(Long serverId, String transactionId) {
         Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
 

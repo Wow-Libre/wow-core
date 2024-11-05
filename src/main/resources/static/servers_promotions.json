@@ -2,127 +2,55 @@
   "es": [
     {
       "id": 1,
-      "name": "Tierra Helada",
-      "sub_title": "Servidor 3.3.5 Lich King",
-      "description": "Promo.",
+      "name": "Wow Libre",
+      "sub_title": "Servidor 3.3.5",
+      "description": "Disponibles promociones",
       "logo": "https://i.ytimg.com/vi/nStvo6M40Yg/maxresdefault.jpg",
-      "link": "https://example.com/servidor1"
+      "link": ""
     },
     {
       "id": 2,
-      "name": "Luz Eterna",
-      "sub_title": "Servidor 4.0 Cataclysm",
-      "description": "Participa en eventos épicos de hermandad y compite por premios exclusivos.",
-      "logo": "https://i.ytimg.com/vi/JQd03l7PmJQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCKUStltu4eqcS1wdvgYdMtt13Ajg",
-      "link": "https://example.com/servidor2"
-    },
-    {
-      "id": 3,
-      "name": "Tempestad Arcana",
-      "sub_title": "Servidor 5.4 Pandaria",
-      "description": "Únete a nuestra comunidad y desbloquea logros para tu hermandad.",
-      "logo": "https://i.ytimg.com/vi/dD0htTlScr0/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAOoy9u6GdZOB-vLn8CtJDwC5Bp7A",
-      "link": "https://example.com/servidor3"
-    },
-    {
-      "id": 4,
-      "name": "Furia de los Titanes",
-      "sub_title": "Servidor 6.2 Draenor",
-      "description": "Conquista tierras inexploradas y reúne 500 miembros para obtener recompensas.",
-      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX8zBD0_S-YKb_u_-DsZ2S2kDRwlQ7kh-skw&s",
-      "link": "https://example.com/servidor4"
-    },
-    {
-      "id": 5,
-      "name": "Ascenso de los Dragones",
-      "sub_title": "Servidor 7.3 Legion",
-      "description": "Únete a la aventura y lleva a tu hermandad al máximo nivel.",
-      "logo": "https://example.com/logo5.jpg",
-      "link": "https://example.com/servidor5"
+      "name": "Vincula tu servidor",
+      "sub_title": "Adquiere tu espacio publicitario gratuitamente",
+      "description": "Disponibles promociones",
+      "logo": "https://images.unsplash.com/photo-1634193295627-1cdddf751ebf?fit=clamp&w=400&h=400&q=80",
+      "link": ""
     }
   ],
   "en": [
     {
       "id": 1,
       "name": "Frozen Land",
-      "sub_title": "Server 3.3.5 Lich King",
+      "sub_title": "Server 3.3.5",
       "description": "Reach 500 guild members and unlock unique rewards.",
       "logo": "https://example.com/logo1.jpg",
       "link": "https://example.com/server1"
     },
     {
       "id": 2,
-      "name": "Eternal Light",
-      "sub_title": "Server 4.0 Cataclysm",
-      "description": "Join epic guild events and compete for exclusive prizes.",
-      "logo": "https://example.com/logo2.jpg",
-      "link": "https://example.com/server2"
-    },
-    {
-      "id": 3,
-      "name": "Arcane Storm",
-      "sub_title": "Server 5.4 Pandaria",
-      "description": "Join our community and unlock guild achievements.",
-      "logo": "https://example.com/logo3.jpg",
-      "link": "https://example.com/server3"
-    },
-    {
-      "id": 4,
-      "name": "Titan's Fury",
-      "sub_title": "Server 6.2 Draenor",
-      "description": "Explore uncharted lands and gather 500 members for rewards.",
-      "logo": "https://example.com/logo4.jpg",
-      "link": "https://example.com/server4"
-    },
-    {
-      "id": 5,
-      "name": "Dragon's Rise",
-      "sub_title": "Server 7.3 Legion",
-      "description": "Join the adventure and take your guild to the max level.",
-      "logo": "https://example.com/logo5.jpg",
-      "link": "https://example.com/server5"
+      "name": "Wow Libre",
+      "sub_title": "Servidor 3.3.5",
+      "description": "Disponibles promociones",
+      "logo": "https://images.unsplash.com/photo-1634193295627-1cdddf751ebf?fit=clamp&w=400&h=400&q=80",
+      "link": "https://example.com/servidor1"
     }
   ],
   "pt": [
     {
       "id": 1,
-      "name": "Terra Congelada",
-      "sub_title": "Servidor 3.3.5 Lich King",
+      "name": "Wow Libre",
+      "sub_title": "Servidor 3.3.5",
       "description": "Alcance 500 membros na sua guilda e desbloqueie recompensas únicas.",
       "logo": "https://example.com/logo1.jpg",
       "link": "https://example.com/servidor1"
     },
     {
       "id": 2,
-      "name": "Luz Eterna",
-      "sub_title": "Servidor 4.0 Cataclysm",
-      "description": "Participe de eventos épicos de guilda e concorra a prêmios exclusivos.",
-      "logo": "https://example.com/logo2.jpg",
-      "link": "https://example.com/servidor2"
-    },
-    {
-      "id": 3,
-      "name": "Tempestade Arcana",
-      "sub_title": "Servidor 5.4 Pandaria",
-      "description": "Junte-se à nossa comunidade e desbloqueie conquistas para sua guilda.",
-      "logo": "https://example.com/logo3.jpg",
-      "link": "https://example.com/servidor3"
-    },
-    {
-      "id": 4,
-      "name": "Fúria dos Titãs",
-      "sub_title": "Servidor 6.2 Draenor",
-      "description": "Explore terras inexploradas e reúna 500 membros para recompensas.",
-      "logo": "https://example.com/logo4.jpg",
-      "link": "https://example.com/servidor4"
-    },
-    {
-      "id": 5,
-      "name": "Ascensão dos Dragões",
-      "sub_title": "Servidor 7.3 Legion",
-      "description": "Participe da aventura e leve sua guilda ao nível máximo.",
-      "logo": "https://example.com/logo5.jpg",
-      "link": "https://example.com/servidor5"
+      "name": "Vincula tu servidor",
+      "sub_title": "Adquiere tu espacio publicitario gratuitamente",
+      "description": "Disponibles promociones",
+      "logo": "https://images.unsplash.com/photo-1634193295627-1cdddf751ebf?fit=clamp&w=400&h=400&q=80",
+      "link": "https://example.com/servidor1"
     }
   ]
 }

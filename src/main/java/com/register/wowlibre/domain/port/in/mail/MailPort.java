@@ -5,4 +5,5 @@ import java.util.*;
 public interface MailPort {
     void sendCodeMail(String mail, String subject, String code, Locale locale, String transactionId);
 
+    void sendMail(String mail, String subject, String body, String transactionId);
 }

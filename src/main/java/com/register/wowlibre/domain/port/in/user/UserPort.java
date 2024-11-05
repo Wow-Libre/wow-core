@@ -19,4 +19,8 @@ public interface UserPort {
     Optional<UserEntity> findByEmailEntity(String email, String transactionId);
 
     void validationAccount(Long userId, String code, String transactionId);
+
+    void resetPassword(String email, String transactionId);
+
+    void validateOtpRecoverPassword(String email, String code, String transactionId);
 }

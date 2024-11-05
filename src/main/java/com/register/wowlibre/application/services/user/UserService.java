@@ -1,5 +1,6 @@
 package com.register.wowlibre.application.services.user;
 
+import com.register.wowlibre.application.services.*;
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.mapper.*;
@@ -15,6 +16,7 @@ import com.register.wowlibre.domain.shared.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 
@@ -31,10 +33,12 @@ public class UserService implements UserPort {
     private final RolPort rolPort;
     private final MailPort mailPort;
     private final AccountValidationPort accountValidationPort;
+    private final I18nService i18nService;
+    private final RandomString randomString;
 
     public UserService(ObtainUserPort obtainUserPort, SaveUserPort saveUserPort, PasswordEncoder passwordEncoder,
-                       JwtPort jwtPort, RolPort rolPort, MailPort mailPort,
-                       AccountValidationPort accountValidationPort) {
+                       JwtPort jwtPort, RolPort rolPort, MailPort mailPort, AccountValidationPort accountValidationPort,
+                       I18nService i18nService, @Qualifier("random-string") RandomString randomString) {
         this.obtainUserPort = obtainUserPort;
         this.saveUserPort = saveUserPort;
         this.passwordEncoder = passwordEncoder;
@@ -42,6 +46,8 @@ public class UserService implements UserPort {
         this.rolPort = rolPort;
         this.mailPort = mailPort;
         this.accountValidationPort = accountValidationPort;
+        this.i18nService = i18nService;
+        this.randomString = randomString;
     }
 
 
@@ -150,6 +156,53 @@ public class UserService implements UserPort {
         } else {
             throw new InternalException("The codes are invalid", transactionId);
         }
+    }
+
+    @Override
+    public void resetPassword(String email, String transactionId) {
+        Optional<UserEntity> account = findByEmailEntity(email, transactionId);
+
+        if (account.isEmpty() || !account.get().getStatus()) {
+            throw new InternalException("The email entered does not exist", transactionId);
+        }
+
+        Locale locale = new Locale(account.get().getLanguage());
+        final String codeOtp = accountValidationPort.generateCodeRecoverAccount(account.get().getEmail());
+        final String body = i18nService.tr("recovery-password-body", new Object[]{codeOtp.toUpperCase()}, locale);
+        final String subject = i18nService.tr("recovery-password-subject", locale);
+
+        mailPort.sendMail(account.get().getEmail(), subject, body, transactionId);
+    }
+
+    @Override
+    public void validateOtpRecoverPassword(String email, String code, String transactionId) {
+
+        final String codeObtain = accountValidationPort.getCodeEmailRecoverPassword(email);
+
+        if (codeObtain == null) {
+            throw new InternalException("Expired security code.", transactionId);
+        }
+
+        if (!codeObtain.toUpperCase().equals(code)) {
+            throw new InternalException("The security code is invalid", transactionId);
+        }
+
+        Optional<UserEntity> account = findByEmailEntity(email, transactionId);
+
+        if (account.isEmpty()) {
+            throw new InternalException("It was not possible to assign a new password, please contact support",
+                    transactionId);
+        }
+
+        UserEntity user = account.get();
+        String password = randomString.nextString();
+
+        Locale locale = new Locale(account.get().getLanguage());
+        final String body = i18nService.tr("message-new-password-body", new Object[]{password}, locale);
+        final String subject = i18nService.tr("message-new-password-subject", locale);
+        mailPort.sendMail(account.get().getEmail(), subject, body, transactionId);
+        user.setPassword(passwordEncoder.encode(password));
+        saveUserPort.save(user, transactionId);
     }
 
 

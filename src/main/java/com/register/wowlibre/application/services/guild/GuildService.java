@@ -99,6 +99,7 @@ public class GuildService implements GuildPort {
 
         integratorPort.attachGuild(verificationDto.server().getIp(), verificationDto.server().getJwt(),
                 verificationDto.accountGame().getAccountId(), guildId, characterId, transactionId);
+
     }
 
     @Override

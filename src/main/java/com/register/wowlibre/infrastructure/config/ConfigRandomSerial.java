@@ -21,4 +21,9 @@ public class ConfigRandomSerial {
         return new RandomString(28, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
+    @Bean("random-send-otp")
+    public RandomString configRandomOtpString() {
+        return new RandomString(5, "abcdefghijklmnopqrstuvwxyz0123456789");
+    }
+
 }

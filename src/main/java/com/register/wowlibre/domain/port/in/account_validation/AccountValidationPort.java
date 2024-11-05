@@ -4,4 +4,8 @@ public interface AccountValidationPort {
     String retrieveEmailCode(String email);
 
     String generateCodeMail(String mail);
+
+    String generateCodeRecoverAccount(String mail);
+
+    String getCodeEmailRecoverPassword(String email);
 }

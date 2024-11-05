@@ -89,4 +89,27 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok().build());
     }
+
+    @GetMapping("/recovery-password")
+    public ResponseEntity<GenericResponse<UserDetailDto>> recoveryPassword(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestParam final String email) {
+
+        userPort.resetPassword(email, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok().build());
+    }
+
+    @PutMapping("/recovery-password")
+    public ResponseEntity<GenericResponse<UserDetailDto>> validatePassword(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestParam final String email,
+            @RequestParam final String code) {
+
+        userPort.validateOtpRecoverPassword(email, code, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok().build());
+    }
 }

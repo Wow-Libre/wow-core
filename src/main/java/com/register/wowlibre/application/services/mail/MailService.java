@@ -35,5 +35,10 @@ public class MailService implements MailPort {
                 .transactionId(transactionId).build());
     }
 
+    @Override
+    public void sendMail(String mail, String subject, String body, String transactionId) {
+        mailSend.sendMail(mail, subject, body, transactionId);
+    }
+
 
 }

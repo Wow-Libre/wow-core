@@ -81,6 +81,7 @@ public class SecurityConfiguration {
                         request.requestMatchers(
                                         //INTERNAL API
                                         "/api/account/create",
+                                        "api/account/recovery-password",
                                         "/api/account/search",
                                         "/api/resources/country",
                                         "/api/resources/server-promos",

@@ -31,6 +31,7 @@ public class RedisConfig {
         cacheConfigurations.put("mails", configurationTtl(Duration.ofMinutes(30)));
         cacheConfigurations.put("emailCodeCache", configurationTtl(Duration.ofMinutes(30)));
         cacheConfigurations.put("serversFindById", configurationTtl(Duration.ofHours(1)));
+        cacheConfigurations.put("recoveryPassword", configurationTtl(Duration.ofMinutes(2)));
 
         // Construcción del RedisCacheManager con configuraciones específicas
         return RedisCacheManager.builder(redisConnectionFactory)
