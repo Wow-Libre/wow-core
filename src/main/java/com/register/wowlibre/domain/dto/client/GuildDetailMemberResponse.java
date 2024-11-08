@@ -30,4 +30,9 @@ public class GuildDetailMemberResponse {
     private boolean publicAccess;
     public Cta cta;
     public String formattedBankMoney;
+    @JsonProperty("is_leader")
+    public Boolean isLeader;
+    @JsonProperty("multi_faction")
+    public Boolean multiFaction;
+    public String discord;
 }

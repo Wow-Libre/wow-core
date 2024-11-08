@@ -29,6 +29,7 @@ public class GuildModel {
     private Long members;
     @JsonProperty("public_access")
     private boolean publicAccess;
+    private String discord;
     private Cta cta;
     private String formattedBankMoney;
 }

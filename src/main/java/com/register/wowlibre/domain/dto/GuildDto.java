@@ -26,7 +26,9 @@ public class GuildDto {
     private String formattedBankMoney;
     private String serverName;
     private Long serverId;
-    private List<BenefitModel>  benefits;
+    private boolean isLeader;
+    private String discord;
+    private List<BenefitModel> benefits;
 
     public GuildDto(GuildResponse response, String serverName, Long serverId) {
         this.id = response.getId();
@@ -45,6 +47,7 @@ public class GuildDto {
         this.cta = response.getCta();
         this.formattedBankMoney = response.getFormattedBankMoney();
         this.serverName = serverName;
+        this.discord = response.getDiscord();
         this.serverId = serverId;
     }
 
@@ -65,6 +68,7 @@ public class GuildDto {
         this.cta = response.getCta();
         this.formattedBankMoney = response.getFormattedBankMoney();
         this.serverName = serverName;
+        this.discord = response.getDiscord();
         this.serverId = serverId;
     }
 }

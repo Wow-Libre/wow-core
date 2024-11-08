@@ -261,4 +261,10 @@ public class IntegratorService implements IntegratorPort {
         integratorClient.purchase(host, jwt, userId, accountId, reference, items, transactionId);
     }
 
+    @Override
+    public void updateGuild(String host, String jwt, Long characterId, Long accountId, boolean isPublic,
+                            boolean multiFaction, String discord, String transactionId) {
+        integratorClient.updateGuild(host, jwt, characterId, accountId, isPublic, multiFaction, discord, transactionId);
+    }
+
 }

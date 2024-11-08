@@ -28,6 +28,7 @@ public class GuildResponse {
     private Long members;
     @JsonProperty("public_access")
     private boolean publicAccess;
+    private String discord;
     public Cta cta;
     public String formattedBankMoney;
 }

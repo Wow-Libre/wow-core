@@ -96,4 +96,18 @@ public class GuildController {
                 .status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
+
+    @PutMapping("/edit")
+    public ResponseEntity<GenericResponse<Void>> update(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestBody @Valid UpdateGuildDto request) {
+
+        guildPort.update(request.getServerId(), userId, request.getAccountId(), request.getCharacterId(),
+                request.getDiscord(), request.isMultiFaction(), request.isPublic(), transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
 }

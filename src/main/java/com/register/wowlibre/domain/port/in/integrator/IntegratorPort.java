@@ -56,4 +56,7 @@ public interface IntegratorPort {
     void purchase(String host, String jwt, Long userId, Long accountId, String reference,
                   List<ItemQuantityModel> items,
                   String transactionId);
+
+    void updateGuild(String host, String jwt, Long characterId, Long accountId, boolean isPublic,
+                     boolean multiFaction, String discord, String transactionId);
 }

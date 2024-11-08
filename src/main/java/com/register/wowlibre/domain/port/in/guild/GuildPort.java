@@ -14,4 +14,7 @@ public interface GuildPort {
 
     GuildMemberDetailDto guildMember(Long serverId, Long userId, Long accountId, Long characterId,
                                      String transactionId);
+
+    void update(Long serverId, Long userId, Long accountId, Long characterId, String discord, boolean multiFaction,
+                boolean isPublic, String transactionId);
 }

@@ -22,5 +22,8 @@ public class GuildMemberDetailDto {
     private Long members;
     private boolean publicAccess;
     private String formattedBankMoney;
+    public Boolean isLeader;
+    public Boolean multiFaction;
+    public String discord;
     private List<BenefitModel> benefits;
 }

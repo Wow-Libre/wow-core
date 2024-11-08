@@ -23,7 +23,7 @@ spring:
     password: Loquendo96@
     driver-class-name: com.mysql.cj.jdbc.Driver
   mail:
-    host: smtp-relay.brevo.com
+    host: 'smtp-relay.brevo.com'
     port: 587
     username: '7e339a001@smtp-brevo.com'
     password: 'RyfB7JX3E0YIcktG'
