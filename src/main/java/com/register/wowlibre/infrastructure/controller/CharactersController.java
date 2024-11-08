@@ -177,4 +177,18 @@ public class CharactersController {
                 .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
 
     }
+
+    @PostMapping(path = "/profession/announcement")
+    public ResponseEntity<GenericResponse<Void>> announcementProfession(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestBody @Valid AnnouncementDto sendMoneyDto) {
+
+        charactersPort.sendAnnouncement(userId, sendMoneyDto.getAccountId(), sendMoneyDto.getServerId(),
+                sendMoneyDto.getCharacterId(), sendMoneyDto.getSkillId(), transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
 }

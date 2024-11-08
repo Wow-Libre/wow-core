@@ -59,4 +59,9 @@ public interface IntegratorPort {
 
     void updateGuild(String host, String jwt, Long characterId, Long accountId, boolean isPublic,
                      boolean multiFaction, String discord, String transactionId);
+
+
+    void sendAnnouncement(String host, String jwt, Long userId, Long accountId, Long characterId, Long skillId,
+                          String transactionId);
+
 }

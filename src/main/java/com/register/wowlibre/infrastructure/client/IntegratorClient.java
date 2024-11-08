@@ -799,4 +799,49 @@ public class IntegratorClient {
 
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
+
+
+    public GenericResponse<Void> sendAnnouncement(String host, String jwt, Long userId, Long accountId,
+                                                  Long characterId,
+                                                  Long skillId, String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+        AnnouncementRequest request = new AnnouncementRequest(accountId, characterId, skillId, userId);
+        HttpEntity<AnnouncementRequest> entity = new HttpEntity<>(request, headers);
+
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/professions/announcement", host))
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<Void>> response = restTemplate.exchange(url, HttpMethod.POST,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody());
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [sendAnnouncement]  Client/Server Error: {}. Error with server " +
+                            "client " +
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException("Transaction failed due to client or server error", transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [sendAnnouncement] Unexpected Error: {}. An unexpected error " +
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
 }

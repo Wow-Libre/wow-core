@@ -152,4 +152,20 @@ public class CharactersService implements CharactersPort {
                 accountGame.getUserId().getId(), characterId, friendId, money, 0.0, transactionId);
     }
 
+    @Override
+    public void sendAnnouncement(Long userId, Long accountId, Long serverId, Long characterId, Long skillId,
+                                 String transactionId) {
+        AccountVerificationDto verifyData = accountGamePort.verifyAccount(userId, accountId, serverId,
+                transactionId);
+
+        final ServerEntity serverModel = verifyData.server();
+
+        if (!serverModel.isStatus()) {
+            throw new InternalException("The server is currently not verified", transactionId);
+        }
+
+        integratorService.sendAnnouncement(serverModel.getIp(), serverModel.getJwt(), userId, accountId, characterId,
+                skillId, transactionId);
+    }
+
 }

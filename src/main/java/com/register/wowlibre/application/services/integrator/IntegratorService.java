@@ -267,4 +267,10 @@ public class IntegratorService implements IntegratorPort {
         integratorClient.updateGuild(host, jwt, characterId, accountId, isPublic, multiFaction, discord, transactionId);
     }
 
+    @Override
+    public void sendAnnouncement(String host, String jwt, Long userId, Long accountId, Long characterId, Long skillId,
+                                 String transactionId) {
+        integratorClient.sendAnnouncement(host, jwt, userId, accountId, characterId, skillId, transactionId);
+    }
+
 }
