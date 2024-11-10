@@ -15,4 +15,7 @@ public interface ServerServicesRepository extends CrudRepository<ServerServicesE
             "INNER JOIN ss.serverId s " +
             "WHERE ss.amount > 0 AND s.status = true")
     List<ServerServicesEntity> findActiveServerServicesWithAmountGreaterThanZero();
+
+    @Override
+    Optional<ServerServicesEntity> findById(Long id);
 }

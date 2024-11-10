@@ -7,7 +7,7 @@ import org.springframework.stereotype.*;
 import java.util.*;
 
 @Repository
-public class JpaServerServicesAdapter implements ObtainServiceServices {
+public class JpaServerServicesAdapter implements ObtainServiceServices, SaveServiceServices {
     private final ServerServicesRepository serverServicesRepository;
 
     public JpaServerServicesAdapter(ServerServicesRepository serverServicesRepository) {
@@ -28,5 +28,15 @@ public class JpaServerServicesAdapter implements ObtainServiceServices {
     @Override
     public List<ServerServicesEntity> findByServersAvailableRequestLoa(String transactionId) {
         return serverServicesRepository.findActiveServerServicesWithAmountGreaterThanZero();
+    }
+
+    @Override
+    public Optional<ServerServicesEntity> findById(Long id) {
+        return serverServicesRepository.findById(id);
+    }
+
+    @Override
+    public void save(ServerServicesEntity serverServicesEntity, String transactionId) {
+        serverServicesRepository.save(serverServicesEntity);
     }
 }

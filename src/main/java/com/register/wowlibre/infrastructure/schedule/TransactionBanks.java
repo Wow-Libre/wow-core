@@ -1,9 +1,11 @@
 package com.register.wowlibre.infrastructure.schedule;
 
+import com.register.wowlibre.application.services.*;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.server.*;
+import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.out.credit_loans.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
@@ -18,22 +20,22 @@ import java.util.*;
 @Component
 public class TransactionBanks {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionBanks.class);
-
     private final ObtainCreditLoans obtainCreditLoans;
     private final SaveCreditLoans saveCreditLoans;
-
     private final IntegratorPort integratorPort;
     private final ServerPort serverPort;
+    private final I18nService i18nService;
 
     public TransactionBanks(ObtainCreditLoans obtainCreditLoans, SaveCreditLoans saveCreditLoans,
-                            IntegratorPort integratorPort, ServerPort serverPort) {
+                            IntegratorPort integratorPort, ServerPort serverPort, I18nService i18nService) {
         this.obtainCreditLoans = obtainCreditLoans;
         this.saveCreditLoans = saveCreditLoans;
         this.integratorPort = integratorPort;
         this.serverPort = serverPort;
+        this.i18nService = i18nService;
     }
 
-    @Scheduled(cron = "0 */10 * * * *")
+    @Scheduled(cron = "* */10 * * * *")
     public void sendCreditLoans() {
         LOGGER.info("[TransactionBanks] [SendCreditLoans] Sending credit applications");
         String transactionId = "[TransactionBanks] [SendCreditLoans]";
@@ -41,7 +43,6 @@ public class TransactionBanks {
 
         credits.forEach(credit -> {
             Optional<ServerEntity> server = serverPort.findById(credit.getServerId(), transactionId);
-
             if (server.isPresent()) {
 
                 try {
@@ -58,9 +59,10 @@ public class TransactionBanks {
                                 credit.getId());
                         return;
                     }
-                    String characterName = charactersDto.getName();
+                    final String characterName = charactersDto.getName();
+                    final Locale locale = new Locale(credit.getUserId().getLanguage());
 
-                    String command = CommandsCore.sendMoney(characterName, "", getGoblinMessage(characterName),
+                    String command = CommandsCore.sendMoney(characterName, "", getGoblinMessage(characterName, locale),
                             String.valueOf(credit.getAmountTransferred().intValue()));
 
                     SecretKey derivedKey = KeyDerivationUtil.deriveKeyFromPassword(server.get().getApiSecret(), salt);
@@ -114,9 +116,7 @@ public class TransactionBanks {
     }
 
 
-    private String getGoblinMessage(String characterName) {
-        return String.format("Oi, %s! This is Grix, the Goblin Lender. I've just sent you some shiny gold coins. " +
-                "Spend it as you wish, but remember: you *will* pay me back, or I'll come knocking... and you won't " +
-                "like that!", characterName);
+    private String getGoblinMessage(String characterName, Locale locale) {
+        return i18nService.tr("message-loans-globin", new Object[]{characterName}, locale);
     }
 }

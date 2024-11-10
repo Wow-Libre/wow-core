@@ -6,7 +6,6 @@ import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.*;
 import com.register.wowlibre.domain.port.in.account_game.*;
 import com.register.wowlibre.domain.port.in.bank.*;
-import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.server_services.*;
 import com.register.wowlibre.domain.port.out.credit_loans.*;
 import com.register.wowlibre.infrastructure.entities.*;
@@ -25,21 +24,18 @@ public class BankService implements BankPort {
 
     private final ObtainCreditLoans obtainCreditLoans;
     private final SaveCreditLoans saveCreditLoans;
-    private final IntegratorPort integratorPort;
 
     private final ServerServicesPort serverServicesPort;
     private final ResourcesPort resourcesPort;
-
     private final AccountGamePort accountGamePort;
     private final RandomString randomString;
 
     public BankService(ObtainCreditLoans obtainCreditLoans, SaveCreditLoans saveCreditLoans,
-                       IntegratorPort integratorPort, ServerServicesPort serverServicesPort,
+                       ServerServicesPort serverServicesPort,
                        ResourcesPort resourcesPort, AccountGamePort accountGamePort,
                        @Qualifier("reference-serial-bank") RandomString randomString) {
         this.obtainCreditLoans = obtainCreditLoans;
         this.saveCreditLoans = saveCreditLoans;
-        this.integratorPort = integratorPort;
         this.serverServicesPort = serverServicesPort;
         this.resourcesPort = resourcesPort;
         this.accountGamePort = accountGamePort;
@@ -51,7 +47,8 @@ public class BankService implements BankPort {
     public void applyForLoan(Long userId, Long accountId, Long characterId, Long serverId, Long planId,
                              String transactionId) {
 
-        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId, transactionId);
+        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+                transactionId);
 
         ServerEntity server = verificationDto.server();
 
@@ -65,6 +62,10 @@ public class BankService implements BankPort {
 
         if (serverServicesModel == null) {
             throw new InternalException("The server currently does not have loans configured", transactionId);
+        }
+
+        if (serverServicesModel.amount() <= 0) {
+            throw new InternalException("There is no money available for loans", transactionId);
         }
 
         Optional<PlanModel> planSearch =
@@ -102,6 +103,8 @@ public class BankService implements BankPort {
         creditLoansEntity.setAmountTransferred(plan.gold);
         creditLoansEntity.setReferenceSerial(randomString.nextString());
         creditLoansEntity.setSend(false);
+
+        serverServicesPort.updateAmount(serverServicesModel.id(), serverServicesModel.amount() - 1, transactionId);
         saveCreditLoans.save(creditLoansEntity, transactionId);
     }
 

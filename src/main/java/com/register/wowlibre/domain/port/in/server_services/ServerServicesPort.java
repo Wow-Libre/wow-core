@@ -11,4 +11,5 @@ public interface ServerServicesPort {
 
     List<ServerServicesModel> findByServersAvailableLoa(String transactionId);
 
+    void updateAmount(Long id, Double amount, String transactionId);
 }

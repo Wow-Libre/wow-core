@@ -64,9 +64,36 @@ public class ResourcesController {
     @GetMapping("/server-promos")
     public ResponseEntity<GenericResponse<List<ServersPromotions>>> serversPromo(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE, required = false) Locale locale) {
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
         final List<ServersPromotions> serversPromotions = resourcesPort.getJsonServersPromoGuild(locale.getLanguage()
                 , transactionId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(serversPromotions, transactionId).ok().build());
+    }
+
+    @GetMapping("/banners-home")
+    public ResponseEntity<GenericResponse<List<BannerHomeModel>>> bannersHome(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
+
+        final List<BannerHomeModel> serversPromotions = resourcesPort.getBannersHome(locale.getLanguage(),
+                transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(serversPromotions, transactionId).ok().build());
+    }
+
+    @GetMapping("/widget-home")
+    public ResponseEntity<GenericResponse<WidgetHomeSubscriptionModel>> widgetSubscription(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
+
+        final WidgetHomeSubscriptionModel serversPromotions =
+                resourcesPort.getWidgetSubscription(locale.getLanguage(),
+                transactionId);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(serversPromotions, transactionId).ok().build());

@@ -16,4 +16,8 @@ public interface ResourcesPort {
 
     List<ServersPromotions> getJsonServersPromoGuild(String language, String transactionId);
 
+    List<BannerHomeModel> getBannersHome(String language, String transactionId);
+
+    WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId);
+
 }

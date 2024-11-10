@@ -11,4 +11,5 @@ public interface ObtainServiceServices {
 
     List<ServerServicesEntity> findByServersAvailableRequestLoa(String transactionId);
 
+    Optional<ServerServicesEntity> findById(Long id);
 }

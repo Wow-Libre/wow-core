@@ -4,53 +4,53 @@
       "id": 1,
       "name": "Wow Libre",
       "sub_title": "Servidor 3.3.5",
-      "description": "Promocion Disponible",
-      "logo": "https://i.ytimg.com/vi/nStvo6M40Yg/maxresdefault.jpg",
+      "description": "¡Aprovecha nuestra promoción ahora!",
+      "logo": "https://pics.craiyon.com/2023-06-04/630560a939124e4ea5752174300c4121.webp",
       "link": ""
     },
     {
       "id": 2,
       "name": "Vincula tu servidor",
       "sub_title": "Adquiere tu espacio publicitario gratuitamente",
-      "description": "Promocion Disponible",
-      "logo": "https://images.unsplash.com/photo-1634193295627-1cdddf751ebf?fit=clamp&w=400&h=400&q=80",
+      "description": "xx",
+      "logo": "https://seeklogo.com/images/W/world-of-warcraft-logo-F6AAB54AD8-seeklogo.com.png",
       "link": ""
     }
   ],
   "en": [
     {
       "id": 1,
-      "name": "Frozen Land",
+      "name": "Wow Free",
       "sub_title": "Server 3.3.5",
-      "description": "Reach 500 guild members and unlock unique rewards.",
-      "logo": "https://example.com/logo1.jpg",
-      "link": "https://example.com/server1"
+      "description": "Take advantage of our promotion now!",
+      "logo": "https://pics.craiyon.com/2023-06-04/630560a939124e4ea5752174300c4121.webp",
+      "link": ""
     },
     {
       "id": 2,
-      "name": "Wow Libre",
-      "sub_title": "Servidor 3.3.5",
-      "description": "Disponibles promociones",
-      "logo": "https://images.unsplash.com/photo-1634193295627-1cdddf751ebf?fit=clamp&w=400&h=400&q=80",
-      "link": "https://example.com/servidor1"
+      "name": "Link Your Server",
+      "sub_title": "Get your advertising space for free",
+      "description": "xx",
+      "logo": "https://seeklogo.com/images/W/world-of-warcraft-logo-F6AAB54AD8-seeklogo.com.png",
+      "link": ""
     }
   ],
   "pt": [
     {
       "id": 1,
-      "name": "Wow Libre",
+      "name": "Wow Grátis",
       "sub_title": "Servidor 3.3.5",
-      "description": "Alcance 500 membros na sua guilda e desbloqueie recompensas únicas.",
-      "logo": "https://example.com/logo1.jpg",
-      "link": "https://example.com/servidor1"
+      "description": "Aproveite nossa promoção agora!",
+      "logo": "https://pics.craiyon.com/2023-06-04/630560a939124e4ea5752174300c4121.webp",
+      "link": ""
     },
     {
       "id": 2,
-      "name": "Vincula tu servidor",
-      "sub_title": "Adquiere tu espacio publicitario gratuitamente",
-      "description": "Disponibles promociones",
-      "logo": "https://images.unsplash.com/photo-1634193295627-1cdddf751ebf?fit=clamp&w=400&h=400&q=80",
-      "link": "https://example.com/servidor1"
+      "name": "Vincule seu servidor",
+      "sub_title": "Adquira seu espaço publicitário gratuitamente",
+      "description": "xx",
+      "logo": "https://seeklogo.com/images/W/world-of-warcraft-logo-F6AAB54AD8-seeklogo.com.png",
+      "link": ""
     }
   ]
 }

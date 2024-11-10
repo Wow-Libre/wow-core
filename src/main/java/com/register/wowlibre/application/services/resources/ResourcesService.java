@@ -38,8 +38,17 @@ public class ResourcesService implements ResourcesPort {
 
     @Override
     public List<ServersPromotions> getJsonServersPromoGuild(String language, String transactionId) {
-        System.out.println(language);
         return jsonLoaderPort.getJsonServersPromoGuild(language, transactionId);
+    }
+
+    @Override
+    public List<BannerHomeModel> getBannersHome(String language, String transactionId) {
+        return jsonLoaderPort.getBannersHome(language, transactionId);
+    }
+
+    @Override
+    public WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId) {
+        return jsonLoaderPort.getWidgetSubscription(language, transactionId);
     }
 
 }
