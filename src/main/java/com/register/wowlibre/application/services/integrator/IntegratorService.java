@@ -256,9 +256,9 @@ public class IntegratorService implements IntegratorPort {
 
     @Override
     public void purchase(String host, String jwt, Long userId, Long accountId, String reference,
-                         List<ItemQuantityModel> items,
+                         List<ItemQuantityModel> items, Double amount,
                          String transactionId) {
-        integratorClient.purchase(host, jwt, userId, accountId, reference, items, transactionId);
+        integratorClient.purchase(host, jwt, userId, accountId, reference, items, amount, transactionId);
     }
 
     @Override

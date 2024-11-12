@@ -17,4 +17,5 @@ public class CreateTransactionItemsDto {
     private String reference;
     @NotNull
     private List<ItemQuantityModel> items;
+    private Double amount;
 }

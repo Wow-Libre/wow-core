@@ -16,4 +16,5 @@ public class CreateTransactionItemsRequest {
     private Long accountId;
     private String reference;
     private List<ItemQuantityModel> items;
+    private Double amount;
 }

@@ -26,7 +26,7 @@ public class TransactionController {
 
         transactionPort.purchase(request.getServerId(), request.getUserId(), request.getAccountId(),
                 request.getReference(),
-                request.getItems(), transactionId);
+                request.getItems(), request.getAmount(), transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<Void>(transactionId).created().build());

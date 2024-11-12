@@ -6,12 +6,14 @@ import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.server.*;
 import com.register.wowlibre.domain.port.in.transaction.*;
 import com.register.wowlibre.infrastructure.entities.*;
+import org.slf4j.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
 @Service
 public class TransactionService implements TransactionPort {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
 
     private final ServerPort serverPort;
     private final IntegratorPort integratorPort;
@@ -24,16 +26,18 @@ public class TransactionService implements TransactionPort {
 
     @Override
     public void purchase(Long serverId, Long userId, Long accountId, String reference, List<ItemQuantityModel> items,
-                         String transactionId) {
+                         Double amount, String transactionId) {
 
         Optional<ServerEntity> serverModel = serverPort.findById(serverId, transactionId);
 
         if (serverModel.isEmpty()) {
-            throw new InternalException("Server Not Vailable", transactionId);
+            LOGGER.error("Server is not available");
+            throw new InternalException("Server is not available", transactionId);
         }
 
         ServerEntity server = serverModel.get();
 
-        integratorPort.purchase(server.getIp(), server.getJwt(), userId, accountId, reference, items, transactionId);
+        integratorPort.purchase(server.getIp(), server.getJwt(), userId, accountId, reference, items, amount,
+                transactionId);
     }
 }

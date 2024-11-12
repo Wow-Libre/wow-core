@@ -5,7 +5,6 @@ import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.server.*;
-import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.out.credit_loans.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;

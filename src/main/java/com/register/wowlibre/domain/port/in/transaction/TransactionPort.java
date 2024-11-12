@@ -6,5 +6,5 @@ import java.util.*;
 
 public interface TransactionPort {
     void purchase(Long serverId, Long userId, Long accountId, String reference, List<ItemQuantityModel> items,
-                  String transactionId);
+                  Double amount, String transactionId);
 }

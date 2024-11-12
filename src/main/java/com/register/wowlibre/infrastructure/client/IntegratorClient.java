@@ -714,13 +714,14 @@ public class IntegratorClient {
 
 
     public GenericResponse<Void> purchase(String host, String jwt, Long userId, Long accountId, String reference,
-                                          List<ItemQuantityModel> items, String transactionId) {
+                                          List<ItemQuantityModel> items, Double amount, String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
-        CreateTransactionItemsRequest request = new CreateTransactionItemsRequest(userId, accountId, reference, items);
+        CreateTransactionItemsRequest request = new CreateTransactionItemsRequest(userId, accountId, reference, items,
+                amount);
         HttpEntity<CreateTransactionItemsRequest> entity = new HttpEntity<>(request, headers);
 
         String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/purchase", host))

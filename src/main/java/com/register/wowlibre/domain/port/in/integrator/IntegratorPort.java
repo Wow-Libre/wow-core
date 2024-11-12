@@ -54,7 +54,7 @@ public interface IntegratorPort {
     Double collectGold(String host, String jwt, Long userId, Double moneyToPay, String transactionId);
 
     void purchase(String host, String jwt, Long userId, Long accountId, String reference,
-                  List<ItemQuantityModel> items,
+                  List<ItemQuantityModel> items, Double amount,
                   String transactionId);
 
     void updateGuild(String host, String jwt, Long characterId, Long accountId, boolean isPublic,
