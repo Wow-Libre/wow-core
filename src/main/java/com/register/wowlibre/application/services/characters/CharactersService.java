@@ -168,4 +168,18 @@ public class CharactersService implements CharactersPort {
                 skillId, transactionId);
     }
 
+    @Override
+    public void benefitsPremium(Long userId, Long accountId, Long serverId, Long characterId, String transactionId) {
+        AccountVerificationDto verifyData = accountGamePort.verifyAccount(userId, accountId, serverId,
+                transactionId);
+
+        final ServerEntity serverModel = verifyData.server();
+
+        if (!serverModel.isStatus()) {
+            throw new InternalException("The server is currently not verified", transactionId);
+        }
+
+        //integratorService.executeCommand();
+    }
+
 }

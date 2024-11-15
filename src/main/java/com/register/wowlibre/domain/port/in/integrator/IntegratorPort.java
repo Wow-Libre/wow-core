@@ -64,4 +64,7 @@ public interface IntegratorPort {
     void sendAnnouncement(String host, String jwt, Long userId, Long accountId, Long characterId, Long skillId,
                           String transactionId);
 
+    void sendBenefitsPremium(String host, String jwt, Long userId, Long accountId,
+                             Long characterId, List<ItemQuantityModel> items,
+                             String benefitType, Double amount, String transactionId);
 }

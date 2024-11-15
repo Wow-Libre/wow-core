@@ -33,8 +33,8 @@ public class ServerService implements ServerPort {
 
 
     @Override
-    public ServerModel findByApiKeyAndStatusIsTrue(String apiKey, String transactionId) {
-        return obtainServerPort.findByApiKeyAndStatusIsTrue(apiKey, transactionId).map(ServerMapper::toModel)
+    public ServerModel findByApiKey(String apiKey, String transactionId) {
+        return obtainServerPort.findByApiKey(apiKey, transactionId).map(ServerMapper::toModel)
                 .orElse(null);
     }
 

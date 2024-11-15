@@ -35,6 +35,8 @@ spring:
             enable: true
     default-encoding: UTF-8
 server:
+  servlet:
+    context-path: /core
   address: 0.0.0.0
   port: 8090
 application:

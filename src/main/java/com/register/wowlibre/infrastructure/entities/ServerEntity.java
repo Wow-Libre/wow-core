@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.*;
 import java.time.*;
+import java.util.*;
 
 @Data
 @Entity
@@ -29,9 +30,14 @@ public class ServerEntity implements Serializable {
     @Column(name = "refresh_token")
     private String refreshToken;
     @Column(name = "expiration_date")
-    private LocalDateTime expirationDate;
+    private Date expirationDate;
     @Column(name = "web_site")
     private String webSite;
     private String realmlist;
     private boolean status;
+    @Column(name = "external_username")
+    private String externalUsername;
+    @Column(name = "external_password")
+    private String externalPassword;
+    private byte[] salt;
 }

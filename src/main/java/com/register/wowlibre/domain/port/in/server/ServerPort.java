@@ -11,7 +11,7 @@ public interface ServerPort {
 
     ServerModel findByNameAndVersionAndStatusIsTrue(String name, String version, String transactionId);
 
-    ServerModel findByApiKeyAndStatusIsTrue(String apiKey, String transactionId);
+    ServerModel findByApiKey(String apiKey, String transactionId);
 
     Optional<ServerEntity> findById(Long id, String transactionId);
 

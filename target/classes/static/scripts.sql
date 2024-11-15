@@ -72,6 +72,8 @@ CREATE TABLE accounts.server
     web_site        text,
     realmlist       varchar(80),
     status          boolean,
+    external_username varchar(50) NOT NULL,
+    external_password varchar(50) NOT NULL,
 
     CONSTRAINT uq_email UNIQUE (name, version),
     PRIMARY KEY (id)

@@ -34,7 +34,7 @@ public class TransactionBanks {
         this.i18nService = i18nService;
     }
 
-    @Scheduled(cron = "* */10 * * * *")
+    @Scheduled(cron = "0 10 * * * *")
     public void sendCreditLoans() {
         LOGGER.info("[TransactionBanks] [SendCreditLoans] Sending credit applications");
         String transactionId = "[TransactionBanks] [SendCreditLoans]";

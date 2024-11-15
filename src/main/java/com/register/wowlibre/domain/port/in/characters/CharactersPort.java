@@ -30,4 +30,6 @@ public interface CharactersPort {
 
     void sendAnnouncement(Long userId, Long accountId, Long serverId, Long characterId, Long skillId,
                           String transactionId);
+
+    void benefitsPremium(Long userId, Long accountId, Long serverId, Long characterId, String transactionId);
 }

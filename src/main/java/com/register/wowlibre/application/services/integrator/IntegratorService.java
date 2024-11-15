@@ -273,4 +273,12 @@ public class IntegratorService implements IntegratorPort {
         integratorClient.sendAnnouncement(host, jwt, userId, accountId, characterId, skillId, transactionId);
     }
 
+    @Override
+    public void sendBenefitsPremium(String host, String jwt, Long userId, Long accountId, Long characterId,
+                                    List<ItemQuantityModel> items, String benefitType, Double amount,
+                                    String transactionId) {
+        integratorClient.sendBenefitsPremium(host, jwt, new SubscriptionBenefitsRequest(userId, accountId,
+                characterId, items, benefitType, amount), transactionId);
+    }
+
 }

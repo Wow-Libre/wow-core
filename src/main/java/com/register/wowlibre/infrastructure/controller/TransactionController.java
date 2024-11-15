@@ -31,4 +31,18 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<Void>(transactionId).created().build());
     }
+
+    @PostMapping("/subscription-benefits")
+    public ResponseEntity<GenericResponse<Void>> sendSubscriptionBenefits(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestBody @Valid SubscriptionBenefitsDto request) {
+
+        transactionPort.sendSubscriptionBenefits(request.getServerId(), request.getUserId(), request.getAccountId(),
+                request.getCharacterId(),
+                request.getItems(), request.getBenefitType(), request.getAmount(), transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).created().build());
+    }
+
 }

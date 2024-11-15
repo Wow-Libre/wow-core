@@ -37,7 +37,7 @@ public class ServerController {
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestParam(name = "api_key") String apiKey) {
 
-        final ServerModel server = serverPort.findByApiKeyAndStatusIsTrue(apiKey, transactionId);
+        final ServerModel server = serverPort.findByApiKey(apiKey, transactionId);
 
         if (server == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
