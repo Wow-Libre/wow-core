@@ -27,7 +27,7 @@ public class AuthScheduleClients {
         this.saveServerPort = saveServerPort;
     }
 
-    @Scheduled(cron = "0 0 9,21 * * *")
+    @Scheduled(cron = "* */50 * * * *")
     public void authServers() {
         LOGGER.info("Init Refresh Jwt Servers [authServers] [AuthScheduleClients]");
         final String transactionId = "Auth-Client";
@@ -68,7 +68,7 @@ public class AuthScheduleClients {
 
     }
 
-    @Scheduled(cron = "*/50 * * * * *")
+    @Scheduled(cron = "* */20 * * * *")
     public void availableServers() {
         final String transactionId = "Auth-Client";
         List<ServerEntity> servers = obtainServerPort.findByStatusIsFalse(transactionId);

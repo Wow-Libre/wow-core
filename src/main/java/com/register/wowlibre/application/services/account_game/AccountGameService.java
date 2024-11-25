@@ -12,6 +12,7 @@ import com.register.wowlibre.domain.port.in.server.*;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.out.account_game.*;
 import com.register.wowlibre.infrastructure.entities.*;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -86,6 +87,10 @@ public class AccountGameService implements AccountGamePort {
                     "available", transactionId);
         }
 
+        if (obtainAccountGamePort.findByUserIdAndServerId(userId, serverAvailable.id, transactionId).size() >= 10) {
+            throw new InternalException("You cannot create more than 10 accounts per server", transactionId);
+        }
+
         Long accountId = integratorPort.create(serverAvailable.ip, serverAvailable.apiSecret, serverAvailable.expansion,
                 username, password, user.getEmail(), user.getId(), transactionId);
 
@@ -114,6 +119,7 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
+    @Cacheable(value = "verify-account", key = "#userId + '_' + #accountId + '_' + #serverId")
     public AccountVerificationDto verifyAccount(Long userId, Long accountId, Long serverId, String transactionId) {
 
         Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);
@@ -169,7 +175,6 @@ public class AccountGameService implements AccountGamePort {
                 .failedLogins(account.failedLogins())
                 .accountBanned(account.accountBanned()).build();
     }
-
 
 
     private ServerEntity getServer(Long serverId, String transactionId) {

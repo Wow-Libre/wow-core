@@ -38,7 +38,8 @@ public class UserDetailsServiceCustom implements UserDetailsService {
                 account.getStatus(),
                 account.getId(),
                 account.getAvatarUrl(),
-                account.getLanguage()
+                account.getLanguage(),
+                !account.getVerified()
         );
     }
 

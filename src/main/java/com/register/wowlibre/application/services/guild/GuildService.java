@@ -8,6 +8,7 @@ import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.*;
 import com.register.wowlibre.domain.port.in.account_game.*;
 import com.register.wowlibre.domain.port.in.benefit_guild.*;
+import com.register.wowlibre.domain.port.in.character_benefit_guild.*;
 import com.register.wowlibre.domain.port.in.guild.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.server.*;
@@ -24,14 +25,17 @@ public class GuildService implements GuildPort {
     private final ResourcesPort resourcesPort;
     private final BenefitGuildPort benefitGuildPort;
     private final AccountGamePort accountGamePort;
+    private final CharacterBenefitGuildPort characterBenefitGuildPort;
 
     public GuildService(IntegratorPort integratorPort, ServerPort serverPort, ResourcesPort resourcesPort,
-                        BenefitGuildPort benefitGuildPort, AccountGamePort accountGamePort) {
+                        BenefitGuildPort benefitGuildPort, AccountGamePort accountGamePort,
+                        CharacterBenefitGuildPort characterBenefitGuildPort) {
         this.integratorPort = integratorPort;
         this.serverPort = serverPort;
         this.resourcesPort = resourcesPort;
         this.benefitGuildPort = benefitGuildPort;
         this.accountGamePort = accountGamePort;
+        this.characterBenefitGuildPort = characterBenefitGuildPort;
     }
 
     @Override
@@ -78,12 +82,12 @@ public class GuildService implements GuildPort {
 
         List<BenefitModel> beneficios = resourcesPort.getBenefitsGuild("es", transactionId);
 
-        List<BenefitGuildModel> beneficiosObtenidos = benefitGuildPort.benefits(serverModel.getId(), guildId,
+        List<BenefitGuildEntity> beneficiosObtenidos = benefitGuildPort.benefits(serverModel.getId(), guildId,
                 transactionId);
 
         List<BenefitModel> beneficiosFiltrados = beneficios.stream()
                 .filter(beneficio -> beneficiosObtenidos.stream()
-                        .anyMatch(beneficioObtenido -> beneficioObtenido.benefitId.equals(beneficio.id)))
+                        .anyMatch(beneficioObtenido -> beneficioObtenido.getGuildId().equals(beneficio.id)))
                 .toList();
 
         guildDto.setBenefits(beneficiosFiltrados);
@@ -123,6 +127,8 @@ public class GuildService implements GuildPort {
                 verificationDto.server().getJwt(), userId,
                 accountId, characterId, transactionId);
 
+        Integer benefits = benefitGuildPort.findRemainingBenefitsForGuildAndServerIdAndCharacter(serverId,
+                response.getId(), characterId, accountId, transactionId).size();
 
         return GuildMemberDetailDto.builder()
                 .id(response.getId())
@@ -140,6 +146,7 @@ public class GuildService implements GuildPort {
                 .bankMoney(response.getBankMoney())
                 .members(response.getMembers())
                 .publicAccess(response.isPublicAccess())
+                .availableBenefits(benefits)
                 .formattedBankMoney(response.getFormattedBankMoney())
                 .members(response.getMembers()).build();
     }
@@ -153,5 +160,60 @@ public class GuildService implements GuildPort {
         integratorPort.updateGuild(verificationDto.server().getIp(),
                 verificationDto.server().getJwt(), characterId, accountId, isPublic, multiFaction, discord,
                 transactionId);
+    }
+
+    @Override
+    public void claimBenefits(Long serverId, Long userId, Long accountId, Long characterId,
+                              String language,
+                              String transactionId) {
+
+        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+                transactionId);
+
+        ServerEntity serverModel = verificationDto.server();
+
+        GuildDetailMemberResponse guildDto = integratorPort.guildMember(verificationDto.server().getIp(),
+                verificationDto.server().getJwt(), userId,
+                accountId, characterId, transactionId);
+
+        if (guildDto == null) {
+            throw new InternalException("You do not belong to a guild or an unexpected error has occurred",
+                    transactionId);
+        }
+
+        List<BenefitModel> beneficios = resourcesPort.getBenefitsGuild(language, transactionId);
+
+        if (beneficios.isEmpty()) {
+            throw new InternalException("There are no benefits available to purchase", transactionId);
+        }
+
+        List<BenefitGuildEntity> benefitsGuild =
+                benefitGuildPort.findRemainingBenefitsForGuildAndServerIdAndCharacter(serverId,
+                guildDto.getId(), characterId, accountId, transactionId);
+
+        if (benefitsGuild.isEmpty()) {
+            throw new InternalException("There are no benefits available to purchase", transactionId);
+        }
+
+        List<ItemQuantityModel> filteredBenefits = beneficios.stream()
+                .filter(benefit ->
+                        benefitsGuild.stream()
+                                .anyMatch(benefitGuild ->
+                                        benefitGuild.getBenefitId().equals(benefit.id)
+                                )
+                )
+                .map(benefit -> new ItemQuantityModel(benefit.itemId, 1))
+                .toList();
+
+
+        if (filteredBenefits.isEmpty()) {
+            throw new InternalException("There are no benefits available to purchase", transactionId);
+        }
+
+        integratorPort.sendGuildBenefit(serverModel.getIp(), serverModel.getJwt(), userId, accountId, characterId,
+                filteredBenefits, transactionId);
+        benefitsGuild.forEach(benefit -> characterBenefitGuildPort.save(characterId, accountId, benefit, true,
+                transactionId));
+
     }
 }

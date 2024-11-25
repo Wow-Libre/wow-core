@@ -24,7 +24,11 @@ public class AccountValidationService implements AccountValidationPort {
         // Este método se utiliza para obtener el código de la caché
         return null;
     }
-
+    @Override
+    @CacheEvict(value = "emailCodeCache", key = "#email")
+    public void clearEmailCode(String email) {
+        // Este método elimina el código asociado al email en la caché
+    }
     @Override
     @CachePut(value = "emailCodeCache", key = "#email")
     public String generateCodeMail(String email) {

@@ -94,7 +94,7 @@ public class UserService implements UserPort {
                 "correo", code, locale, transactionId);
 
         return new JwtDto(token, refreshToken, expiration, PICTURE_DEFAULT_PROFILE_WEB,
-                customUserDetails.getLanguage());
+                customUserDetails.getLanguage(), true);
     }
 
 
@@ -141,9 +141,12 @@ public class UserService implements UserPort {
 
         Optional<UserEntity> userFound = findByUserId(userId, transactionId);
 
-        if (userFound.isEmpty() || userFound.get().getVerified() || !userFound.get().getStatus()) {
+        if (userFound.isEmpty() || !userFound.get().getStatus()) {
             throw new InternalException("It was not possible to validate your code, the account is disabled or " +
                     "does not exist.", transactionId);
+        }
+        if (userFound.get().getVerified()) {
+            return;
         }
 
         UserEntity userModel = userFound.get();
@@ -153,6 +156,7 @@ public class UserService implements UserPort {
         if (obtainedCode != null && obtainedCode.equals(code)) {
             userModel.setVerified(true);
             saveUserPort.save(userModel, transactionId);
+            accountValidationPort.clearEmailCode(userModel.getEmail());
         } else {
             throw new InternalException("The codes are invalid", transactionId);
         }
@@ -203,6 +207,48 @@ public class UserService implements UserPort {
         mailPort.sendMail(account.get().getEmail(), subject, body, transactionId);
         user.setPassword(passwordEncoder.encode(password));
         saveUserPort.save(user, transactionId);
+    }
+
+    @Override
+    public void sendMailValidation(String mail, String transactionId) {
+        Optional<UserEntity> account = findByEmailEntity(mail, transactionId);
+
+        if (account.isEmpty()) {
+            throw new InternalException("It was not possible to assign a new password, please contact support",
+                    transactionId);
+        }
+
+        UserEntity user = account.get();
+
+        if (user.getVerified()) {
+            return;
+        }
+        Locale locale = new Locale(account.get().getLanguage());
+        final String code = accountValidationPort.generateCodeMail(user.getEmail());
+
+        mailPort.sendCodeMail(user.getEmail(), "Bienvenido, Su cuenta ha sido creada exitosamente, Por favor " +
+                "verifique su " +
+                "correo", code, locale, transactionId);
+    }
+
+    @Override
+    public void changePassword(Long userId, String password, String newPassword, String transactionId) {
+        Optional<UserEntity> userFound = findByUserId(userId, transactionId);
+
+        if (userFound.isEmpty() || !userFound.get().getStatus()) {
+            throw new InternalException("It was not possible to change the password because the account cannot be " +
+                    "found", transactionId);
+        }
+
+        UserEntity user = userFound.get();
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new InternalException("Could not change password", transactionId);
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        saveUserPort.save(user, transactionId);
+
     }
 
 

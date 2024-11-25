@@ -1,6 +1,5 @@
 package com.register.wowlibre.domain.dto;
 
-import com.register.wowlibre.domain.model.*;
 import lombok.*;
 
 import java.util.*;
@@ -22,8 +21,10 @@ public class GuildMemberDetailDto {
     private Long members;
     private boolean publicAccess;
     private String formattedBankMoney;
-    public Boolean isLeader;
-    public Boolean multiFaction;
-    public String discord;
-    private List<BenefitModel> benefits;
+    private Boolean isLeader;
+    private Boolean multiFaction;
+    private String discord;
+    private Integer claimedBenefits;
+    private Integer availableBenefits;
+
 }

@@ -7,8 +7,9 @@ import jakarta.validation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import static com.register.wowlibre.domain.constant.Constants.HEADER_TRANSACTION_ID;
-import static com.register.wowlibre.domain.constant.Constants.HEADER_USER_ID;
+import java.util.*;
+
+import static com.register.wowlibre.domain.constant.Constants.*;
 
 @RestController
 @RequestMapping("/api/guilds")
@@ -105,6 +106,21 @@ public class GuildController {
 
         guildPort.update(request.getServerId(), userId, request.getAccountId(), request.getCharacterId(),
                 request.getDiscord(), request.isMultiFaction(), request.isPublic(), transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
+
+    @PutMapping("/claim-benefit")
+    public ResponseEntity<GenericResponse<Void>> benefits(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
+            @RequestBody @Valid ClaimBenefitsGuildDto request) {
+
+        guildPort.claimBenefits(request.getServerId(), userId, request.getAccountId(), request.getCharacterId(),
+                locale.getLanguage(), transactionId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

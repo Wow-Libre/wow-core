@@ -56,24 +56,25 @@ CREATE TABLE accounts.account_game
 
 CREATE TABLE accounts.server
 (
-    id              bigint auto_increment NOT NULL,
-    name            varchar(40) NOT NULL,
-    emulator        varchar(40) NOT NULL,
-    expansion       varchar(5)  NOT NULL,
-    ip              text,
-    api_key         varchar(50) NOT NULL,
-    api_secret      varchar(50) NOT NULL,
-    password        varchar(50) NOT NULL,
-    jwt             text,
-    expiration_date date,
-    refresh_token   text,
-    avatar          text,
-    creation_date   date,
-    web_site        text,
-    realmlist       varchar(80),
-    status          boolean,
+    id                bigint auto_increment NOT NULL,
+    name              varchar(40) NOT NULL,
+    emulator          varchar(40) NOT NULL,
+    expansion         varchar(5)  NOT NULL,
+    ip                text,
+    api_key           varchar(50) NOT NULL,
+    api_secret        varchar(50) NOT NULL,
+    password          varchar(50) NOT NULL,
+    jwt               text,
+    expiration_date   date,
+    refresh_token     text,
+    avatar            text,
+    creation_date     date,
+    web_site          text,
+    realmlist         varchar(80),
+    status            boolean,
     external_username varchar(50) NOT NULL,
     external_password varchar(50) NOT NULL,
+    salt              VARBINARY(16),
 
     CONSTRAINT uq_email UNIQUE (name, version),
     PRIMARY KEY (id)
@@ -142,3 +143,14 @@ create table character_benefit_guild
     PRIMARY KEY (id)
 
 )
+
+CREATE TABLE accounts.user_promotion
+(
+    id           bigint AUTO_INCREMENT NOT NULL,
+    user_id      bigint NOT NULL,
+    account_id   bigint NOT NULL,
+    promotion_id bigint NOT NULL,
+    created_at   date   NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT user_promotion_uq UNIQUE (user_id, account_id, promotion_id)
+);

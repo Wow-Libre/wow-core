@@ -22,6 +22,15 @@ public class JpaBenefitGuildAdapter implements ObtainBenefitGuild, SaveBenefitGu
     }
 
     @Override
+    public List<BenefitGuildEntity> findRemainingBenefitsForGuildAndServerIdAndCharacter(Long serverId, Long guildId,
+                                                                                         Long characterId,
+                                                                                         Long accountId,
+                                                                                         String transactionId) {
+        return benefitGuildRepository.findRemainingBenefitsForGuildAndServerIdAndCharacter(serverId, guildId,
+                characterId, accountId);
+    }
+
+    @Override
     public void save(BenefitGuildEntity benefitGuild, String transactionId) {
         benefitGuildRepository.save(benefitGuild);
     }

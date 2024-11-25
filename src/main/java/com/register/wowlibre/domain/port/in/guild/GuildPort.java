@@ -17,4 +17,7 @@ public interface GuildPort {
 
     void update(Long serverId, Long userId, Long accountId, Long characterId, String discord, boolean multiFaction,
                 boolean isPublic, String transactionId);
+
+    void claimBenefits(Long serverId, Long userId, Long accountId, Long characterId, String language,
+                       String transactionId);
 }

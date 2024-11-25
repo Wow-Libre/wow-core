@@ -33,12 +33,12 @@ public class ServerService implements ServerPort {
 
 
     @Override
+    @Cacheable(value = "server-apikey", key = "#apiKey")
     public ServerModel findByApiKey(String apiKey, String transactionId) {
         return obtainServerPort.findByApiKey(apiKey, transactionId).map(ServerMapper::toModel)
                 .orElse(null);
     }
 
-    @Cacheable(value = "serversFindById", key = "#id")
     @Override
     public Optional<ServerEntity> findById(Long id, String transactionId) {
         return obtainServerPort.findById(id, transactionId);

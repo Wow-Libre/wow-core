@@ -6,4 +6,7 @@ import java.util.*;
 
 public interface ObtainBenefitGuild {
     List<BenefitGuildEntity> findByServerIdAndGuildIdAndStatusIsTrue(Long serverId, Long guildId, String transactionId);
+    List<BenefitGuildEntity> findRemainingBenefitsForGuildAndServerIdAndCharacter(Long serverId, Long guildId, Long characterId,
+                                                                      Long accountId ,String transactionId);
+
 }

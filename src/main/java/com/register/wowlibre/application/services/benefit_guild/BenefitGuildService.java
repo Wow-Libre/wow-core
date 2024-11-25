@@ -1,6 +1,5 @@
 package com.register.wowlibre.application.services.benefit_guild;
 
-import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.benefit_guild.*;
 import com.register.wowlibre.domain.port.out.benefit_guild.*;
 import com.register.wowlibre.infrastructure.entities.*;
@@ -27,12 +26,18 @@ public class BenefitGuildService implements BenefitGuildPort {
     }
 
     @Override
-    public List<BenefitGuildModel> benefits(Long serverId, Long guildId, String transactionId) {
-        return obtainBenefitGuild.findByServerIdAndGuildIdAndStatusIsTrue(serverId, guildId, transactionId).stream().map(this::mapToModel).toList();
+    public List<BenefitGuildEntity> benefits(Long serverId, Long guildId, String transactionId) {
+        return obtainBenefitGuild.findByServerIdAndGuildIdAndStatusIsTrue(serverId, guildId, transactionId);
     }
 
-    private BenefitGuildModel mapToModel(BenefitGuildEntity benefitGuild) {
-        return new BenefitGuildModel(benefitGuild.getId(), benefitGuild.getBenefitId(),
-                benefitGuild.getStatus());
+    @Override
+    public List<BenefitGuildEntity> findRemainingBenefitsForGuildAndServerIdAndCharacter(Long serverId, Long guildId,
+                                                                                         Long characterId,
+                                                                                         Long accountId,
+                                                                                         String transactionId) {
+        return obtainBenefitGuild.findRemainingBenefitsForGuildAndServerIdAndCharacter(serverId, guildId, characterId
+                , accountId, transactionId);
     }
+
+
 }

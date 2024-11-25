@@ -536,7 +536,7 @@ public class IntegratorClient {
                             "associated guilds. " +
                             "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
-            throw new InternalException("Transaction failed due to client or server error", transactionId);
+            throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [attachGuild] Unexpected Error: {}. An unexpected error occurred during " +
                             "the " +
@@ -857,7 +857,7 @@ public class IntegratorClient {
 
         HttpEntity<SubscriptionBenefitsRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/subscription-benefits", host))
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/subscription-benefits", host))
                 .toUriString();
 
         try {
@@ -879,6 +879,94 @@ public class IntegratorClient {
             throw new InternalException("Transaction failed due to client or server error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [sendBenefitsPremium] Unexpected Error: {}. An unexpected error " +
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
+
+
+    public GenericResponse<Void> sendPromo(String host, String jwt, ClaimPromoRequest request,
+                                           String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+
+        HttpEntity<ClaimPromoRequest> entity = new HttpEntity<>(request, headers);
+
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/claim-promotions", host))
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<Void>> response = restTemplate.exchange(url, HttpMethod.POST,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody());
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [sendPromo]  Client/Server Error: {}. Error with server " +
+                            "client " +
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException("Transaction failed due to client or server error", transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [sendPromo] Unexpected Error: {}. An unexpected error " +
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
+
+
+    public GenericResponse<Void> sendGuildBenefits(String host, String jwt, BenefitsGuildRequest request,
+                                                   String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+
+        HttpEntity<BenefitsGuildRequest> entity = new HttpEntity<>(request, headers);
+
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/claim-guild-benefits", host))
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<Void>> response = restTemplate.exchange(url, HttpMethod.POST,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody());
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [sendGuildBenefits]  Client/Server Error: {}. Error with server " +
+                            "client " +
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException("Transaction failed due to client or server error", transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [sendGuildBenefits] Unexpected Error: {}. An unexpected error " +
                             "occurred " +
                             "during " +
                             "the " +

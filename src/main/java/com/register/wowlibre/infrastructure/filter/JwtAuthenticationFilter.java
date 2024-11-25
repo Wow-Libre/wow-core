@@ -10,6 +10,8 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.apache.commons.lang3.*;
 import org.apache.logging.log4j.*;
+import org.slf4j.Logger;
+import org.slf4j.*;
 import org.springframework.http.*;
 import org.springframework.lang.*;
 import org.springframework.security.authentication.*;
@@ -28,6 +30,8 @@ import static com.register.wowlibre.domain.constant.Constants.*;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
     private final JwtPort jwtPort;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
@@ -46,6 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String transactionId = request.getHeader(Constants.HEADER_TRANSACTION_ID);
         ThreadContext.put(CONSTANT_UNIQUE_ID, transactionId);
+        LOGGER.info("{} Transaction {}", request.getRequestURI(), transactionId);
 
         try {
 

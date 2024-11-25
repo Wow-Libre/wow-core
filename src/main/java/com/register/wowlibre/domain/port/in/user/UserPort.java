@@ -23,4 +23,8 @@ public interface UserPort {
     void resetPassword(String email, String transactionId);
 
     void validateOtpRecoverPassword(String email, String code, String transactionId);
+
+    void sendMailValidation(String mail, String transactionId);
+
+    void changePassword(Long userId, String password, String newPassword, String transactionId);
 }

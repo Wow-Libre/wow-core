@@ -21,4 +21,6 @@ public class CharacterBenefitGuildEntity {
             optional = false,
             fetch = FetchType.EAGER)
     private BenefitGuildEntity benefitGuildId;
+    @Column(name = "benefit_send")
+    private Boolean benefitSend;
 }

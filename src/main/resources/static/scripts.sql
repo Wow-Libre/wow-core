@@ -143,3 +143,14 @@ create table character_benefit_guild
     PRIMARY KEY (id)
 
 )
+
+CREATE TABLE accounts.user_promotion
+(
+    id           bigint AUTO_INCREMENT NOT NULL,
+    user_id      bigint NOT NULL,
+    account_id   bigint NOT NULL,
+    promotion_id bigint NOT NULL,
+    created_at   date   NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT user_promotion_uq UNIQUE (user_id, account_id, promotion_id)
+);

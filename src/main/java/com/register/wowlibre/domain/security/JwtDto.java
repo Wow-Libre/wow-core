@@ -15,12 +15,17 @@ public class JwtDto {
     public String avatarUrl;
 
     public String language;
+    @JsonProperty("pending_validation")
 
-    public JwtDto(String jwt, String refreshToken, Date expirationDate, String avatarUrl, String language) {
+    public boolean pendingValidation;
+
+    public JwtDto(String jwt, String refreshToken, Date expirationDate, String avatarUrl, String language,
+                  boolean pendingValidation) {
         this.jwt = jwt;
         this.refreshToken = refreshToken;
         this.expirationDate = expirationDate;
         this.avatarUrl = avatarUrl;
         this.language = language;
+        this.pendingValidation = pendingValidation;
     }
 }

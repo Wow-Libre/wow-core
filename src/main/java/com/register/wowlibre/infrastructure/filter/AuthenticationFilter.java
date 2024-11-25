@@ -117,6 +117,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         Date expiration = jwtPort.extractExpiration(token);
         String refreshToken = jwtPort.generateRefreshToken(customUserDetails);
         return new JwtDto(token, refreshToken, expiration, customUserDetails.getAvatarUrl(),
-                customUserDetails.getLanguage());
+                customUserDetails.getLanguage(), customUserDetails.isPendingValidation());
     }
 }

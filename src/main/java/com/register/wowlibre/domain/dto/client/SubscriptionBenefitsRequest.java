@@ -1,7 +1,7 @@
 package com.register.wowlibre.domain.dto.client;
 
+import com.fasterxml.jackson.annotation.*;
 import com.register.wowlibre.domain.model.*;
-import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.util.*;
@@ -9,16 +9,14 @@ import java.util.*;
 @Data
 @AllArgsConstructor
 public class SubscriptionBenefitsRequest {
-    @NotNull
+    @JsonProperty("user_id")
     private Long userId;
-    @NotNull
+    @JsonProperty("account_id")
     private Long accountId;
-    @NotNull
+    @JsonProperty("character_id")
     private Long characterId;
-
     private List<ItemQuantityModel> items;
-    @NotNull
-    @NotEmpty
+    @JsonProperty("benefit_type")
     private String benefitType;
     private Double amount;
 }

@@ -199,6 +199,9 @@ public class IntegratorService implements IntegratorPort {
         List<GuildDto> guilds =
                 response.getGuilds().stream().filter(GuildModel::isPublicAccess).map(guildModel -> new GuildDto(guildModel, serverName, serverId)).toList();
 
+        if (guilds.isEmpty()) {
+            return new GuildsDto(guilds, 0L);
+        }
         return new GuildsDto(guilds, response.getSize());
     }
 
@@ -279,6 +282,19 @@ public class IntegratorService implements IntegratorPort {
                                     String transactionId) {
         integratorClient.sendBenefitsPremium(host, jwt, new SubscriptionBenefitsRequest(userId, accountId,
                 characterId, items, benefitType, amount), transactionId);
+    }
+
+    @Override
+    public void sendPromo(String host, String jwt, Long userId, Long accountId, Long characterId,
+                          List<ItemQuantityModel> items, String type, Double amount, String transactionId) {
+        integratorClient.sendPromo(host, jwt, new ClaimPromoRequest(userId, accountId, characterId, items, type,
+                amount), transactionId);
+    }
+
+    @Override
+    public void sendGuildBenefit(String host, String jwt, Long userId, Long accountId, Long characterId,
+                                 List<ItemQuantityModel> items, String transactionId) {
+        integratorClient.sendGuildBenefits(host, jwt, new BenefitsGuildRequest(userId, accountId, characterId, items), transactionId);
     }
 
 }

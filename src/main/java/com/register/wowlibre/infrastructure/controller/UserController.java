@@ -112,4 +112,28 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok().build());
     }
+
+    @PutMapping("/send-mail")
+    public ResponseEntity<GenericResponse<UserDetailDto>> validateMail(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_EMAIL, required = false) final String email) {
+
+        userPort.sendMailValidation(email, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok().build());
+    }
+
+    @PutMapping(path = "/new-password")
+    public ResponseEntity<GenericResponse<Void>> newPassword(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestBody @Valid ChangePasswordUserDto changePassword) {
+
+        userPort.changePassword(userId, changePassword.getPassword(),
+                changePassword.getNewPassword(), transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
 }
