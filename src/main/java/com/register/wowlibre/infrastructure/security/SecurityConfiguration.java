@@ -48,7 +48,7 @@ public class SecurityConfiguration {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
                 "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "http://15.204.134" +
-                        ".74:3000", "http://15.204.134.74:8080", "http://15.204.134.74"));
+                        ".74:3000", "http://15.204.134.74:8080", "http://15.204.134.74","https://9jqcw0f0-3000.use2.devtunnels.ms"));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
@@ -81,12 +81,18 @@ public class SecurityConfiguration {
                         request.requestMatchers(
                                         //INTERNAL API
                                         "/api/account/create",
+                                        "api/account/recovery-password",
                                         "/api/account/search",
-                                        "/api/resources/country",
+                                        "/api/resources/banners-home",
+                                        "/api/resources/country", "/api/resources/widget-home",
+                                        "/api/resources/server-promos",
                                         "/api/resources/faqs",
                                         "/api/resources/bank/plans",
                                         "/api/resources/benefit",
+                                        "/api/resources/benefits-guild",
                                         "/api/server",
+                                        "/api/guilds",
+                                        "/api/guilds/{id}",
                                         //SWAGGER
                                         "/v2/api-docs",
                                         "/swagger-resources",
@@ -99,6 +105,8 @@ public class SecurityConfiguration {
                                         "/swagger-ui/**")
                                 .permitAll()
                                 .requestMatchers("/api/server/create", "/api/server/key").hasAuthority(Roles.SERVER.getRoleName())
+                                .requestMatchers("/api/transaction/purchase", "/api/transaction/subscription-benefits"
+                                ).hasAuthority(Roles.ADMIN.getRoleName())
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

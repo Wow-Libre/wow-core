@@ -1,19 +1,16 @@
 package com.register.wowlibre.infrastructure.handler;
 
-import com.register.wowlibre.domain.exception.GenericErrorException;
-import com.register.wowlibre.domain.shared.GenericResponse;
-import com.register.wowlibre.domain.shared.NotNullValuesDto;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.shared.*;
+import org.springframework.http.*;
+import org.springframework.http.converter.*;
+import org.springframework.security.authentication.*;
+import org.springframework.validation.*;
+import org.springframework.web.bind.*;
+import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.exceptions.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @RestControllerAdvice
 public class ManagerExceptionHandler {
@@ -69,12 +66,24 @@ public class ManagerExceptionHandler {
                     GenericErrorException.class,
             })
     public ResponseEntity<GenericResponse<Void>> unauthorizedException(GenericErrorException e) {
-        System.out.println(e.getClass());
         GenericResponse<Void> response = new GenericResponse<>();
         response.setMessage(e.getMessage() != null ? e.getMessage() : "");
         response.setCode(e.httpStatus.value());
         response.setTransactionId(e.transactionId);
         return ResponseEntity.status(e.httpStatus).body(response);
+    }
+
+    @ExceptionHandler(
+            value = {
+                    JedisConnectionException.class
+            })
+    public ResponseEntity<GenericResponse<Void>> httpMessageNotReadableException(JedisConnectionException e) {
+
+        GenericResponse<Void> response = new GenericResponse<>();
+        response.setMessage("Cache Invalid");
+        response.setCode(500);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
 }

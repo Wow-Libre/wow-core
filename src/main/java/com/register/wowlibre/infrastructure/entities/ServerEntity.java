@@ -3,12 +3,14 @@ package com.register.wowlibre.infrastructure.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.*;
 import java.time.*;
+import java.util.*;
 
 @Data
 @Entity
 @Table(name = "server")
-public class ServerEntity {
+public class ServerEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,7 +26,18 @@ public class ServerEntity {
     private String apiSecret;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
+    private String jwt;
+    @Column(name = "refresh_token")
+    private String refreshToken;
+    @Column(name = "expiration_date")
+    private Date expirationDate;
     @Column(name = "web_site")
     private String webSite;
+    private String realmlist;
     private boolean status;
+    @Column(name = "external_username")
+    private String externalUsername;
+    @Column(name = "external_password")
+    private String externalPassword;
+    private byte[] salt;
 }

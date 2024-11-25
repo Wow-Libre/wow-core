@@ -7,8 +7,18 @@ import java.util.*;
 public interface JsonLoaderPort {
     List<CountryModel> getJsonCountry(String transactionId);
 
-    List<FaqsModel> getJsonFaqs(String transactionId);
+    List<FaqsModel> getJsonFaqs(String language, String transactionId);
 
     List<PlanModel> getJsonPlans(String language, String transactionId);
+
+    List<BenefitModel> getJsonBenefitsGuild(String language, String transactionId);
+
+    List<ServersPromotions> getJsonServersPromoGuild(String language, String transactionId);
+
+    List<BannerHomeModel> getBannersHome(String language, String transactionId);
+
+    WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId);
+
+    List<PromotionModel> getPromotions(String language, String transactionId);
 
 }

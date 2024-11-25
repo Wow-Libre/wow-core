@@ -41,12 +41,14 @@ CREATE TABLE accounts.user
 CREATE TABLE accounts.account_game
 (
     id         bigint auto_increment NOT NULL,
-    server_id  bigint NOT NULL,
-    account_id bigint NOT NULL,
+    server_id  bigint      NOT NULL,
+    account_id bigint      NOT NULL,
+    username   varchar(40) NOT NULL,
     status     boolean,
-    user_id    bigint NOT NULL,
+    user_id    bigint      NOT NULL,
 
     CONSTRAINT fk_account_game_user_id FOREIGN KEY (user_id) REFERENCES accounts.user (id),
+    CONSTRAINT fk_account_game_server_id FOREIGN KEY (server_id) REFERENCES accounts.server (id),
     CONSTRAINT uq_server_and_account_and_user UNIQUE (server_id, account_id),
     PRIMARY KEY (id)
 );
@@ -54,19 +56,101 @@ CREATE TABLE accounts.account_game
 
 CREATE TABLE accounts.server
 (
-    id            bigint auto_increment NOT NULL,
-    name          varchar(40) NOT NULL,
-    emulator      varchar(40) NOT NULL,
-    expansion     varchar(5) NOT NULL,
-    ip            text,
-    api_key       varchar(50) NOT NULL,
-    api_secret     varchar(50) NOT NULL,
-    password      varchar(50) NOT NULL,
-    avatar    text,
-    creation_date date,
-    web_site      text,
-    status        boolean,
+    id                bigint auto_increment NOT NULL,
+    name              varchar(40) NOT NULL,
+    emulator          varchar(40) NOT NULL,
+    expansion         varchar(5)  NOT NULL,
+    ip                text,
+    api_key           varchar(50) NOT NULL,
+    api_secret        varchar(50) NOT NULL,
+    password          varchar(50) NOT NULL,
+    jwt               text,
+    expiration_date   date,
+    refresh_token     text,
+    avatar            text,
+    creation_date     date,
+    web_site          text,
+    realmlist         varchar(80),
+    status            boolean,
+    external_username varchar(50) NOT NULL,
+    external_password varchar(50) NOT NULL,
+    salt              VARBINARY(16),
 
     CONSTRAINT uq_email UNIQUE (name, version),
     PRIMARY KEY (id)
+);
+
+
+CREATE TABLE accounts.server_services
+(
+    id        bigint auto_increment NOT NULL,
+    name      varchar(50) NOT NULL,
+    amount double NOT NULL,
+    server_id bigint      NOT NULL,
+
+    CONSTRAINT fk_server_services_server_id FOREIGN KEY (server_id) REFERENCES accounts.server (id),
+    CONSTRAINT uq_name_server_id UNIQUE (name, server_id),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE accounts.credit_loans
+(
+    id               bigint auto_increment NOT NULL,
+    user_id          bigint      NOT NULL,
+    reference_serial varchar(60) NOT NULL,
+    account_id       bigint,
+    character_id     bigint,
+    server_id        bigint,
+    amount_transferred double NOT NULL,
+    debt_to_pay double NOT NULL,
+    transaction_date date        NOT NULL,
+    payment_date     date        NOT NULL,
+    interests        INTEGER     NOT NULL,
+    status           boolean     NOT NULL,
+    send             boolean     NOT NULL,
+
+    CONSTRAINT fk_credit_loans_user_id FOREIGN KEY (user_id) REFERENCES accounts.user (id),
+    CONSTRAINT uq_credit_loans_reference_serial UNIQUE (reference_serial),
+    PRIMARY KEY (id)
+);
+
+
+
+create table benefit_guild
+(
+    id         bigint auto_increment NOT NULL,
+    server_id  bigint      not null,
+    guild_name varchar(70) not null,
+    guild_id   bigint      not null,
+    benefit_id bigint      not null,
+    status     boolean     not null,
+    CONSTRAINT uq_benefit_guild_server_id_guild_id_benefit_id UNIQUE (server_id, guild_id, benefit_id),
+    CONSTRAINT fk_benefit_guild_server_id FOREIGN KEY (server_id) REFERENCES accounts.server (id),
+    PRIMARY KEY (id)
+
+);
+
+create table character_benefit_guild
+(
+    id               bigint auto_increment NOT NULL,
+    character_id     bigint not null,
+    account_id       bigint not null,
+    benefit_guild_id bigint not null,
+    benefit_send     boolean,
+
+    CONSTRAINT uq_character_and_account_and_benefit_id UNIQUE (character_id, account_id, benefit_guild_id),
+    CONSTRAINT fk_benefit_guild_id FOREIGN KEY (benefit_guild_id) REFERENCES accounts.benefit_guild (id),
+    PRIMARY KEY (id)
+
+)
+
+CREATE TABLE accounts.user_promotion
+(
+    id           bigint AUTO_INCREMENT NOT NULL,
+    user_id      bigint NOT NULL,
+    account_id   bigint NOT NULL,
+    promotion_id bigint NOT NULL,
+    created_at   date   NOT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT user_promotion_uq UNIQUE (user_id, account_id, promotion_id)
 );

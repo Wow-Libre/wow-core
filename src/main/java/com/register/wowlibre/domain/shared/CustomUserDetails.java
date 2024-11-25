@@ -25,10 +25,13 @@ public class CustomUserDetails implements UserDetails {
     private final String avatarUrl;
     @Getter
     private final String language;
+    @Getter
+    private final boolean pendingValidation;
 
     public CustomUserDetails(Collection<? extends GrantedAuthority> authorities, String password, String username,
                              boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired,
-                             boolean enabled, Long accountWebId, String avatarUrl, String language) {
+                             boolean enabled, Long accountWebId, String avatarUrl, String language,
+                             boolean pendingValidation) {
         this.authorities = authorities;
         this.password = password;
         this.username = username;
@@ -39,6 +42,7 @@ public class CustomUserDetails implements UserDetails {
         this.userId = accountWebId;
         this.avatarUrl = avatarUrl;
         this.language = language;
+        this.pendingValidation = pendingValidation;
     }
 
     public CustomUserDetails(List<RolModel> authorities, String password, String username,
@@ -57,6 +61,7 @@ public class CustomUserDetails implements UserDetails {
         this.userId = userId;
         this.avatarUrl = avatarUrl;
         this.language = language;
+        this.pendingValidation = true;
     }
 
     @Override

@@ -34,7 +34,7 @@ public class UserDto {
     @NotNull
     @Length(min = 5, max = 50)
     private String email;
-
+    @Length( max = 30)
     @NotNull
     private String password;
     @NotNull

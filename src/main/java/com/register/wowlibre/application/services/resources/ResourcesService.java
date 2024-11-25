@@ -22,13 +22,38 @@ public class ResourcesService implements ResourcesPort {
     }
 
     @Override
-    public List<FaqsModel> getFaqs(String transactionId) {
-        return jsonLoaderPort.getJsonFaqs(transactionId);
+    public List<FaqsModel> getFaqs(String language, String transactionId) {
+        return jsonLoaderPort.getJsonFaqs(language, transactionId);
     }
 
     @Override
     public List<PlanModel> getPlansBank(String language, String transactionId) {
         return jsonLoaderPort.getJsonPlans(language, transactionId);
+    }
+
+    @Override
+    public List<BenefitModel> getBenefitsGuild(String language, String transactionId) {
+        return jsonLoaderPort.getJsonBenefitsGuild(language, transactionId);
+    }
+
+    @Override
+    public List<ServersPromotions> getJsonServersPromoGuild(String language, String transactionId) {
+        return jsonLoaderPort.getJsonServersPromoGuild(language, transactionId);
+    }
+
+    @Override
+    public List<BannerHomeModel> getBannersHome(String language, String transactionId) {
+        return jsonLoaderPort.getBannersHome(language, transactionId);
+    }
+
+    @Override
+    public WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId) {
+        return jsonLoaderPort.getWidgetSubscription(language, transactionId);
+    }
+
+    @Override
+    public List<PromotionModel> getPromotions(String language, String transactionId) {
+        return jsonLoaderPort.getPromotions(language, transactionId);
     }
 
 }

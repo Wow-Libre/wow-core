@@ -16,8 +16,33 @@ public class JpaAccountGameAdapter implements ObtainAccountGamePort, SaveAccount
     }
 
     @Override
-    public List<AccountGameEntity> findByUserIdAndStatusIsTrue(Long userId, int size, int page, String transactionId) {
+    public List<AccountGameEntity> findByUserIdAndStatusIsTrue(Long userId, int page, int size, String transactionId) {
         return accountGameRepository.findByUserId_IdAndStatusIsTrue(userId, PageRequest.of(page, size)).stream().toList();
+    }
+
+    @Override
+    public Optional<AccountGameEntity> findByUserIdAndAccountIdAndStatusIsTrue(Long userId, Long accountId,
+                                                                               String transactionId) {
+        return accountGameRepository.findByUserId_IdAndAccountIdAndStatusIsTrue(userId, accountId);
+    }
+
+    @Override
+    public Long accounts(Long userId) {
+        return accountGameRepository.countByUserId(userId);
+    }
+
+    @Override
+    public List<AccountGameEntity> findByUserIdAndServerNameAndUsernameStatusIsTrue(Long userId, int page, int size,
+                                                                                    String serverName,
+                                                                                    String username,
+                                                                                    String transactionId) {
+        return accountGameRepository.findByUserId_IdAndStatusIsTrueAndServerNameAndUsername(
+                serverName, userId, username, PageRequest.of(page, size)).stream().toList();
+    }
+
+    @Override
+    public List<AccountGameEntity> findByUserIdAndServerId(Long userId, Long serverId, String transactionId) {
+        return accountGameRepository.findByUserId_IdAndServerId_IdAndStatusIsTrue(userId, serverId);
     }
 
     @Override

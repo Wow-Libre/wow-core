@@ -3,14 +3,16 @@ package com.register.wowlibre.infrastructure.entities;
 import com.register.wowlibre.domain.mapper.*;
 import com.register.wowlibre.domain.model.UserModel;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
+import java.io.*;
 import java.time.LocalDate;
 
 @Data
 @Entity
 @Table(name = "user")
-public class UserEntity {
+@NoArgsConstructor
+public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,10 +56,14 @@ public class UserEntity {
 
 
     public UserModel mapToModelEntity() {
-        return UserModel.builder().id(id)
-                .avatar(avatarUrl).country(country).firstName(firstName).rolModel(RolMapper.toModel(rolId))
-                .dateOfBirth(dateOfBirth).email(email).status(status).verified(verified)
-                .lastName(lastName).cellPhone(cellPhone).password(password).language(language).build();
+        return UserModel.builder()
+                .id(id)
+                .avatar(avatarUrl).country(country)
+                .firstName(firstName).rolModel(RolMapper.toModel(rolId))
+                .dateOfBirth(dateOfBirth).email(email)
+                .status(status).verified(verified)
+                .lastName(lastName).cellPhone(cellPhone)
+                .password(password).language(language).build();
     }
 
 

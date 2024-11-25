@@ -3,6 +3,7 @@ package com.register.wowlibre.domain.model;
 import lombok.*;
 
 @AllArgsConstructor
-public class SearchModel {
-  public boolean exist;
+public class ItemQuantityModel {
+    public String id;
+    public int quantity;
 }

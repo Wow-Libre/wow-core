@@ -1,23 +1,23 @@
 package com.register.wowlibre.application.services.jwt;
 
-import com.register.wowlibre.domain.port.in.jwt.JwtPort;
-import com.register.wowlibre.domain.shared.CustomUserDetails;
-import com.register.wowlibre.infrastructure.config.JwtProperties;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import com.register.wowlibre.domain.port.in.jwt.*;
+import com.register.wowlibre.domain.shared.*;
+import com.register.wowlibre.infrastructure.config.*;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.*;
+import io.jsonwebtoken.security.*;
+import lombok.extern.slf4j.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.authority.*;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.*;
 
-import java.security.Key;
+import javax.crypto.*;
+import java.security.*;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.function.*;
+import java.util.stream.*;
 
 import static com.register.wowlibre.domain.constant.Constants.*;
 
@@ -73,10 +73,10 @@ public class JwtPortService implements JwtPort {
     ) {
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .claims(extraClaims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -128,11 +128,11 @@ public class JwtPortService implements JwtPort {
 
     private Claims extractAllClaims(String token) {
         return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
+                .parser()
+                .verifyWith((SecretKey) getSignInKey())
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     private Key getSignInKey() {

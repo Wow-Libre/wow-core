@@ -1,6 +1,7 @@
 package com.register.wowlibre.application.services.server;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.mapper.*;
 import com.register.wowlibre.domain.model.*;
@@ -9,17 +10,18 @@ import com.register.wowlibre.domain.port.out.server.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 
 @Repository
 public class ServerService implements ServerPort {
-    private final String AVATAR_SERVER_DEFAULT = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/WoW_icon" +
-            ".svg/2048px-WoW_icon.svg.png";
+    private static final String AVATAR_SERVER_DEFAULT = "https://upload.wikimedia" +
+            ".org/wikipedia/commons/thumb/e/eb/WoW_icon.svg/2048px-WoW_icon.svg.png";
     private final ObtainServerPort obtainServerPort;
     private final SaveServerPort saveServerPort;
-
     private final RandomString randomString;
 
     public ServerService(ObtainServerPort obtainServerPort, SaveServerPort saveServerPort,
@@ -29,24 +31,17 @@ public class ServerService implements ServerPort {
         this.randomString = randomString;
     }
 
-    @Override
-    public List<ServerModel> findByStatusIsTrue(String transactionId) {
-        List<ServerEntity> servers = obtainServerPort.findByStatusIsTrue(transactionId);
-
-        return servers.stream().map(ServerMapper::toModel).toList();
-    }
 
     @Override
-    public ServerModel findByNameAndVersionAndStatusIsTrue(String name, String version,
-                                                           String transactionId) {
-        return obtainServerPort.findByNameAndExpansionAndStatusIsTrue(name, version, transactionId)
-                .map(ServerMapper::toModel).orElse(null);
-    }
-
-    @Override
-    public ServerModel findByApiKeyAndStatusIsTrue(String apiKey, String transactionId) {
-        return obtainServerPort.findByApiKeyAndStatusIsTrue(apiKey, transactionId).map(ServerMapper::toModel)
+    @Cacheable(value = "server-apikey", key = "#apiKey")
+    public ServerModel findByApiKey(String apiKey, String transactionId) {
+        return obtainServerPort.findByApiKey(apiKey, transactionId).map(ServerMapper::toModel)
                 .orElse(null);
+    }
+
+    @Override
+    public Optional<ServerEntity> findById(Long id, String transactionId) {
+        return obtainServerPort.findById(id, transactionId);
     }
 
     @Override
@@ -62,14 +57,55 @@ public class ServerService implements ServerPort {
         final String apiKey = randomString.nextString();
         final String apiSecret = randomString.nextString();
 
-        ServerModel serverDto = ServerMapper.create(serverCreateDto, apiKey, apiSecret, AVATAR_SERVER_DEFAULT, false);
+        ServerModel serverDto = ServerModel.builder()
+                .name(serverCreateDto.getName())
+                .emulator(serverCreateDto.getEmulator())
+                .expansion(serverCreateDto.getExpansion())
+                .avatar(AVATAR_SERVER_DEFAULT)
+                .ip(serverCreateDto.getIp())
+                .apiKey(apiKey)
+                .apiSecret(apiSecret)
+                .password(serverCreateDto.getPassword())
+                .creationDate(LocalDateTime.now())
+                .status(false)
+                .realmlist(serverCreateDto.getRealmlist())
+                .webSite(serverCreateDto.getWebSite())
+                .build();
 
         saveServerPort.save(ServerMapper.toEntity(serverDto), transactionId);
     }
 
     @Override
-    public void update(String name, String avatar, String ip, String password, String oldPassword, String website,
-                       String transactionId) {
-
+    public List<ServerEntity> findByStatusIsTrueServers(String transactionId) {
+        return obtainServerPort.findByStatusIsTrue(transactionId);
     }
+
+
+    @Override
+    public List<ServersDto> findByStatusIsTrue(String transactionId) {
+        return findByStatusIsTrueServers(transactionId).stream().map(this::mapToModel).toList();
+    }
+
+    private ServersDto mapToModel(ServerEntity server) {
+        ServersDto serversDto = new ServersDto();
+        serversDto.setId(server.getId());
+        serversDto.setName(server.getName());
+        serversDto.setStatus(server.isStatus());
+        serversDto.setEmulator(server.getEmulator());
+        serversDto.setExpansion(server.getExpansion());
+        serversDto.setCreationDate(server.getCreationDate());
+        serversDto.setWebSite(server.getWebSite());
+        serversDto.setAvatar(server.getAvatar());
+        serversDto.setExpName(Expansion.getById(Integer.parseInt(serversDto.expansion)).getDisplayName());
+        return serversDto;
+    }
+
+    @Override
+    public ServerModel findByNameAndVersionAndStatusIsTrue(String name, String version,
+                                                           String transactionId) {
+        return obtainServerPort.findByNameAndExpansionAndStatusIsTrue(name, version, transactionId)
+                .map(ServerMapper::toModel).orElse(null);
+    }
+
+
 }

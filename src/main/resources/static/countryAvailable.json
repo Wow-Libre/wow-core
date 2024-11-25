@@ -37,7 +37,7 @@
   {
     "value": "Haití",
     "label": "Haití",
-    "language": "fr",
+    "language": "en",
     "site": "WLHT",
     "timezone": "America/Port-au-Prince"
   },
@@ -128,7 +128,7 @@
   {
     "value": "Guayana Francesa",
     "label": "Guayana Francesa",
-    "language": "fr",
+    "language": "en",
     "site": "WLGF",
     "timezone": "America/Cayenne"
   },

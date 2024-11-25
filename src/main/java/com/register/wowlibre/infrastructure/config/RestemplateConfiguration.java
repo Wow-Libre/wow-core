@@ -14,9 +14,9 @@ import java.util.*;
 @Configuration
 public class RestemplateConfiguration {
 
-    @Value("${restemplate.config.connect-timeout:160}")
+    @Value("${restemplate.config.connect-timeout:60}")
     private Integer connectTimeout;
-    @Value("${restemplate.config.read-timeout:130}")
+    @Value("${restemplate.config.read-timeout:30}")
     private Integer readTimeout;
 
 

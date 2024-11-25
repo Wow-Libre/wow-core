@@ -1,8 +1,26 @@
 spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
-  main:
-      allow-circular-references: true
+  profiles:
+    active: local
+  freemarker:
+    template-loader-path: classpath:/templates/
+  messages:
+    basename: messages,config.i18n.messages
+    always-use-message-format: false
+    cache-duration:
+    encoding: UTF-8
+    fallback-to-system-locale: true
+    use-code-as-default-message: false
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  data:
+    redis:
+      host: localhost
+      port: 6379
   jpa:
     hibernate:
       ddl-auto: none
@@ -12,23 +30,73 @@ spring:
     password: Loquendo96@
     driver-class-name: com.mysql.cj.jdbc.Driver
   mail:
-    host: smtp.gmail.com
+    host: 'smtp-relay.brevo.com'
     port: 587
-    username: 'mschitiva68@gmail.com'
-    password: 'xxvl spfa sdal bzgm'
+    username: '7e339a001@smtp-brevo.com'
+    password: 'RyfB7JX3E0YIcktG'
     properties:
       mail:
         smtp:
           auth: true
           starttls:
-            enable: true
+            enable: false
+    default-encoding: UTF-8
 server:
+  servlet:
+    context-path: /core
   address: 0.0.0.0
-  port: 8090
+  port: 8091
 application:
+  host:
+    wow-libre: http://localhost:3000/confirmation
+  security:
+    mail:
+      api-key: 'mlsn.0ebc57351a0ce3a6b78a6e2e80f0233d8b826f34cdccc052e3946909de563769'
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 604800000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  data:
+    redis:
+      host: 1}
+      port: 1
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_USERNAME}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: 'smtp-relay.brevo.com'
+    port: 587
+    username: '7e339a001@smtp-brevo.com'
+    password: 'RyfB7JX3E0YIcktG'
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: false
+    default-encoding: UTF-8
+server:
+  servlet:
+    context-path: /core
+  address: 0.0.0.0
+  port: 8091
+application:
+  host:
+    wow-libre: ${WOW_LIBRE_HOST}/confirmation
   security:
     jwt:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-      expiration: 86400000 # a day
+      expiration: 604800000 # a day
       refresh-token:
         expiration: 604800000 # 7 days

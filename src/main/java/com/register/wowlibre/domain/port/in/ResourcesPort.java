@@ -8,8 +8,16 @@ import java.util.*;
 public interface ResourcesPort {
     List<CountryModel> getCountry(String transactionId);
 
-    List<FaqsModel> getFaqs(String transactionId);
+    List<FaqsModel> getFaqs(String language, String transactionId);
 
     List<PlanModel> getPlansBank(String language, String transactionId);
 
+    List<BenefitModel> getBenefitsGuild(String language, String transactionId);
+
+    List<ServersPromotions> getJsonServersPromoGuild(String language, String transactionId);
+
+    List<BannerHomeModel> getBannersHome(String language, String transactionId);
+
+    WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId);
+    List<PromotionModel> getPromotions(String language, String transactionId);
 }

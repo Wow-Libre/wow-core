@@ -13,11 +13,11 @@ public class UserModel {
     public String firstName;
     public String lastName;
     public String cellPhone;
-    public String email;
     public String password;
+    public String email;
     public boolean status;
     public boolean verified;
+    public String avatar;
     public String language;
     public RolModel rolModel;
-    public String avatar;
 }

@@ -32,40 +32,12 @@ public class ServerController {
                 .body(new GenericResponseBuilder<Void>(transactionId).created().build());
     }
 
-    @GetMapping
-    public ResponseEntity<GenericResponse<List<ServerModel>>> all(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
-
-        final List<ServerModel> serverList = serverPort.findByStatusIsTrue(transactionId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(serverList, transactionId).ok().build());
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<GenericResponse<ServerModel>> search(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestParam String emulator,
-            @RequestParam String name) {
-
-        final ServerModel server = serverPort.findByNameAndVersionAndStatusIsTrue(name, emulator, transactionId);
-
-        if (server == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                    .body(new GenericResponseBuilder<ServerModel>(transactionId).notContent().build());
-        }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(server, transactionId).ok().build());
-    }
-
-
     @GetMapping("/key")
     public ResponseEntity<GenericResponse<ServerModel>> apiKey(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestParam(name = "api_key") String apiKey) {
 
-        final ServerModel server = serverPort.findByApiKeyAndStatusIsTrue(apiKey, transactionId);
+        final ServerModel server = serverPort.findByApiKey(apiKey, transactionId);
 
         if (server == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
@@ -76,15 +48,17 @@ public class ServerController {
                 .body(new GenericResponseBuilder<>(server, transactionId).ok().build());
     }
 
-    @PutMapping
-    public ResponseEntity<GenericResponse<Void>> update(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestBody @Valid ServerUpdateDto request) {
 
-        serverPort.update(request.getName(), "", request.getIp(),
-                request.getPassword(), request.getOldPassword(), request.getWebSite(), transactionId);
+    @GetMapping
+    public ResponseEntity<GenericResponse<List<ServersDto>>> servers(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
+
+        final List<ServersDto> serverList = serverPort.findByStatusIsTrue(transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+                .body(new GenericResponseBuilder<>(serverList, transactionId).ok().build());
     }
+
+
+
 }

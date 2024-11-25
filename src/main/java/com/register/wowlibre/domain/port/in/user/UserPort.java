@@ -8,7 +8,7 @@ import com.register.wowlibre.infrastructure.entities.*;
 import java.util.*;
 
 public interface UserPort {
-    JwtDto create(UserDto accountWebDto, String transactionId);
+    JwtDto create(UserDto accountWebDto, Locale locale, String transactionId);
 
     UserModel findByEmail(String email, String transactionId);
 
@@ -16,4 +16,15 @@ public interface UserPort {
 
     Optional<UserEntity> findByUserId(Long userId, String transactionId);
 
+    Optional<UserEntity> findByEmailEntity(String email, String transactionId);
+
+    void validationAccount(Long userId, String code, String transactionId);
+
+    void resetPassword(String email, String transactionId);
+
+    void validateOtpRecoverPassword(String email, String code, String transactionId);
+
+    void sendMailValidation(String mail, String transactionId);
+
+    void changePassword(Long userId, String password, String newPassword, String transactionId);
 }

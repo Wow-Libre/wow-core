@@ -1,0 +1,28 @@
+package com.register.wowlibre.infrastructure.repositories.user_promotion;
+
+import com.register.wowlibre.domain.port.out.user_promotion.*;
+import com.register.wowlibre.infrastructure.entities.*;
+import org.springframework.stereotype.*;
+
+import java.util.*;
+
+@Repository
+public class JpaUserPromotionAdapter implements SaveUserPromotion, ObtainUserPromotion {
+
+    private final UserPromotionRepository userPromotionRepository;
+
+    public JpaUserPromotionAdapter(UserPromotionRepository userPromotionRepository) {
+        this.userPromotionRepository = userPromotionRepository;
+    }
+
+    @Override
+    public Optional<UserPromotionEntity> findByUserIdAndAccountId(Long userId, Long accountId, Long promotionId,
+                                                                  String transactionId) {
+        return userPromotionRepository.findByUserIdAndAccountIdAndPromotionId(userId, accountId, promotionId);
+    }
+
+    @Override
+    public void save(UserPromotionEntity userPromotionEntity, String transactionId) {
+        userPromotionRepository.save(userPromotionEntity);
+    }
+}

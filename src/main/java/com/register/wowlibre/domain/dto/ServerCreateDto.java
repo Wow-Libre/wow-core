@@ -16,6 +16,7 @@ public class ServerCreateDto {
     @Length(min = 1, max = 4)
     private String expansion;
     @NotNull
+    @Length(min = 1, max = 30)
     private String webSite;
     @NotNull
     @Length(min = 2, max = 50)
@@ -23,4 +24,7 @@ public class ServerCreateDto {
     @NotNull
     @Length(min = 2, max = 20)
     private String password;
+    @NotNull
+    @Length(min = 5, max = 80)
+    private String realmlist;
 }

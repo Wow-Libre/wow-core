@@ -31,8 +31,9 @@ public class ResourcesController {
 
     @GetMapping("/faqs")
     public ResponseEntity<GenericResponse<List<FaqsModel>>> faqs(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
-        final List<FaqsModel> countryModelList = resourcesPort.getFaqs(transactionId);
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE, required = false) Locale locale) {
+        final List<FaqsModel> countryModelList = resourcesPort.getFaqs(locale.getLanguage(), transactionId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(countryModelList, transactionId).ok().build());
@@ -47,5 +48,54 @@ public class ResourcesController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(countryModelList, transactionId).ok().build());
+    }
+
+    @GetMapping("/benefits-guild")
+    public ResponseEntity<GenericResponse<List<BenefitModel>>> benefitsGuild(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestParam(name = "language", defaultValue = "es") final String language) {
+        final List<BenefitModel> benefitsGuild = resourcesPort.getBenefitsGuild(language, transactionId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(benefitsGuild, transactionId).ok().build());
+    }
+
+
+    @GetMapping("/server-promos")
+    public ResponseEntity<GenericResponse<List<ServersPromotions>>> serversPromo(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
+        final List<ServersPromotions> serversPromotions = resourcesPort.getJsonServersPromoGuild(locale.getLanguage()
+                , transactionId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(serversPromotions, transactionId).ok().build());
+    }
+
+    @GetMapping("/banners-home")
+    public ResponseEntity<GenericResponse<List<BannerHomeModel>>> bannersHome(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
+
+        final List<BannerHomeModel> serversPromotions = resourcesPort.getBannersHome(locale.getLanguage(),
+                transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(serversPromotions, transactionId).ok().build());
+    }
+
+    @GetMapping("/widget-home")
+    public ResponseEntity<GenericResponse<WidgetHomeSubscriptionModel>> widgetSubscription(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
+
+        final WidgetHomeSubscriptionModel serversPromotions =
+                resourcesPort.getWidgetSubscription(locale.getLanguage(),
+                transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(serversPromotions, transactionId).ok().build());
     }
 }

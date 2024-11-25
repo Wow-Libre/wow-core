@@ -10,7 +10,6 @@ import java.util.*;
 public class JpaServerAdapter implements ObtainServerPort, SaveServerPort {
     private final ServerRepository serverRepository;
 
-
     public JpaServerAdapter(ServerRepository serverRepository) {
         this.serverRepository = serverRepository;
     }
@@ -22,18 +21,28 @@ public class JpaServerAdapter implements ObtainServerPort, SaveServerPort {
 
     @Override
     public Optional<ServerEntity> findByNameAndExpansionAndStatusIsTrue(String name, String version,
-                                                                      String transactionId) {
+                                                                        String transactionId) {
         return serverRepository.findByNameAndExpansionAndStatusIsTrue(name, version);
     }
 
     @Override
-    public Optional<ServerEntity> findByApiKeyAndStatusIsTrue(String apikey, String transactionId) {
-        return serverRepository.findByApiKeyAndStatusIsTrue(apikey);
+    public Optional<ServerEntity> findByApiKey(String apikey, String transactionId) {
+        return serverRepository.findByApiKey(apikey);
+    }
+
+    @Override
+    public Optional<ServerEntity> findById(Long id, String transactionId) {
+        return serverRepository.findById(id);
     }
 
     @Override
     public Optional<ServerEntity> findByNameAndExpansion(String name, String expansion, String transactionId) {
         return serverRepository.findByNameAndExpansionAndStatusIsTrue(name, expansion);
+    }
+
+    @Override
+    public List<ServerEntity> findByStatusIsFalse(String transactionId) {
+        return serverRepository.findByStatusIsFalse();
     }
 
     @Override
