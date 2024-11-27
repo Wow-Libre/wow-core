@@ -38,22 +38,6 @@ CREATE TABLE accounts.user
     PRIMARY KEY (id)
 );
 
-CREATE TABLE accounts.account_game
-(
-    id         bigint auto_increment NOT NULL,
-    server_id  bigint      NOT NULL,
-    account_id bigint      NOT NULL,
-    username   varchar(40) NOT NULL,
-    status     boolean,
-    user_id    bigint      NOT NULL,
-
-    CONSTRAINT fk_account_game_user_id FOREIGN KEY (user_id) REFERENCES accounts.user (id),
-    CONSTRAINT fk_account_game_server_id FOREIGN KEY (server_id) REFERENCES accounts.server (id),
-    CONSTRAINT uq_server_and_account_and_user UNIQUE (server_id, account_id),
-    PRIMARY KEY (id)
-);
-
-
 CREATE TABLE accounts.server
 (
     id                bigint auto_increment NOT NULL,
@@ -76,9 +60,27 @@ CREATE TABLE accounts.server
     external_password varchar(50) NOT NULL,
     salt              VARBINARY(16),
 
-    CONSTRAINT uq_email UNIQUE (name, version),
+    CONSTRAINT uq_email UNIQUE (name, expansion),
     PRIMARY KEY (id)
 );
+
+CREATE TABLE accounts.account_game
+(
+    id         bigint auto_increment NOT NULL,
+    server_id  bigint      NOT NULL,
+    account_id bigint      NOT NULL,
+    username   varchar(40) NOT NULL,
+    status     boolean,
+    user_id    bigint      NOT NULL,
+
+    CONSTRAINT fk_account_game_user_id FOREIGN KEY (user_id) REFERENCES accounts.user (id),
+    CONSTRAINT fk_account_game_server_id FOREIGN KEY (server_id) REFERENCES accounts.server (id),
+    CONSTRAINT uq_server_and_account_and_user UNIQUE (server_id, account_id),
+    PRIMARY KEY (id)
+);
+
+
+
 
 
 CREATE TABLE accounts.server_services
