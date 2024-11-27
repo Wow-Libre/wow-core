@@ -78,6 +78,8 @@ public class SecurityConfiguration {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(
+                                        "/actuator/health",
+
                                         //INTERNAL API
                                         "/api/account/create",
                                         "api/account/recovery-password",
