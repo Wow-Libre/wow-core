@@ -68,7 +68,7 @@ public class AuthScheduleClients {
 
     }
 
-        @Scheduled(cron = "* */2 * * * *")
+    @Scheduled(cron = "* */2 * * * *")
     public void availableServers() {
         final String transactionId = "Auth-Client";
         List<ServerEntity> servers = obtainServerPort.findByStatusIsFalse(transactionId);
