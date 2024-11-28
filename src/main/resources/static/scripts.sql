@@ -81,8 +81,6 @@ CREATE TABLE accounts.account_game
 
 
 
-
-
 CREATE TABLE accounts.server_services
 (
     id        bigint auto_increment NOT NULL,
@@ -156,3 +154,11 @@ CREATE TABLE accounts.user_promotion
     PRIMARY KEY (id),
     CONSTRAINT user_promotion_uq UNIQUE (user_id, account_id, promotion_id)
 );
+
+CREATE TABLE user_validation
+(
+    id    BIGINT AUTO_INCREMENT PRIMARY KEY, -- Clave primaria con auto_increment
+    email VARCHAR(255) NOT NULL,             -- Columna para el email (puedes ajustar el tamaño según sea necesario)
+    code  VARCHAR(255),                      -- Columna para el código
+    otp   VARCHAR(255)                       -- Columna para el OTP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

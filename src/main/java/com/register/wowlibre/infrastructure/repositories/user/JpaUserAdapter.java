@@ -27,7 +27,7 @@ public class JpaUserAdapter implements ObtainUserPort, SaveUserPort {
     }
 
     @Override
-    @Cacheable(value = "findByUserIdAndStatusIsTrue", key = "#userId")
+    //@Cacheable(value = "findByUserIdAndStatusIsTrue", key = "#userId")
     public Optional<UserEntity> findByUserIdAndStatusIsTrue(Long userId, String transactionId) {
         return userRepository.findById(userId);
     }

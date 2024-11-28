@@ -1,22 +1,17 @@
 package com.register.wowlibre.infrastructure.config;
 
-import org.springframework.cache.*;
-import org.springframework.cache.annotation.*;
-import org.springframework.context.annotation.*;
-import org.springframework.data.redis.cache.*;
-import org.springframework.data.redis.connection.*;
-import org.springframework.data.redis.connection.jedis.*;
-
-import java.time.*;
-import java.util.*;
-
-@Configuration
-@EnableCaching
+//@Configuration
+//@EnableCaching
 public class RedisConfig {
-
+/*
     @Bean
-    JedisConnectionFactory jedisConnectionFactory() {
-        return new JedisConnectionFactory();
+    public JedisConnectionFactory jedisConnectionFactory() {
+        // Configura la conexión de Redis con la dirección y el puerto
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+        config.setHostName("clustercfg.wowlibre.tkfyma.use2.cache.amazonaws.com"); // Cambia la IP según tus necesidades
+        config.setPort(6379); // Cambia el puerto si es diferente
+
+        return new JedisConnectionFactory(config);
     }
 
     @Bean
@@ -47,4 +42,6 @@ public class RedisConfig {
         return RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(duration);
     }
+
+ */
 }
