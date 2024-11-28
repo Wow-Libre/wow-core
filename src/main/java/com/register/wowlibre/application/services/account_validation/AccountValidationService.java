@@ -36,38 +36,47 @@ public class AccountValidationService implements AccountValidationPort {
     @Override
     // @CacheEvict(value = "emailCodeCache", key = "#email")
     public void clearEmailCode(String email, String transactionId) {
-        save(email, transactionId, randomString.nextString());
+        UserValidationEntity userValidation = obtainUserValidation
+                .findByEmail(email, transactionId)
+                .orElseGet(UserValidationEntity::new);
+
+        userValidation.setEmail(email);
+        userValidation.setCode(randomString.nextString());
+        saveUserValidation.save(userValidation, transactionId);
     }
 
     @Override
     //@CachePut(value = "emailCodeCache", key = "#email")
     public String generateCodeMail(String email, String transactionId) {
         final String code = String.format("%s_%s", email, randomString.nextString());
-        save(email, transactionId, code);
+
+        UserValidationEntity userValidation = obtainUserValidation
+                .findByEmail(email, transactionId)
+                .orElseGet(UserValidationEntity::new);
+
+        userValidation.setEmail(email);
+        userValidation.setCode(code);
+        saveUserValidation.save(userValidation, transactionId);
+
         return code;
     }
 
-    private void save(String email, String transactionId, String code) {
-        UserValidationEntity userValidationEntity =
-                obtainUserValidation.findByEmail(email, transactionId).orElseThrow(() -> new InternalException(
-                        "Error ", transactionId));
-        userValidationEntity.setCode(code);
-        saveUserValidation.save(userValidationEntity, transactionId);
-    }
-
-    private void updateOtp(String email, String transactionId, String otp) {
-        UserValidationEntity userValidationEntity =
-                obtainUserValidation.findByEmail(email, transactionId).orElseThrow(() -> new InternalException(
-                        "Error ", transactionId));
-        userValidationEntity.setOtp(otp);
-        saveUserValidation.save(userValidationEntity, transactionId);
-    }
 
     @Override
     // @CachePut(value = "recoveryPassword", key = "#email")
     public String generateCodeRecoverAccount(String email, String transactionId) {
         String otp = otpRandom.nextString();
-        updateOtp(email, transactionId, otp);
+
+        UserValidationEntity userValidation = obtainUserValidation
+                .findByEmail(email, transactionId)
+                .orElseGet(UserValidationEntity::new);
+
+        userValidation.setEmail(email);
+        userValidation.setOtp(otp);
+
+        saveUserValidation.save(userValidation, transactionId);
+
+
         return otp;
     }
 
