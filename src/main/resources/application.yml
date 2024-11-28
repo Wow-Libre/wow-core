@@ -69,8 +69,8 @@ spring:
       on-profile: prod
   data:
     redis:
-      host: "clustercfg.wowlibre.tkfyma.use2.cache.amazonaws.com"
-      port: 6379
+      host: ${REDIS-URL}
+      port: ${REDIS-PORT}
   jpa:
     hibernate:
       ddl-auto: none

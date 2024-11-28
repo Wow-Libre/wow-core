@@ -16,7 +16,10 @@ public class RedisConfig {
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
-        return new JedisConnectionFactory();
+        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
+        jedisConnectionFactory.setHostName("clustercfg.wowlibre.tkfyma.use2.cache.amazonaws.com");
+        jedisConnectionFactory.setPort(6379); // Cambia el puerto si es diferente
+        return jedisConnectionFactory;
     }
 
     @Bean
