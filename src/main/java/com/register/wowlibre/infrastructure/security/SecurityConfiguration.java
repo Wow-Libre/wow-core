@@ -47,7 +47,7 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
-                "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "https://www.wowlibre.com"));
+                "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "https://www.wowlibre.com","clustercfg.wowlibre.tkfyma.use2.cache.amazonaws.com"));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),

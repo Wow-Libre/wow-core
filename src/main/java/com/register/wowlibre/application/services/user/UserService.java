@@ -88,7 +88,7 @@ public class UserService implements UserPort {
         final String token = jwtPort.generateToken(customUserDetails);
         final Date expiration = jwtPort.extractExpiration(token);
         final String refreshToken = jwtPort.generateRefreshToken(customUserDetails);
-        final String code = accountValidationPort.generateCodeMail(email);
+        final String code = accountValidationPort.generateCodeMail(email, transactionId);
 
         mailPort.sendCodeMail(email, "Bienvenido, Su cuenta ha sido creada exitosamente, Por favor verifique su " +
                 "correo", code, locale, transactionId);
@@ -151,12 +151,12 @@ public class UserService implements UserPort {
 
         UserEntity userModel = userFound.get();
 
-        String obtainedCode = accountValidationPort.retrieveEmailCode(userModel.getEmail());
+        String obtainedCode = accountValidationPort.retrieveEmailCode(userModel.getEmail(), transactionId);
 
         if (obtainedCode != null && obtainedCode.equals(code)) {
             userModel.setVerified(true);
             saveUserPort.save(userModel, transactionId);
-            accountValidationPort.clearEmailCode(userModel.getEmail());
+            accountValidationPort.clearEmailCode(userModel.getEmail(), transactionId);
         } else {
             throw new InternalException("The codes are invalid", transactionId);
         }
@@ -171,7 +171,8 @@ public class UserService implements UserPort {
         }
 
         Locale locale = new Locale(account.get().getLanguage());
-        final String codeOtp = accountValidationPort.generateCodeRecoverAccount(account.get().getEmail());
+        final String codeOtp = accountValidationPort.generateCodeMail(account.get().getEmail(),
+                transactionId);
         final String body = i18nService.tr("recovery-password-body", new Object[]{codeOtp.toUpperCase()}, locale);
         final String subject = i18nService.tr("recovery-password-subject", locale);
 
@@ -181,7 +182,7 @@ public class UserService implements UserPort {
     @Override
     public void validateOtpRecoverPassword(String email, String code, String transactionId) {
 
-        final String codeObtain = accountValidationPort.getCodeEmailRecoverPassword(email);
+        final String codeObtain = accountValidationPort.getCodeEmailRecoverPassword(email, transactionId);
 
         if (codeObtain == null) {
             throw new InternalException("Expired security code.", transactionId);
@@ -224,7 +225,7 @@ public class UserService implements UserPort {
             return;
         }
         Locale locale = new Locale(account.get().getLanguage());
-        final String code = accountValidationPort.generateCodeMail(user.getEmail());
+        final String code = accountValidationPort.generateCodeMail(user.getEmail(), transactionId);
 
         mailPort.sendCodeMail(user.getEmail(), "Bienvenido, Su cuenta ha sido creada exitosamente, Por favor " +
                 "verifique su " +

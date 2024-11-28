@@ -119,7 +119,7 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
-    @Cacheable(value = "verify-account", key = "#userId + '_' + #accountId + '_' + #serverId")
+    //@Cacheable(value = "verify-account", key = "#userId + '_' + #accountId + '_' + #serverId")
     public AccountVerificationDto verifyAccount(Long userId, Long accountId, Long serverId, String transactionId) {
 
         Optional<ServerEntity> server = serverPort.findById(serverId, transactionId);

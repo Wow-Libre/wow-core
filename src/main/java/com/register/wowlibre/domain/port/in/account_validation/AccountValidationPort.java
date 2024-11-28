@@ -1,11 +1,12 @@
 package com.register.wowlibre.domain.port.in.account_validation;
 
 public interface AccountValidationPort {
-    String retrieveEmailCode(String email);
+    String retrieveEmailCode(String email, String transactionId);
 
-    String generateCodeMail(String mail);
-     void clearEmailCode(String email);
-    String generateCodeRecoverAccount(String mail);
+     void clearEmailCode(String email, String transactionId);
 
-    String getCodeEmailRecoverPassword(String email);
+    String generateCodeMail(String email, String transactionId);
+    String generateCodeRecoverAccount(String mail, String transactionId);
+
+    String getCodeEmailRecoverPassword(String email, String transactionId);
 }

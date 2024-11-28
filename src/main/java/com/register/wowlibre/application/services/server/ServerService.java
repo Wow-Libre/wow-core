@@ -10,7 +10,6 @@ import com.register.wowlibre.domain.port.out.server.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.time.*;
@@ -33,7 +32,7 @@ public class ServerService implements ServerPort {
 
 
     @Override
-    @Cacheable(value = "server-apikey", key = "#apiKey")
+    //@Cacheable(value = "server-apikey", key = "#apiKey")
     public ServerModel findByApiKey(String apiKey, String transactionId) {
         return obtainServerPort.findByApiKey(apiKey, transactionId).map(ServerMapper::toModel)
                 .orElse(null);
