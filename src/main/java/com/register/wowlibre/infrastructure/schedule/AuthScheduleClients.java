@@ -68,7 +68,7 @@ public class AuthScheduleClients {
 
     }
 
-    @Scheduled(cron = "* */20 * * * *")
+    @Scheduled(cron = "* 1/5 * * * *")
     public void availableServers() {
         final String transactionId = "Auth-Client";
         List<ServerEntity> servers = obtainServerPort.findByStatusIsFalse(transactionId);
@@ -77,7 +77,12 @@ public class AuthScheduleClients {
             try {
                 byte[] salt = server.getSalt();
                 final String password = server.getExternalPassword();
-                authIntegratorPort.create(server.getIp(), server.getExternalUsername(), password, salt,
+                final String apiSecret = server.getApiSecret();
+
+                SecretKey derivedKey = KeyDerivationUtil.deriveKeyFromPassword(apiSecret, salt);
+                String encrypt = EncryptionUtil.encrypt(password, derivedKey);
+
+                authIntegratorPort.create(server.getIp(), server.getExternalUsername(), encrypt, salt,
                         transactionId);
                 server.setStatus(true);
                 saveServerPort.save(server, transactionId);
