@@ -1,0 +1,125 @@
+{
+  "es": [
+    {
+      "id": 1,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbw94DnB4ZP0L2Q-Is5D0zhT-iMikJ1y5V-g&s",
+      "name": "Promoción de Leveo - Armas",
+      "description": "¡Haz tu progreso más fácil con esta increíble promoción! Consigue armas reliquia y lleva tu nivel al siguiente nivel de forma más sencilla.",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42944",
+          "quantity": 1
+        },
+        {
+          "code": "42946",
+          "quantity": 1
+        },
+        {
+          "code": "42948",
+          "quantity": 1
+        },
+        {
+          "code": "42943",
+          "quantity": 1
+        },
+        {
+          "code": "42945",
+          "quantity": 1
+        },
+        {
+          "code": "48716",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    }
+  ],
+  "en": [
+    {
+      "id": 1,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbw94DnB4ZP0L2Q-Is5D0zhT-iMikJ1y5V-g&s",
+      "name": "Leveling Promotion - Weapons",
+      "description": "Make your progress easier with this amazing promotion! Get relic weapons and level up more effortlessly.",
+      "btn_txt": "Get",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42944",
+          "quantity": 1
+        },
+        {
+          "code": "42946",
+          "quantity": 1
+        },
+        {
+          "code": "42948",
+          "quantity": 1
+        },
+        {
+          "code": "42943",
+          "quantity": 1
+        },
+        {
+          "code": "42945",
+          "quantity": 1
+        },
+        {
+          "code": "48716",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    }
+  ],
+  "pt": [
+    {
+      "id": 1,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbw94DnB4ZP0L2Q-Is5D0zhT-iMikJ1y5V-g&s",
+      "name": "Promoção de Nivelamento - Armas",
+      "description": "Facilite seu progresso com esta promoção incrível! Obtenha armas relíquia e suba de nível com mais facilidade.",
+      "btn_txt": "Obter",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42944",
+          "quantity": 1
+        },
+        {
+          "code": "42946",
+          "quantity": 1
+        },
+        {
+          "code": "42948",
+          "quantity": 1
+        },
+        {
+          "code": "42943",
+          "quantity": 1
+        },
+        {
+          "code": "42945",
+          "quantity": 1
+        },
+        {
+          "code": "48716",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    }
+  ]
+}

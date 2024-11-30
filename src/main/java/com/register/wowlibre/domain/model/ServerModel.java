@@ -23,4 +23,7 @@ public class ServerModel {
     public String password;
     public String apiKey;
     public String realmlist;
+    public byte[] salt;
+    public String externalPassword;
+    public String externalUsername;
 }

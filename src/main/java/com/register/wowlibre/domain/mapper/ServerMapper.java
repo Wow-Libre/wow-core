@@ -53,6 +53,9 @@ public class ServerMapper {
         serverEntity.setJwt(server.jwt);
         serverEntity.setExpirationDate(server.expirationDate);
         serverEntity.setRealmlist(server.realmlist);
+        serverEntity.setExternalPassword(server.externalPassword);
+        serverEntity.setExternalUsername(server.externalUsername);
+        serverEntity.setSalt(server.salt);
         return serverEntity;
     }
 

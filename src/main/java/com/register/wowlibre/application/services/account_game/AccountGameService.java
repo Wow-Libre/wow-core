@@ -12,7 +12,6 @@ import com.register.wowlibre.domain.port.in.server.*;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.out.account_game.*;
 import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -196,6 +195,6 @@ public class AccountGameService implements AccountGamePort {
                 accountGameEntity.getServerId().getName(), accountGameEntity.getServerId().getId(),
                 expansion.getDisplayName()
                 , accountGameEntity.getServerId().getAvatar(),
-                accountGameEntity.getServerId().getWebSite(), status);
+                accountGameEntity.getServerId().getWebSite(), status, accountGameEntity.getServerId().getRealmlist());
     }
 }
