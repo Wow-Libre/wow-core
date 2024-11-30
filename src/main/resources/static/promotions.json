@@ -88,6 +88,90 @@
       "max_lvl": 30,
       "type": "ITEM",
       "amount": 0
+    },
+    {
+      "id": 4,
+      "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
+      "name": "Promoción de Leveo - Equipo",
+      "description": "¡Descubre la experiencia Leveo! Nuestra promoción está diseñada para brindarte el equipo ideal y ayudarte a alcanzar tus metas de manera eficiente y profesional.",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42949",
+          "quantity": 1
+        },
+        {
+          "code": "42951",
+          "quantity": 1
+        }, {
+          "code": "42952",
+          "quantity": 1
+        }, {
+          "code": "42984",
+          "quantity": 1
+        }, {
+          "code": "42985",
+          "quantity": 1
+        }, {
+          "code": "48677",
+          "quantity": 1
+        }, {
+          "code": "48683",
+          "quantity": 1
+        }, {
+          "code": "48685",
+          "quantity": 1
+        }, {
+          "code": "48687",
+          "quantity": 1
+        }, {
+          "code": "48689",
+          "quantity": 1
+        }, {
+          "code": "48691",
+          "quantity": 1
+        }, {
+          "code": "50255",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 5,
+      "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
+      "name": "Promoción de Leveo - Abalorios y Otros",
+      "description": "¡Explora nuestra oferta especial! Encuentra los mejores abalorios y accesorios para potenciar tu experiencia y marcar la diferencia en cada detalle.",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42985",
+          "quantity": 1
+        }, {
+          "code": "50255",
+          "quantity": 1
+        }, {
+          "code": "42991",
+          "quantity": 1
+        }, {
+          "code": "42992",
+          "quantity": 1
+        }, {
+          "code": "42947",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
     }
   ],
   "en": [
@@ -139,7 +223,7 @@
       "img": "https://chaosboost.com/wp-content/uploads/2024/05/wowclassic-power-leveling.jpg",
       "name": "Claim 800 Frost Emblems Now!",
       "description": "Don’t miss out on this limited-time offer! Get 800 Frost Emblems to enhance your PvE set. Exclusive promotion for one account only—grab it before it’s gone!",
-      "btn_txt": "Obtener",
+      "btn_txt": "Get",
       "send_item": true,
       "items": [
         {
@@ -162,7 +246,7 @@
       "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
       "name": "Exclusive Mount for Your Account!",
       "description": "Don’t miss out on this chance! Claim a free mount as part of this special promotion. Limited to one account.",
-      "btn_txt": "Obtener",
+      "btn_txt": "Get",
       "send_item": true,
       "items": [
         {
@@ -171,6 +255,90 @@
         },
         {
           "code": "44168",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 4,
+      "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
+      "name": "Leveling Promotion - Equipment",
+      "description": "Discover the Leveo experience! Our promotion is designed to provide you with the ideal gear and help you achieve your goals efficiently and professionally.",
+      "btn_txt": "Get",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42949",
+          "quantity": 1
+        },
+        {
+          "code": "42951",
+          "quantity": 1
+        }, {
+          "code": "42952",
+          "quantity": 1
+        }, {
+          "code": "42984",
+          "quantity": 1
+        }, {
+          "code": "42985",
+          "quantity": 1
+        }, {
+          "code": "48677",
+          "quantity": 1
+        }, {
+          "code": "48683",
+          "quantity": 1
+        }, {
+          "code": "48685",
+          "quantity": 1
+        }, {
+          "code": "48687",
+          "quantity": 1
+        }, {
+          "code": "48689",
+          "quantity": 1
+        }, {
+          "code": "48691",
+          "quantity": 1
+        }, {
+          "code": "50255",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 5,
+      "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
+      "name": "Leveling Promotion - Trinkets and More",
+      "description": "Explore our special offer! Find the best trinkets and accessories to enhance your experience and make a difference in every detail.\n",
+      "btn_txt": "Get",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42985",
+          "quantity": 1
+        }, {
+          "code": "50255",
+          "quantity": 1
+        }, {
+          "code": "42991",
+          "quantity": 1
+        }, {
+          "code": "42992",
+          "quantity": 1
+        }, {
+          "code": "42947",
           "quantity": 1
         }
       ],
@@ -262,6 +430,90 @@
         },
         {
           "code": "44168",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 4,
+      "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
+      "name": "Promoção de Leveling - Equipamentos",
+      "description": "Descubra a experiência Leveo! Nossa promoção foi projetada para fornecer o equipamento ideal e ajudá-lo a alcançar seus objetivos de forma eficiente e profissional.",
+      "btn_txt": "Obter",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42949",
+          "quantity": 1
+        },
+        {
+          "code": "42951",
+          "quantity": 1
+        }, {
+          "code": "42952",
+          "quantity": 1
+        }, {
+          "code": "42984",
+          "quantity": 1
+        }, {
+          "code": "42985",
+          "quantity": 1
+        }, {
+          "code": "48677",
+          "quantity": 1
+        }, {
+          "code": "48683",
+          "quantity": 1
+        }, {
+          "code": "48685",
+          "quantity": 1
+        }, {
+          "code": "48687",
+          "quantity": 1
+        }, {
+          "code": "48689",
+          "quantity": 1
+        }, {
+          "code": "48691",
+          "quantity": 1
+        }, {
+          "code": "50255",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 5,
+      "img": "https://wow.zamimg.com/uploads/screenshots/small/95580.jpg",
+      "name": "Promoção de Leveling - Abalórios e Outros",
+      "description": "Explore nossa oferta especial! Encontre os melhores abalórios e acessórios para melhorar sua experiência e fazer a diferença em cada detalhe.",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42985",
+          "quantity": 1
+        }, {
+          "code": "50255",
+          "quantity": 1
+        }, {
+          "code": "42991",
+          "quantity": 1
+        }, {
+          "code": "42992",
+          "quantity": 1
+        }, {
+          "code": "42947",
           "quantity": 1
         }
       ],
