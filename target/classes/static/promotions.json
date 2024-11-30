@@ -31,6 +31,56 @@
         {
           "code": "48716",
           "quantity": 1
+        },
+        {
+          "code": "48718",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 2,
+      "img": "https://chaosboost.com/wp-content/uploads/2024/05/wowclassic-power-leveling.jpg",
+      "name": "¡Reclama 800 Emblemas de Escarcha Ahora!",
+      "description": "¡No dejes pasar esta oferta única! Consigue 800 emblemas de escarcha para potenciar tu set PvE. Promoción exclusiva para una cuenta, ¡aprovecha antes de que se acabe!",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "49426",
+          "quantity": 800
+        },
+        {
+          "code": "47241",
+          "quantity": 300
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 3,
+      "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
+      "name": "¡Montura Exclusiva por Cuenta!",
+      "description": "¡No dejes pasar esta oportunidad! Obtén una montura gratis como parte de esta promoción especial. Solo para una cuenta.",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "43599",
+          "quantity": 1
+        },
+        {
+          "code": "44168",
+          "quantity": 1
         }
       ],
       "server_id": 1,
@@ -72,6 +122,56 @@
         {
           "code": "48716",
           "quantity": 1
+        },
+        {
+          "code": "48718",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 2,
+      "img": "https://chaosboost.com/wp-content/uploads/2024/05/wowclassic-power-leveling.jpg",
+      "name": "Claim 800 Frost Emblems Now!",
+      "description": "Don’t miss out on this limited-time offer! Get 800 Frost Emblems to enhance your PvE set. Exclusive promotion for one account only—grab it before it’s gone!",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "49426",
+          "quantity": 800
+        },
+        {
+          "code": "47241",
+          "quantity": 300
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 3,
+      "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
+      "name": "Exclusive Mount for Your Account!",
+      "description": "Don’t miss out on this chance! Claim a free mount as part of this special promotion. Limited to one account.",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "43599",
+          "quantity": 1
+        },
+        {
+          "code": "44168",
+          "quantity": 1
         }
       ],
       "server_id": 1,
@@ -112,6 +212,56 @@
         },
         {
           "code": "48716",
+          "quantity": 1
+        },
+        {
+          "code": "48718",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 2,
+      "img": "https://chaosboost.com/wp-content/uploads/2024/05/wowclassic-power-leveling.jpg",
+      "name": "Resgate 800 Emblemas de Gelo Agora!",
+      "description": "Não perca esta oferta limitada! Obtenha 800 emblemas de gelo para fortalecer seu set PvE. Promoção exclusiva para uma conta—aproveite antes que termine!",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "49426",
+          "quantity": 800
+        },
+        {
+          "code": "47241",
+          "quantity": 300
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 30,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 3,
+      "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
+      "name": "Montaria Exclusiva por Conta!",
+      "description": "Não perca esta chance! Resgate uma montaria grátis como parte desta promoção especial. Limitado a uma conta.",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "43599",
+          "quantity": 1
+        },
+        {
+          "code": "44168",
           "quantity": 1
         }
       ],
