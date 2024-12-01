@@ -39,7 +39,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -138,7 +138,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -169,7 +169,38 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 6,
+      "img": "https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/blt44b9b4635a152dfc/63c71f0ca1a308140627270d/world-of-warcraft-service-character-transfer-section1-feature3.jpg?imwidth=1920&imdensity=2.625",
+      "name": "Promoción de Leveo - Abalorios y Otros",
+      "description": "¡Explora nuestra oferta especial! Encuentra los mejores abalorios y accesorios para potenciar tu experiencia y marcar la diferencia en cada detalle.",
+      "btn_txt": "Obtener",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42985",
+          "quantity": 1
+        }, {
+          "code": "50255",
+          "quantity": 1
+        }, {
+          "code": "42991",
+          "quantity": 1
+        }, {
+          "code": "42992",
+          "quantity": 1
+        }, {
+          "code": "42947",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     }
@@ -214,7 +245,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -237,7 +268,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -260,7 +291,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -313,7 +344,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -344,7 +375,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     }
@@ -389,7 +420,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -412,7 +443,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -435,7 +466,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -488,7 +519,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -519,7 +550,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     }

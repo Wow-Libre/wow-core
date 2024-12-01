@@ -8,7 +8,6 @@ import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.infrastructure.client.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
-import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.*;
 
 import javax.crypto.*;
@@ -286,15 +285,17 @@ public class IntegratorService implements IntegratorPort {
 
     @Override
     public void sendPromo(String host, String jwt, Long userId, Long accountId, Long characterId,
-                          List<ItemQuantityModel> items, String type, Double amount, String transactionId) {
+                          List<ItemQuantityModel> items, String type, Double amount, Integer minLvl, Integer maxLvl,
+                          String transactionId) {
         integratorClient.sendPromo(host, jwt, new ClaimPromoRequest(userId, accountId, characterId, items, type,
-                amount), transactionId);
+                amount, minLvl, maxLvl), transactionId);
     }
 
     @Override
     public void sendGuildBenefit(String host, String jwt, Long userId, Long accountId, Long characterId,
                                  List<ItemQuantityModel> items, String transactionId) {
-        integratorClient.sendGuildBenefits(host, jwt, new BenefitsGuildRequest(userId, accountId, characterId, items), transactionId);
+        integratorClient.sendGuildBenefits(host, jwt, new BenefitsGuildRequest(userId, accountId, characterId, items)
+                , transactionId);
     }
 
 }

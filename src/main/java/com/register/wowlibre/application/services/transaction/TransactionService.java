@@ -137,7 +137,7 @@ public class TransactionService implements TransactionPort {
         }
 
         integratorPort.sendPromo(server.getIp(), server.getJwt(), userId, accountId, characterId, items,
-                promo.getType(), promo.getAmount(),
+                promo.getType(), promo.getAmount(), promo.getMinLvl(), promo.getMaxLvl(),
                 transactionId);
 
         userPromotionPort.save(userId, accountId, promotionId, transactionId);

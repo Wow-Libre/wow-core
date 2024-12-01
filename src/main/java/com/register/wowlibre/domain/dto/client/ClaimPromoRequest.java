@@ -18,4 +18,8 @@ public class ClaimPromoRequest {
     private List<ItemQuantityModel> items;
     private String type;
     private Double amount;
+    @JsonProperty("min_lvl")
+    private Integer minLvl;
+    @JsonProperty("max_lvl")
+    private Integer maxLvl;
 }
