@@ -162,4 +162,7 @@ CREATE TABLE user_validation
     email VARCHAR(255) NOT NULL,             -- Columna para el email (puedes ajustar el tamaño según sea necesario)
     code  VARCHAR(255),                      -- Columna para el código
     otp   VARCHAR(255)                       -- Columna para el OTP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+)
+
+ALTER TABLE accounts.user_promotion
+    ADD COLUMN character_id bigint NOT NULL;

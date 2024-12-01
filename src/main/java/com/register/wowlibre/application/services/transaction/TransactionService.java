@@ -140,6 +140,6 @@ public class TransactionService implements TransactionPort {
                 promo.getType(), promo.getAmount(), promo.getMinLvl(), promo.getMaxLvl(),
                 transactionId);
 
-        userPromotionPort.save(userId, accountId, promotionId, transactionId);
+        userPromotionPort.save(userId, accountId, promotionId, characterId, transactionId);
     }
 }

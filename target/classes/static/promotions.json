@@ -39,7 +39,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -138,7 +138,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -169,7 +169,26 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 6,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "Promoción Especial de Bolsas",
+      "description": "¡No pierdas la oportunidad de obtener estas bolsas exclusivas y mejora tu inventario!",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "41600",
+          "quantity": 4
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     }
@@ -214,7 +233,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -237,7 +256,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -260,7 +279,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -313,7 +332,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -344,7 +363,26 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 6,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "Exclusive Bag Promotion",
+      "description": "Don't miss the chance to grab these exclusive bags and upgrade your inventory!",
+      "btn_txt": "Get Now",
+      "send_item": true,
+      "items": [
+        {
+          "code": "41600",
+          "quantity": 4
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     }
@@ -389,7 +427,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -412,7 +450,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -435,7 +473,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -488,16 +526,16 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
     {
       "id": 5,
       "img": "https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/blt44b9b4635a152dfc/63c71f0ca1a308140627270d/world-of-warcraft-service-character-transfer-section1-feature3.jpg?imwidth=1920&imdensity=2.625",
-      "name": "Promoção de Leveling - Abalórios e Outros",
-      "description": "Explore nossa oferta especial! Encontre os melhores abalórios e acessórios para melhorar sua experiência e fazer a diferença em cada detalhe.",
-      "btn_txt": "Obtener",
+      "name": "Promoção de Leveling - Acessórios e Mais",
+      "description": "Explore nossa oferta especial! Encontre os melhores acessórios e itens para aprimorar sua experiência e fazer a diferença em cada detalhe.",
+      "btn_txt": "Obter",
       "send_item": true,
       "items": [
         {
@@ -519,7 +557,26 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 6,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "Promoção Exclusiva de Bolsas",
+      "description": "Não perca a chance de conseguir essas bolsas exclusivas e melhore seu inventário!",
+      "btn_txt": "Obter Agora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "41600",
+          "quantity": 4
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     }
