@@ -95,7 +95,7 @@ public class TransactionService implements TransactionPort {
         return new PromotionsDto(promotions.stream()
                 .filter(promoValidation ->
                         userPromotionPort.findByUserIdAndAccountId(
-                                userId, accountId, promoValidation.getId(), transactionId).isEmpty())
+                                userId, accountId, promoValidation.getId(), characterId, transactionId).isEmpty())
                 .map(PromotionDto::new).toList(), promotions.size());
     }
 
@@ -104,7 +104,7 @@ public class TransactionService implements TransactionPort {
                                String language, String transactionId) {
 
         if (userPromotionPort.findByUserIdAndAccountId(
-                userId, accountId, promotionId, transactionId).isPresent()) {
+                userId, accountId, promotionId, characterId, transactionId).isPresent()) {
             throw new InternalException("You have already consumed the promotion", transactionId);
         }
 

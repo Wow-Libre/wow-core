@@ -30,7 +30,8 @@ public class UserPromotionService implements UserPromotionPort {
 
     @Override
     public Optional<UserPromotionEntity> findByUserIdAndAccountId(Long userId, Long accountId, Long promotionId,
+                                                                  Long characterId,
                                                                   String transactionId) {
-        return obtainUserPromotion.findByUserIdAndAccountId(userId, accountId, promotionId, transactionId);
+        return obtainUserPromotion.findByUserIdAndAccountId(userId, accountId, promotionId, characterId, transactionId);
     }
 }

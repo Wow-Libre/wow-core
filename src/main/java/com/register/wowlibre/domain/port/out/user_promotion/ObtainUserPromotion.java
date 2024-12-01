@@ -6,5 +6,6 @@ import java.util.*;
 
 public interface ObtainUserPromotion {
     Optional<UserPromotionEntity> findByUserIdAndAccountId(Long userId, Long accountId, Long promotionId,
+                                                           Long characterId,
                                                            String transactionId);
 }

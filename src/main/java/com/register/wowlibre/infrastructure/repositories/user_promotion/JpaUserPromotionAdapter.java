@@ -17,8 +17,10 @@ public class JpaUserPromotionAdapter implements SaveUserPromotion, ObtainUserPro
 
     @Override
     public Optional<UserPromotionEntity> findByUserIdAndAccountId(Long userId, Long accountId, Long promotionId,
+                                                                  Long characterId,
                                                                   String transactionId) {
-        return userPromotionRepository.findByUserIdAndAccountIdAndPromotionId(userId, accountId, promotionId);
+        return userPromotionRepository.findByUserIdAndAccountIdAndPromotionIdAndCharacterId(userId, accountId,
+                promotionId, characterId);
     }
 
     @Override

@@ -17,6 +17,8 @@ public class UserPromotionEntity {
     private Long userId;
     @Column(name = "account_id")
     private Long accountId;
+    @Column(name = "character_id")
+    private Long characterId;
     @Column(name = "promotion_id")
     private Long promotionId;
     @Column(name = "created_at")
