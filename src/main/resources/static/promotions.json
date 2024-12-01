@@ -531,6 +531,37 @@
       "amount": 0
     },
     {
+      "id": 5,
+      "img": "https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/blt44b9b4635a152dfc/63c71f0ca1a308140627270d/world-of-warcraft-service-character-transfer-section1-feature3.jpg?imwidth=1920&imdensity=2.625",
+      "name": "Promoção de Leveling - Acessórios e Mais",
+      "description": "Explore nossa oferta especial! Encontre os melhores acessórios e itens para aprimorar sua experiência e fazer a diferença em cada detalhe.",
+      "btn_txt": "Obter",
+      "send_item": true,
+      "items": [
+        {
+          "code": "42985",
+          "quantity": 1
+        }, {
+          "code": "50255",
+          "quantity": 1
+        }, {
+          "code": "42991",
+          "quantity": 1
+        }, {
+          "code": "42992",
+          "quantity": 1
+        }, {
+          "code": "42947",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
       "id": 6,
       "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
       "name": "Promoção Exclusiva de Bolsas",
