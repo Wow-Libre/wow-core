@@ -1,6 +1,279 @@
 {
   "es": [
     {
+      "id": 7,
+      "img": "https://static.wixstatic.com/media/5dd8a0_67020ed5ab7c46e4be8085fb20563eb7~mv2.webp",
+      "name": "Promoción Level 80",
+      "description": "¡Salta directamente al nivel 80 y prepárate para la acción! Olvídate de las misiones repetitivas y entra al contenido épico ahora mismo..",
+      "btn_txt": "¡Salta Ahora!",
+      "send_item": false,
+      "items": [],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 10,
+      "type": "LEVEL",
+      "amount": 0
+    },
+    {
+      "id": 8,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvKlw1918kd4HhWR7PtOA5ffUPeFNB8kVVLw&s",
+      "name": "Beneficio de levelear - Arcos/Ballestas/Arma arrojadiza/Astas",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51395",
+          "quantity": 1
+        },
+        {
+          "code": "51395",
+          "quantity": 1
+        },
+        {
+          "code": "51535",
+          "quantity": 1
+        },
+        {
+          "code": "51411",
+          "quantity": 1
+        },
+        {
+          "code": "51412",
+          "quantity": 1
+        },
+        {
+          "code": "51481",
+          "quantity": 1
+        },
+        {
+          "code": "51480",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 60,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 9,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQGlJVf0YynsG8lBX2sTbNYXhhkLtJq57iVdjUDuERv0XJu0UhP11JLHGUXpaDS_jYet4&usqp=CAU",
+      "name": "Beneficio de levelear - Bastones/Arma de fuego",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51432",
+          "quantity": 1
+        },
+        {
+          "code": "51404",
+          "quantity": 1
+        },
+        {
+          "code": "51402",
+          "quantity": 1
+        },
+        {
+          "code": "51431",
+          "quantity": 1
+        },
+        {
+          "code": "51456",
+          "quantity": 1
+        },
+        {
+          "code": "51400",
+          "quantity": 1
+        },
+        {
+          "code": "51401",
+          "quantity": 1
+        },
+        {
+          "code": "51405",
+          "quantity": 1
+        },
+        {
+          "code": "51403",
+          "quantity": 1
+        },
+        {
+          "code": "51457",
+          "quantity": 1
+        },
+        {
+          "code": "51450",
+          "quantity": 1
+        },
+        {
+          "code": "51449",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 60,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 10,
+      "img": "https://es.gizmodo.com/app/uploads/2019/05/kgc6dnrc1tuz5xdlxjaq.jpg",
+      "name": "Beneficio de levelear - Hachas/Espada Dos manos",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51389",
+          "quantity": 1
+        },
+        {
+          "code": "51388",
+          "quantity": 1
+        },
+        {
+          "code": "51439",
+          "quantity": 1
+        },
+        {
+          "code": "51526",
+          "quantity": 1
+        },
+        {
+          "code": "51440",
+          "quantity": 1
+        },
+        {
+          "code": "51515",
+          "quantity": 1
+        },
+        {
+          "code": "51392",
+          "quantity": 1
+        },
+        {
+          "code": "51393",
+          "quantity": 1
+        },
+        {
+          "code": "51516",
+          "quantity": 1
+        },
+        {
+          "code": "51448",
+          "quantity": 1
+        },
+        {
+          "code": "51522",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 70,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 11,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5rp2ozxs5YbQmibKBN4YiVpZLzi_fRKOgZWyTXKApwUwHpojioaX7w8gWSW_S8MKnik&usqp=CAU",
+      "name": "Beneficio de levelear - Dagas - Maza",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51518",
+          "quantity": 1
+        },
+        {
+          "code": "51528",
+          "quantity": 1
+        },
+        {
+          "code": "51398",
+          "quantity": 1
+        },
+        {
+          "code": "51442",
+          "quantity": 1
+        },
+        {
+          "code": "51399",
+          "quantity": 1
+        },
+        {
+          "code": "51529",
+          "quantity": 1
+        },
+        {
+          "code": "51524",
+          "quantity": 1
+        },
+        {
+          "code": "51444",
+          "quantity": 1
+        },
+        {
+          "code": "51390",
+          "quantity": 1
+        },
+        {
+          "code": "51520",
+          "quantity": 1
+        },
+        {
+          "code": "51446",
+          "quantity": 1
+        },
+        {
+          "code": "51454",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 70,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 12,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyUYhMzg5L5b-YvW47jWahUTyGHRGqhUbXt_Qo6LwpeAqr2UcS_tgx4iPUqRHDS9gob9Y&usqp=CAU",
+      "name": "Beneficio de levelear - Varitas",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51454",
+          "quantity": 1
+        },
+        {
+          "code": "51451",
+          "quantity": 1
+        },
+        {
+          "code": "51531",
+          "quantity": 1
+        },
+        {
+          "code": "51410",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 60,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
       "id": 1,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbw94DnB4ZP0L2Q-Is5D0zhT-iMikJ1y5V-g&s",
       "name": "Promoción de Leveo - Armas",
@@ -70,7 +343,7 @@
       "id": 3,
       "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
       "name": "¡Montura Exclusiva por Cuenta!",
-      "description": "¡No dejes pasar esta oportunidad! Obtén una montura gratis como parte de esta promoción especial. Solo para una cuenta.",
+      "description": "¡No dejes pasar esta oportunidad! Obtén una montura gratis como parte de esta promoción especial.",
       "btn_txt": "Obtener",
       "send_item": true,
       "items": [
@@ -104,34 +377,44 @@
         {
           "code": "42951",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42952",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42984",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42985",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48677",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48683",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48685",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48687",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48689",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48691",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "50255",
           "quantity": 1
         }
@@ -153,16 +436,20 @@
         {
           "code": "42985",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "50255",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42991",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42992",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42947",
           "quantity": 1
         }
@@ -194,6 +481,279 @@
     }
   ],
   "en": [
+    {
+      "id": 7,
+      "img": "https://static.wixstatic.com/media/5dd8a0_67020ed5ab7c46e4be8085fb20563eb7~mv2.webp",
+      "name": "Level 80 Boost",
+      "description": "Jump straight to level 80 and dive into the action! Skip the grind and get ready for epic content now.",
+      "btn_txt": "Boost Now!",
+      "send_item": false,
+      "items": [],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 10,
+      "type": "LEVEL",
+      "amount": 0
+    },
+    {
+      "id": 8,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvKlw1918kd4HhWR7PtOA5ffUPeFNB8kVVLw&s",
+      "name": "Beneficio de levelear - Arcos/Ballestas/Arma arrojadiza/Astas",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51395",
+          "quantity": 1
+        },
+        {
+          "code": "51395",
+          "quantity": 1
+        },
+        {
+          "code": "51535",
+          "quantity": 1
+        },
+        {
+          "code": "51411",
+          "quantity": 1
+        },
+        {
+          "code": "51412",
+          "quantity": 1
+        },
+        {
+          "code": "51481",
+          "quantity": 1
+        },
+        {
+          "code": "51480",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 60,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 9,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQGlJVf0YynsG8lBX2sTbNYXhhkLtJq57iVdjUDuERv0XJu0UhP11JLHGUXpaDS_jYet4&usqp=CAU",
+      "name": "Beneficio de levelear - Bastones/Arma de fuego",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51432",
+          "quantity": 1
+        },
+        {
+          "code": "51404",
+          "quantity": 1
+        },
+        {
+          "code": "51402",
+          "quantity": 1
+        },
+        {
+          "code": "51431",
+          "quantity": 1
+        },
+        {
+          "code": "51456",
+          "quantity": 1
+        },
+        {
+          "code": "51400",
+          "quantity": 1
+        },
+        {
+          "code": "51401",
+          "quantity": 1
+        },
+        {
+          "code": "51405",
+          "quantity": 1
+        },
+        {
+          "code": "51403",
+          "quantity": 1
+        },
+        {
+          "code": "51457",
+          "quantity": 1
+        },
+        {
+          "code": "51450",
+          "quantity": 1
+        },
+        {
+          "code": "51449",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 60,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 10,
+      "img": "https://es.gizmodo.com/app/uploads/2019/05/kgc6dnrc1tuz5xdlxjaq.jpg",
+      "name": "Beneficio de levelear - Hachas/Espada Dos manos",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51389",
+          "quantity": 1
+        },
+        {
+          "code": "51388",
+          "quantity": 1
+        },
+        {
+          "code": "51439",
+          "quantity": 1
+        },
+        {
+          "code": "51526",
+          "quantity": 1
+        },
+        {
+          "code": "51440",
+          "quantity": 1
+        },
+        {
+          "code": "51515",
+          "quantity": 1
+        },
+        {
+          "code": "51392",
+          "quantity": 1
+        },
+        {
+          "code": "51393",
+          "quantity": 1
+        },
+        {
+          "code": "51516",
+          "quantity": 1
+        },
+        {
+          "code": "51448",
+          "quantity": 1
+        },
+        {
+          "code": "51522",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 70,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 11,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5rp2ozxs5YbQmibKBN4YiVpZLzi_fRKOgZWyTXKApwUwHpojioaX7w8gWSW_S8MKnik&usqp=CAU",
+      "name": "Beneficio de levelear - Dagas - Maza",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51518",
+          "quantity": 1
+        },
+        {
+          "code": "51528",
+          "quantity": 1
+        },
+        {
+          "code": "51398",
+          "quantity": 1
+        },
+        {
+          "code": "51442",
+          "quantity": 1
+        },
+        {
+          "code": "51399",
+          "quantity": 1
+        },
+        {
+          "code": "51529",
+          "quantity": 1
+        },
+        {
+          "code": "51524",
+          "quantity": 1
+        },
+        {
+          "code": "51444",
+          "quantity": 1
+        },
+        {
+          "code": "51390",
+          "quantity": 1
+        },
+        {
+          "code": "51520",
+          "quantity": 1
+        },
+        {
+          "code": "51446",
+          "quantity": 1
+        },
+        {
+          "code": "51454",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 70,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 12,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyUYhMzg5L5b-YvW47jWahUTyGHRGqhUbXt_Qo6LwpeAqr2UcS_tgx4iPUqRHDS9gob9Y&usqp=CAU",
+      "name": "Beneficio de levelear - Varitas",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51454",
+          "quantity": 1
+        },
+        {
+          "code": "51451",
+          "quantity": 1
+        },
+        {
+          "code": "51531",
+          "quantity": 1
+        },
+        {
+          "code": "51410",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 60,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
     {
       "id": 1,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbw94DnB4ZP0L2Q-Is5D0zhT-iMikJ1y5V-g&s",
@@ -241,7 +801,7 @@
       "id": 2,
       "img": "https://chaosboost.com/wp-content/uploads/2024/05/wowclassic-power-leveling.jpg",
       "name": "Claim 800 Frost Emblems Now!",
-      "description": "Don’t miss out on this limited-time offer! Get 800 Frost Emblems to enhance your PvE set. Exclusive promotion for one account only—grab it before it’s gone!",
+      "description": "Don’t miss out on this limited-time offer! Get 800 Frost Emblems to enhance your PvE set.",
       "btn_txt": "Get",
       "send_item": true,
       "items": [
@@ -298,34 +858,44 @@
         {
           "code": "42951",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42952",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42984",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42985",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48677",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48683",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48685",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48687",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48689",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48691",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "50255",
           "quantity": 1
         }
@@ -347,16 +917,20 @@
         {
           "code": "42985",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "50255",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42991",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42992",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42947",
           "quantity": 1
         }
@@ -388,6 +962,279 @@
     }
   ],
   "pt": [
+    {
+      "id": 7,
+      "img": "https://static.wixstatic.com/media/5dd8a0_67020ed5ab7c46e4be8085fb20563eb7~mv2.webp",
+      "name": "Pulo para o Nível 80",
+      "description": "Vá direto para o nível 80 e entre na ação! Esqueça o grind e prepare-se para conteúdos épicos agora mesmo.",
+      "btn_txt": "Pular Agora!",
+      "send_item": false,
+      "items": [],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 10,
+      "type": "LEVEL",
+      "amount": 0
+    },
+    {
+      "id": 8,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvKlw1918kd4HhWR7PtOA5ffUPeFNB8kVVLw&s",
+      "name": "Beneficio de levelear - Arcos/Ballestas/Arma arrojadiza/Astas",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51395",
+          "quantity": 1
+        },
+        {
+          "code": "51395",
+          "quantity": 1
+        },
+        {
+          "code": "51535",
+          "quantity": 1
+        },
+        {
+          "code": "51411",
+          "quantity": 1
+        },
+        {
+          "code": "51412",
+          "quantity": 1
+        },
+        {
+          "code": "51481",
+          "quantity": 1
+        },
+        {
+          "code": "51480",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 60,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 9,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQGlJVf0YynsG8lBX2sTbNYXhhkLtJq57iVdjUDuERv0XJu0UhP11JLHGUXpaDS_jYet4&usqp=CAU",
+      "name": "Beneficio de levelear - Bastones/Arma de fuego",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51432",
+          "quantity": 1
+        },
+        {
+          "code": "51404",
+          "quantity": 1
+        },
+        {
+          "code": "51402",
+          "quantity": 1
+        },
+        {
+          "code": "51431",
+          "quantity": 1
+        },
+        {
+          "code": "51456",
+          "quantity": 1
+        },
+        {
+          "code": "51400",
+          "quantity": 1
+        },
+        {
+          "code": "51401",
+          "quantity": 1
+        },
+        {
+          "code": "51405",
+          "quantity": 1
+        },
+        {
+          "code": "51403",
+          "quantity": 1
+        },
+        {
+          "code": "51457",
+          "quantity": 1
+        },
+        {
+          "code": "51450",
+          "quantity": 1
+        },
+        {
+          "code": "51449",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 60,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 10,
+      "img": "https://es.gizmodo.com/app/uploads/2019/05/kgc6dnrc1tuz5xdlxjaq.jpg",
+      "name": "Beneficio de levelear - Hachas/Espada Dos manos",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51389",
+          "quantity": 1
+        },
+        {
+          "code": "51388",
+          "quantity": 1
+        },
+        {
+          "code": "51439",
+          "quantity": 1
+        },
+        {
+          "code": "51526",
+          "quantity": 1
+        },
+        {
+          "code": "51440",
+          "quantity": 1
+        },
+        {
+          "code": "51515",
+          "quantity": 1
+        },
+        {
+          "code": "51392",
+          "quantity": 1
+        },
+        {
+          "code": "51393",
+          "quantity": 1
+        },
+        {
+          "code": "51516",
+          "quantity": 1
+        },
+        {
+          "code": "51448",
+          "quantity": 1
+        },
+        {
+          "code": "51522",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 70,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 11,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5rp2ozxs5YbQmibKBN4YiVpZLzi_fRKOgZWyTXKApwUwHpojioaX7w8gWSW_S8MKnik&usqp=CAU",
+      "name": "Beneficio de levelear - Dagas - Maza",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51518",
+          "quantity": 1
+        },
+        {
+          "code": "51528",
+          "quantity": 1
+        },
+        {
+          "code": "51398",
+          "quantity": 1
+        },
+        {
+          "code": "51442",
+          "quantity": 1
+        },
+        {
+          "code": "51399",
+          "quantity": 1
+        },
+        {
+          "code": "51529",
+          "quantity": 1
+        },
+        {
+          "code": "51524",
+          "quantity": 1
+        },
+        {
+          "code": "51444",
+          "quantity": 1
+        },
+        {
+          "code": "51390",
+          "quantity": 1
+        },
+        {
+          "code": "51520",
+          "quantity": 1
+        },
+        {
+          "code": "51446",
+          "quantity": 1
+        },
+        {
+          "code": "51454",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 70,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 12,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyUYhMzg5L5b-YvW47jWahUTyGHRGqhUbXt_Qo6LwpeAqr2UcS_tgx4iPUqRHDS9gob9Y&usqp=CAU",
+      "name": "Beneficio de levelear - Varitas",
+      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51454",
+          "quantity": 1
+        },
+        {
+          "code": "51451",
+          "quantity": 1
+        },
+        {
+          "code": "51531",
+          "quantity": 1
+        },
+        {
+          "code": "51410",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 60,
+      "max_lvl": 79,
+      "type": "ITEM",
+      "amount": 0
+    },
     {
       "id": 1,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbw94DnB4ZP0L2Q-Is5D0zhT-iMikJ1y5V-g&s",
@@ -458,7 +1305,7 @@
       "id": 3,
       "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
       "name": "Montaria Exclusiva por Conta!",
-      "description": "Não perca esta chance! Resgate uma montaria grátis como parte desta promoção especial. Limitado a uma conta.",
+      "description": "Não perca esta chance! Resgate uma montaria grátis como parte desta promoção especial.",
       "btn_txt": "Obtener",
       "send_item": true,
       "items": [
@@ -492,34 +1339,44 @@
         {
           "code": "42951",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42952",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42984",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42985",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48677",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48683",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48685",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48687",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48689",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "48691",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "50255",
           "quantity": 1
         }
@@ -541,16 +1398,20 @@
         {
           "code": "42985",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "50255",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42991",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42992",
           "quantity": 1
-        }, {
+        },
+        {
           "code": "42947",
           "quantity": 1
         }
