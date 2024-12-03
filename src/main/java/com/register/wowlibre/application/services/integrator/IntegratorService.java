@@ -5,6 +5,7 @@ import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
+import com.register.wowlibre.domain.shared.*;
 import com.register.wowlibre.infrastructure.client.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
@@ -296,6 +297,20 @@ public class IntegratorService implements IntegratorPort {
                                  List<ItemQuantityModel> items, String transactionId) {
         integratorClient.sendGuildBenefits(host, jwt, new BenefitsGuildRequest(userId, accountId, characterId, items)
                 , transactionId);
+    }
+
+    @Override
+    public ClaimMachineResponse claimMachine(String host, String jwt, Long userId, Long accountId, Long characterId,
+                                             String type, String transactionId) {
+        GenericResponse<ClaimMachineResponse> response = integratorClient.claimMachine(host, jwt,
+                new ClaimMachineRequest(userId, accountId, characterId, type), transactionId);
+
+        if (response == null) {
+            throw new InternalException("Something is wrong with the roulette system, please contact support",
+                    transactionId);
+        }
+
+        return response.getData();
     }
 
 }

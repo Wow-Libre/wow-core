@@ -1,3 +1,6 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
 spring:
   jackson:
     property-naming-strategy: SNAKE_CASE

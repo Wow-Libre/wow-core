@@ -47,7 +47,7 @@ CREATE TABLE accounts.server
     ip                text,
     api_key           varchar(80) NOT NULL,
     api_secret        varchar(80) NOT NULL,
-    password          text NOT NULL,
+    password          text        NOT NULL,
     jwt               text,
     expiration_date   date,
     refresh_token     text,
@@ -166,3 +166,14 @@ CREATE TABLE user_validation
 
 ALTER TABLE accounts.user_promotion
     ADD COLUMN character_id bigint NOT NULL;
+
+
+CREATE TABLE accounts.user_server_coins
+(
+    id        BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id   BIGINT NOT NULL,
+    server_id BIGINT NOT NULL,
+    coint     INT,
+    last_win  DATETIME,
+    UNIQUE (user_id, server_id)
+);
