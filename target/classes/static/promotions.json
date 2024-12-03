@@ -498,9 +498,9 @@
     {
       "id": 8,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvKlw1918kd4HhWR7PtOA5ffUPeFNB8kVVLw&s",
-      "name": "Beneficio de levelear - Arcos/Ballestas/Arma arrojadiza/Astas",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
-      "btn_txt": "¡Obtener Beneficio!",
+      "name": "Leveling Reward - Bows/Crossbows/Thrown Weapons/Polearms",
+      "description": "By leveling up and enjoying the content, if you're in the level range 70 to 79, you can claim this reward.",
+      "btn_txt": "Claim Reward!",
       "send_item": true,
       "items": [
         {
@@ -541,9 +541,9 @@
     {
       "id": 9,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQGlJVf0YynsG8lBX2sTbNYXhhkLtJq57iVdjUDuERv0XJu0UhP11JLHGUXpaDS_jYet4&usqp=CAU",
-      "name": "Beneficio de levelear - Bastones/Arma de fuego",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
-      "btn_txt": "¡Obtener Beneficio!",
+      "name": "Leveling Reward - Staves/Guns",
+      "description": "By leveling up and enjoying the content, if you're in the level range 70 to 79, you can claim this reward.",
+      "btn_txt": "Claim Reward!",
       "send_item": true,
       "items": [
         {
@@ -604,9 +604,9 @@
     {
       "id": 10,
       "img": "https://es.gizmodo.com/app/uploads/2019/05/kgc6dnrc1tuz5xdlxjaq.jpg",
-      "name": "Beneficio de levelear - Hachas/Espada Dos manos",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
-      "btn_txt": "¡Obtener Beneficio!",
+      "name": "Leveling Reward - Axes/Two-Handed Swords",
+      "description": "By leveling up and enjoying the content, if you're in the level range 70 to 79, you can claim this reward.",
+      "btn_txt": "Claim Reward!",
       "send_item": true,
       "items": [
         {
@@ -663,9 +663,9 @@
     {
       "id": 11,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5rp2ozxs5YbQmibKBN4YiVpZLzi_fRKOgZWyTXKApwUwHpojioaX7w8gWSW_S8MKnik&usqp=CAU",
-      "name": "Beneficio de levelear - Dagas - Maza",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
-      "btn_txt": "¡Obtener Beneficio!",
+      "name": "Leveling Reward - Daggers/Maces",
+      "description": "By leveling up and enjoying the content, if you're in the level range 70 to 79, you can claim this reward.",
+      "btn_txt": "Claim Reward!",
       "send_item": true,
       "items": [
         {
@@ -726,9 +726,9 @@
     {
       "id": 12,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyUYhMzg5L5b-YvW47jWahUTyGHRGqhUbXt_Qo6LwpeAqr2UcS_tgx4iPUqRHDS9gob9Y&usqp=CAU",
-      "name": "Beneficio de levelear - Varitas",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
-      "btn_txt": "¡Obtener Beneficio!",
+      "name": "Leveling Reward - Wands",
+      "description": "By leveling up and enjoying the content, if you're in the level range 70 to 79, you can claim this reward.",
+      "btn_txt": "Claim Reward!",
       "send_item": true,
       "items": [
         {
@@ -979,9 +979,9 @@
     {
       "id": 8,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvKlw1918kd4HhWR7PtOA5ffUPeFNB8kVVLw&s",
-      "name": "Beneficio de levelear - Arcos/Ballestas/Arma arrojadiza/Astas",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
-      "btn_txt": "¡Obtener Beneficio!",
+      "name": "Recompensa de Nivelamento - Arcos/Bestas/Armas Arremessáveis/Lanças",
+      "description": "Ao subir de nível e aproveitar o conteúdo, se você estiver no intervalo de níveis 70 a 79, poderá reivindicar esta recompensa.",
+      "btn_txt": "Reivindicar Recompensa!",
       "send_item": true,
       "items": [
         {
@@ -1022,9 +1022,9 @@
     {
       "id": 9,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQGlJVf0YynsG8lBX2sTbNYXhhkLtJq57iVdjUDuERv0XJu0UhP11JLHGUXpaDS_jYet4&usqp=CAU",
-      "name": "Beneficio de levelear - Bastones/Arma de fuego",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
-      "btn_txt": "¡Obtener Beneficio!",
+      "name": "Recompensa de Nivelamento - Cajados/Armas de Fogo",
+      "description": "Ao subir de nível e aproveitar o conteúdo, se você estiver no intervalo de níveis 70 a 79, poderá reivindicar esta recompensa.",
+      "btn_txt": "Reivindicar Recompensa!",
       "send_item": true,
       "items": [
         {
@@ -1085,9 +1085,9 @@
     {
       "id": 10,
       "img": "https://es.gizmodo.com/app/uploads/2019/05/kgc6dnrc1tuz5xdlxjaq.jpg",
-      "name": "Beneficio de levelear - Hachas/Espada Dos manos",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
-      "btn_txt": "¡Obtener Beneficio!",
+      "name": "Recompensa de Nivelamento - Machados/Espadas de Duas Mãos",
+      "description": "Ao subir de nível e aproveitar o conteúdo, se você estiver no intervalo de níveis 70 a 79, poderá reivindicar esta recompensa.",
+      "btn_txt": "Reivindicar Recompensa!",
       "send_item": true,
       "items": [
         {
@@ -1144,9 +1144,9 @@
     {
       "id": 11,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5rp2ozxs5YbQmibKBN4YiVpZLzi_fRKOgZWyTXKApwUwHpojioaX7w8gWSW_S8MKnik&usqp=CAU",
-      "name": "Beneficio de levelear - Dagas - Maza",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
-      "btn_txt": "¡Obtener Beneficio!",
+      "name": "Recompensa de Nivelamento - Adagas/Maças",
+      "description": "Ao subir de nível e aproveitar o conteúdo, se você estiver no intervalo de níveis 70 a 79, poderá reivindicar esta recompensa.",
+      "btn_txt": "Reivindicar Recompensa!",
       "send_item": true,
       "items": [
         {
@@ -1207,9 +1207,9 @@
     {
       "id": 12,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyUYhMzg5L5b-YvW47jWahUTyGHRGqhUbXt_Qo6LwpeAqr2UcS_tgx4iPUqRHDS9gob9Y&usqp=CAU",
-      "name": "Beneficio de levelear - Varitas",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
-      "btn_txt": "¡Obtener Beneficio!",
+      "name": "Recompensa de Nivelamento - Varinhas",
+      "description": "Ao subir de nível e aproveitar o conteúdo, se você estiver no intervalo de níveis 70 a 79, poderá reivindicar esta recompensa.",
+      "btn_txt": "Reivindicar Recompensa!",
       "send_item": true,
       "items": [
         {
