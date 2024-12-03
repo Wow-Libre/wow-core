@@ -358,7 +358,7 @@
       ],
       "server_id": 1,
       "min_lvl": 1,
-      "max_lvl": 30,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
