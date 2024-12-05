@@ -9,7 +9,7 @@ COPY .mvn .mvn
 COPY mvnw .
 
 # Corregir los finales de línea y establecer permisos para el wrapper de Maven
-RUN sed -i 's/\r$//' ./mvnw && chmod +x ./mvnw
+RUN sed -i '' 's/\r$//' ./mvnw && chmod +x ./mvnw
 
 # Descargar las dependencias (capa de caché)
 RUN ./mvnw dependency:go-offline -B
