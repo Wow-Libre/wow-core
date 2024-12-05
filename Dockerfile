@@ -8,11 +8,8 @@ COPY ./pom.xml .
 COPY .mvn .mvn
 COPY mvnw .
 
-# Verificar permisos y existencia del archivo antes de modificarlo
-RUN ls -l ./mvnw
-
 # Corregir los finales de línea y establecer permisos
-RUN sed 's/\r$//' ./mvnw > ./mvnw.new && mv ./mvnw.new ./mvnw && chmod +x ./mvnw
+RUN sed -i 's/\r$//' ./mvnw && chmod +x ./mvnw
 
 # Descargar las dependencias (capa de caché)
 RUN ./mvnw dependency:go-offline -B
