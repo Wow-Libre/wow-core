@@ -1,41 +1,36 @@
 # Build stage
-FROM amazoncorretto:17 AS builder
+FROM arm64v8/openjdk:17 AS builder
 
 WORKDIR /app
 
-# Instalar tar y otras herramientas necesarias
-RUN yum install -y tar
-
-# Copiar archivos de configuración y el wrapper de Maven
-COPY ./pom.xml ./
+# Copy Maven wrapper and configuration
+COPY ./pom.xml .
 COPY .mvn .mvn
 COPY mvnw .
 
-# Configurar permisos y corregir saltos de línea
+# Fix line endings and set permissions for Maven wrapper
 RUN sed -i 's/\r$//' ./mvnw && chmod +x ./mvnw
 
-# Descargar dependencias
+# Download dependencies (cache layer)
 RUN ./mvnw dependency:go-offline -B
 
-# Copiar el código fuente
+# Copy application source code
 COPY ./src ./src
 
-# Construir la aplicación
+# Build the application
 RUN ./mvnw clean package -DskipTests
 
 # Runtime stage
-FROM amazoncorretto:17
+FROM arm64v8/openjdk:17
 
 WORKDIR /app
 
-# Copiar el archivo JAR desde la etapa de construcción
+# Copy the JAR file from the build stage
 COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar .
 
-# Configurar variables de entorno
 ENV SPRING_PROFILES_ACTIVE=prod
-
-# Exponer el puerto de la aplicación
+# Expose the application port
 EXPOSE 8091
 
-# Iniciar la aplicación
+# Start the application
 ENTRYPOINT ["java", "-jar", "wowlibre-0.0.1-SNAPSHOT.jar"]
