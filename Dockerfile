@@ -3,6 +3,9 @@ FROM amazoncorretto:17 AS builder
 
 WORKDIR /app
 
+# Instalar tar y otras herramientas necesarias
+RUN yum install -y tar
+
 # Copiar archivos de configuración y el wrapper de Maven
 COPY ./pom.xml ./
 COPY .mvn .mvn
