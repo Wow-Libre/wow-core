@@ -1,5 +1,5 @@
 # Build stage
-FROM eclipse-temurin:17-jdk-slim AS builder
+FROM openjdk:17-slim AS builder
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ COPY ./src ./src
 RUN ./mvnw clean package -DskipTests
 
 # Runtime stage
-FROM eclipse-temurin:17-jdk-slim
+FROM openjdk:17-slim
 
 WORKDIR /app
 
