@@ -21,7 +21,7 @@ COPY ./src ./src
 RUN ./mvnw clean package -DskipTests
 
 # Runtime stage
-FROM openjdk:17
+FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
