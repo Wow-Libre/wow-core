@@ -1,36 +1,37 @@
 # Build stage
-FROM openjdk:17 AS builder
+FROM eclipse-temurin:17-jdk-slim AS builder
 
 WORKDIR /app
 
-# Copy Maven wrapper and configuration
+# Copiar el archivo de configuración de Maven y el wrapper
 COPY ./pom.xml .
 COPY .mvn .mvn
 COPY mvnw .
 
-# Fix line endings and set permissions for Maven wrapper
+# Corregir los finales de línea y establecer permisos para el wrapper de Maven
 RUN sed -i 's/\r$//' ./mvnw && chmod +x ./mvnw
 
-# Download dependencies (cache layer)
+# Descargar las dependencias (capa de caché)
 RUN ./mvnw dependency:go-offline -B
 
-# Copy application source code
+# Copiar el código fuente de la aplicación
 COPY ./src ./src
 
-# Build the application
+# Compilar la aplicación
 RUN ./mvnw clean package -DskipTests
 
 # Runtime stage
-FROM openjdk:17
+FROM eclipse-temurin:17-jdk-slim
 
 WORKDIR /app
 
-# Copy the JAR file from the build stage
+# Copiar el archivo JAR desde la etapa de construcción (builder)
 COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar .
 
 ENV SPRING_PROFILES_ACTIVE=prod
-# Expose the application port
+
+# Exponer el puerto de la aplicación
 EXPOSE 8091
 
-# Start the application
+# Iniciar la aplicación
 ENTRYPOINT ["java", "-jar", "wowlibre-0.0.1-SNAPSHOT.jar"]
