@@ -1,5 +1,5 @@
 # Build stage
-FROM amazoncorretto:17 AS builder
+FROM --platform=linux/arm64 amazoncorretto:17 AS builder
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ COPY ./src ./src
 RUN ./mvnw clean package -DskipTests
 
 # Runtime stage
-FROM amazoncorretto:17
+FROM --platform=linux/arm64 amazoncorretto:17
 
 WORKDIR /app
 
