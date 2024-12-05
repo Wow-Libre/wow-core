@@ -9,6 +9,7 @@ COPY .mvn .mvn
 COPY mvnw .
 
 # Fix line endings and set permissions for Maven wrapper
+RUN apt-get update && apt-get install -y sed
 RUN sed -i 's/\r$//' ./mvnw && chmod +x ./mvnw
 
 # Download dependencies (cache layer)
