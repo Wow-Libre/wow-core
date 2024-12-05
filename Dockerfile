@@ -1,5 +1,5 @@
 # Build stage
-FROM openjdk:17-jdk-slim AS builder
+FROM --platform=linux/arm64 openjdk:17-jdk-slim AS builder
 
 WORKDIR /app
 
