@@ -8,8 +8,10 @@ COPY ./pom.xml ./
 COPY .mvn .mvn
 COPY mvnw .
 
+# Instalar `sed` si es necesario (comando de acuerdo a la imagen base)
+RUN apk update && apk add --no-cache sed  # Para imágenes basadas en Alpine
+
 # Fix line endings and set permissions for Maven wrapper
-RUN apt-get update && apt-get install -y sed
 RUN sed -i 's/\r$//' ./mvnw && chmod +x ./mvnw
 
 # Download dependencies (cache layer)
