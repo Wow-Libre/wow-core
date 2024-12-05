@@ -4,7 +4,7 @@ FROM openjdk:17-jdk-slim AS builder
 WORKDIR /app
 
 # Copy Maven wrapper and configuration
-COPY ./pom.xml .
+COPY ./pom.xml ./
 COPY .mvn .mvn
 COPY mvnw .
 
@@ -28,7 +28,9 @@ WORKDIR /app
 # Copy the JAR file from the build stage
 COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar .
 
+# Set environment variables
 ENV SPRING_PROFILES_ACTIVE=prod
+
 # Expose the application port
 EXPOSE 8091
 
