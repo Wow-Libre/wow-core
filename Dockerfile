@@ -1,5 +1,5 @@
 # Build stage
-FROM openjdk:17-jdk-slim AS builder
+FROM openjdk:17 AS builder
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ COPY ./src ./src
 RUN ./mvnw clean package -DskipTests
 
 # Runtime stage
-FROM openjdk:17-jdk-slim AS builder
+FROM openjdk:17
 
 WORKDIR /app
 
