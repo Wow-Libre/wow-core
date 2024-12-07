@@ -1,24 +1,10 @@
 {
   "es": [
     {
-      "id": 7,
-      "img": "https://static.wixstatic.com/media/5dd8a0_67020ed5ab7c46e4be8085fb20563eb7~mv2.webp",
-      "name": "Promoción Level 80",
-      "description": "¡Salta directamente al nivel 80 y prepárate para la acción! Olvídate de las misiones repetitivas y entra al contenido épico ahora mismo..",
-      "btn_txt": "¡Salta Ahora!",
-      "send_item": false,
-      "items": [],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 10,
-      "type": "LEVEL",
-      "amount": 0
-    },
-    {
-      "id": 8,
+      "id": 99,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvKlw1918kd4HhWR7PtOA5ffUPeFNB8kVVLw&s",
-      "name": "Beneficio de levelear - Arcos/Ballestas/Arma arrojadiza/Astas",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "name": "PROMO FIN DE SEMANA - Arcos/Ballestas/Arma arrojadiza/Astas",
+      "description": "EVENTO FIN DE SEMANA",
       "btn_txt": "¡Obtener Beneficio!",
       "send_item": true,
       "items": [
@@ -52,16 +38,16 @@
         }
       ],
       "server_id": 1,
-      "min_lvl": 14,
-      "max_lvl": 79,
+      "min_lvl": 1,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
     {
-      "id": 9,
+      "id": 98,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQGlJVf0YynsG8lBX2sTbNYXhhkLtJq57iVdjUDuERv0XJu0UhP11JLHGUXpaDS_jYet4&usqp=CAU",
-      "name": "Beneficio de levelear - Bastones/Arma de fuego",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "name": "PROMO FIN DE SEMANA - Bastones/Arma de fuego",
+      "description": "EVENTO FIN DE SEMANA",
       "btn_txt": "¡Obtener Beneficio!",
       "send_item": true,
       "items": [
@@ -115,16 +101,16 @@
         }
       ],
       "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
+      "min_lvl": 1,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
     {
-      "id": 10,
+      "id": 97,
       "img": "https://es.gizmodo.com/app/uploads/2019/05/kgc6dnrc1tuz5xdlxjaq.jpg",
-      "name": "Beneficio de levelear - Hachas/Espada Dos manos",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "name": "PROMO FIN DE SEMANA  - Hachas/Espada Dos manos",
+      "description": "EVENTO FIN DE SEMANA",
       "btn_txt": "¡Obtener Beneficio!",
       "send_item": true,
       "items": [
@@ -174,15 +160,15 @@
         }
       ],
       "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
+      "min_lvl": 1,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
     {
-      "id": 11,
+      "id": 96,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5rp2ozxs5YbQmibKBN4YiVpZLzi_fRKOgZWyTXKApwUwHpojioaX7w8gWSW_S8MKnik&usqp=CAU",
-      "name": "Beneficio de levelear - Dagas - Maza",
+      "name": "PROMO FIN DE SEMANA - Dagas - Maza",
       "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
       "btn_txt": "¡Obtener Beneficio!",
       "send_item": true,
@@ -243,10 +229,10 @@
       "amount": 0
     },
     {
-      "id": 12,
+      "id": 95,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyUYhMzg5L5b-YvW47jWahUTyGHRGqhUbXt_Qo6LwpeAqr2UcS_tgx4iPUqRHDS9gob9Y&usqp=CAU",
-      "name": "Beneficio de levelear - Varitas",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "name": "PROMO FIN DE SEMANA - Varitas",
+      "description": "EVENTO FIN DE SEMANA",
       "btn_txt": "¡Obtener Beneficio!",
       "send_item": true,
       "items": [
@@ -268,56 +254,13 @@
         }
       ],
       "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 1,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbw94DnB4ZP0L2Q-Is5D0zhT-iMikJ1y5V-g&s",
-      "name": "Promoción de Leveo - Armas",
-      "description": "¡Haz tu progreso más fácil con esta increíble promoción! Consigue armas reliquia y lleva tu nivel al siguiente nivel de forma más sencilla.",
-      "btn_txt": "Obtener",
-      "send_item": true,
-      "items": [
-        {
-          "code": "42944",
-          "quantity": 1
-        },
-        {
-          "code": "42946",
-          "quantity": 1
-        },
-        {
-          "code": "42948",
-          "quantity": 1
-        },
-        {
-          "code": "42943",
-          "quantity": 1
-        },
-        {
-          "code": "42945",
-          "quantity": 1
-        },
-        {
-          "code": "48716",
-          "quantity": 1
-        },
-        {
-          "code": "48718",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
       "min_lvl": 1,
       "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
     {
-      "id": 2,
+      "id": 94,
       "img": "https://chaosboost.com/wp-content/uploads/2024/05/wowclassic-power-leveling.jpg",
       "name": "¡Reclama 800 Emblemas de Escarcha Ahora!",
       "description": "¡No dejes pasar esta oferta única! Consigue 800 emblemas de escarcha para potenciar tu set PvE. Promoción exclusiva para una cuenta, ¡aprovecha antes de que se acabe!",
@@ -326,7 +269,7 @@
       "items": [
         {
           "code": "49426",
-          "quantity": 800
+          "quantity": 1200
         },
         {
           "code": "47241",
@@ -340,7 +283,7 @@
       "amount": 0
     },
     {
-      "id": 3,
+      "id": 93,
       "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
       "name": "¡Montura Exclusiva por Cuenta!",
       "description": "¡No dejes pasar esta oportunidad! Obtén una montura gratis como parte de esta promoción especial.",
@@ -363,105 +306,7 @@
       "amount": 0
     },
     {
-      "id": 4,
-      "img": "https://www.wowchakra.com/wp-content/uploads/2020/04/WowChakraNovelaIlustrada.jpg",
-      "name": "Promoción de Leveo - Equipo",
-      "description": "¡Descubre la experiencia Leveo! Nuestra promoción está diseñada para brindarte el equipo ideal y ayudarte a alcanzar tus metas de manera eficiente y profesional.",
-      "btn_txt": "Obtener",
-      "send_item": true,
-      "items": [
-        {
-          "code": "42949",
-          "quantity": 1
-        },
-        {
-          "code": "42951",
-          "quantity": 1
-        },
-        {
-          "code": "42952",
-          "quantity": 1
-        },
-        {
-          "code": "42984",
-          "quantity": 1
-        },
-        {
-          "code": "42985",
-          "quantity": 1
-        },
-        {
-          "code": "48677",
-          "quantity": 1
-        },
-        {
-          "code": "48683",
-          "quantity": 1
-        },
-        {
-          "code": "48685",
-          "quantity": 1
-        },
-        {
-          "code": "48687",
-          "quantity": 1
-        },
-        {
-          "code": "48689",
-          "quantity": 1
-        },
-        {
-          "code": "48691",
-          "quantity": 1
-        },
-        {
-          "code": "50255",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 5,
-      "img": "https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/blt44b9b4635a152dfc/63c71f0ca1a308140627270d/world-of-warcraft-service-character-transfer-section1-feature3.jpg?imwidth=1920&imdensity=2.625",
-      "name": "Promoción de Leveo - Abalorios y Otros",
-      "description": "¡Explora nuestra oferta especial! Encuentra los mejores abalorios y accesorios para potenciar tu experiencia y marcar la diferencia en cada detalle.",
-      "btn_txt": "Obtener",
-      "send_item": true,
-      "items": [
-        {
-          "code": "42985",
-          "quantity": 1
-        },
-        {
-          "code": "50255",
-          "quantity": 1
-        },
-        {
-          "code": "42991",
-          "quantity": 1
-        },
-        {
-          "code": "42992",
-          "quantity": 1
-        },
-        {
-          "code": "42947",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 6,
+      "id": 92,
       "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
       "name": "Promoción Especial de Bolsas",
       "description": "¡No pierdas la oportunidad de obtener estas bolsas exclusivas y mejora tu inventario!",
@@ -478,968 +323,690 @@
       "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
+    },
+    {
+      "id": 91,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "ARMAS FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "49623",
+          "quantity": 1
+        },
+        {
+          "code": "50730",
+          "quantity": 1
+        },
+        {
+          "code": "50735",
+          "quantity": 1
+        },
+        {
+          "code": "50732",
+          "quantity": 1
+        },
+        {
+          "code": "50737",
+          "quantity": 1
+        },
+        {
+          "code": "50734",
+          "quantity": 1
+        },
+        {
+          "code": "50733",
+          "quantity": 1
+        },
+        {
+          "code": "50736",
+          "quantity": 1
+        },
+        {
+          "code": "50731",
+          "quantity": 1
+        },
+        {
+          "code": "50738",
+          "quantity": 1
+        },
+        {
+          "code": "50638",
+          "quantity": 1
+        },
+        {
+          "code": "50709",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 90,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "ARMAS FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "50684",
+          "quantity": 1
+        },
+        {
+          "code": "50648",
+          "quantity": 1
+        },
+        {
+          "code": "50727",
+          "quantity": 1
+        },
+        {
+          "code": "50654",
+          "quantity": 1
+        },
+        {
+          "code": "50672",
+          "quantity": 1
+        },
+        {
+          "code": "50608",
+          "quantity": 1
+        },
+        {
+          "code": "50704",
+          "quantity": 1
+        },
+        {
+          "code": "50603",
+          "quantity": 1
+        },
+        {
+          "code": "50685",
+          "quantity": 1
+        },
+        {
+          "code": "50621",
+          "quantity": 1
+        },
+        {
+          "code": "50708",
+          "quantity": 1
+        },
+        {
+          "code": "50692",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 90,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "ARMAS FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51945",
+          "quantity": 1
+        },
+        {
+          "code": "51940",
+          "quantity": 1
+        },
+        {
+          "code": "51944",
+          "quantity": 1
+        },
+        {
+          "code": "51946",
+          "quantity": 1
+        },
+        {
+          "code": "51947",
+          "quantity": 1
+        },
+        {
+          "code": "51941",
+          "quantity": 1
+        },
+        {
+          "code": "51939",
+          "quantity": 1
+        },
+        {
+          "code": "51943",
+          "quantity": 1
+        },
+        {
+          "code": "51942",
+          "quantity": 1
+        },
+        {
+          "code": "51916",
+          "quantity": 1
+        },
+        {
+          "code": "51927",
+          "quantity": 1
+        },
+        {
+          "code": "51936",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 89,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "ARMAS FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51938",
+          "quantity": 1
+        },
+        {
+          "code": "51881",
+          "quantity": 1
+        },
+        {
+          "code": "51834",
+          "quantity": 1
+        },
+        {
+          "code": "51828",
+          "quantity": 1
+        },
+        {
+          "code": "51875",
+          "quantity": 1
+        },
+        {
+          "code": "51833",
+          "quantity": 1
+        },
+        {
+          "code": "51905",
+          "quantity": 1
+        },
+        {
+          "code": "51858",
+          "quantity": 1
+        },
+        {
+          "code": "51819",
+          "quantity": 1
+        },
+        {
+          "code": "51868",
+          "quantity": 1
+        },
+        {
+          "code": "51451",
+          "quantity": 1
+        },
+        {
+          "code": "51846",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 88,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "ARMAS FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51869",
+          "quantity": 1
+        },
+        {
+          "code": "51887",
+          "quantity": 1
+        },
+        {
+          "code": "51845",
+          "quantity": 1
+        },
+        {
+          "code": "51880",
+          "quantity": 1
+        },
+        {
+          "code": "51893",
+          "quantity": 1
+        },
+        {
+          "code": "51857",
+          "quantity": 1
+        },
+        {
+          "code": "51898",
+          "quantity": 1
+        },
+        {
+          "code": "51910",
+          "quantity": 1
+        },
+        {
+          "code": "51932",
+          "quantity": 1
+        },
+        {
+          "code": "51876",
+          "quantity": 1
+        },
+        {
+          "code": "51852",
+          "quantity": 1
+        },
+        {
+          "code": "51838",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 87,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "ARMAS FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51815",
+          "quantity": 1
+        },
+        {
+          "code": "51937",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 86,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "ABALORIOS FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51815",
+          "quantity": 1
+        },
+        {
+          "code": "51937",
+          "quantity": 1
+        },
+        {
+          "code": "54590",
+          "quantity": 1
+        },
+        {
+          "code": "54588",
+          "quantity": 1
+        },
+        {
+          "code": "54589",
+          "quantity": 1
+        },
+        {
+          "code": "54591",
+          "quantity": 1
+        },
+        {
+          "code": "50363",
+          "quantity": 1
+        },
+        {
+          "code": "50348",
+          "quantity": 1
+        },
+        {
+          "code": "50366",
+          "quantity": 1
+        },
+        {
+          "code": "50365",
+          "quantity": 1
+        },
+        {
+          "code": "50706",
+          "quantity": 1
+        },
+        {
+          "code": "50349",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 85,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "ABALORIOS FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "50726",
+          "quantity": 1
+        },
+        {
+          "code": "50343",
+          "quantity": 1
+        },
+        {
+          "code": "50344",
+          "quantity": 1
+        },
+        {
+          "code": "50345",
+          "quantity": 1
+        },
+        {
+          "code": "50346",
+          "quantity": 1
+        },
+        {
+          "code": "54591",
+          "quantity": 1
+        },
+        {
+          "code": "50357",
+          "quantity": 1
+        },
+        {
+          "code": "50352",
+          "quantity": 1
+        },
+        {
+          "code": "51378",
+          "quantity": 1
+        },
+        {
+          "code": "50365",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 84,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "ESCUDOS FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "50729",
+          "quantity": 1
+        },
+        {
+          "code": "50616",
+          "quantity": 1
+        },
+        {
+          "code": "51533",
+          "quantity": 1
+        },
+        {
+          "code": "51452",
+          "quantity": 1
+        },
+        {
+          "code": "51455",
+          "quantity": 1
+        },
+        {
+          "code": "50065",
+          "quantity": 1
+        },
+        {
+          "code": "51909",
+          "quantity": 1
+        },
+        {
+          "code": "51812",
+          "quantity": 1
+        },
+        {
+          "code": "49976",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 83,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "Anillos FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "54585",
+          "quantity": 1
+        },
+        {
+          "code": "54576",
+          "quantity": 1
+        },
+        {
+          "code": "50664",
+          "quantity": 1
+        },
+        {
+          "code": "50618",
+          "quantity": 1
+        },
+        {
+          "code": "52572",
+          "quantity": 1
+        },
+        {
+          "code": "50402",
+          "quantity": 1
+        },
+        {
+          "code": "50398",
+          "quantity": 1
+        },
+        {
+          "code": "50614",
+          "quantity": 1
+        },
+        {
+          "code": "50400",
+          "quantity": 1
+        },
+        {
+          "code": "50614",
+          "quantity": 1
+        },
+        {
+          "code": "50400",
+          "quantity": 1
+        },
+        {
+          "code": "50404",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 82,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "Anillos FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "50714",
+          "quantity": 1
+        },
+        {
+          "code": "50622",
+          "quantity": 1
+        },
+        {
+          "code": "50604",
+          "quantity": 1
+        },
+        {
+          "code": "50610",
+          "quantity": 1
+        },
+        {
+          "code": "50657",
+          "quantity": 1
+        },
+        {
+          "code": "50644",
+          "quantity": 1
+        },
+        {
+          "code": "50693",
+          "quantity": 1
+        },
+        {
+          "code": "50636",
+          "quantity": 1
+        },
+        {
+          "code": "50642",
+          "quantity": 1
+        },
+        {
+          "code": "50720",
+          "quantity": 1
+        },
+        {
+          "code": "50678",
+          "quantity": 1
+        },
+        {
+          "code": "54567",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 81,
+      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
+      "name": "Anillos FULL",
+      "description": "EVENTO FIN DE SEMANA",
+      "btn_txt": "Conseguir ahora",
+      "send_item": true,
+      "items": [
+        {
+          "code": "54563",
+          "quantity": 1
+        },
+        {
+          "code": "51843",
+          "quantity": 1
+        },
+        {
+          "code": "51900",
+          "quantity": 1
+        },
+        {
+          "code": "51855",
+          "quantity": 1
+        },
+        {
+          "code": "51849",
+          "quantity": 1
+        },
+        {
+          "code": "51913",
+          "quantity": 1
+        },
+        {
+          "code": "51878",
+          "quantity": 1
+        },
+        {
+          "code": "51884",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
     }
   ],
   "en": [
-    {
-      "id": 7,
-      "img": "https://static.wixstatic.com/media/5dd8a0_67020ed5ab7c46e4be8085fb20563eb7~mv2.webp",
-      "name": "Level 80 Boost",
-      "description": "Jump straight to level 80 and dive into the action! Skip the grind and get ready for epic content now.",
-      "btn_txt": "Boost Now!",
-      "send_item": false,
-      "items": [],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 10,
-      "type": "LEVEL",
-      "amount": 0
-    },
-    {
-      "id": 8,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvKlw1918kd4HhWR7PtOA5ffUPeFNB8kVVLw&s",
-      "name": "Leveling Reward - Bows/Crossbows/Thrown Weapons/Polearms",
-      "description": "By leveling up and enjoying the content, if you're in the level range 70 to 79, you can claim this reward.",
-      "btn_txt": "Claim Reward!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51395",
-          "quantity": 1
-        },
-        {
-          "code": "51395",
-          "quantity": 1
-        },
-        {
-          "code": "51535",
-          "quantity": 1
-        },
-        {
-          "code": "51411",
-          "quantity": 1
-        },
-        {
-          "code": "51412",
-          "quantity": 1
-        },
-        {
-          "code": "51481",
-          "quantity": 1
-        },
-        {
-          "code": "51480",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 9,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQGlJVf0YynsG8lBX2sTbNYXhhkLtJq57iVdjUDuERv0XJu0UhP11JLHGUXpaDS_jYet4&usqp=CAU",
-      "name": "Leveling Reward - Staves/Guns",
-      "description": "By leveling up and enjoying the content, if you're in the level range 70 to 79, you can claim this reward.",
-      "btn_txt": "Claim Reward!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51432",
-          "quantity": 1
-        },
-        {
-          "code": "51404",
-          "quantity": 1
-        },
-        {
-          "code": "51402",
-          "quantity": 1
-        },
-        {
-          "code": "51431",
-          "quantity": 1
-        },
-        {
-          "code": "51456",
-          "quantity": 1
-        },
-        {
-          "code": "51400",
-          "quantity": 1
-        },
-        {
-          "code": "51401",
-          "quantity": 1
-        },
-        {
-          "code": "51405",
-          "quantity": 1
-        },
-        {
-          "code": "51403",
-          "quantity": 1
-        },
-        {
-          "code": "51457",
-          "quantity": 1
-        },
-        {
-          "code": "51450",
-          "quantity": 1
-        },
-        {
-          "code": "51449",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 10,
-      "img": "https://es.gizmodo.com/app/uploads/2019/05/kgc6dnrc1tuz5xdlxjaq.jpg",
-      "name": "Leveling Reward - Axes/Two-Handed Swords",
-      "description": "By leveling up and enjoying the content, if you're in the level range 70 to 79, you can claim this reward.",
-      "btn_txt": "Claim Reward!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51389",
-          "quantity": 1
-        },
-        {
-          "code": "51388",
-          "quantity": 1
-        },
-        {
-          "code": "51439",
-          "quantity": 1
-        },
-        {
-          "code": "51526",
-          "quantity": 1
-        },
-        {
-          "code": "51440",
-          "quantity": 1
-        },
-        {
-          "code": "51515",
-          "quantity": 1
-        },
-        {
-          "code": "51392",
-          "quantity": 1
-        },
-        {
-          "code": "51393",
-          "quantity": 1
-        },
-        {
-          "code": "51516",
-          "quantity": 1
-        },
-        {
-          "code": "51448",
-          "quantity": 1
-        },
-        {
-          "code": "51522",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 11,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5rp2ozxs5YbQmibKBN4YiVpZLzi_fRKOgZWyTXKApwUwHpojioaX7w8gWSW_S8MKnik&usqp=CAU",
-      "name": "Leveling Reward - Daggers/Maces",
-      "description": "By leveling up and enjoying the content, if you're in the level range 70 to 79, you can claim this reward.",
-      "btn_txt": "Claim Reward!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51518",
-          "quantity": 1
-        },
-        {
-          "code": "51528",
-          "quantity": 1
-        },
-        {
-          "code": "51398",
-          "quantity": 1
-        },
-        {
-          "code": "51442",
-          "quantity": 1
-        },
-        {
-          "code": "51399",
-          "quantity": 1
-        },
-        {
-          "code": "51529",
-          "quantity": 1
-        },
-        {
-          "code": "51524",
-          "quantity": 1
-        },
-        {
-          "code": "51444",
-          "quantity": 1
-        },
-        {
-          "code": "51390",
-          "quantity": 1
-        },
-        {
-          "code": "51520",
-          "quantity": 1
-        },
-        {
-          "code": "51446",
-          "quantity": 1
-        },
-        {
-          "code": "51454",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 12,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyUYhMzg5L5b-YvW47jWahUTyGHRGqhUbXt_Qo6LwpeAqr2UcS_tgx4iPUqRHDS9gob9Y&usqp=CAU",
-      "name": "Leveling Reward - Wands",
-      "description": "By leveling up and enjoying the content, if you're in the level range 70 to 79, you can claim this reward.",
-      "btn_txt": "Claim Reward!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51454",
-          "quantity": 1
-        },
-        {
-          "code": "51451",
-          "quantity": 1
-        },
-        {
-          "code": "51531",
-          "quantity": 1
-        },
-        {
-          "code": "51410",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 1,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbw94DnB4ZP0L2Q-Is5D0zhT-iMikJ1y5V-g&s",
-      "name": "Leveling Promotion - Weapons",
-      "description": "Make your progress easier with this amazing promotion! Get relic weapons and level up more effortlessly.",
-      "btn_txt": "Get",
-      "send_item": true,
-      "items": [
-        {
-          "code": "42944",
-          "quantity": 1
-        },
-        {
-          "code": "42946",
-          "quantity": 1
-        },
-        {
-          "code": "42948",
-          "quantity": 1
-        },
-        {
-          "code": "42943",
-          "quantity": 1
-        },
-        {
-          "code": "42945",
-          "quantity": 1
-        },
-        {
-          "code": "48716",
-          "quantity": 1
-        },
-        {
-          "code": "48718",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 2,
-      "img": "https://chaosboost.com/wp-content/uploads/2024/05/wowclassic-power-leveling.jpg",
-      "name": "Claim 800 Frost Emblems Now!",
-      "description": "Don’t miss out on this limited-time offer! Get 800 Frost Emblems to enhance your PvE set.",
-      "btn_txt": "Get",
-      "send_item": true,
-      "items": [
-        {
-          "code": "49426",
-          "quantity": 800
-        },
-        {
-          "code": "47241",
-          "quantity": 300
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 3,
-      "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
-      "name": "Exclusive Mount for Your Account!",
-      "description": "Don’t miss out on this chance! Claim a free mount as part of this special promotion. Limited to one account.",
-      "btn_txt": "Get",
-      "send_item": true,
-      "items": [
-        {
-          "code": "43599",
-          "quantity": 1
-        },
-        {
-          "code": "44168",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 4,
-      "img": "https://www.wowchakra.com/wp-content/uploads/2020/04/WowChakraNovelaIlustrada.jpg",
-      "name": "Leveling Promotion - Equipment",
-      "description": "Discover the Leveo experience! Our promotion is designed to provide you with the ideal gear and help you achieve your goals efficiently and professionally.",
-      "btn_txt": "Get",
-      "send_item": true,
-      "items": [
-        {
-          "code": "42949",
-          "quantity": 1
-        },
-        {
-          "code": "42951",
-          "quantity": 1
-        },
-        {
-          "code": "42952",
-          "quantity": 1
-        },
-        {
-          "code": "42984",
-          "quantity": 1
-        },
-        {
-          "code": "42985",
-          "quantity": 1
-        },
-        {
-          "code": "48677",
-          "quantity": 1
-        },
-        {
-          "code": "48683",
-          "quantity": 1
-        },
-        {
-          "code": "48685",
-          "quantity": 1
-        },
-        {
-          "code": "48687",
-          "quantity": 1
-        },
-        {
-          "code": "48689",
-          "quantity": 1
-        },
-        {
-          "code": "48691",
-          "quantity": 1
-        },
-        {
-          "code": "50255",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 5,
-      "img": "https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/blt44b9b4635a152dfc/63c71f0ca1a308140627270d/world-of-warcraft-service-character-transfer-section1-feature3.jpg?imwidth=1920&imdensity=2.625",
-      "name": "Leveling Promotion - Trinkets and More",
-      "description": "Explore our special offer! Find the best trinkets and accessories to enhance your experience and make a difference in every detail.\n",
-      "btn_txt": "Get",
-      "send_item": true,
-      "items": [
-        {
-          "code": "42985",
-          "quantity": 1
-        },
-        {
-          "code": "50255",
-          "quantity": 1
-        },
-        {
-          "code": "42991",
-          "quantity": 1
-        },
-        {
-          "code": "42992",
-          "quantity": 1
-        },
-        {
-          "code": "42947",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 6,
-      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
-      "name": "Exclusive Bag Promotion",
-      "description": "Don't miss the chance to grab these exclusive bags and upgrade your inventory!",
-      "btn_txt": "Get Now",
-      "send_item": true,
-      "items": [
-        {
-          "code": "41600",
-          "quantity": 4
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    }
   ],
   "pt": [
-    {
-      "id": 7,
-      "img": "https://static.wixstatic.com/media/5dd8a0_67020ed5ab7c46e4be8085fb20563eb7~mv2.webp",
-      "name": "Pulo para o Nível 80",
-      "description": "Vá direto para o nível 80 e entre na ação! Esqueça o grind e prepare-se para conteúdos épicos agora mesmo.",
-      "btn_txt": "Pular Agora!",
-      "send_item": false,
-      "items": [],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 10,
-      "type": "LEVEL",
-      "amount": 0
-    },
-    {
-      "id": 8,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvKlw1918kd4HhWR7PtOA5ffUPeFNB8kVVLw&s",
-      "name": "Recompensa de Nivelamento - Arcos/Bestas/Armas Arremessáveis/Lanças",
-      "description": "Ao subir de nível e aproveitar o conteúdo, se você estiver no intervalo de níveis 70 a 79, poderá reivindicar esta recompensa.",
-      "btn_txt": "Reivindicar Recompensa!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51395",
-          "quantity": 1
-        },
-        {
-          "code": "51395",
-          "quantity": 1
-        },
-        {
-          "code": "51535",
-          "quantity": 1
-        },
-        {
-          "code": "51411",
-          "quantity": 1
-        },
-        {
-          "code": "51412",
-          "quantity": 1
-        },
-        {
-          "code": "51481",
-          "quantity": 1
-        },
-        {
-          "code": "51480",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 9,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQGlJVf0YynsG8lBX2sTbNYXhhkLtJq57iVdjUDuERv0XJu0UhP11JLHGUXpaDS_jYet4&usqp=CAU",
-      "name": "Recompensa de Nivelamento - Cajados/Armas de Fogo",
-      "description": "Ao subir de nível e aproveitar o conteúdo, se você estiver no intervalo de níveis 70 a 79, poderá reivindicar esta recompensa.",
-      "btn_txt": "Reivindicar Recompensa!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51432",
-          "quantity": 1
-        },
-        {
-          "code": "51404",
-          "quantity": 1
-        },
-        {
-          "code": "51402",
-          "quantity": 1
-        },
-        {
-          "code": "51431",
-          "quantity": 1
-        },
-        {
-          "code": "51456",
-          "quantity": 1
-        },
-        {
-          "code": "51400",
-          "quantity": 1
-        },
-        {
-          "code": "51401",
-          "quantity": 1
-        },
-        {
-          "code": "51405",
-          "quantity": 1
-        },
-        {
-          "code": "51403",
-          "quantity": 1
-        },
-        {
-          "code": "51457",
-          "quantity": 1
-        },
-        {
-          "code": "51450",
-          "quantity": 1
-        },
-        {
-          "code": "51449",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 10,
-      "img": "https://es.gizmodo.com/app/uploads/2019/05/kgc6dnrc1tuz5xdlxjaq.jpg",
-      "name": "Recompensa de Nivelamento - Machados/Espadas de Duas Mãos",
-      "description": "Ao subir de nível e aproveitar o conteúdo, se você estiver no intervalo de níveis 70 a 79, poderá reivindicar esta recompensa.",
-      "btn_txt": "Reivindicar Recompensa!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51389",
-          "quantity": 1
-        },
-        {
-          "code": "51388",
-          "quantity": 1
-        },
-        {
-          "code": "51439",
-          "quantity": 1
-        },
-        {
-          "code": "51526",
-          "quantity": 1
-        },
-        {
-          "code": "51440",
-          "quantity": 1
-        },
-        {
-          "code": "51515",
-          "quantity": 1
-        },
-        {
-          "code": "51392",
-          "quantity": 1
-        },
-        {
-          "code": "51393",
-          "quantity": 1
-        },
-        {
-          "code": "51516",
-          "quantity": 1
-        },
-        {
-          "code": "51448",
-          "quantity": 1
-        },
-        {
-          "code": "51522",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 11,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5rp2ozxs5YbQmibKBN4YiVpZLzi_fRKOgZWyTXKApwUwHpojioaX7w8gWSW_S8MKnik&usqp=CAU",
-      "name": "Recompensa de Nivelamento - Adagas/Maças",
-      "description": "Ao subir de nível e aproveitar o conteúdo, se você estiver no intervalo de níveis 70 a 79, poderá reivindicar esta recompensa.",
-      "btn_txt": "Reivindicar Recompensa!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51518",
-          "quantity": 1
-        },
-        {
-          "code": "51528",
-          "quantity": 1
-        },
-        {
-          "code": "51398",
-          "quantity": 1
-        },
-        {
-          "code": "51442",
-          "quantity": 1
-        },
-        {
-          "code": "51399",
-          "quantity": 1
-        },
-        {
-          "code": "51529",
-          "quantity": 1
-        },
-        {
-          "code": "51524",
-          "quantity": 1
-        },
-        {
-          "code": "51444",
-          "quantity": 1
-        },
-        {
-          "code": "51390",
-          "quantity": 1
-        },
-        {
-          "code": "51520",
-          "quantity": 1
-        },
-        {
-          "code": "51446",
-          "quantity": 1
-        },
-        {
-          "code": "51454",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 12,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyUYhMzg5L5b-YvW47jWahUTyGHRGqhUbXt_Qo6LwpeAqr2UcS_tgx4iPUqRHDS9gob9Y&usqp=CAU",
-      "name": "Recompensa de Nivelamento - Varinhas",
-      "description": "Ao subir de nível e aproveitar o conteúdo, se você estiver no intervalo de níveis 70 a 79, poderá reivindicar esta recompensa.",
-      "btn_txt": "Reivindicar Recompensa!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51454",
-          "quantity": 1
-        },
-        {
-          "code": "51451",
-          "quantity": 1
-        },
-        {
-          "code": "51531",
-          "quantity": 1
-        },
-        {
-          "code": "51410",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 1,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbw94DnB4ZP0L2Q-Is5D0zhT-iMikJ1y5V-g&s",
-      "name": "Promoção de Nivelamento - Armas",
-      "description": "Facilite seu progresso com esta promoção incrível! Obtenha armas relíquia e suba de nível com mais facilidade.",
-      "btn_txt": "Obter",
-      "send_item": true,
-      "items": [
-        {
-          "code": "42944",
-          "quantity": 1
-        },
-        {
-          "code": "42946",
-          "quantity": 1
-        },
-        {
-          "code": "42948",
-          "quantity": 1
-        },
-        {
-          "code": "42943",
-          "quantity": 1
-        },
-        {
-          "code": "42945",
-          "quantity": 1
-        },
-        {
-          "code": "48716",
-          "quantity": 1
-        },
-        {
-          "code": "48718",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 2,
-      "img": "https://chaosboost.com/wp-content/uploads/2024/05/wowclassic-power-leveling.jpg",
-      "name": "Resgate 800 Emblemas de Gelo Agora!",
-      "description": "Não perca esta oferta limitada! Obtenha 800 emblemas de gelo para fortalecer seu set PvE. Promoção exclusiva para uma conta—aproveite antes que termine!",
-      "btn_txt": "Obtener",
-      "send_item": true,
-      "items": [
-        {
-          "code": "49426",
-          "quantity": 800
-        },
-        {
-          "code": "47241",
-          "quantity": 300
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 3,
-      "img": "https://wow.zamimg.com/uploads/screenshots/normal/102318-gran-oso-de-blizzard.jpg",
-      "name": "Montaria Exclusiva por Conta!",
-      "description": "Não perca esta chance! Resgate uma montaria grátis como parte desta promoção especial.",
-      "btn_txt": "Obtener",
-      "send_item": true,
-      "items": [
-        {
-          "code": "43599",
-          "quantity": 1
-        },
-        {
-          "code": "44168",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 4,
-      "img": "https://www.wowchakra.com/wp-content/uploads/2020/04/WowChakraNovelaIlustrada.jpg",
-      "name": "Promoção de Leveling - Equipamentos",
-      "description": "Descubra a experiência Leveo! Nossa promoção foi projetada para fornecer o equipamento ideal e ajudá-lo a alcançar seus objetivos de forma eficiente e profissional.",
-      "btn_txt": "Obter",
-      "send_item": true,
-      "items": [
-        {
-          "code": "42949",
-          "quantity": 1
-        },
-        {
-          "code": "42951",
-          "quantity": 1
-        },
-        {
-          "code": "42952",
-          "quantity": 1
-        },
-        {
-          "code": "42984",
-          "quantity": 1
-        },
-        {
-          "code": "42985",
-          "quantity": 1
-        },
-        {
-          "code": "48677",
-          "quantity": 1
-        },
-        {
-          "code": "48683",
-          "quantity": 1
-        },
-        {
-          "code": "48685",
-          "quantity": 1
-        },
-        {
-          "code": "48687",
-          "quantity": 1
-        },
-        {
-          "code": "48689",
-          "quantity": 1
-        },
-        {
-          "code": "48691",
-          "quantity": 1
-        },
-        {
-          "code": "50255",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 5,
-      "img": "https://blz-contentstack-images.akamaized.net/v3/assets/bltf408a0557f4e4998/blt44b9b4635a152dfc/63c71f0ca1a308140627270d/world-of-warcraft-service-character-transfer-section1-feature3.jpg?imwidth=1920&imdensity=2.625",
-      "name": "Promoção de Leveling - Acessórios e Mais",
-      "description": "Explore nossa oferta especial! Encontre os melhores acessórios e itens para aprimorar sua experiência e fazer a diferença em cada detalhe.",
-      "btn_txt": "Obter",
-      "send_item": true,
-      "items": [
-        {
-          "code": "42985",
-          "quantity": 1
-        },
-        {
-          "code": "50255",
-          "quantity": 1
-        },
-        {
-          "code": "42991",
-          "quantity": 1
-        },
-        {
-          "code": "42992",
-          "quantity": 1
-        },
-        {
-          "code": "42947",
-          "quantity": 1
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
-      "id": 6,
-      "img": "https://cdn.altertime.es/e4f080d2-94e8-4fd0-aa16-a489d183d4bf.png",
-      "name": "Promoção Exclusiva de Bolsas",
-      "description": "Não perca a chance de conseguir essas bolsas exclusivas e melhore seu inventário!",
-      "btn_txt": "Obter Agora",
-      "send_item": true,
-      "items": [
-        {
-          "code": "41600",
-          "quantity": 4
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    }
   ]
 }
