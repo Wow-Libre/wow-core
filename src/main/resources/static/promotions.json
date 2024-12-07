@@ -169,7 +169,7 @@
       "id": 96,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5rp2ozxs5YbQmibKBN4YiVpZLzi_fRKOgZWyTXKApwUwHpojioaX7w8gWSW_S8MKnik&usqp=CAU",
       "name": "PROMO FIN DE SEMANA - Dagas - Maza",
-      "description": "¡Por levelear y disfrutar el contenido y estas en el rango  level 70 y 79 puedes reclamar este beneficio",
+      "description": "EVENTO FIN DE SEMANA",
       "btn_txt": "¡Obtener Beneficio!",
       "send_item": true,
       "items": [
@@ -223,8 +223,8 @@
         }
       ],
       "server_id": 1,
-      "min_lvl": 15,
-      "max_lvl": 79,
+      "min_lvl": 1,
+      "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
     },
@@ -262,8 +262,8 @@
     {
       "id": 94,
       "img": "https://chaosboost.com/wp-content/uploads/2024/05/wowclassic-power-leveling.jpg",
-      "name": "¡Reclama 800 Emblemas de Escarcha Ahora!",
-      "description": "¡No dejes pasar esta oferta única! Consigue 800 emblemas de escarcha para potenciar tu set PvE. Promoción exclusiva para una cuenta, ¡aprovecha antes de que se acabe!",
+      "name": "¡Reclama 1200 Emblemas de Escarcha Ahora!",
+      "description": "EVENTO FIN DE SEMANA",
       "btn_txt": "Obtener",
       "send_item": true,
       "items": [
