@@ -1366,8 +1366,8 @@
     },
     {
       "id": 1024,
-      "img": "https://wow.zamimg.com/uploads/screenshots/normal/122614-faja-de-aparecido.jpg",
-      "name": "EMBLEMAS",
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTf0r67QEORW0jvix5DfRdFXiKMrXGcU2Ih7A&s",
+      "name": "Emblemas para SET PVE",
       "description": "Emblemas",
       "btn_txt": "¡Obtener Beneficio!",
       "send_item": true,
@@ -1379,6 +1379,409 @@
         {
           "code": "47241",
           "quantity": 1200
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 1025,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
+      "name": "Bolsas",
+      "description": "Bolsas",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51809",
+          "quantity": 4
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 1026,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
+      "name": "Bolsas",
+      "description": "Bolsas",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "51809",
+          "quantity": 4
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 1027,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
+      "name": "Colgantes",
+      "description": "Colgantes Full ",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "54581",
+          "quantity": 1
+        },
+        {
+          "code": "50724",
+          "quantity": 1
+        },
+        {
+          "code": "50647",
+          "quantity": 1
+        },
+        {
+          "code": "50658",
+          "quantity": 1
+        },
+        {
+          "code": "50633",
+          "quantity": 1
+        },
+        {
+          "code": "50728",
+          "quantity": 1
+        },
+        {
+          "code": "50682",
+          "quantity": 1
+        },
+        {
+          "code": "50609",
+          "quantity": 1
+        },
+        {
+          "code": "50627",
+          "quantity": 1
+        },
+        {
+          "code": "50700",
+          "quantity": 1
+        },
+        {
+          "code": "53132",
+          "quantity": 1
+        },
+        {
+          "code": "54557",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 1028,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
+      "name": "Colgantes",
+      "description": "Colgantes Full ",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "50182",
+          "quantity": 1
+        },
+        {
+          "code": "50452",
+          "quantity": 1
+        },
+        {
+          "code": "51355",
+          "quantity": 1
+        },
+        {
+          "code": "51867",
+          "quantity": 1
+        },
+        {
+          "code": "51842",
+          "quantity": 1
+        },
+        {
+          "code": "50023",
+          "quantity": 1
+        },
+        {
+          "code": "51333",
+          "quantity": 1
+        },
+        {
+          "code": "51335",
+          "quantity": 1
+        },
+        {
+          "code": "50421",
+          "quantity": 1
+        },
+        {
+          "code": "49975",
+          "quantity": 1
+        },
+        {
+          "code": "50180",
+          "quantity": 1
+        },
+        {
+          "code": "50195",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 1029,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
+      "name": "Colgantes",
+      "description": "Colgantes Full ",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "54581",
+          "quantity": 1
+        },
+        {
+          "code": "50061",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 1030,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
+      "name": "muñecas - Tela",
+      "description": "muñecas Full ",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "54582",
+          "quantity": 1
+        },
+        {
+          "code": "50651",
+          "quantity": 1
+        },
+        {
+          "code": "50686",
+          "quantity": 1
+        },
+        {
+          "code": "53486",
+          "quantity": 1
+        },
+        {
+          "code": "49994",
+          "quantity": 1
+        },
+        {
+          "code": "51339",
+          "quantity": 1
+        },
+        {
+          "code": "50032",
+          "quantity": 1
+        },
+        {
+          "code": "51872",
+          "quantity": 1
+        },
+        {
+          "code": "51918",
+          "quantity": 1
+        },
+        {
+          "code": "47208",
+          "quantity": 1
+        },
+        {
+          "code": "47467",
+          "quantity": 1
+        },
+        {
+          "code": "47485",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 1031,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
+      "name": "muñecas - Cuero",
+      "description": "muñecas Full ",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "54580",
+          "quantity": 1
+        },
+        {
+          "code": "54584",
+          "quantity": 1
+        },
+        {
+          "code": "50785",
+          "quantity": 1
+        },
+        {
+          "code": "50670",
+          "quantity": 1
+        },
+        {
+          "code": "50333",
+          "quantity": 1
+        },
+        {
+          "code": "50417",
+          "quantity": 1
+        },
+        {
+          "code": "53126",
+          "quantity": 1
+        },
+        {
+          "code": "51370",
+          "quantity": 1
+        },
+        {
+          "code": "51820",
+          "quantity": 1
+        },
+        {
+          "code": "50630",
+          "quantity": 1
+        },
+        {
+          "code": "53134",
+          "quantity": 1
+        },
+        {
+          "code": "51885",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 1032,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
+      "name": "muñecas - malla",
+      "description": "muñecas Full ",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "50655",
+          "quantity": 1
+        },
+        {
+          "code": "51914",
+          "quantity": 1
+        },
+        {
+          "code": "50687",
+          "quantity": 1
+        },
+        {
+          "code": "51929",
+          "quantity": 1
+        },
+        {
+          "code": "50030",
+          "quantity": 1
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
+    },
+    {
+      "id": 1033,
+      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
+      "name": "muñecas - Placa",
+      "description": "muñecas Full ",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "50659",
+          "quantity": 1
+        },
+        {
+          "code": "50611",
+          "quantity": 1
+        },
+        {
+          "code": "50721",
+          "quantity": 1
+        },
+        {
+          "code": "54559",
+          "quantity": 1
+        },
+        {
+          "code": "50175",
+          "quantity": 1
+        },
+        {
+          "code": "51901",
+          "quantity": 1
+        },
+        {
+          "code": "49960",
+          "quantity": 1
+        },
+        {
+          "code": "50002",
+          "quantity": 1
+        },
+        {
+          "code": "51832",
+          "quantity": 1
+        },
+        {
+          "code": "51907",
+          "quantity": 1
         }
       ],
       "server_id": 1,
