@@ -54,12 +54,11 @@ jobs:
         run: |
           docker buildx build \
             --platform linux/arm64 \
-            --cache-from=type=registry,ref=$ECR_REGISTRY/$ECR_REPOSITORY:cache \
-            --cache-to=type=registry,ref=$ECR_REGISTRY/$ECR_REPOSITORY:cache,mode=max \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
             --progress=plain \
             --push .
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+      
 
       # 8. Verify the Docker image
       - name: Verify Java version in Docker image
