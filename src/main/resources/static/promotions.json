@@ -1363,6 +1363,29 @@
       "max_lvl": 80,
       "type": "ITEM",
       "amount": 0
+    },
+    {
+      "id": 1024,
+      "img": "https://wow.zamimg.com/uploads/screenshots/normal/122614-faja-de-aparecido.jpg",
+      "name": "EMBLEMAS",
+      "description": "Emblemas",
+      "btn_txt": "¡Obtener Beneficio!",
+      "send_item": true,
+      "items": [
+        {
+          "code": "49426",
+          "quantity": 1200
+        },
+        {
+          "code": "47241",
+          "quantity": 1200
+        }
+      ],
+      "server_id": 1,
+      "min_lvl": 1,
+      "max_lvl": 80,
+      "type": "ITEM",
+      "amount": 0
     }
   ],
   "en": [
