@@ -42,31 +42,20 @@ jobs:
         with:
           mask-password: true
 
-      # 6. Cache Docker layers to avoid redundant builds
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-docker-
-
-      # 7. Setup Docker Buildx
+      # 6. Setup Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # 8. Build, tag, and push Docker image to Amazon ECR
+      # 7. Build, tag, and push Docker image to Amazon ECR
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY_NAME }}
-          IMAGE_TAG: latest
+          IMAGE_TAG: wow-core
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm64 \
-            --cache-from=type=local,src=/tmp/.buildx-cache \
-            --cache-to=type=local,dest=/tmp/.buildx-cache \
+            --platform linux/arm64 \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
             --progress=plain \
             --push .
