@@ -25,7 +25,7 @@ jobs:
 
       # 3. Build the project with Maven
       - name: Build with Maven
-        run: mvn clean package -DskipTests
+        run: mvn clean package -DskipTests -X
 
       # 4. Configure AWS credentials for deployment
       - name: Configure AWS credentials
@@ -39,15 +39,10 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-        with:
-          mask-password: true
 
-      # 6. Set up Docker Buildx with persistent storage
-      - name: Set up Docker Buildx with persistent storage
+      # 6. Setup Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-        with:
-          driver: docker-container
-          driver-opts: image=moby/buildkit:latest,network=host
 
       # 7. Build, tag, and push Docker image to Amazon ECR
       - name: Build, tag, and push image to Amazon ECR
@@ -55,7 +50,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY_NAME }}
-          IMAGE_TAG: wow-core
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           docker buildx build \
             --platform linux/arm64 \
@@ -65,3 +60,9 @@ jobs:
             --progress=plain \
             --push .
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      # 8. Verify the Docker image
+      - name: Verify Java version in Docker image
+        run: |
+          docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker run --rm $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG java -version
