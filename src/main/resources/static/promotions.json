@@ -1407,25 +1407,6 @@
       "amount": 0
     },
     {
-      "id": 1026,
-      "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
-      "name": "Bolsas",
-      "description": "Bolsas",
-      "btn_txt": "¡Obtener Beneficio!",
-      "send_item": true,
-      "items": [
-        {
-          "code": "51809",
-          "quantity": 4
-        }
-      ],
-      "server_id": 1,
-      "min_lvl": 1,
-      "max_lvl": 80,
-      "type": "ITEM",
-      "amount": 0
-    },
-    {
       "id": 1027,
       "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb-Y9EBLF2uBD5gUMx0eMyQq_sQUviNJN4Bg&s",
       "name": "Colgantes",
