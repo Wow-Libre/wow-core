@@ -22,10 +22,10 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
           cache: maven
-
-      # 3. Build the project with Maven
-      - name: Build with Maven
-        run: mvn clean package -DskipTests
+          run: | 
+            mvn clean install
+            mkdir artifacts && cp target/*jar artifacts
+            cd artifacts && ls
 
       # 4. Configure AWS credentials for deployment
       - name: Configure AWS credentials
@@ -41,19 +41,6 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
         with:
           mask-password: true
-
-      # 6. Cache Docker layers to avoid redundant builds
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-docker-
-
-      # 7. Setup Docker Buildx
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
 
       # 8. Build, tag, and push Docker image to Amazon ECR
       - name: Build, tag, and push image to Amazon ECR
