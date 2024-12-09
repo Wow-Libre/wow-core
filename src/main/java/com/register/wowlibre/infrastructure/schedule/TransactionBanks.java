@@ -34,13 +34,14 @@ public class TransactionBanks {
         this.i18nService = i18nService;
     }
 
-    @Scheduled(cron = "0 10 * * * *")
+    @Scheduled(cron = "1/50 * * * * *")
     public void sendCreditLoans() {
-        LOGGER.info("[TransactionBanks] [SendCreditLoans] Sending credit applications");
         String transactionId = "[TransactionBanks] [SendCreditLoans]";
         List<CreditLoansEntity> credits = obtainCreditLoans.creditPendingSend(transactionId);
 
         credits.forEach(credit -> {
+            LOGGER.info("[TransactionBanks] [SendCreditLoans] Sending credit applications");
+
             Optional<ServerEntity> server = serverPort.findById(credit.getServerId(), transactionId);
             if (server.isPresent()) {
 

@@ -6,7 +6,7 @@ import lombok.*;
 
 @Data
 public class UpdateGuildDto {
-    @NotNull
+
     private String discord;
     @JsonProperty("is_public")
     private boolean isPublic;

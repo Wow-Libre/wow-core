@@ -920,7 +920,7 @@ public class IntegratorClient {
                             "associated guilds. " +
                             "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
-            throw new InternalException("Transaction failed due to client or server error", transactionId);
+            throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [sendPromo] Unexpected Error: {}. An unexpected error " +
                             "occurred " +
@@ -976,6 +976,48 @@ public class IntegratorClient {
         }
 
         throw new InternalException("Unexpected transaction failure", transactionId);
+    }
+
+
+    public GenericResponse<ClaimMachineResponse> claimMachine(String host, String jwt, ClaimMachineRequest request,
+                                                              String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+
+        HttpEntity<ClaimMachineRequest> entity = new HttpEntity<>(request, headers);
+
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/claim-machine", host))
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<ClaimMachineResponse>> response = restTemplate.exchange(url, HttpMethod.POST,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody());
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [claimMachine]  Client/Server Error: {}. It was not possible to claim " +
+                            "the shipment of the prize to the client because he won at the slot machine " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            return new GenericResponseBuilder<>(new ClaimMachineResponse(false), transactionId).build();
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [claimMachine] Unexpected Error: {}. An unexpected error " +
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            return new GenericResponseBuilder<>(new ClaimMachineResponse(false), transactionId).build();
+        }
+
+        return new GenericResponseBuilder<>(new ClaimMachineResponse(false), transactionId).build();
     }
 
 }

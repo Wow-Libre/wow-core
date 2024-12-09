@@ -7,24 +7,31 @@ import org.hibernate.validator.constraints.*;
 @Data
 public class ServerCreateDto {
     @NotNull
-    @Length(min = 5, max = 30)
+    @Length(min = 5, max = 40)
     private String name;
     @NotNull
-    @Length(min = 5, max = 30)
+    @Length(min = 5, max = 40)
     private String emulator;
     @NotNull
-    @Length(min = 1, max = 4)
+    @Length(min = 1, max = 5)
     private String expansion;
     @NotNull
-    @Length(min = 1, max = 30)
+    @Length(min = 5, max = 50)
     private String webSite;
     @NotNull
     @Length(min = 2, max = 50)
     private String ip;
     @NotNull
-    @Length(min = 2, max = 20)
+    @Length(min = 2, max = 30)
     private String password;
     @NotNull
     @Length(min = 5, max = 80)
     private String realmlist;
+    @NotNull
+    @Length(min = 5, max = 80)
+    private String externalUsername;
+    @NotNull
+    @Length(min = 5, max = 80)
+    private String externalPassword;
+
 }

@@ -19,18 +19,21 @@ public class UserPromotionService implements UserPromotionPort {
     }
 
     @Override
-    public void save(Long userId, Long accountId, Long promotionId, String transactionId) {
+    public void save(Long userId, Long accountId, Long promotionId, Long characterId, String transactionId) {
         UserPromotionEntity userPromotionEntity = new UserPromotionEntity();
         userPromotionEntity.setUserId(userId);
         userPromotionEntity.setCreatedAt(new Date());
         userPromotionEntity.setPromotionId(promotionId);
+        userPromotionEntity.setCharacterId(characterId);
         userPromotionEntity.setAccountId(accountId);
+
         saveUserPromotion.save(userPromotionEntity, transactionId);
     }
 
     @Override
     public Optional<UserPromotionEntity> findByUserIdAndAccountId(Long userId, Long accountId, Long promotionId,
+                                                                  Long characterId,
                                                                   String transactionId) {
-        return obtainUserPromotion.findByUserIdAndAccountId(userId, accountId, promotionId, transactionId);
+        return obtainUserPromotion.findByUserIdAndAccountId(userId, accountId, promotionId, characterId, transactionId);
     }
 }

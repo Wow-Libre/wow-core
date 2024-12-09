@@ -9,25 +9,32 @@ import com.register.wowlibre.domain.port.in.server.*;
 import com.register.wowlibre.domain.port.out.server.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 
+import javax.crypto.*;
 import java.time.*;
 import java.util.*;
 
 @Repository
 public class ServerService implements ServerPort {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerService.class);
+
     private static final String AVATAR_SERVER_DEFAULT = "https://upload.wikimedia" +
             ".org/wikipedia/commons/thumb/e/eb/WoW_icon.svg/2048px-WoW_icon.svg.png";
     private final ObtainServerPort obtainServerPort;
     private final SaveServerPort saveServerPort;
     private final RandomString randomString;
+    private final PasswordEncoder passwordEncoder;
 
     public ServerService(ObtainServerPort obtainServerPort, SaveServerPort saveServerPort,
-                         @Qualifier("random-string") RandomString randomString) {
+                         @Qualifier("random-string") RandomString randomString, PasswordEncoder passwordEncoder) {
         this.obtainServerPort = obtainServerPort;
         this.saveServerPort = saveServerPort;
         this.randomString = randomString;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -46,32 +53,48 @@ public class ServerService implements ServerPort {
     @Override
     public void create(ServerCreateDto serverCreateDto, String transactionId) {
 
-
         if (obtainServerPort.findByNameAndExpansion(serverCreateDto.getName(), serverCreateDto.getExpansion(),
                 transactionId).isPresent()) {
             throw new InternalException("It is not possible to create or configure a server with because one already " +
                     "exists with the same name and with the same version characteristics.", transactionId);
         }
+        try {
+            final String apiKey = randomString.nextString();
+            final String apiSecret = randomString.nextString();
 
-        final String apiKey = randomString.nextString();
-        final String apiSecret = randomString.nextString();
+            byte[] salt = KeyDerivationUtil.generateSalt();
+            final String externalPass = serverCreateDto.getExternalPassword();
 
-        ServerModel serverDto = ServerModel.builder()
-                .name(serverCreateDto.getName())
-                .emulator(serverCreateDto.getEmulator())
-                .expansion(serverCreateDto.getExpansion())
-                .avatar(AVATAR_SERVER_DEFAULT)
-                .ip(serverCreateDto.getIp())
-                .apiKey(apiKey)
-                .apiSecret(apiSecret)
-                .password(serverCreateDto.getPassword())
-                .creationDate(LocalDateTime.now())
-                .status(false)
-                .realmlist(serverCreateDto.getRealmlist())
-                .webSite(serverCreateDto.getWebSite())
-                .build();
+            final String password = passwordEncoder.encode(serverCreateDto.getPassword());
+            SecretKey derivedKey = KeyDerivationUtil.deriveKeyFromPassword(apiSecret, salt);
+            String encryptedMessage = EncryptionUtil.encrypt(externalPass, derivedKey);
 
-        saveServerPort.save(ServerMapper.toEntity(serverDto), transactionId);
+            ServerModel serverDto = ServerModel.builder()
+                    .name(serverCreateDto.getName())
+                    .emulator(serverCreateDto.getEmulator())
+                    .expansion(serverCreateDto.getExpansion())
+                    .avatar(AVATAR_SERVER_DEFAULT)
+                    .ip(serverCreateDto.getIp())
+                    .apiKey(apiKey)
+                    .apiSecret(apiSecret)
+                    .salt(salt)
+                    .password(password)
+                    .creationDate(LocalDateTime.now())
+                    .status(false)
+                    .realmlist(serverCreateDto.getRealmlist())
+                    .webSite(serverCreateDto.getWebSite())
+                    .externalPassword(encryptedMessage)
+                    .externalUsername(serverCreateDto.getExternalUsername())
+                    .build();
+
+            saveServerPort.save(ServerMapper.toEntity(serverDto), transactionId);
+
+        } catch (Exception e) {
+            LOGGER.error("An error occurred while encrypting data for a new server {}", transactionId);
+            throw new InternalException("It was not possible to create a server at this time, an unexpected error has" +
+                    " occurred, please contact support", transactionId);
+        }
+
     }
 
     @Override
