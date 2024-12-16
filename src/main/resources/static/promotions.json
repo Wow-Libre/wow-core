@@ -10,11 +10,11 @@
       "items": [
         {
           "code": "49426",
-          "quantity": 1200
+          "quantity": 500
         },
         {
           "code": "47241",
-          "quantity": 1200
+          "quantity": 500
         }
       ],
       "server_id": 1,
