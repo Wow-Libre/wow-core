@@ -34,7 +34,7 @@ public class TransactionBanks {
         this.i18nService = i18nService;
     }
 
-    @Scheduled(cron = "1/50 * * * * *")
+    @Scheduled(cron = "1/10 * * * * *")
     public void sendCreditLoans() {
         String transactionId = "[TransactionBanks] [SendCreditLoans]";
         List<CreditLoansEntity> credits = obtainCreditLoans.creditPendingSend(transactionId);
