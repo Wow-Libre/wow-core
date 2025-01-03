@@ -1,7 +1,10 @@
 package com.register.wowlibre.domain.dto.client;
 
 import com.fasterxml.jackson.annotation.*;
+import com.register.wowlibre.domain.model.*;
 import lombok.*;
+
+import java.util.*;
 
 @Data
 public class DashboardMetricsResponse {
@@ -17,4 +20,7 @@ public class DashboardMetricsResponse {
     private Long characterCount;
     private Long hordas;
     private Long alianzas;
+    @JsonProperty("range_level")
+    private List<LevelRangeModel> rangeLevel;
+
 }

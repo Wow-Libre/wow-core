@@ -168,6 +168,6 @@ public class DashboardService implements DashboardPort {
 
         return new DashboardMetricsDto(dashboard.getTotalUsers(), dashboard.getOnlineUsers(),
                 dashboard.getTotalGuilds(), dashboard.getExternalRegistrations(), dashboard.getCharacterCount(),
-                dashboard.getHordas(), dashboard.getAlianzas(), redeemedPromotion);
+                dashboard.getHordas(), dashboard.getAlianzas(), redeemedPromotion, dashboard.getRangeLevel());
     }
 }
