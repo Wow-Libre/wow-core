@@ -67,6 +67,11 @@ public class ServerService implements ServerPort {
                     "exists with the same name and with the same version characteristics.", transactionId);
         }
 
+        if (obtainServerPort.findByUser(userId, transactionId).size() >= 2) {
+            throw new InternalException("Currently it is not possible to link more than two servers", transactionId);
+        }
+
+
         try {
             final String apiKey = randomString.nextString();
             final String apiSecret = randomString.nextString();
@@ -90,6 +95,7 @@ public class ServerService implements ServerPort {
                     .salt(salt)
                     .password(password)
                     .creationDate(LocalDateTime.now())
+                    .retry(0)
                     .status(false)
                     .realmlist(serverCreateDto.getRealmlist())
                     .webSite(serverCreateDto.getWebSite())

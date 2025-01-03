@@ -15,4 +15,6 @@ public class DashboardMetricsResponse {
     private Long externalRegistrations;
     @JsonProperty("character_count")
     private Long characterCount;
+    private Long hordas;
+    private Long alianzas;
 }

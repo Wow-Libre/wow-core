@@ -28,4 +28,5 @@ public class ServerModel {
     public String externalPassword;
     public String externalUsername;
     public Long userId;
+    public Integer retry;
 }

@@ -1,7 +1,6 @@
 package com.register.wowlibre.domain.port.in.dashboard;
 
 import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.domain.dto.client.*;
 
 import java.util.*;
 
@@ -18,5 +17,5 @@ public interface DashboardPort {
     AccountsGameDto accountsServer(Long userId, Long serverId, String filter, int size, int page,
                                    String transactionId);
 
-    DashboardMetricsResponse metrics(Long userId, Long serverId, String transactionId);
+    DashboardMetricsDto metrics(Long userId, Long serverId, String transactionId);
 }

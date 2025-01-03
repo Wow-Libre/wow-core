@@ -9,4 +9,7 @@ public interface UserPromotionRepository extends CrudRepository<UserPromotionEnt
     Optional<UserPromotionEntity> findByUserIdAndAccountIdAndPromotionIdAndCharacterId(Long userId, Long accountId,
                                                                                        Long promotionId,
                                                                                        Long characterId);
+
+    Long countByServerId(Long serverId);
+
 }

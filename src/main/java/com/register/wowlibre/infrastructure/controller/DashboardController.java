@@ -1,7 +1,6 @@
 package com.register.wowlibre.infrastructure.controller;
 
 import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.port.in.dashboard.*;
 import com.register.wowlibre.domain.shared.*;
 import org.springframework.http.*;
@@ -88,12 +87,12 @@ public class DashboardController {
     }
 
     @GetMapping
-    public ResponseEntity<GenericResponse<DashboardMetricsResponse>> dashboard(
+    public ResponseEntity<GenericResponse<DashboardMetricsDto>> dashboard(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_USER_ID) final Long userId,
             @RequestParam(name = PARAM_SERVER_ID) final Long serverId) {
 
-        DashboardMetricsResponse metrics =
+        DashboardMetricsDto metrics =
                 dashboardPort.metrics(userId, serverId, transactionId);
 
         return ResponseEntity

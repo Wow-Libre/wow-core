@@ -58,7 +58,7 @@ public class ServerMapper {
         serverEntity.setExternalUsername(server.externalUsername);
         serverEntity.setSalt(server.salt);
         serverEntity.setUserId(server.userId);
-        serverEntity.setRetry(0);
+        serverEntity.setRetry(server.retry);
         return serverEntity;
     }
 
