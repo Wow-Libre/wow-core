@@ -32,7 +32,9 @@ public class DashboardService implements DashboardPort {
      * Integrator Port
      **/
     private final IntegratorPort integratorPort;
-
+    /**
+     * UserPromotion Port
+     **/
     private final UserPromotionPort userPromotionPort;
 
     public DashboardService(ObtainCreditLoans obtainCreditLoans, ServerPort serverPort,
@@ -169,5 +171,22 @@ public class DashboardService implements DashboardPort {
         return new DashboardMetricsDto(dashboard.getTotalUsers(), dashboard.getOnlineUsers(),
                 dashboard.getTotalGuilds(), dashboard.getExternalRegistrations(), dashboard.getCharacterCount(),
                 dashboard.getHordas(), dashboard.getAlianzas(), redeemedPromotion, dashboard.getRangeLevel());
+    }
+
+    @Override
+    public void updateMail(Long userId, Long serverId, String username, String newMail, String transactionId) {
+
+        Optional<ServerEntity> server = serverPort.findByIdAndUserId(serverId, userId, transactionId);
+
+        if (server.isEmpty() || !server.get().isStatus()) {
+            throw new InternalException("The server is not found or is not available please contact support.",
+                    transactionId);
+        }
+
+
+        integratorPort.updateMailAccount(
+                server.get().getIp(), server.get().getJwt(),
+                new AccountUpdateMailRequest(newMail, username),
+                transactionId);
     }
 }

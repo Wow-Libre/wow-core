@@ -18,4 +18,6 @@ public interface DashboardPort {
                                    String transactionId);
 
     DashboardMetricsDto metrics(Long userId, Long serverId, String transactionId);
+
+    void updateMail(Long userId, Long serverId, String username, String newMail, String transactionId);
 }

@@ -3,6 +3,7 @@ package com.register.wowlibre.infrastructure.controller;
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.port.in.dashboard.*;
 import com.register.wowlibre.domain.shared.*;
+import jakarta.validation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -86,6 +87,23 @@ public class DashboardController {
                 .body(new GenericResponseBuilder<>(accounts, transactionId).ok().build());
     }
 
+    @PutMapping("/account")
+    public ResponseEntity<GenericResponse<AccountsGameDto>> accountUpdate(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam(name = PARAM_SERVER_ID) final Long serverId,
+            @RequestParam final int size,
+            @RequestParam final int page,
+            @RequestParam final String filter) {
+
+        AccountsGameDto accounts =
+                dashboardPort.accountsServer(userId, serverId, filter, size, page, transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(accounts, transactionId).ok().build());
+    }
+
     @GetMapping
     public ResponseEntity<GenericResponse<DashboardMetricsDto>> dashboard(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
@@ -99,4 +117,20 @@ public class DashboardController {
                 .status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(metrics, transactionId).ok().build());
     }
+
+    @PutMapping("/account/email")
+    public ResponseEntity<GenericResponse<Void>> updateMailAccount(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam(name = PARAM_SERVER_ID) final Long serverId,
+            @RequestBody @Valid AccountUpdateMailDto request) {
+
+        dashboardPort.updateMail(userId, serverId, request.getUsername(),
+                request.getMail(), transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
+
 }
