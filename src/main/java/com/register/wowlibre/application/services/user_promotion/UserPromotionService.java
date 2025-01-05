@@ -19,21 +19,30 @@ public class UserPromotionService implements UserPromotionPort {
     }
 
     @Override
-    public void save(Long userId, Long accountId, Long promotionId, Long characterId, String transactionId) {
+    public void save(Long userId, Long accountId, Long promotionId, Long characterId, Long serverId,
+                     String transactionId) {
         UserPromotionEntity userPromotionEntity = new UserPromotionEntity();
         userPromotionEntity.setUserId(userId);
         userPromotionEntity.setCreatedAt(new Date());
         userPromotionEntity.setPromotionId(promotionId);
         userPromotionEntity.setCharacterId(characterId);
         userPromotionEntity.setAccountId(accountId);
-
+        userPromotionEntity.setServerId(serverId);
         saveUserPromotion.save(userPromotionEntity, transactionId);
     }
 
     @Override
-    public Optional<UserPromotionEntity> findByUserIdAndAccountIdAndPromotionIdAndCharacterId(Long userId, Long accountId, Long promotionId,
-                                                                  Long characterId,
-                                                                  String transactionId) {
-        return obtainUserPromotion.findByUserIdAndAccountIdAndPromotionIdAndCharacterId(userId, accountId, promotionId, characterId, transactionId);
+    public Optional<UserPromotionEntity> findByUserIdAndAccountIdAndPromotionIdAndCharacterId(Long userId,
+                                                                                              Long accountId,
+                                                                                              Long promotionId,
+                                                                                              Long characterId,
+                                                                                              String transactionId) {
+        return obtainUserPromotion.findByUserIdAndAccountIdAndPromotionIdAndCharacterId(userId, accountId,
+                promotionId, characterId, transactionId);
+    }
+
+    @Override
+    public Long countRedeemedPromotion(Long serverId, String transactionId) {
+        return obtainUserPromotion.countRedeemedPromotion(serverId,transactionId);
     }
 }

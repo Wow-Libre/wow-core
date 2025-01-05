@@ -5,7 +5,10 @@ import com.register.wowlibre.infrastructure.entities.*;
 import java.util.*;
 
 public interface ObtainUserPromotion {
-    Optional<UserPromotionEntity> findByUserIdAndAccountIdAndPromotionIdAndCharacterId(Long userId, Long accountId, Long promotionId,
-                                                           Long characterId,
-                                                           String transactionId);
+    Optional<UserPromotionEntity> findByUserIdAndAccountIdAndPromotionIdAndCharacterId(Long userId, Long accountId,
+                                                                                       Long promotionId,
+                                                                                       Long characterId,
+                                                                                       String transactionId);
+
+    Long countRedeemedPromotion(Long serverId, String transactionId);
 }

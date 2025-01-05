@@ -39,7 +39,7 @@ public class AuthScheduleClients {
                 Date expirationDate = server.getExpirationDate();
 
                 if (expirationDate == null || isExpirationDateExpired(expirationDate)) {
-                    Date adjustedExpirationDate = expirationDate != null ? adjustExpirationDate(expirationDate) :
+                    Date adjustedExpirationDate = expirationDate != null ? expirationDate :
                             new Date();
 
                     if (adjustedExpirationDate.before(new Date())) {
@@ -95,9 +95,8 @@ public class AuthScheduleClients {
                         server.getIp(), server.getExternalUsername(), decryptPassword, transactionId
                 );
 
-
                 server.setJwt(authToken.getJwt());
-                server.setExpirationDate(authToken.getExpirationDate());
+                server.setExpirationDate(adjustExpirationDate(authToken.getExpirationDate()));
                 server.setRefreshToken(authToken.getRefreshToken());
                 server.setStatus(true);
                 server.setRetry(0);
@@ -118,7 +117,7 @@ public class AuthScheduleClients {
     private Date adjustExpirationDate(Date expirationDate) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(expirationDate);
-        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        calendar.add(Calendar.DAY_OF_MONTH, -2);
         return calendar.getTime();
     }
 

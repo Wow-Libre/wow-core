@@ -9,6 +9,7 @@ import com.register.wowlibre.domain.port.in.dashboard.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.server.*;
 import com.register.wowlibre.domain.port.in.server_services.*;
+import com.register.wowlibre.domain.port.in.user_promotion.*;
 import com.register.wowlibre.domain.port.out.credit_loans.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import org.springframework.stereotype.*;
@@ -31,14 +32,19 @@ public class DashboardService implements DashboardPort {
      * Integrator Port
      **/
     private final IntegratorPort integratorPort;
-
+    /**
+     * UserPromotion Port
+     **/
+    private final UserPromotionPort userPromotionPort;
 
     public DashboardService(ObtainCreditLoans obtainCreditLoans, ServerPort serverPort,
-                            ServerServicesPort serverServicesPort, IntegratorPort integratorPort) {
+                            ServerServicesPort serverServicesPort, IntegratorPort integratorPort,
+                            UserPromotionPort userPromotionPort) {
         this.obtainCreditLoans = obtainCreditLoans;
         this.serverPort = serverPort;
         this.serverServicesPort = serverServicesPort;
         this.integratorPort = integratorPort;
+        this.userPromotionPort = userPromotionPort;
     }
 
     @Override
@@ -148,7 +154,7 @@ public class DashboardService implements DashboardPort {
     }
 
     @Override
-    public DashboardMetricsResponse metrics(Long userId, Long serverId, String transactionId) {
+    public DashboardMetricsDto metrics(Long userId, Long serverId, String transactionId) {
 
         Optional<ServerEntity> server = serverPort.findByIdAndUserId(serverId, userId, transactionId);
 
@@ -157,6 +163,30 @@ public class DashboardService implements DashboardPort {
                     transactionId);
         }
 
-        return integratorPort.dashboard(server.get().getIp(), server.get().getJwt(), transactionId);
+        DashboardMetricsResponse dashboard = integratorPort.dashboard(server.get().getIp(),
+                server.get().getJwt(), transactionId);
+
+        Long redeemedPromotion = userPromotionPort.countRedeemedPromotion(serverId, transactionId);
+
+        return new DashboardMetricsDto(dashboard.getTotalUsers(), dashboard.getOnlineUsers(),
+                dashboard.getTotalGuilds(), dashboard.getExternalRegistrations(), dashboard.getCharacterCount(),
+                dashboard.getHordas(), dashboard.getAlianzas(), redeemedPromotion, dashboard.getRangeLevel());
+    }
+
+    @Override
+    public void updateMail(Long userId, Long serverId, String username, String newMail, String transactionId) {
+
+        Optional<ServerEntity> server = serverPort.findByIdAndUserId(serverId, userId, transactionId);
+
+        if (server.isEmpty() || !server.get().isStatus()) {
+            throw new InternalException("The server is not found or is not available please contact support.",
+                    transactionId);
+        }
+
+
+        integratorPort.updateMailAccount(
+                server.get().getIp(), server.get().getJwt(),
+                new AccountUpdateMailRequest(newMail, username),
+                transactionId);
     }
 }

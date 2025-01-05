@@ -222,3 +222,7 @@ CREATE TABLE accounts.promotion_item
 
 ALTER TABLE accounts.server
     ADD retry integer;
+
+
+ALTER TABLE accounts.user_promotion
+    ADD server_id bigint;

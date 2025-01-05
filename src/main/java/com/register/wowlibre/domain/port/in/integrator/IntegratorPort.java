@@ -82,4 +82,6 @@ public interface IntegratorPort {
                                     String transactionId);
 
     DashboardMetricsResponse dashboard(String host, String jwt, String transactionId);
+
+    void updateMailAccount(String host, String jwt, AccountUpdateMailRequest request, String transactionId);
 }

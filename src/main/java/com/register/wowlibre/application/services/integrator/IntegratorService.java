@@ -334,4 +334,9 @@ public class IntegratorService implements IntegratorPort {
         return integratorClient.metricsDashboard(host, jwt, transactionId).getData();
     }
 
+    @Override
+    public void updateMailAccount(String host, String jwt, AccountUpdateMailRequest request, String transactionId) {
+        integratorClient.updateMail(host, jwt, request, transactionId);
+    }
+
 }
