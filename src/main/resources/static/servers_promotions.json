@@ -11,12 +11,12 @@
     },
     {
       "id": 2,
-      "name": "Progresive",
-      "sub_title": "Adquiere tu espacio publicitario gratuitamente",
-      "description": "Conéctate a nuestra plataforma",
+      "name": "Progresivo",
+      "sub_title": "Reino Progresivo ",
+      "description": "¡Muy pronto! Únete a una experiencia revolucionaria donde la innovación y el crecimiento se encuentran. ¡No te lo pierdas!",
       "logo": "https://static.wixstatic.com/media/5dd8a0_faae8b906f904b88bedb03d3025bed7d~mv2.jpeg",
       "link": "",
-      "realmlist": "Tu servidor, tu aventura, tus decisiones"
+      "realmlist": "Lanzamiento oficial: 1 de febrero"
     }
   ],
   "en": [
@@ -31,12 +31,12 @@
     },
     {
       "id": 2,
-      "name": "Link Your Server",
-      "sub_title": "Get your advertising space for free",
+      "name": "Progresivo",
+      "sub_title": "Progressive Realm",
       "description": "Connect to our platform",
       "logo": "https://seeklogo.com/images/W/world-of-warcraft-logo-F6AAB54AD8-seeklogo.com.png",
       "link": "",
-      "realmlist": "Your server, your adventure, your decisions"
+      "realmlist": "Official launch: February 1st"
     }
   ],
   "pt": [
@@ -51,12 +51,12 @@
     },
     {
       "id": 2,
-      "name": "Vincule seu servidor",
-      "sub_title": "Adquira seu espaço publicitário gratuitamente",
-      "description": "Conecte-se à nossa plataforma",
+      "name": "Progresivo",
+      "sub_title": "Reino Progressivo",
+      "description": "Em breve! Participe de uma experiência revolucionária onde inovação e crescimento se encontram. Não perca!",
       "logo": "https://seeklogo.com/images/W/world-of-warcraft-logo-F6AAB54AD8-seeklogo.com.png",
       "link": "",
-      "realmlist": "Seu servidor, sua aventura, suas decisões"
+      "realmlist": "Lançamento oficial: 1º de fevereiro"
     }
   ]
 }
