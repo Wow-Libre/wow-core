@@ -52,6 +52,8 @@ public class JwtPortService implements JwtPort {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put(CONSTANT_ROL, userDetails.getAuthorities());
         extraClaims.put(HEADER_USER_ID, userDetails.getUserId());
+        extraClaims.put(HEADER_EMAIL, userDetails.getUsername());
+
         extraClaims.put(HEADER_LANGUAGE, userDetails.getLanguage());
 
         return generateToken(extraClaims, userDetails);
