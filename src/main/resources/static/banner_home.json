@@ -1,44 +1,44 @@
 {
   "es": [
     {
+      "url": "https://static.wixstatic.com/media/5dd8a0_3e5cdb74a08d403aa38c6ac9be148c14~mv2.webp",
+      "alt": "vip-account"
+    },
+    {
+      "url": "https://static.wixstatic.com/media/5dd8a0_48869dcf0dc6427c98cd394ab58520ab~mv2.webp",
+      "alt": "new-realm"
+    },
+    {
       "url": "https://static.wixstatic.com/media/5dd8a0_4a310acbe45843f781126d771ac4cb6f~mv2.webp",
       "alt": "casino-img"
-    },
-    {
-      "url": "https://static.wixstatic.com/media/5dd8a0_518fc7b71aff420db1825b85c34bf6a1~mv2.png",
-      "alt": "information-account"
-    },
-    {
-      "url": "https://static.wixstatic.com/media/5dd8a0_4465ad5d10c046d9a678cf52568e7f47~mv2.png",
-      "alt": "integrations-server"
     }
   ],
   "en": [
     {
+      "url": "https://static.wixstatic.com/media/5dd8a0_485224506cd44177a3c877a29f55f066~mv2.webp",
+      "alt": "vip-account"
+    },
+    {
+      "url": "https://static.wixstatic.com/media/5dd8a0_8d6208e1630f4ba6a08d80c54971184a~mv2.webp",
+      "alt": "new-realm"
+    },
+    {
       "url": "https://static.wixstatic.com/media/5dd8a0_0e8de15c70be4bf3836858d312ad72a8~mv2.webp",
       "alt": "casino-img"
-    },
-    {
-      "url": "https://static.wixstatic.com/media/5dd8a0_434df915dae24604afbac7e47c8f0bf4~mv2.png",
-      "alt": "information-account"
-    },
-    {
-      "url": "https://static.wixstatic.com/media/5dd8a0_c989a9a0d64d45bbb95a07008a0ab7cb~mv2.png",
-      "alt": "integrations-server"
     }
   ],
   "pt": [
     {
+      "url": "https://static.wixstatic.com/media/5dd8a0_62eb352bb90a4ecd97f245170b704dd1~mv2.webp",
+      "alt": "vip-account"
+    },
+    {
+      "url": "https://static.wixstatic.com/media/5dd8a0_2b0ff7bec32d4684b89c52f305613d02~mv2.webp",
+      "alt": "new-realm"
+    },
+    {
       "url": "https://static.wixstatic.com/media/5dd8a0_308ffb8bb262475a8f34684d80161220~mv2.webp",
       "alt": "casino-img"
-    },
-    {
-      "url": "https://static.wixstatic.com/media/5dd8a0_b963fba787fe48bba23ad108c3d560b2~mv2.png",
-      "alt": "information-account"
-    },
-    {
-      "url": "https://static.wixstatic.com/media/5dd8a0_af1b88d20a1b4685a97e487cda271ee4~mv2.png",
-      "alt": "integrations-server"
     }
   ]
 }
