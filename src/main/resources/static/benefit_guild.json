@@ -6,10 +6,10 @@
       "sub_title": "Logro de hermandad",
       "description": "Este logro se consigue si tu hermandad logra llegar a los 500 miembros.",
       "logo": "https://i.ytimg.com/vi/rF0znJAv9fs/maxresdefault.jpg",
-      "item_id": 49636,
+      "item_id": 33184,
       "quantity": 1,
       "status": true,
-      "link": "https://www.wowhead.com/wotlk/es/item=52200/riendas-del-destrero-de-la-muerte-carmes%C3%AD"
+      "link": "https://www.wowhead.com/wotlk/es/item=33184/escoba-m%C3%A1gica-presta"
     },
     {
       "id": 10000001,
@@ -28,10 +28,10 @@
       "sub_title": "Logro de hermandad",
       "description": "Al unirte a esta hermandad podras reclamar el beneficio de los 500 miembros.",
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7dyz1qBj7TA9Xb3yFm7kTPUUFixpF0LMPcA&s",
-      "item_id": 52200,
+      "item_id": 45802,
       "quantity": 1,
       "status": true,
-      "link": "https://www.wowhead.com/wotlk/es/item=52200/riendas-del-destrero-de-la-muerte-carmes%C3%AD"
+      "link": "https://www.wowhead.com/wotlk/es/item=45802/riendas-de-protodraco-herrumbroso"
     }
   ],
   "en": [
@@ -41,10 +41,10 @@
       "sub_title": "Guild Achievement",
       "description": "This achievement is earned when your guild reaches 500 members.",
       "logo": "https://i.ytimg.com/vi/rF0znJAv9fs/maxresdefault.jpg",
-      "item_id": 49636,
+      "item_id": 33184,
       "quantity": 1,
       "status": true,
-      "link": "https://www.wowhead.com/wotlk/en/item=52200/reins-of-the-crimson-deathcharger"
+      "link": "https://www.wowhead.com/wotlk/es/item=33184/escoba-m%C3%A1gica-presta"
     },
     {
       "id": 10000001,
@@ -63,10 +63,10 @@
       "sub_title": "Guild Achievement",
       "description": "By joining this guild, you can claim the benefit of the 500 members.",
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7dyz1qBj7TA9Xb3yFm7kTPUUFixpF0LMPcA&s",
-      "item_id": 52200,
+      "item_id": 45802,
       "quantity": 1,
       "status": true,
-      "link": "https://www.wowhead.com/wotlk/en/item=52200/reins-of-the-crimson-deathcharger"
+      "link": "https://www.wowhead.com/wotlk/es/item=45802/riendas-de-protodraco-herrumbroso"
     }
   ],
   "pt": [
@@ -76,10 +76,10 @@
       "sub_title": "Conquista da Guilda",
       "description": "Essa conquista é obtida quando sua guilda alcança 500 membros.",
       "logo": "https://i.ytimg.com/vi/rF0znJAv9fs/maxresdefault.jpg",
-      "item_id": 49636,
+      "item_id": 33184,
       "quantity": 1,
       "status": true,
-      "link": "https://www.wowhead.com/wotlk/pt/item=52200/reinas-do-cavalo-da-morte-carmesim"
+      "link": "https://www.wowhead.com/wotlk/es/item=33184/escoba-m%C3%A1gica-presta"
     },
     {
       "id": 10000001,
@@ -98,10 +98,10 @@
       "sub_title": "Conquista da Guilda",
       "description": "Ao se juntar a esta guilda, você pode reivindicar o benefício dos 500 membros.",
       "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7dyz1qBj7TA9Xb3yFm7kTPUUFixpF0LMPcA&s",
-      "item_id": 52200,
+      "item_id": 45802,
       "quantity": 1,
       "status": true,
-      "link": "https://www.wowhead.com/wotlk/pt/item=52200/reinas-do-cavalo-da-morte-carmesim"
+      "link": "https://www.wowhead.com/wotlk/es/item=45802/riendas-de-protodraco-herrumbroso"
     }
   ]
 }
