@@ -118,12 +118,12 @@ public class MachineService implements MachinePort {
 
         if (machine.isEmpty()) {
             MachineEntity machineModel = new MachineEntity();
-            machineModel.setCoint(100);
+            machineModel.setCoint(serverId == 1 ? 100 : 0);
             machineModel.setUserId(userId);
             machineModel.setServerId(serverId);
             saveMachine.save(machineModel, transactionId);
         }
 
-        return machine.map(machineEntity -> new MachineDetailDto(machineEntity.getCoint())).orElse(new MachineDetailDto(100));
+        return machine.map(machineEntity -> new MachineDetailDto(machineEntity.getCoint())).orElse(new MachineDetailDto(0));
     }
 }
