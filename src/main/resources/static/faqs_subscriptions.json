@@ -1,0 +1,56 @@
+{
+  "es": [
+    {
+      "question": "¿Cuál es el horario de atención?",
+      "answer": "Nuestro horario de atención es de lunes a sábado, de 9:00 AM a 6:00 PM."
+    },
+    {
+      "question": "¿Qué beneficios obtengo con una suscripción?",
+      "answer": "Al suscribirte, tendrás acceso a servicios gratuitos para todas tus cuentas vinculadas en World of Warcraft. Además, recibirás regalos mensuales que incluyen monturas y objetos exclusivos para mejorar tu experiencia de juego."
+    },
+    {
+      "question": "¿Qué debo hacer después de realizar el pago?",
+      "answer": "Dado que nuestra plataforma aún está ajustando el sistema de pagos automáticos, te pedimos que, después de realizar el pago, envíes el comprobante de la transacción para confirmar tu suscripción."
+    },
+    {
+      "question": "¿Ofrecen soporte personalizado?",
+      "answer": "Sí, ofrecemos soporte técnico y atención VIP prioritaria para nuestros suscriptores durante nuestro horario de atención."
+    }
+  ],
+  "en": [
+    {
+      "question": "What are your support hours?",
+      "answer": "Our support hours are Monday to Saturday, from 9:00 AM to 6:00 PM."
+    },
+    {
+      "question": "What benefits do I get with a subscription?",
+      "answer": "By subscribing, you will have access to free services for all your linked World of Warcraft accounts. Additionally, you will receive monthly gifts, including mounts and exclusive items to enhance your gaming experience."
+    },
+    {
+      "question": "What should I do after making a payment?",
+      "answer": "Since our platform is still adjusting the automatic payment system, we ask that after making a payment, you send the transaction receipt to confirm your subscription."
+    },
+    {
+      "question": "Do you offer personalized support?",
+      "answer": "Yes, we offer technical support and VIP priority assistance for our subscribers during our support hours."
+    }
+  ],
+  "pt": [
+    {
+      "question": "Qual é o horário de atendimento?",
+      "answer": "Nosso horário de atendimento é de segunda a sábado, das 9:00 às 18:00."
+    },
+    {
+      "question": "Quais benefícios eu obtenho com uma assinatura?",
+      "answer": "Ao assinar, você terá acesso a serviços gratuitos para todas as suas contas vinculadas no World of Warcraft. Além disso, receberá presentes mensais, incluindo montarias e itens exclusivos para melhorar sua experiência no jogo."
+    },
+    {
+      "question": "O que devo fazer depois de realizar o pagamento?",
+      "answer": "Como nossa plataforma ainda está ajustando o sistema de pagamentos automáticos, pedimos que, após realizar o pagamento, você envie o comprovante da transação para confirmar sua assinatura."
+    },
+    {
+      "question": "Vocês oferecem suporte personalizado?",
+      "answer": "Sim, oferecemos suporte técnico e atendimento VIP prioritário para nossos assinantes durante o horário de atendimento."
+    }
+  ]
+}

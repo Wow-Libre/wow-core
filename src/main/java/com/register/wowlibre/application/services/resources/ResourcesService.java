@@ -27,6 +27,11 @@ public class ResourcesService implements ResourcesPort {
     }
 
     @Override
+    public List<FaqsModel> getFaqsSubscription(String language, String transactionId) {
+        return jsonLoaderPort.getJsonFaqsSubscriptions(language, transactionId);
+    }
+
+    @Override
     public List<PlanModel> getPlansBank(String language, String transactionId) {
         return jsonLoaderPort.getJsonPlans(language, transactionId);
     }
