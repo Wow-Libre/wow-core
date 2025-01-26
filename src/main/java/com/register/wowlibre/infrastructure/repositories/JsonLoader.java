@@ -45,7 +45,7 @@ public class JsonLoader implements JsonLoaderPort {
                       @Value("classpath:/static/banner_home.json") Resource bannersHome,
                       @Value("classpath:/static/subscription_benefit.json") Resource widgetHomeSubscription,
                       @Value("classpath:/static/promotions.json") Resource promotions,
-                      @Value("classpath:/static/faqs.json") Resource faqsSubscriptionJsonFile) {
+                      @Value("classpath:/static/faqs_subscriptions.json") Resource faqsSubscriptionJsonFile) {
         this.objectMapper = objectMapper;
         this.jsonFile = jsonFile;
         this.faqsJsonFile = faqsJsonFile;
