@@ -33,10 +33,21 @@ public class ResourcesController {
     public ResponseEntity<GenericResponse<List<FaqsModel>>> faqs(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_ACCEPT_LANGUAGE, required = false) Locale locale) {
-        final List<FaqsModel> countryModelList = resourcesPort.getFaqs(locale.getLanguage(), transactionId);
+        final List<FaqsModel> faqs = resourcesPort.getFaqs(locale.getLanguage(), transactionId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(countryModelList, transactionId).ok().build());
+                .body(new GenericResponseBuilder<>(faqs, transactionId).ok().build());
+    }
+
+
+    @GetMapping("/faqs-subscriptions")
+    public ResponseEntity<GenericResponse<List<FaqsModel>>> faqsSubscriptions(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE, required = false) Locale locale) {
+        final List<FaqsModel> faqsModels = resourcesPort.getFaqsSubscription(locale.getLanguage(), transactionId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(faqsModels, transactionId).ok().build());
     }
 
     @GetMapping("/bank/plans")
@@ -92,7 +103,7 @@ public class ResourcesController {
 
         final WidgetHomeSubscriptionModel serversPromotions =
                 resourcesPort.getWidgetSubscription(locale.getLanguage(),
-                transactionId);
+                        transactionId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

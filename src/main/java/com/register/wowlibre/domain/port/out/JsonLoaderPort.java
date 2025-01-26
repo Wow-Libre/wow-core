@@ -9,6 +9,8 @@ public interface JsonLoaderPort {
 
     List<FaqsModel> getJsonFaqs(String language, String transactionId);
 
+    List<FaqsModel> getJsonFaqsSubscriptions(String language, String transactionId);
+
     List<PlanModel> getJsonPlans(String language, String transactionId);
 
     List<BenefitModel> getJsonBenefitsGuild(String language, String transactionId);
