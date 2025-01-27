@@ -1,0 +1,125 @@
+{
+  "es": [
+    {
+      "title": "Elysium - WoW",
+      "title_disclaimer": "Libre",
+      "subtitle": "Reino x100 - ¡Salta directo a la acción en nivel 80!",
+      "description": "¡Enfréntate al Rey Exánime sin barreras! Nuestro innovador sistema de auto-balanceo te permite conquistar mazmorras en solitario o en pequeños grupos. Disfruta el contenido más épico de WoW sin límites.",
+      "button_primary_text": "¡Únete Ahora!",
+      "button_secondary_text": "Copiar Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_7c9f1d9542df413b8d161ef38b82a373~mv2.jpg",
+      "realmlist": "set realmlist elysium.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "¡Vive la mejor experiencia de WoW como nunca antes!"
+    },
+    {
+      "title": "Twinks - WoW",
+      "title_disclaimer": "Libre",
+      "subtitle": "¡El reino definitivo para Twinks!",
+      "description": "Enfréntate a otros jugadores en un entorno balanceado diseñado para los verdaderos guerreros del campo de batalla. ¿Listo para demostrar tu dominio?",
+      "button_primary_text": "¡Regístrate y Domina!",
+      "button_secondary_text": "Copiar Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_21f1bf864e994a4ea6578ec0433629ca~mv2.jpg",
+      "realmlist": "set realmlist twinks.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "¡La mejor experiencia, hecha a tu medida!"
+    },
+    {
+      "title": "WoW",
+      "title_disclaimer": "Frozen",
+      "subtitle": "Progresión desde Classic hasta 3.3.5",
+      "description": "Revive la historia de World of Warcraft en un viaje progresivo que te llevará desde los inicios hasta la épica batalla final contra el Rey Exánime. ¿Tienes lo que se necesita para hacer historia?",
+      "button_primary_text": "¡Empieza tu Aventura!",
+      "button_secondary_text": "Copiar Realmlist",
+      "background_image": "https://bnetcmsus-a.akamaihd.net/cms/blog_header/sy/SY33A044Y7P31650501276320.png",
+      "realmlist": "set realmlist 89.117.148.21",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "¡Forja tu leyenda en un mundo en constante evolución!"
+    }
+  ],
+  "en": [
+    {
+      "title": "Elysium - WoW",
+      "title_disclaimer": "Free",
+      "subtitle": "Realm x100 - Jump straight into the action at level 80!",
+      "description": "Face the Lich King without barriers! Our innovative auto-balancing system allows you to conquer dungeons solo or in small groups. Enjoy the most epic WoW content without limits.",
+      "button_primary_text": "Join Now!",
+      "button_secondary_text": "Copy Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_7c9f1d9542df413b8d161ef38b82a373~mv2.jpg",
+      "realmlist": "set realmlist elysium.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "Live the best WoW experience like never before!"
+    },
+    {
+      "title": "Twinks - WoW",
+      "title_disclaimer": "Free",
+      "subtitle": "The ultimate realm for Twinks!",
+      "description": "Face other players in a balanced environment designed for true battlefield warriors. Ready to prove your mastery?",
+      "button_primary_text": "Register and Dominate!",
+      "button_secondary_text": "Copy Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_21f1bf864e994a4ea6578ec0433629ca~mv2.jpg",
+      "realmlist": "set realmlist twinks.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "The best experience, tailored for you!"
+    },
+    {
+      "title": "WoW",
+      "title_disclaimer": "Frozen",
+      "subtitle": "Progression from Classic to 3.3.5",
+      "description": "Relive the history of World of Warcraft in a progressive journey that takes you from its origins to the epic final battle against the Lich King. Do you have what it takes to make history?",
+      "button_primary_text": "Start Your Adventure!",
+      "button_secondary_text": "Copy Realmlist",
+      "background_image": "https://bnetcmsus-a.akamaihd.net/cms/blog_header/sy/SY33A044Y7P31650501276320.png",
+      "realmlist": "set realmlist 89.117.148.21",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "Forge your legend in a constantly evolving world!"
+    }
+  ],
+  "pt": [
+    {
+      "title": "Elysium - WoW",
+      "title_disclaimer": "Livre",
+      "subtitle": "Reino x100 - Pule direto para a ação no nível 80!",
+      "description": "Enfrente o Lich Rei sem barreiras! Nosso inovador sistema de auto-balanceamento permite que você conquiste masmorras sozinho ou em pequenos grupos. Desfrute do conteúdo mais épico de WoW sem limites.",
+      "button_primary_text": "Junte-se Agora!",
+      "button_secondary_text": "Copiar Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_7c9f1d9542df413b8d161ef38b82a373~mv2.jpg",
+      "realmlist": "set realmlist elysium.wowlibre.com",
+      "copy_success": false,
+      "redirect": "www.wowlibre.com/register",
+      "disclaimer": "Viva a melhor experiência de WoW como nunca antes!"
+    },
+    {
+      "title": "Twinks - WoW",
+      "title_disclaimer": "Livre",
+      "subtitle": "O reino definitivo para Twinks!",
+      "description": "Enfrente outros jogadores em um ambiente equilibrado projetado para verdadeiros guerreiros do campo de batalha. Pronto para provar sua maestria?",
+      "button_primary_text": "Registre-se e Domine!",
+      "button_secondary_text": "Copiar Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_21f1bf864e994a4ea6578ec0433629ca~mv2.jpg",
+      "realmlist": "set realmlist twinks.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "A melhor experiência, feita para você!"
+    },
+    {
+      "title": "WoW",
+      "title_disclaimer": "Frozen",
+      "subtitle": "Progressão do Classic ao 3.3.5",
+      "description": "Reviva a história do World of Warcraft em uma jornada progressiva que o levará desde o início até a épica batalha final contra o Lich Rei. Você tem o que é preciso para fazer história?",
+      "button_primary_text": "Comece Sua Aventura!",
+      "button_secondary_text": "Copiar Realmlist",
+      "background_image": "https://bnetcmsus-a.akamaihd.net/cms/blog_header/sy/SY33A044Y7P31650501276320.png",
+      "realmlist": "set realmlist 89.117.148.21",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "Forje sua lenda em um mundo em constante evolução!"
+    }
+  ]
+}

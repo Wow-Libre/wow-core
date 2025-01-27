@@ -23,4 +23,5 @@ public interface JsonLoaderPort {
 
     List<PromotionModel> getPromotions(String language, String transactionId);
 
+    List<ExperiencesHomeModel> getExperiencesHome(String language, String transactionId);
 }

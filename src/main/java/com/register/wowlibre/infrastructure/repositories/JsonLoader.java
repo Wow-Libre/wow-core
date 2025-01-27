@@ -25,6 +25,7 @@ public class JsonLoader implements JsonLoaderPort {
     private final Resource widgetHomeSubscription;
     private final Resource promotions;
     private final Resource faqsSubscriptionJsonFile;
+    private final Resource serverExperience;
 
     private List<CountryModel> jsonCountryModel;
     private Map<String, List<FaqsModel>> jsonFaqsModel;
@@ -35,6 +36,7 @@ public class JsonLoader implements JsonLoaderPort {
     private Map<String, List<WidgetHomeSubscriptionModel>> jsonWidgetSubscription;
     private Map<String, List<PromotionModel>> jsonPromotions;
     private Map<String, List<FaqsModel>> jsonFaqsSubscriptionModel;
+    private Map<String, List<ExperiencesHomeModel>> jsonServerExperienceModel;
 
     public JsonLoader(ObjectMapper objectMapper,
                       @Value("classpath:/static/countryAvailable.json") Resource jsonFile,
@@ -45,7 +47,8 @@ public class JsonLoader implements JsonLoaderPort {
                       @Value("classpath:/static/banner_home.json") Resource bannersHome,
                       @Value("classpath:/static/subscription_benefit.json") Resource widgetHomeSubscription,
                       @Value("classpath:/static/promotions.json") Resource promotions,
-                      @Value("classpath:/static/faqs_subscriptions.json") Resource faqsSubscriptionJsonFile) {
+                      @Value("classpath:/static/faqs_subscriptions.json") Resource faqsSubscriptionJsonFile,
+                      @Value("classpath:/static/server_experiences.json") Resource serverExperience) {
         this.objectMapper = objectMapper;
         this.jsonFile = jsonFile;
         this.faqsJsonFile = faqsJsonFile;
@@ -56,6 +59,8 @@ public class JsonLoader implements JsonLoaderPort {
         this.widgetHomeSubscription = widgetHomeSubscription;
         this.promotions = promotions;
         this.faqsSubscriptionJsonFile = faqsSubscriptionJsonFile;
+        this.serverExperience = serverExperience;
+
     }
 
     @PostConstruct
@@ -67,7 +72,7 @@ public class JsonLoader implements JsonLoaderPort {
             });
             jsonFaqsSubscriptionModel = objectMapper.readValue(faqsSubscriptionJsonFile.getInputStream(),
                     new TypeReference<>() {
-            });
+                    });
             jsonPlanModel = objectMapper.readValue(bankPlans.getInputStream(), new TypeReference<>() {
             });
             jsonBenefits = objectMapper.readValue(benefitsGuild.getInputStream(), new TypeReference<>() {
@@ -80,6 +85,9 @@ public class JsonLoader implements JsonLoaderPort {
                     new TypeReference<>() {
                     });
             jsonPromotions = objectMapper.readValue(promotions.getInputStream(),
+                    new TypeReference<>() {
+                    });
+            jsonServerExperienceModel = objectMapper.readValue(serverExperience.getInputStream(),
                     new TypeReference<>() {
                     });
 
@@ -133,6 +141,11 @@ public class JsonLoader implements JsonLoaderPort {
     @Override
     public List<PromotionModel> getPromotions(String language, String transactionId) {
         return Optional.of(jsonPromotions.get(language)).orElse(jsonPromotions.get("es"));
+    }
+
+    @Override
+    public List<ExperiencesHomeModel> getExperiencesHome(String language, String transactionId) {
+        return Optional.of(jsonServerExperienceModel.get(language)).orElse(jsonServerExperienceModel.get("es"));
     }
 
 

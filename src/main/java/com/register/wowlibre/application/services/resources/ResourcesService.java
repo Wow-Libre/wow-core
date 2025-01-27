@@ -61,4 +61,9 @@ public class ResourcesService implements ResourcesPort {
         return jsonLoaderPort.getPromotions(language, transactionId);
     }
 
+    @Override
+    public List<ExperiencesHomeModel> getExperiencesHome(String language, String transactionId) {
+        return jsonLoaderPort.getExperiencesHome(language, transactionId);
+    }
+
 }
