@@ -187,5 +187,33 @@
     "language": "es",
     "site": "WLEC",
     "timezone": "America/Guayaquil"
+  },
+  {
+    "value": "España",
+    "label": "España",
+    "language": "es",
+    "site": "WLESP",
+    "timezone": "Europe/Madrid"
+  },
+  {
+    "value": "Irlanda",
+    "label": "Irlanda",
+    "language": "en",
+    "site": "WLIR",
+    "timezone": "Europe/Dublin"
+  },
+  {
+    "value": "Reino Unido",
+    "label": "Reino Unido",
+    "language": "en",
+    "site": "WLUK",
+    "timezone": "Europe/London"
+  },
+  {
+    "value": "Gibraltar",
+    "label": "Gibraltar",
+    "language": "en",
+    "site": "WLGI",
+    "timezone": "Europe/Gibraltar"
   }
 ]
