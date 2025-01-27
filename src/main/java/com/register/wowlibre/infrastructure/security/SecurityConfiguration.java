@@ -47,7 +47,8 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
-                "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "https://www.wowlibre.com","clustercfg.wowlibre.tkfyma.use2.cache.amazonaws.com"));
+                "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001", "https://www.wowlibre.com"
+                , "clustercfg.wowlibre.tkfyma.use2.cache.amazonaws.com"));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
@@ -94,6 +95,7 @@ public class SecurityConfiguration {
                                         "/api/resources/bank/plans",
                                         "/api/resources/benefit",
                                         "/api/resources/benefits-guild",
+                                        "/api/resources/experiences",
                                         "/api/server",
                                         "/api/guilds",
                                         "/api/guilds/{id}",
@@ -108,7 +110,7 @@ public class SecurityConfiguration {
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**")
                                 .permitAll()
-                                .requestMatchers( "/api/server/key").hasAuthority(Rol.SERVER.getName())
+                                .requestMatchers("/api/server/key").hasAuthority(Rol.SERVER.getName())
                                 .requestMatchers("/api/transaction/purchase", "/api/transaction/subscription-benefits"
                                 ).hasAuthority(Rol.ADMIN.getName())
                                 .anyRequest().authenticated())
