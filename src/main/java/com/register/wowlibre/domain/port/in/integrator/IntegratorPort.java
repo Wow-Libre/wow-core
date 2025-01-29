@@ -84,4 +84,10 @@ public interface IntegratorPort {
     DashboardMetricsResponse dashboard(String host, String jwt, String transactionId);
 
     void updateMailAccount(String host, String jwt, AccountUpdateMailRequest request, String transactionId);
+
+    List<CharacterInventoryResponse> getCharacterInventory(String host, String jwt, Long characterId,
+                                                           Long accountId, String transactionId);
+
+    void transferInventoryItem(String host, String jwt, Long accountId,  Long characterId, Long friendId,
+                               Integer count, Long itemId, String transactionId);
 }

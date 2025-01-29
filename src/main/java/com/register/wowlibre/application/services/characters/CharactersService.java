@@ -1,6 +1,7 @@
 package com.register.wowlibre.application.services.characters;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.port.in.account_game.*;
 import com.register.wowlibre.domain.port.in.characters.*;
@@ -169,17 +170,30 @@ public class CharactersService implements CharactersPort {
     }
 
     @Override
-    public void benefitsPremium(Long userId, Long accountId, Long serverId, Long characterId, String transactionId) {
+    public List<CharacterInventoryResponse> getCharacterInventory(Long userId, Long accountId, Long serverId,
+                                                                  Long characterId, String transactionId) {
         AccountVerificationDto verifyData = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         final ServerEntity serverModel = verifyData.server();
 
-        if (!serverModel.isStatus()) {
-            throw new InternalException("The server is currently not verified", transactionId);
-        }
-
-        //integratorService.executeCommand();
+        return integratorService.getCharacterInventory(serverModel.getIp(), serverModel.getJwt(), characterId,
+                accountId,
+                transactionId);
     }
+
+    @Override
+    public void transferInventoryItem(Long userId, Long accountId, Long serverId, Long characterId, Long friendId,
+                                      Integer count, Long itemId, String transactionId) {
+
+        AccountVerificationDto verifyData = accountGamePort.verifyAccount(userId, accountId, serverId,
+                transactionId);
+
+        final ServerEntity serverModel = verifyData.server();
+
+        integratorService.transferInventoryItem(serverModel.getIp(), serverModel.getJwt(), accountId, characterId,
+                friendId, count, itemId, transactionId);
+    }
+
 
 }
