@@ -1,6 +1,7 @@
 package com.register.wowlibre.domain.port.in.characters;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.client.*;
 
 import java.util.*;
 
@@ -31,5 +32,9 @@ public interface CharactersPort {
     void sendAnnouncement(Long userId, Long accountId, Long serverId, Long characterId, Long skillId,
                           String transactionId);
 
-    void benefitsPremium(Long userId, Long accountId, Long serverId, Long characterId, String transactionId);
+    List<CharacterInventoryResponse> getCharacterInventory(Long userId, Long accountId, Long serverId, Long characterId,
+                                                           String transactionId);
+
+    void transferInventoryItem(Long userId, Long accountId, Long serverId, Long characterId, Long friendId,
+                               Integer count, Long itemId, String transactionId);
 }

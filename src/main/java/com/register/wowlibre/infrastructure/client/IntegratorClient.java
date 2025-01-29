@@ -1155,4 +1155,97 @@ public class IntegratorClient {
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
 
+
+    public GenericResponse<List<CharacterInventoryResponse>> getCharacterInventory(String host, String jwt,
+                                                                                   Long characterId,
+                                                                                   Long accountId,
+                                                                                   String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/characters/%d/inventory", host,
+                        characterId))
+                .queryParam(PARAM_ACCOUNT_ID, accountId)
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<List<CharacterInventoryResponse>>> response = restTemplate.exchange(url,
+                    HttpMethod.GET,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody());
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [getCharacterInventory]  Client/Server Error: {}. Could not get server " +
+                            "accounts" +
+                            "  " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [getCharacterInventory] Unexpected Error: {}. An unexpected error " +
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Transaction failed due to client or server error", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
+
+
+    public GenericResponse<Void> transferInventoryItem(String host, String jwt, TransferInventoryRequest request,
+                                                       String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+
+
+        HttpEntity<TransferInventoryRequest> entity = new HttpEntity<>(request, headers);
+
+
+        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/characters/inventory/transfer", host))
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<Void>> response = restTemplate.exchange(url,
+                    HttpMethod.POST,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody());
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [transferInventoryItem]  Client/Server Error: {}. Could not get server " +
+                            "accounts" +
+                            "  " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [transferInventoryItem] Unexpected Error: {}. An unexpected error " +
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Transaction failed due to client or server error", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
 }

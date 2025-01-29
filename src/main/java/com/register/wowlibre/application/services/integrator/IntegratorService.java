@@ -339,4 +339,20 @@ public class IntegratorService implements IntegratorPort {
         integratorClient.updateMail(host, jwt, request, transactionId);
     }
 
+    @Override
+    public List<CharacterInventoryResponse> getCharacterInventory(String host, String jwt, Long characterId,
+                                                                  Long accountId
+            , String transactionId) {
+
+        return integratorClient.getCharacterInventory(host, jwt, characterId, accountId, transactionId).getData();
+    }
+
+    @Override
+    public void transferInventoryItem(String host, String jwt, Long accountId, Long characterId,
+                                      Long friendId, Integer quantity, Long itemId, String transactionId) {
+
+        integratorClient.transferInventoryItem(host, jwt, new TransferInventoryRequest(characterId, friendId, itemId,
+                quantity, accountId), transactionId);
+    }
+
 }
