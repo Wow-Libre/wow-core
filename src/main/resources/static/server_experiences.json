@@ -14,17 +14,17 @@
       "disclaimer": "¡Vive la mejor experiencia de WoW como nunca antes!"
     },
     {
-      "title": "Twinks - WoW",
+      "title": "Escuela de Gms - WoW",
       "title_disclaimer": "Libre",
-      "subtitle": "¡El reino definitivo para Twinks!",
-      "description": "Enfréntate a otros jugadores en un entorno balanceado diseñado para los verdaderos guerreros del campo de batalla. ¿Listo para demostrar tu dominio?",
+      "subtitle": "¡El reino donde todos pueden ser Game Masters!",
+      "description": "Únete a un servidor único donde cada jugador puede convertirse en un Game Master. Crea eventos, personaliza el mundo y desafía a otros en un entorno dinámico y equilibrado. ¡Es tu turno de tomar el control!",
       "button_primary_text": "¡Regístrate y Domina!",
       "button_secondary_text": "Copiar Realmlist",
       "background_image": "https://static.wixstatic.com/media/5dd8a0_21f1bf864e994a4ea6578ec0433629ca~mv2.jpg",
-      "realmlist": "set realmlist twinks.wowlibre.com",
+      "realmlist": "set realmlist gm.wowlibre.com",
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/register",
-      "disclaimer": "¡La mejor experiencia, hecha a tu medida!"
+      "disclaimer": "¡Vive la experiencia de ser un GM y crea tu propia aventura!"
     },
     {
       "title": "WoW",
@@ -55,17 +55,17 @@
       "disclaimer": "Live the best WoW experience like never before!"
     },
     {
-      "title": "Twinks - WoW",
-      "title_disclaimer": "Free",
-      "subtitle": "The ultimate realm for Twinks!",
-      "description": "Face other players in a balanced environment designed for true battlefield warriors. Ready to prove your mastery?",
-      "button_primary_text": "Register and Dominate!",
+      "title": "GM School - WoW",
+      "title_disclaimer": "Free Server",
+      "subtitle": "The realm where everyone can be a Game Master!",
+      "description": "Join a unique server where every player can become a Game Master. Create events, customize the world, and challenge others in a dynamic and balanced environment. It’s your turn to take control!",
+      "button_primary_text": "Sign Up and Become a GM!",
       "button_secondary_text": "Copy Realmlist",
       "background_image": "https://static.wixstatic.com/media/5dd8a0_21f1bf864e994a4ea6578ec0433629ca~mv2.jpg",
-      "realmlist": "set realmlist twinks.wowlibre.com",
+      "realmlist": "set realmlist gm.wowlibre.com",
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/register",
-      "disclaimer": "The best experience, tailored for you!"
+      "disclaimer": "Experience life as a GM and create your own adventure!"
     },
     {
       "title": "WoW",
@@ -96,17 +96,17 @@
       "disclaimer": "Viva a melhor experiência de WoW como nunca antes!"
     },
     {
-      "title": "Twinks - WoW",
+      "title": "Escola de GMs - WoW",
       "title_disclaimer": "Livre",
-      "subtitle": "O reino definitivo para Twinks!",
-      "description": "Enfrente outros jogadores em um ambiente equilibrado projetado para verdadeiros guerreiros do campo de batalha. Pronto para provar sua maestria?",
-      "button_primary_text": "Registre-se e Domine!",
+      "subtitle": "O reino onde todos podem ser Game Masters!",
+      "description": "Junte-se a um servidor único onde cada jogador pode se tornar um Game Master. Crie eventos, personalize o mundo e desafie outros em um ambiente dinâmico e equilibrado. Agora é sua vez de assumir o controle!",
+      "button_primary_text": "Cadastre-se e Torne-se um GM!",
       "button_secondary_text": "Copiar Realmlist",
       "background_image": "https://static.wixstatic.com/media/5dd8a0_21f1bf864e994a4ea6578ec0433629ca~mv2.jpg",
-      "realmlist": "set realmlist twinks.wowlibre.com",
+      "realmlist": "set realmlist gm.wowlibre.com",
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/register",
-      "disclaimer": "A melhor experiência, feita para você!"
+      "disclaimer": "Experimente ser um GM e crie sua própria aventura!"
     },
     {
       "title": "WoW",
