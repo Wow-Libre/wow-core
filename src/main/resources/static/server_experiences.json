@@ -38,6 +38,19 @@
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/register",
       "disclaimer": "¡Forja tu leyenda en un mundo en constante evolución!"
+    },
+    {
+      "title": "Twinks - WoW",
+      "title_disclaimer": "Libre",
+      "subtitle": "¡El reino definitivo para Twinks!",
+      "description": "Enfréntate a otros jugadores en un entorno balanceado diseñado para los verdaderos guerreros del campo de batalla. ¿Listo para demostrar tu dominio?",
+      "button_primary_text": "¡Regístrate y Domina!",
+      "button_secondary_text": "Copiar Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_21f1bf864e994a4ea6578ec0433629ca~mv2.jpg",
+      "realmlist": "set realmlist twinks.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "¡La mejor experiencia, hecha a tu medida!"
     }
   ],
   "en": [
@@ -79,6 +92,19 @@
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/register",
       "disclaimer": "Forge your legend in a constantly evolving world!"
+    },
+    {
+      "title": "Twinks - WoW",
+      "title_disclaimer": "Free",
+      "subtitle": "The ultimate realm for Twinks!",
+      "description": "Face other players in a balanced environment designed for true battlefield warriors. Ready to prove your mastery?",
+      "button_primary_text": "Register and Dominate!",
+      "button_secondary_text": "Copy Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_21f1bf864e994a4ea6578ec0433629ca~mv2.jpg",
+      "realmlist": "set realmlist twinks.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "The best experience, tailored for you!"
     }
   ],
   "pt": [
@@ -120,6 +146,19 @@
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/register",
       "disclaimer": "Forje sua lenda em um mundo em constante evolução!"
+    },
+    {
+      "title": "Twinks - WoW",
+      "title_disclaimer": "Livre",
+      "subtitle": "O reino definitivo para Twinks!",
+      "description": "Enfrente outros jogadores em um ambiente equilibrado projetado para verdadeiros guerreiros do campo de batalha. Pronto para provar sua maestria?",
+      "button_primary_text": "Registre-se e Domine!",
+      "button_secondary_text": "Copiar Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_21f1bf864e994a4ea6578ec0433629ca~mv2.jpg",
+      "realmlist": "set realmlist twinks.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/register",
+      "disclaimer": "A melhor experiência, feita para você!"
     }
   ]
 }
