@@ -67,7 +67,7 @@ public class ServerService implements ServerPort {
                     "exists with the same name and with the same version characteristics.", transactionId);
         }
 
-        if (obtainServerPort.findByUser(userId, transactionId).size() >= 2) {
+        if (obtainServerPort.findByUser(userId, transactionId).size() >= 4) {
             throw new InternalException("Currently it is not possible to link more than two servers", transactionId);
         }
 
