@@ -9,7 +9,8 @@ import org.springframework.data.repository.query.*;
 import java.util.*;
 
 public interface AccountGameRepository extends CrudRepository<AccountGameEntity, Long> {
-    Optional<AccountGameEntity> findByUserId_IdAndAccountIdAndStatusIsTrue(Long userId, Long accountId);
+    Optional<AccountGameEntity> findByUserId_IdAndAccountIdAndServerId_idAndStatusIsTrue(Long userId, Long accountId,
+                                                                                      Long serverId);
 
     Page<AccountGameEntity> findByUserId_IdAndStatusIsTrue(Long userId, Pageable pageable);
 
