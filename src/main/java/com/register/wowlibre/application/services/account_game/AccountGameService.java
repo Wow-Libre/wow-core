@@ -136,7 +136,8 @@ public class AccountGameService implements AccountGamePort {
         }
 
         Optional<AccountGameEntity> accountGame =
-                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
+                obtainAccountGamePort.findByUserIdAndAccountIdAndServerIdAndStatusIsTrue(userId, accountId,
+                        server.get().getId(), transactionId);
 
         if (accountGame.isEmpty()) {
             throw new InternalException("Currently your account is not found or is not available, please contact " +
@@ -152,7 +153,8 @@ public class AccountGameService implements AccountGamePort {
         final ServerEntity serverRequest = getServer(serverId, transactionId);
 
         Optional<AccountGameEntity> accountGame =
-                obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, accountId, transactionId);
+                obtainAccountGamePort.findByUserIdAndAccountIdAndServerIdAndStatusIsTrue(userId, accountId, serverId,
+                        transactionId);
 
         if (accountGame.isEmpty()) {
             throw new InternalException("Currently your account is not found or is not available, please contact " +

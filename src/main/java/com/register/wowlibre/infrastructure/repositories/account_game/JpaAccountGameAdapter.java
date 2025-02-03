@@ -21,9 +21,11 @@ public class JpaAccountGameAdapter implements ObtainAccountGamePort, SaveAccount
     }
 
     @Override
-    public Optional<AccountGameEntity> findByUserIdAndAccountIdAndStatusIsTrue(Long userId, Long accountId,
-                                                                               String transactionId) {
-        return accountGameRepository.findByUserId_IdAndAccountIdAndStatusIsTrue(userId, accountId);
+    public Optional<AccountGameEntity> findByUserIdAndAccountIdAndServerIdAndStatusIsTrue(Long userId,
+                                                                                          Long accountId,
+                                                                                          Long serverId,
+                                                                                          String transactionId) {
+        return accountGameRepository.findByUserId_IdAndAccountIdAndServerId_idAndStatusIsTrue(userId, accountId, serverId);
     }
 
     @Override
