@@ -27,7 +27,7 @@ public class AuthScheduleClients {
         this.saveServerPort = saveServerPort;
     }
 
-    @Scheduled(cron = "1 0/20 * * * *")
+    @Scheduled(cron = "1 0/1 * * * *")
     public void authServers() {
         final String transactionId = "Auth-Client";
         List<ServerEntity> servers = obtainServerPort.findByStatusIsTrue(transactionId);
@@ -69,7 +69,7 @@ public class AuthScheduleClients {
 
     }
 
-    @Scheduled(cron = "1 0/10 * * * *")
+    @Scheduled(cron = "1 0/1 * * * *")
     public void availableServers() {
         final String transactionId = "Auth-Client";
         List<ServerEntity> servers = obtainServerPort.findByStatusIsFalseAndRetry(5L, transactionId);
@@ -82,7 +82,6 @@ public class AuthScheduleClients {
                 final String password = server.getExternalPassword();
                 final String apiSecret = server.getApiSecret();
                 final String username = server.getExternalUsername();
-
 
                 authIntegratorPort.create(server.getIp(), username, password, salt,
                         transactionId);
@@ -101,6 +100,7 @@ public class AuthScheduleClients {
                 server.setStatus(true);
                 server.setRetry(0);
                 saveServerPort.save(server, transactionId);
+                LOGGER.info("SUCCESS SERVER REGISTER");
             } catch (Exception e) {
                 LOGGER.error("[AuthScheduleClients][availableServers]  Fail Register {}", e.getMessage());
                 server.setRetry(server.getRetry() == null ? 0 : server.getRetry() + 1);
