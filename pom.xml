@@ -155,7 +155,7 @@
                 <executions>
                     <execution>
                         <id>unpack-newrelic</id>
-                        <phase>package</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>unpack-dependencies</goal>
                         </goals>
@@ -168,6 +168,30 @@
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
                             <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-newrelic-yml</id>
+                        <phase>prepare-package</phase> <!-- Asegura que se copie antes de Docker -->
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/newrelic</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory> <!-- Ruta donde está tu newrelic.yml original -->
+                                    <includes>
+                                        <include>newrelic.yml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
