@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <property name="LOGS" value="./logs" />
-
     <appender name="Console"
               class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
@@ -12,14 +10,11 @@
         </layout>
     </appender>
 
-
     <root level="info">
-        <appender-ref ref="RollingFile" />
         <appender-ref ref="Console" />
     </root>
 
     <logger name="com.baeldung" level="trace" additivity="false">
-        <appender-ref ref="RollingFile" />
         <appender-ref ref="Console" />
     </logger>
 
