@@ -23,11 +23,8 @@ FROM --platform=linux/arm64 openjdk:17-jdk
 
 WORKDIR /app
 
-# Corregir posibles problemas con repositorios
-RUN sed -i 's|http://security.debian.org|http://deb.debian.org|g' /etc/apt/sources.list
-
-# Instalar curl y unzip
-RUN apt-get update && apt-get upgrade -y && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
+# Instalar curl y unzip (sin modificar sources.list)
+RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
 
 # Crear el directorio para New Relic
 RUN mkdir -p /usr/local/newrelic
