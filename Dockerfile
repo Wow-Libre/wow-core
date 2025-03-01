@@ -41,8 +41,8 @@ RUN curl -sSL "https://download.newrelic.com/newrelic/java-agent/newrelic-agent/
 COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar /app/wowlibre-0.0.1-SNAPSHOT.jar
 
 # Configurar variables de entorno de New Relic
-ENV NEW_RELIC_APP_NAME="MiAplicacion"
-ENV NEW_RELIC_LICENSE_KEY="TU_CLAVE_DE_NEW_RELIC"
+ENV NEW_RELIC_APP_NAME="wow libre"
+ENV NEW_RELIC_LICENSE_KEY="8285c673cef713f1a0a57dc28158882cFFFFNRAL"
 
 # Exponer el puerto
 EXPOSE 8091
