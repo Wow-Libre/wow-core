@@ -1,4 +1,4 @@
-# Build stage
+# Etapa de construcción
 FROM openjdk:17-slim AS builder
 
 WORKDIR /app
@@ -20,32 +20,26 @@ COPY ./src ./src
 # Compilar la aplicación
 RUN ./mvnw clean package -DskipTests
 
-# Runtime stage
+# Etapa de ejecución
 FROM openjdk:17-slim
 
 WORKDIR /app
 
-# Establecer modo no interactivo para evitar problemas en apt-get
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Instalar curl y unzip sin recomendaciones extra
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl unzip && \
-    rm -rf /var/lib/apt/lists/*
-
-# Descargar y descomprimir el agente de New Relic
-RUN mkdir -p /usr/local/newrelic && \
-    curl -O https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip && \
-    unzip newrelic-java.zip -d /usr/local/newrelic && \
-    rm newrelic-java.zip
-
 # Copiar el archivo JAR desde la etapa de construcción (builder)
-COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar .
+COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar /app/wowlibre-0.0.1-SNAPSHOT.jar
 
+# Crear el directorio para New Relic
+RUN mkdir -p /usr/local/newrelic
+
+# Copiar los archivos de configuración de New Relic
+COPY ./newrelic/newrelic.jar /usr/local/newrelic/newrelic.jar
+COPY ./newrelic/newrelic.yml /usr/local/newrelic/newrelic.yml
+
+# Definir el perfil de Spring activo
 ENV SPRING_PROFILES_ACTIVE=prod
 
+# Exponer el puerto de la aplicación
 EXPOSE 8091
 
-# Iniciar la aplicación con el agente de New Relic.
-# Asegúrate de que la ruta al newrelic.jar sea la correcta según la estructura descomprimida.
-ENTRYPOINT ["java", "-javaagent:/usr/local/newrelic/newrelic/newrelic.jar", "-jar", "wowlibre-0.0.1-SNAPSHOT.jar"]
+# Configurar la aplicación con el agente de New Relic
+ENTRYPOINT ["java", "-javaagent:/usr/local/newrelic/newrelic.jar", "-jar", "/app/wowlibre-0.0.1-SNAPSHOT.jar"]
