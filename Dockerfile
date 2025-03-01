@@ -28,8 +28,10 @@ WORKDIR /app
 # Copiar el archivo JAR desde la etapa de construcción (builder)
 COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar .
 
+COPY newrelic.jar /app/newrelic.jar
+
 ENV SPRING_PROFILES_ACTIVE=prod
 
 EXPOSE 8091
 
-ENTRYPOINT ["java", "-jar", "wowlibre-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-javaagent:/app/newrelic.jar", "-jar", "wowlibre-0.0.1-SNAPSHOT.jar"]
