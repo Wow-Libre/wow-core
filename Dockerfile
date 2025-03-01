@@ -34,7 +34,6 @@ RUN mkdir -p /usr/local/newrelic && \
 # Copiar el archivo JAR desde la etapa de construcción (builder)
 COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar .
 
-COPY newrelic.jar /app/newrelic.jar
 
 ENV SPRING_PROFILES_ACTIVE=prod
 
