@@ -59,7 +59,7 @@ public class BankService implements BankPort {
 
         ServerServicesModel serverServicesModel =
                 serverServicesPort.findByNameAndServerId(ServerServices.BANK.getName(), serverId,
-                transactionId);
+                        transactionId);
 
         if (serverServicesModel == null) {
             throw new InternalException("The server currently does not have loans configured", transactionId);
@@ -112,7 +112,7 @@ public class BankService implements BankPort {
     @Override
     public List<ServerAvailableBankDto> serverAvailableLoan(String transactionId) {
         return serverServicesPort.findByServersAvailableLoa(transactionId)
-                .stream().map(server -> new ServerAvailableBankDto(server.id(), server.serverName())).toList();
+                .stream().map(server -> new ServerAvailableBankDto(server.serverId(), server.serverName())).toList();
     }
 
     private double calculateMonthlyPayment(double cost, int interest, int paymentMonth) {
