@@ -3,18 +3,18 @@ FROM openjdk:17-slim AS builder
 
 WORKDIR /app
 
-# Copiar el archivo de configuración de Maven y el wrapper
+# Copiar archivos de Maven y el wrapper
 COPY ./pom.xml .
 COPY .mvn .mvn
 COPY mvnw .
 
-# Corregir los finales de línea y establecer permisos
+# Corregir permisos y finales de línea
 RUN sed -i 's/\r$//' ./mvnw && chmod +x ./mvnw
 
-# Descargar las dependencias (capa de caché)
+# Descargar dependencias (capa de caché)
 RUN ./mvnw dependency:go-offline -B
 
-# Copiar el código fuente de la aplicación
+# Copiar el código fuente
 COPY ./src ./src
 
 # Compilar la aplicación
@@ -25,21 +25,27 @@ FROM openjdk:17-slim
 
 WORKDIR /app
 
-# Copiar el archivo JAR desde la etapa de construcción (builder)
-COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar /app/wowlibre-0.0.1-SNAPSHOT.jar
+# Instalar curl y unzip
+RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
 
 # Crear el directorio para New Relic
 RUN mkdir -p /usr/local/newrelic
 
-# Copiar los archivos de configuración de New Relic
-COPY ./newrelic/newrelic.jar /usr/local/newrelic/newrelic.jar
-COPY ./newrelic/newrelic.yml /usr/local/newrelic/newrelic.yml
+# Descargar y extraer New Relic directamente en el contenedor
+RUN curl -sSL "https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip" -o /tmp/newrelic-java.zip \
+    && unzip /tmp/newrelic-java.zip -d /tmp \
+    && mv /tmp/newrelic/* /usr/local/newrelic/ \
+    && rm -rf /tmp/newrelic /tmp/newrelic-java.zip
 
-# Definir el perfil de Spring activo
-ENV SPRING_PROFILES_ACTIVE=prod
+# Copiar el archivo JAR desde la etapa de construcción
+COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar /app/wowlibre-0.0.1-SNAPSHOT.jar
 
-# Exponer el puerto de la aplicación
+# Configurar variables de entorno de New Relic
+ENV NEW_RELIC_APP_NAME="MiAplicacion"
+ENV NEW_RELIC_LICENSE_KEY="TU_CLAVE_DE_NEW_RELIC"
+
+# Exponer el puerto
 EXPOSE 8091
 
-# Configurar la aplicación con el agente de New Relic
+# Iniciar la aplicación con el agente de New Relic
 ENTRYPOINT ["java", "-javaagent:/usr/local/newrelic/newrelic.jar", "-jar", "/app/wowlibre-0.0.1-SNAPSHOT.jar"]
