@@ -1,5 +1,5 @@
 # Etapa de construcción
-FROM openjdk:17-slim AS builder
+FROM --platform=linux/arm64 openjdk:17-jdk AS builder
 
 WORKDIR /app
 
@@ -11,36 +11,37 @@ COPY mvnw .
 # Corregir permisos y finales de línea
 RUN sed -i 's/\r$//' ./mvnw && chmod +x ./mvnw
 
-# Descargar dependencias (capa de caché)
+# Descargar dependencias
 RUN ./mvnw dependency:go-offline -B
 
-# Copiar el código fuente
+# Copiar código fuente y compilar
 COPY ./src ./src
-
-# Compilar la aplicación
 RUN ./mvnw clean package -DskipTests
 
 # Etapa de ejecución
-FROM openjdk:17-slim
+FROM --platform=linux/arm64 openjdk:17-jdk
 
 WORKDIR /app
 
+# Corregir posibles problemas con repositorios
+RUN sed -i 's|http://security.debian.org|http://deb.debian.org|g' /etc/apt/sources.list
+
 # Instalar curl y unzip
-RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get upgrade -y && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
 
 # Crear el directorio para New Relic
 RUN mkdir -p /usr/local/newrelic
 
-# Descargar y extraer New Relic directamente en el contenedor
+# Descargar y extraer New Relic
 RUN curl -sSL "https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip" -o /tmp/newrelic-java.zip \
     && unzip /tmp/newrelic-java.zip -d /tmp \
     && mv /tmp/newrelic/* /usr/local/newrelic/ \
     && rm -rf /tmp/newrelic /tmp/newrelic-java.zip
 
-# Copiar el archivo JAR desde la etapa de construcción
+# Copiar la aplicación compilada
 COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar /app/wowlibre-0.0.1-SNAPSHOT.jar
 
-# Configurar variables de entorno de New Relic
+# Configurar variables de entorno
 ENV NEW_RELIC_APP_NAME="wow libre"
 ENV NEW_RELIC_LICENSE_KEY="8285c673cef713f1a0a57dc28158882cFFFFNRAL"
 
