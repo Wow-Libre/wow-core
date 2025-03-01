@@ -30,6 +30,7 @@ COPY --from=builder /app/target/newrelic/newrelic.yml .
 COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar .
 COPY --from=builder /app/target/newrelic/newrelic.jar .
 
+ENV NEW_RELIC_LICENSE_KEY=82ff848c92a86cfccb796e3c22d3b01aFFFFNRAL
 ENV SPRING_PROFILES_ACTIVE=prod
 
 EXPOSE 8091
