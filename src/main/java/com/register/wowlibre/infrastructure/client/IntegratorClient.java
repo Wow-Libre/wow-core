@@ -655,11 +655,9 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [sendCommand]  Client/Server Error: {}. Error with server client " +
-                            "getting " +
-                            "associated guilds. " +
                             "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
-            throw new InternalException("Transaction failed due to client or server error", transactionId);
+            throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [sendCommand] Unexpected Error: {}. An unexpected error occurred " +
                             "during " +

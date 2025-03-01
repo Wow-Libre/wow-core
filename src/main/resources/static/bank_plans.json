@@ -9,12 +9,13 @@
       "features": [
         "Interés del 10%",
         "Préstamo de 1k de oro",
-        "Pago máximo: 1 mes"
+        "Pago máximo: 1 mes",
+        "Total a pagar: 1,100g"
       ],
       "button": "Solicitar Préstamo",
       "interest": 10,
       "month_payment_period": 1,
-      "gold": 11000000.0
+      "gold": 10000000.0
     },
     {
       "id": 2,
@@ -25,12 +26,13 @@
       "features": [
         "Interés del 20%",
         "Préstamo de 40k de oro",
-        "Pago máximo: 1 mes"
+        "Pago máximo: 1 mes",
+        "Total a pagar: 48,000g"
       ],
       "button": "Solicitar Préstamo",
       "interest": 20,
       "month_payment_period": 1,
-      "gold": 480000000.0
+      "gold": 400000000.0
     },
     {
       "id": 3,
@@ -41,12 +43,13 @@
       "features": [
         "Interés del 20%",
         "Préstamo de 10k de oro",
-        "Pago máximo: 1 mes"
+        "Pago máximo: 1 mes",
+        "Total a pagar: 12,000g"
       ],
       "button": "Solicitar Préstamo",
       "interest": 20,
       "month_payment_period": 1,
-      "gold": 120000000.0
+      "gold": 100000000.0
     }
   ],
   "en": [
@@ -64,7 +67,7 @@
       "button": "Apply for Loan",
       "interest": 10,
       "month_payment_period": 1,
-      "gold": 11000000.0
+      "gold": 10000000.0
     },
     {
       "id": 2,
@@ -96,7 +99,7 @@
       "button": "Apply for Loan",
       "interest": 20,
       "month_payment_period": 1,
-      "gold": 120000000.0
+      "gold": 100000000.0
     }
   ],
   "pt": [
@@ -114,7 +117,7 @@
       "button": "Solicitar Empréstimo",
       "interest": 10,
       "month_payment_period": 1,
-      "gold": 11000000.0
+      "gold": 10000000.0
     },
     {
       "id": 2,
@@ -130,7 +133,7 @@
       "button": "Solicitar Empréstimo",
       "interest": 20,
       "month_payment_period": 1,
-      "gold": 480000000.0
+      "gold": 400000000.0
     },
     {
       "id": 3,
@@ -146,7 +149,7 @@
       "button": "Solicitar Empréstimo",
       "interest": 20,
       "month_payment_period": 1,
-      "gold": 120000000.0
+      "gold": 100000000.0
     }
   ]
 }
