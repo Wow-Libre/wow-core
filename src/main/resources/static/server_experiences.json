@@ -1,47 +1,47 @@
 {
   "es": [
     {
-      "title": "Elysium - WoW",
-      "title_disclaimer": "Libre",
-      "subtitle": "Reino x10 - ¡Salta directo a la acción en nivel 80!",
-      "description": "¡Enfréntate al Rey Exánime sin barreras! Nuestro innovador sistema de auto-balanceo te permite conquistar mazmorras en solitario o en pequeños grupos. Disfruta el contenido más épico de WoW sin límites.",
+      "title": "Wow",
+      "title_disclaimer": "Hero",
+      "subtitle": "Reino x1 - ¡Empuña una leyenda y equipa lo que quieras, sin límites.!",
+      "description": "Ármate sin límites, equípate con lo que quieras y forja tu leyenda desde nivel 1.",
       "button_primary_text": "¡Únete Ahora!",
       "button_secondary_text": "Copiar Realmlist",
-      "background_image": "https://static.wixstatic.com/media/5dd8a0_7c9f1d9542df413b8d161ef38b82a373~mv2.jpg",
-      "realmlist": "set realmlist elysium.wowlibre.com",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_3403438a20cf4cb7baff8341cdabeeaf~mv2.jpg",
+      "realmlist": "set realmlist wowhero.wowlibre.com",
       "copy_success": false,
-      "redirect": "https://www.wowlibre.com/vdp?name=elysium&expansion=2",
-      "disclaimer": "¡Vive la mejor experiencia de WoW como nunca antes!"
+      "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
+      "disclaimer": "¡El poder está en tus manos, úsalo con sabiduría!"
     }
   ],
   "en": [
     {
       "title": "Elysium - WoW",
       "title_disclaimer": "Free",
-      "subtitle": "Realm x10 - Jump straight into the action at level 80!",
-      "description": "Face the Lich King without barriers! Our innovative auto-balancing system allows you to conquer dungeons solo or in small groups. Enjoy the most epic WoW content without limits.",
+      "subtitle": "Wield a legend and equip anything, no limits!",
+      "description": "Arm yourself without limits, equip anything, and forge your legend from level 1.",
       "button_primary_text": "Join Now!",
       "button_secondary_text": "Copy Realmlist",
-      "background_image": "https://static.wixstatic.com/media/5dd8a0_7c9f1d9542df413b8d161ef38b82a373~mv2.jpg",
-      "realmlist": "set realmlist elysium.wowlibre.com",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_3403438a20cf4cb7baff8341cdabeeaf~mv2.jpg",
+      "realmlist": "set realmlist wowhero.wowlibre.com",
       "copy_success": false,
-      "redirect": "https://www.wowlibre.com/register",
-      "disclaimer": "Live the best WoW experience like never before!"
+      "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
+      "disclaimer": "Power is in your hands—use it wisely!"
     }
   ],
   "pt": [
     {
       "title": "Elysium - WoW",
       "title_disclaimer": "Livre",
-      "subtitle": "Reino x10 - Pule direto para a ação no nível 80!",
-      "description": "Enfrente o Lich Rei sem barreiras! Nosso inovador sistema de auto-balanceamento permite que você conquiste masmorras sozinho ou em pequenos grupos. Desfrute do conteúdo mais épico de WoW sem limites.",
+      "subtitle": "Reino x1 – Empunhe uma lenda e equipe o que quiser, sem limites!",
+      "description": "Arme-se sem limites, equipe o que quiser e forje sua lenda desde o nível 1.",
       "button_primary_text": "Junte-se Agora!",
       "button_secondary_text": "Copiar Realmlist",
-      "background_image": "https://static.wixstatic.com/media/5dd8a0_7c9f1d9542df413b8d161ef38b82a373~mv2.jpg",
-      "realmlist": "set realmlist elysium.wowlibre.com",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_3403438a20cf4cb7baff8341cdabeeaf~mv2.jpg",
+      "realmlist": "set realmlist wowhero.wowlibre.com",
       "copy_success": false,
-      "redirect": "www.wowlibre.com/register",
-      "disclaimer": "Viva a melhor experiência de WoW como nunca antes!"
+      "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
+      "disclaimer": "O poder está em suas mãos—use-o com sabedoria!"
     }
   ]
 }
