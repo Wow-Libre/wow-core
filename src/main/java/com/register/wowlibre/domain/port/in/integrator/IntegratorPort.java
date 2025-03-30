@@ -61,7 +61,7 @@ public interface IntegratorPort {
                      boolean multiFaction, String discord, String transactionId);
 
 
-    void sendAnnouncement(String host, String jwt, Long userId, Long accountId, Long characterId, Long skillId,
+    void sendAnnouncement(String host, String jwt, Long userId, Long accountId, Long characterId, Long skillId,String message,
                           String transactionId);
 
     void sendBenefitsPremium(String host, String jwt, Long userId, Long accountId,
@@ -88,6 +88,11 @@ public interface IntegratorPort {
     List<CharacterInventoryResponse> getCharacterInventory(String host, String jwt, Long characterId,
                                                            Long accountId, String transactionId);
 
-    void transferInventoryItem(String host, String jwt, Long accountId,  Long characterId, Long friendId,
+    void transferInventoryItem(String host, String jwt, Long accountId, Long characterId, Long friendId,
                                Integer count, Long itemId, String transactionId);
+
+    void bannedUser(String host, String jwt, String username, Integer days, Integer hours, Integer minutes,
+                    Integer seconds, String bannedBy, String banReason, String transactionId);
+
+    Map<String, String> getConfigs(String host, String jwt, String url, boolean authServer, String transactionId);
 }

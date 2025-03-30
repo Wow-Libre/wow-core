@@ -10,75 +10,59 @@
     },
     {
       "question": "¿Cómo puedo integrar mi servidor privado?",
-      "answer": "Para integrar tu servidor privado, dirígete al canal de Discord en la sección de integración o contacta a través de cualquiera de nuestros canales de comunicación, como WhatsApp o Telegram. Estaremos encantados de guiarte en todo el proceso."
+      "answer": "Para integrar tu servidor privado, visita nuestra sección de integraciones en https://www.wowlibre.com/integrations. También puedes contactarnos a través de nuestros canales de soporte, como Discord, WhatsApp o Telegram. Estaremos encantados de guiarte en cada paso del proceso."
     },
     {
-      "question": "¿Puedo descargar mis datos para evitar pérdidas y migrar a otros servidores?",
-      "answer": "En Wow Libre, los jugadores pueden cambiar de servidor sin necesidad de descargar sus datos. Nuestro objetivo es facilitar la migración entre servidores privados sin que se pierda ninguna información. Además, estamos trabajando en nuevas integraciones con otros servidores para seguir mejorando la experiencia de juego."
+      "question": "¿Tiene algún costo la integración de mi servidor?",
+      "answer": "Ofrecemos distintos planes diseñados para adaptarse a tus necesidades. Consulta nuestras opciones y elige la que mejor se ajuste a tu comunidad."
     },
     {
-      "question": "¿Puedo migrar a otros servidores?",
-      "answer": "En Wow Libre, los jugadores pueden cambiar de servidor sin necesidad de descargar sus datos. Nuestro objetivo es facilitar la migración entre servidores privados sin que se pierda ninguna información. Además, estamos trabajando en nuevas integraciones con otros servidores para seguir mejorando la experiencia de juego."
-    },
-    {
-      "question": "¿Tiene un costo la integración de mi servidor?",
-      "answer": "La integración de hasta dos servidores es completamente gratuita. A partir del tercer servidor, se aplicará un costo adicional de 10 dólares por cada servidor adicional."
-    },
-    {
-      "question": "¿Tiene un costo la integración de mi servidor?",
-      "answer": "La integración de hasta dos servidores es completamente gratuita. A partir del tercer servidor, se aplicará un costo adicional de 10 dólares por cada servidor adicional."
+      "question": "¿Qué beneficios obtengo al integrar mi servidor?",
+      "answer": "Al integrar tu servidor, accedes a herramientas avanzadas que potencian el crecimiento de tu comunidad. Nuestra plataforma simplifica la administración, mejora la experiencia de los jugadores y optimiza la gestión de tu servidor."
     }
   ],
   "en": [
     {
       "question": "Is Wow Libre a World of Warcraft server?",
-      "answer": "No, Wow Libre is not a World of Warcraft server. Our platform is designed to provide advanced tools that allow administrators to create unique and personalized experiences within the gaming world. We focus on offering solutions that simplify the creation and management of servers for various gaming experiences."
+      "answer": "No, Wow Libre is not a World of Warcraft server. Our platform is designed to provide advanced tools that allow administrators to create unique and customized experiences within the gaming world. We focus on offering solutions that facilitate the creation and management of servers for various gaming experiences."
     },
     {
-      "question": "Are there additional player support channels?",
+      "question": "Are there additional support channels for players?",
       "answer": "Yes, we have various support channels on our platform where you can find answers to frequently asked questions from the community and receive personalized assistance."
     },
     {
       "question": "How can I integrate my private server?",
-      "answer": "To integrate your private server, go to the integration section on our Discord channel or reach out through any of our communication channels, such as WhatsApp or Telegram. We will be happy to guide you through the process."
+      "answer": "To integrate your private server, visit our integrations section at https://www.wowlibre.com/integrations. You can also contact us through our support channels, such as Discord, WhatsApp, or Telegram. We will be happy to guide you through every step of the process."
     },
     {
-      "question": "Can I download my data to avoid loss and migrate to other servers?",
-      "answer": "At Wow Libre, players can switch servers without needing to download their data. Our goal is to facilitate migration between private servers without losing any information. Additionally, we are working on new integrations with other servers to further improve the gaming experience."
+      "question": "Does integrating my server have a cost?",
+      "answer": "We offer different plans designed to suit your needs. Check out our options and choose the one that best fits your community."
     },
     {
-      "question": "Can I migrate to other servers?",
-      "answer": "At Wow Libre, players can switch servers without needing to download their data. Our goal is to facilitate migration between private servers without losing any information. Additionally, we are working on new integrations with other servers to further improve the gaming experience."
-    },
-    {
-      "question": "Is there a cost for integrating my server?",
-      "answer": "Integration of up to two servers is completely free. Starting from the third server, an additional cost of $10 will be applied per server."
+      "question": "What benefits do I get by integrating my server?",
+      "answer": "By integrating your server, you gain access to advanced tools that boost the growth of your community. Our platform simplifies administration, enhances the player experience, and optimizes server management."
     }
   ],
   "pt": [
     {
       "question": "O Wow Libre é um servidor de World of Warcraft?",
-      "answer": "Não, o Wow Libre não é um servidor de World of Warcraft. Nossa plataforma foi projetada para fornecer ferramentas avançadas que permitem aos administradores criar experiências únicas e personalizadas dentro do mundo dos jogos. Nosso foco é oferecer soluções que facilitem a criação e gestão de servidores para diversas experiências de jogo."
+      "answer": "Não, o Wow Libre não é um servidor de World of Warcraft. Nossa plataforma foi projetada para fornecer ferramentas avançadas que permitem aos administradores criar experiências únicas e personalizadas no mundo dos jogos. Nosso foco é oferecer soluções que facilitem a criação e gestão de servidores para diversas experiências de jogo."
     },
     {
-      "question": "Existem canais adicionais de atendimento ao jogador?",
-      "answer": "Sim, temos vários canais de atendimento em nossa plataforma, onde você pode encontrar respostas para perguntas frequentes da comunidade e receber assistência personalizada."
+      "question": "Existem canais adicionais de suporte para os jogadores?",
+      "answer": "Sim, temos diversos canais de suporte em nossa plataforma, onde você pode encontrar respostas para as perguntas mais frequentes da comunidade e obter assistência personalizada."
     },
     {
       "question": "Como posso integrar meu servidor privado?",
-      "answer": "Para integrar seu servidor privado, vá até a seção de integração no nosso canal do Discord ou entre em contato através de qualquer um de nossos canais de comunicação, como WhatsApp ou Telegram. Teremos prazer em guiá-lo durante o processo."
+      "answer": "Para integrar seu servidor privado, visite nossa seção de integrações em https://www.wowlibre.com/integrations. Você também pode entrar em contato conosco através dos nossos canais de suporte, como Discord, WhatsApp ou Telegram. Ficaremos felizes em guiá-lo em cada etapa do processo."
     },
     {
-      "question": "Posso baixar meus dados para evitar perdas e migrar para outros servidores?",
-      "answer": "No Wow Libre, os jogadores podem mudar de servidor sem precisar baixar seus dados. Nosso objetivo é facilitar a migração entre servidores privados sem perder nenhuma informação. Além disso, estamos trabalhando em novas integrações com outros servidores para melhorar ainda mais a experiência de jogo."
+      "question": "A integração do meu servidor tem algum custo?",
+      "answer": "Oferecemos diferentes planos projetados para atender às suas necessidades. Confira nossas opções e escolha aquela que melhor se adapta à sua comunidade."
     },
     {
-      "question": "Posso migrar para outros servidores?",
-      "answer": "No Wow Libre, os jogadores podem mudar de servidor sem precisar baixar seus dados. Nosso objetivo é facilitar a migração entre servidores privados sem perder nenhuma informação. Além disso, estamos trabalhando em novas integrações com outros servidores para melhorar ainda mais a experiência de jogo."
-    },
-    {
-      "question": "A integração do meu servidor tem custo?",
-      "answer": "A integração de até dois servidores é totalmente gratuita. A partir do terceiro servidor, será cobrada uma taxa adicional de 10 dólares por servidor."
+      "question": "Quais benefícios eu obtenho ao integrar meu servidor?",
+      "answer": "Ao integrar seu servidor, você terá acesso a ferramentas avançadas que impulsionam o crescimento da sua comunidade. Nossa plataforma simplifica a administração, melhora a experiência dos jogadores e otimiza a gestão do servidor."
     }
   ]
 }
