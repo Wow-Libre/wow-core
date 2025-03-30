@@ -2,40 +2,40 @@
   "es": [
     {
       "id": 1,
-      "name": "Wow Libre - Elysium",
-      "sub_title": "Servidor 3.3.5",
-      "description": "¡Aprovecha nuestra promoción ahora!",
-      "logo": "https://static.wixstatic.com/media/5dd8a0_f0c3204f2346419695468d1ec3ac5bb0~mv2.webp",
+      "name": "Wow Hero",
+      "sub_title": "Version 3.3.5",
+      "description": "Forja tu destino sin barreras",
+      "logo": "https://static.wixstatic.com/media/5dd8a0_660821f872c74ff0b965625d0ba5d52f~mv2.webp",
       "link": "",
-      "realmlist": "set realmlist elysium.wowlibre.com",
-      "whatsapp": "https://chat.whatsapp.com/KpvQJSOAujI4DlYjweWDxW",
-      "facebook": "https://www.facebook.com/profile.php?id=61570471507937"
+      "realmlist": "set realmlist wowhero.wowlibre.com",
+      "whatsapp": "https://chat.whatsapp.com/JwE1UAGX6Zo7uM6OTOj2oo",
+      "facebook": "https://www.facebook.com/profile.php?id=61574830231332"
     }
   ],
   "en": [
     {
       "id": 1,
-      "name": "Wow Libre - Elysium",
-      "sub_title": "Server 3.3.5",
-      "description": "Take advantage of our promotion now!",
-      "logo": "https://static.wixstatic.com/media/5dd8a0_f0c3204f2346419695468d1ec3ac5bb0~mv2.webp",
+      "name": "Wow Hero",
+      "sub_title": "Version 3.3.5",
+      "description": "Forge your destiny without limits.",
+      "logo": "https://static.wixstatic.com/media/5dd8a0_660821f872c74ff0b965625d0ba5d52f~mv2.webp",
       "link": "",
-      "realmlist": "set realmlist elysium.wowlibre.com",
-      "whatsapp": "https://chat.whatsapp.com/KpvQJSOAujI4DlYjweWDxW",
-      "facebook": "https://www.facebook.com/profile.php?id=61570471507937"
+      "realmlist": "set realmlist wowhero.wowlibre.com",
+      "whatsapp": "https://chat.whatsapp.com/JwE1UAGX6Zo7uM6OTOj2oo",
+      "facebook": "https://www.facebook.com/profile.php?id=61574830231332"
     }
   ],
   "pt": [
     {
       "id": 1,
-      "name": "Wow Libre - Elysium",
-      "sub_title": "Servidor Instant 3.3.5",
-      "description": "Aproveite nossa promoção agora!",
-      "logo": "https://static.wixstatic.com/media/5dd8a0_f0c3204f2346419695468d1ec3ac5bb0~mv2.webp",
+      "name": "Wow Hero",
+      "sub_title": "Version 3.3.5",
+      "description": "Forje seu destino sem barreiras.",
+      "logo": "https://static.wixstatic.com/media/5dd8a0_660821f872c74ff0b965625d0ba5d52f~mv2.webp",
       "link": "",
-      "realmlist": "set realmlist elysium.wowlibre.com",
-      "whatsapp": "https://chat.whatsapp.com/KpvQJSOAujI4DlYjweWDxW",
-      "facebook": "https://www.facebook.com/profile.php?id=61570471507937"
+      "realmlist": "set realmlist wowhero.wowlibre.com",
+      "whatsapp": "https://chat.whatsapp.com/JwE1UAGX6Zo7uM6OTOj2oo",
+      "facebook": "https://www.facebook.com/profile.php?id=61574830231332"
     }
   ]
 }
