@@ -8,40 +8,79 @@
       "button_primary_text": "¡Únete Ahora!",
       "button_secondary_text": "Copiar Realmlist",
       "background_image": "https://static.wixstatic.com/media/5dd8a0_3403438a20cf4cb7baff8341cdabeeaf~mv2.jpg",
-      "realmlist": "set realmlist wowhero.wowlibre.com",
+      "realmlist": "set realmlist play.wowlibre.com",
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
       "disclaimer": "¡El poder está en tus manos, úsalo con sabiduría!"
+    },
+    {
+      "title": "Wow",
+      "title_disclaimer": "Elysium",
+      "subtitle": "Instant 80 Full PVP",
+      "description": "¡Salta directo al nivel 80 y domina los campos de batalla con equipo PvP completo!",
+      "button_primary_text": "¡Únete Ahora!",
+      "button_secondary_text": "Copiar Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_066c7389fe6d427da2cbb3ef258784c9~mv2.webp",
+      "realmlist": "set realmlist play.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
+      "disclaimer": "Solo los valientes triunfan en Elysium."
     }
   ],
   "en": [
     {
-      "title": "Elysium - WoW",
-      "title_disclaimer": "Free",
-      "subtitle": "Wield a legend and equip anything, no limits!",
-      "description": "Arm yourself without limits, equip anything, and forge your legend from level 1.",
+      "title": "Wow",
+      "title_disclaimer": "Hero",
+      "subtitle": "Reino x1 - Wield a legend and equip whatever you want, with no limits!",
+      "description": "Gear up with no limits, equip yourself with whatever you want, and forge your legend from level 1.",
       "button_primary_text": "Join Now!",
       "button_secondary_text": "Copy Realmlist",
       "background_image": "https://static.wixstatic.com/media/5dd8a0_3403438a20cf4cb7baff8341cdabeeaf~mv2.jpg",
       "realmlist": "set realmlist wowhero.wowlibre.com",
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
-      "disclaimer": "Power is in your hands—use it wisely!"
+      "disclaimer": "The power is in your hands, use it wisely!"
+    },
+    {
+      "title": "Wow",
+      "title_disclaimer": "Elysium",
+      "subtitle": "Instant 80 Full PVP",
+      "description": "Jump straight to level 80 and dominate the battlegrounds with full PvP gear!",
+      "button_primary_text": "Join Now!",
+      "button_secondary_text": "Copy Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_066c7389fe6d427da2cbb3ef258784c9~mv2.webp",
+      "realmlist": "set realmlist play.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
+      "disclaimer": "Only the brave prevail in Elysium."
     }
   ],
   "pt": [
     {
-      "title": "Elysium - WoW",
-      "title_disclaimer": "Livre",
-      "subtitle": "Reino x1 – Empunhe uma lenda e equipe o que quiser, sem limites!",
-      "description": "Arme-se sem limites, equipe o que quiser e forje sua lenda desde o nível 1.",
+      "title": "Wow",
+      "title_disclaimer": "Herói",
+      "subtitle": "Reino x1 - Empunhe uma lenda e equipe o que quiser, sem limites!",
+      "description": "Equipe-se sem limites, escolha o que quiser e forje sua lenda desde o nível 1.",
       "button_primary_text": "Junte-se Agora!",
       "button_secondary_text": "Copiar Realmlist",
       "background_image": "https://static.wixstatic.com/media/5dd8a0_3403438a20cf4cb7baff8341cdabeeaf~mv2.jpg",
       "realmlist": "set realmlist wowhero.wowlibre.com",
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
-      "disclaimer": "O poder está em suas mãos—use-o com sabedoria!"
+      "disclaimer": "O poder está em suas mãos, use-o com sabedoria!"
+    },
+    {
+      "title": "Wow",
+      "title_disclaimer": "Elysium",
+      "subtitle": "Instantâneo 80 Full PVP",
+      "description": "Comece direto no nível 80 e domine os campos de batalha com equipamento PvP completo!",
+      "button_primary_text": "Junte-se Agora!",
+      "button_secondary_text": "Copiar Realmlist",
+      "background_image": "https://static.wixstatic.com/media/5dd8a0_066c7389fe6d427da2cbb3ef258784c9~mv2.webp",
+      "realmlist": "set realmlist play.wowlibre.com",
+      "copy_success": false,
+      "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
+      "disclaimer": "Apenas os corajosos vencem em Elysium."
     }
   ]
 }
