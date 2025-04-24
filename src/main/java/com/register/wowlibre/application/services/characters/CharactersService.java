@@ -97,16 +97,16 @@ public class CharactersService implements CharactersPort {
 
         AccountGameEntity accountGameModel = accountVerificationDto.accountGame();
         Long userIdAccount = accountGameModel.getUserId().getId();
+        ServerEntity server = accountVerificationDto.server();
 
         if (!passwordEncoder.matches(password, accountVerificationDto.accountGame().getUserId().getPassword())) {
             throw new InternalException("The password is invalid", transactionId);
         }
-
+        Integer expansionId = Integer.valueOf(server.getExpansion());
         integratorService.changePassword(accountVerificationDto.server().getIp(),
                 accountVerificationDto.server().getApiSecret(),
                 accountVerificationDto.server().getJwt(),
-                accountId, userIdAccount, newPassword, transactionId);
-
+                accountId, userIdAccount, newPassword, expansionId, transactionId);
     }
 
     @Override
