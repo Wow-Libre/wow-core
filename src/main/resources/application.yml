@@ -22,7 +22,7 @@ spring:
       on-profile: local
   data:
     redis:
-      host: clustercfg.wowlibre.tkfyma.use2.cache.amazonaws.com
+      host: localhost
       port: 6379
   jpa:
     hibernate:
@@ -50,6 +50,8 @@ aws:
     secret-key: J5DUqwaoV2jQy9XtTewqNKgefh88zuBzHuIlRbOQ
     region: us-east-1
     from-email: wowlibrecomunidad@gmail.com
+google:
+  api-key: "6Lcd3iArAAAAAMBZ30BN1hry_nhXsfnoHQWIfejg"
 server:
   servlet:
     context-path: /core
@@ -106,6 +108,8 @@ aws:
     secret-key: J5DUqwaoV2jQy9XtTewqNKgefh88zuBzHuIlRbOQ
     region: us-east-1
     from-email: wowlibrecomunidad@gmail.com
+google:
+  api-key: ${GOOGLE_SERVER_API_KEY}
 server:
   servlet:
     context-path: /core

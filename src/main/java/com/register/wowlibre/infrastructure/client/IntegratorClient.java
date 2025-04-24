@@ -237,21 +237,21 @@ public class IntegratorClient {
     }
 
     public void changePasswordGame(String host, String jwt, Long accountId, Long userId, String password, byte[] salt,
-                                   String transactionId) {
+                                   Integer expansionId, String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
         HttpEntity<ChangePasswordRequest> entity = new HttpEntity<>(new ChangePasswordRequest(password, accountId,
-                userId,
+                userId,expansionId,
                 salt), headers);
 
         String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/account/change-password", host))
                 .toUriString();
 
         try {
-            ResponseEntity<GenericResponse<CharacterSocialResponse>> response = restTemplate.exchange(url,
+            ResponseEntity<GenericResponse<Void>> response = restTemplate.exchange(url,
                     HttpMethod.POST,
                     entity, new ParameterizedTypeReference<>() {
                     });
@@ -261,7 +261,8 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("Client/Server Error: {}. The request failed with a client or server error. " +
+            LOGGER.error("[changePasswordGame] Client/Server Error: {}. The request failed with a client or server " +
+                            "error. " +
                             "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or server error", transactionId);

@@ -45,7 +45,7 @@ public class IntegratorService implements IntegratorPort {
                 .password(encryptedMessage)
                 .email(email)
                 .userId(userId)
-                .expansion(expansion)
+                .expansionId(Integer.valueOf(expansion))
                 .salt(salt)
                 .build();
 
@@ -122,14 +122,16 @@ public class IntegratorService implements IntegratorPort {
     }
 
     @Override
-    public void changePassword(String host, String apiSecret, String jwt, Long accountId, Long userId, String password,
+    public void changePassword(String host, String apiSecret, String jwt, Long accountId, Long userId,
+                               String password, Integer expansionId,
                                String transactionId) {
         try {
             byte[] salt = KeyDerivationUtil.generateSalt();
             SecretKey derivedKey = KeyDerivationUtil.deriveKeyFromPassword(apiSecret, salt);
             String encryptedMessage = EncryptionUtil.encrypt(password, derivedKey);
 
-            integratorClient.changePasswordGame(host, jwt, accountId, userId, encryptedMessage, salt, transactionId);
+            integratorClient.changePasswordGame(host, jwt, accountId, userId, encryptedMessage, salt, expansionId,
+                    transactionId);
         } catch (Exception e) {
             LOGGER.error("Failed to update game account password");
             throw new InternalException("Failed to update game account password", transactionId);

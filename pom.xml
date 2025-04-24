@@ -8,10 +8,10 @@
         <version>3.3.4</version>
         <relativePath/>
     </parent>
-    <groupId>com.register</groupId>
+    <groupId>com.core</groupId>
     <artifactId>wowlibre</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>wow-libre-register</name>
+    <name>wow-libre-core</name>
     <description>Wow Core - Wow Libre</description>
     <url/>
     <licenses>

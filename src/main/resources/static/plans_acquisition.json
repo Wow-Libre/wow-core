@@ -68,7 +68,7 @@
     {
       "name": "Mensual",
       "price": "$39/mes",
-      "description": "La flexibilidad que necesitas. Pago mensual de $39, con un pago inicial adicional por el dominio.",
+      "description": "La flexibilidad que necesitas. Pago mensual de $39",
       "features": [
         "Vinculaciones ilimitadas",
         "Tráfico sin restricciones",
@@ -81,7 +81,6 @@
         "Servidor VPS incluido",
         "Monitoreo y alertas 24/7",
         "Vinculación automática",
-        "Dominio personalizado (requiere pago inicial)",
         "Instalación web completa",
         "Estrategias de marketing en redes"
       ],

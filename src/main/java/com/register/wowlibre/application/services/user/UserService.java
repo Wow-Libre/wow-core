@@ -14,6 +14,7 @@ import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.out.user.*;
 import com.register.wowlibre.domain.security.*;
 import com.register.wowlibre.domain.shared.*;
+import com.register.wowlibre.infrastructure.config.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
@@ -54,12 +55,16 @@ public class UserService implements UserPort {
      * VERIFY CAPCHAT PORT
      **/
     private final GooglePort googlePort;
+    /**
+     * Configs
+     **/
+    private final Configurations configurations;
 
     public UserService(ObtainUserPort obtainUserPort, SaveUserPort saveUserPort, PasswordEncoder passwordEncoder,
                        JwtPort jwtPort, RolPort rolPort, MailPort mailPort,
                        SecurityValidationPort securityValidationPort,
                        I18nService i18nService, @Qualifier("random-string") RandomString randomString,
-                       GooglePort googlePort) {
+                       GooglePort googlePort, Configurations configurations) {
         this.obtainUserPort = obtainUserPort;
         this.saveUserPort = saveUserPort;
         this.passwordEncoder = passwordEncoder;
@@ -70,14 +75,16 @@ public class UserService implements UserPort {
         this.i18nService = i18nService;
         this.randomString = randomString;
         this.googlePort = googlePort;
+        this.configurations = configurations;
     }
 
 
     @Override
     public JwtDto create(UserDto userDto, String ip, Locale locale, String transactionId) {
 
-        if (!googlePort.verifyCaptcha("6LcbSqcqAAAAAE6r0D529XeZtuaIsueNUzz7jWen", userDto.getToken(), ip,
+        if (!googlePort.verifyCaptcha(configurations.getGoogleSecret(), userDto.getToken(), ip,
                 transactionId)) {
+            LOGGER.error("Ha ocurrido un error al verificar el captcha. transactionId: {}", transactionId);
             throw new InternalException("The captcha is invalid", transactionId);
         }
 

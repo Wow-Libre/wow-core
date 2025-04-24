@@ -22,6 +22,7 @@ public interface IntegratorPort {
     CharacterSocialDto friends(String host, String jwt, Long characterId, String transactionId);
 
     void changePassword(String host, String apiSecret, String jwt, Long accountId, Long userId, String password,
+                        Integer expansionId,
                         String transactionId);
 
     List<CharacterProfessionsDto> professions(String host, String jwt, Long accountId, Long characterId,
@@ -61,7 +62,8 @@ public interface IntegratorPort {
                      boolean multiFaction, String discord, String transactionId);
 
 
-    void sendAnnouncement(String host, String jwt, Long userId, Long accountId, Long characterId, Long skillId,String message,
+    void sendAnnouncement(String host, String jwt, Long userId, Long accountId, Long characterId, Long skillId,
+                          String message,
                           String transactionId);
 
     void sendBenefitsPremium(String host, String jwt, Long userId, Long accountId,

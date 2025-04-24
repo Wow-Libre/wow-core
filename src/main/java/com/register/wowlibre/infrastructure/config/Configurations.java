@@ -9,4 +9,6 @@ import org.springframework.context.annotation.*;
 public class Configurations {
     @Value("${application.host.wow-libre}")
     private String hostWowLibre;
+    @Value("${google.api-key}")
+    private String googleSecret;
 }
