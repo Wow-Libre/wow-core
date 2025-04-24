@@ -36,7 +36,7 @@
       "button_primary_text": "Join Now!",
       "button_secondary_text": "Copy Realmlist",
       "background_image": "https://static.wixstatic.com/media/5dd8a0_3403438a20cf4cb7baff8341cdabeeaf~mv2.jpg",
-      "realmlist": "set realmlist wowhero.wowlibre.com",
+      "realmlist": "set realmlist play.wowlibre.com",
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
       "disclaimer": "The power is in your hands, use it wisely!"
@@ -64,7 +64,7 @@
       "button_primary_text": "Junte-se Agora!",
       "button_secondary_text": "Copiar Realmlist",
       "background_image": "https://static.wixstatic.com/media/5dd8a0_3403438a20cf4cb7baff8341cdabeeaf~mv2.jpg",
-      "realmlist": "set realmlist wowhero.wowlibre.com",
+      "realmlist": "set realmlist play.wowlibre.com",
       "copy_success": false,
       "redirect": "https://www.wowlibre.com/vdp?name=wowhero&expansion=2",
       "disclaimer": "O poder está em suas mãos, use-o com sabedoria!"
