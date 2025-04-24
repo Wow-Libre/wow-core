@@ -10,6 +10,6 @@ public class AccountGameCreateDto {
     public String email;
     @JsonProperty("user_id")
     public Long userId;
-    public String expansion;
+    public Integer expansionId;
     public byte[] salt;
 }

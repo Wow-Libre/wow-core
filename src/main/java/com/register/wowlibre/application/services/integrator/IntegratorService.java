@@ -45,7 +45,7 @@ public class IntegratorService implements IntegratorPort {
                 .password(encryptedMessage)
                 .email(email)
                 .userId(userId)
-                .expansion(expansion)
+                .expansionId(Integer.valueOf(expansion))
                 .salt(salt)
                 .build();
 
