@@ -2,6 +2,7 @@ package com.register.wowlibre.application.services.machine;
 
 import com.register.wowlibre.application.services.*;
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.account_game.*;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
@@ -41,7 +42,7 @@ public class MachineService implements MachinePort {
                 transactionId);
 
 
-        final ServerEntity server = verificationDto.server();
+        final RealmEntity server = verificationDto.server();
 
         int[] weights = {21, 1, 5, 3, 70};
         String[] outcomes = {"Item", "Level", "Mount", "Gold", "None"};
@@ -63,7 +64,7 @@ public class MachineService implements MachinePort {
         } else {
             machineModel.setCoint(10);
             machineModel.setUserId(userId);
-            machineModel.setServerId(serverId);
+            machineModel.setRealmId(null);
             saveMachine.save(machineModel, transactionId);
         }
 
@@ -94,7 +95,7 @@ public class MachineService implements MachinePort {
             return MachineDto.builder().winner(false).message(i18nService.tr("message-machine-loss", locale)).build();
         }
 
-        ClaimMachineResponse claimMachineResponse = integratorPort.claimMachine(server.getIp(), server.getJwt(),
+        ClaimMachineResponse claimMachineResponse = integratorPort.claimMachine(server.getHost(), server.getJwt(),
                 userId, accountId, characterId,
                 machineType.getName(), transactionId);
 
@@ -124,7 +125,7 @@ public class MachineService implements MachinePort {
                 machineModel.setCoint(0);
             }
             machineModel.setUserId(userId);
-            machineModel.setServerId(serverId);
+            machineModel.setRealmId(null);
             saveMachine.save(machineModel, transactionId);
         }
 

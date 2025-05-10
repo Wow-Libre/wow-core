@@ -11,12 +11,12 @@ public class BenefitGuildEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JoinColumn(
-            name = "server_id",
+            name = "realm_id",
             referencedColumnName = "id")
     @ManyToOne(
             optional = false,
-            fetch = FetchType.EAGER)
-    private ServerEntity serverId;
+            fetch = FetchType.LAZY)
+    private RealmEntity realmId;
     @Column(name = "guild_name")
     private String guildName;
     @Column(name = "guild_id")

@@ -1,20 +1,20 @@
 package com.register.wowlibre.domain.port.in.account_game;
 
-import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.account_game.*;
+import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
 
 public interface AccountGamePort {
-    AccountsDto accounts(Long userId, int page, int size, String searchUsername, String serverName,
-                         String transactionId);
 
-    void create(Long userId, String serverName, String expansion, String username, String password,
+    void create(Long userId, String serverName, Integer expansionId, String username, String password,
                 String transactionId);
 
+    AccountsGameDto accounts(Long userId, int page, int size, String searchUsername, String serverName,
+                             String transactionId);
 
-    AccountsDto accounts(Long userId, Long serverId, String transactionId);
+    AccountsGameDto accounts(Long userId, Long realmId, String transactionId);
 
-    AccountVerificationDto verifyAccount(Long userId, Long accountId, Long serverId, String transactionId);
+    AccountVerificationDto verifyAccount(Long userId, Long accountId, Long realmId, String transactionId);
 
-    AccountDetailDto account(Long userId, Long accountId, Long serverId, String transactionId);
-
+    AccountGameDetailDto account(Long userId, Long accountId, Long realmId, String transactionId);
 
 }

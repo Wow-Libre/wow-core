@@ -5,6 +5,6 @@ import org.springframework.data.repository.*;
 
 import java.util.*;
 
-public interface ServerResourcesRepository extends CrudRepository<ServerResourcesEntity, Long> {
-    List<ServerResourcesEntity> findByServerId(ServerEntity serverId);
+public interface ServerResourcesRepository extends CrudRepository<RealmResourcesEntity, Long> {
+    List<RealmResourcesEntity> findByRealmId(RealmEntity serverId);
 }

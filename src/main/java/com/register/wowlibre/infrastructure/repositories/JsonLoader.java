@@ -2,7 +2,7 @@ package com.register.wowlibre.infrastructure.repositories;
 
 import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
-import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.model.resources.*;
 import com.register.wowlibre.domain.port.out.*;
 import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
@@ -17,7 +17,6 @@ public class JsonLoader implements JsonLoaderPort {
     private final ObjectMapper objectMapper;
 
     private final Resource jsonFile;
-    private final Resource faqsJsonFile;
     private final Resource bankPlans;
     private final Resource benefitsGuild;
     private final Resource serversPromos;
@@ -28,7 +27,6 @@ public class JsonLoader implements JsonLoaderPort {
     private final Resource plansAcquisition;
 
     private List<CountryModel> jsonCountryModel;
-    private Map<String, List<FaqsModel>> jsonFaqsModel;
     private Map<String, List<PlanModel>> jsonPlanModel;
     private Map<String, List<BenefitModel>> jsonBenefits;
     private Map<String, List<ServersPromotions>> jsonServerPromos;
@@ -40,7 +38,6 @@ public class JsonLoader implements JsonLoaderPort {
 
     public JsonLoader(ObjectMapper objectMapper,
                       @Value("classpath:/static/countryAvailable.json") Resource jsonFile,
-                      @Value("classpath:/static/faqs.json") Resource faqsJsonFile,
                       @Value("classpath:/static/bank_plans.json") Resource bankPlans,
                       @Value("classpath:/static/benefit_guild.json") Resource benefitsGuild,
                       @Value("classpath:/static/servers_promotions.json") Resource serverPromos,
@@ -51,7 +48,6 @@ public class JsonLoader implements JsonLoaderPort {
                       @Value("classpath:/static/plans_acquisition.json") Resource plansAcquisition) {
         this.objectMapper = objectMapper;
         this.jsonFile = jsonFile;
-        this.faqsJsonFile = faqsJsonFile;
         this.bankPlans = bankPlans;
         this.benefitsGuild = benefitsGuild;
         this.serversPromos = serverPromos;
@@ -65,45 +61,41 @@ public class JsonLoader implements JsonLoaderPort {
     @PostConstruct
     public void loadJsonFile() {
         try {
-            jsonCountryModel = objectMapper.readValue(jsonFile.getInputStream(), new TypeReference<>() {
+            jsonBannerHome = readValue(bannersHome.getInputStream(), new TypeReference<>() {
             });
-            jsonFaqsModel = objectMapper.readValue(faqsJsonFile.getInputStream(), new TypeReference<>() {
+            jsonCountryModel = readValue(jsonFile.getInputStream(), new TypeReference<>() {
             });
-            jsonFaqsSubscriptionModel = objectMapper.readValue(faqsSubscriptionJsonFile.getInputStream(),
-                    new TypeReference<>() {
-                    });
-            jsonPlanModel = objectMapper.readValue(bankPlans.getInputStream(), new TypeReference<>() {
+            jsonFaqsSubscriptionModel = readValue(faqsSubscriptionJsonFile.getInputStream(), new TypeReference<>() {
             });
-            jsonBenefits = objectMapper.readValue(benefitsGuild.getInputStream(), new TypeReference<>() {
+            jsonPlanModel = readValue(bankPlans.getInputStream(), new TypeReference<>() {
             });
-            jsonServerPromos = objectMapper.readValue(serversPromos.getInputStream(), new TypeReference<>() {
+            jsonBenefits = readValue(benefitsGuild.getInputStream(), new TypeReference<>() {
             });
-            jsonBannerHome = objectMapper.readValue(bannersHome.getInputStream(), new TypeReference<>() {
+            jsonServerPromos = readValue(serversPromos.getInputStream(), new TypeReference<>() {
             });
-            jsonWidgetSubscription = objectMapper.readValue(widgetHomeSubscription.getInputStream(),
-                    new TypeReference<>() {
-                    });
-            jsonServerExperienceModel = objectMapper.readValue(serverExperience.getInputStream(),
-                    new TypeReference<>() {
-                    });
-            jsonPlanAcquisitionModel = objectMapper.readValue(plansAcquisition.getInputStream(),
-                    new TypeReference<>() {
-                    });
-
+            jsonWidgetSubscription = readValue(widgetHomeSubscription.getInputStream(), new TypeReference<>() {
+            });
+            jsonServerExperienceModel = readValue(serverExperience.getInputStream(), new TypeReference<>() {
+            });
+            jsonPlanAcquisitionModel = readValue(plansAcquisition.getInputStream(), new TypeReference<>() {
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Override
-    public List<CountryModel> getJsonCountry(String transactionId) {
-        return jsonCountryModel;
+    private <T> T readValue(InputStream src, TypeReference<T> valueTypeRef) throws IOException {
+        return objectMapper.readValue(src, valueTypeRef);
     }
 
     @Override
-    public List<FaqsModel> getJsonFaqs(String language, String transactionId) {
-        return Optional.of(jsonFaqsModel.get(language)).orElse(jsonFaqsModel.get("es"));
+    public List<BannerHomeModel> getBannersHome(String language, String transactionId) {
+        return Optional.of(jsonBannerHome.get(language)).orElse(jsonBannerHome.get("es"));
+    }
 
+    @Override
+    public List<CountryModel> getJsonCountry(String transactionId) {
+        return jsonCountryModel;
     }
 
     @Override
@@ -127,11 +119,6 @@ public class JsonLoader implements JsonLoaderPort {
     }
 
     @Override
-    public List<BannerHomeModel> getBannersHome(String language, String transactionId) {
-        return Optional.of(jsonBannerHome.get(language)).orElse(jsonBannerHome.get("es"));
-    }
-
-    @Override
     public WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId) {
         return Optional.of(jsonWidgetSubscription.get(language).stream()
                 .findFirst()).orElse(jsonWidgetSubscription.get("es").stream().findFirst()).orElse(null);
@@ -146,5 +133,5 @@ public class JsonLoader implements JsonLoaderPort {
     public List<PlanAcquisitionModel> getPlansAcquisition(String language, String transactionId) {
         return Optional.of(jsonPlanAcquisitionModel.get(language)).orElse(jsonPlanAcquisitionModel.get("es"));
     }
-    
+
 }

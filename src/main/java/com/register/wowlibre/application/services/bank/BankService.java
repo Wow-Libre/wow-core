@@ -1,9 +1,11 @@
 package com.register.wowlibre.application.services.bank;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.account_game.*;
 import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.model.resources.*;
 import com.register.wowlibre.domain.port.in.*;
 import com.register.wowlibre.domain.port.in.account_game.*;
 import com.register.wowlibre.domain.port.in.bank.*;
@@ -50,7 +52,7 @@ public class BankService implements BankPort {
         AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
-        ServerEntity server = verificationDto.server();
+        RealmEntity server = verificationDto.server();
 
         if (!server.isStatus()) {
             throw new InternalException("Currently the server is not available to accept loans, contact the " +
@@ -58,7 +60,7 @@ public class BankService implements BankPort {
         }
 
         ServerServicesModel serverServicesModel =
-                serverServicesPort.findByNameAndServerId(ServerServices.BANK.getName(), serverId,
+                serverServicesPort.findByNameAndServerId(RealmServices.BANK, serverId,
                         transactionId);
 
         if (serverServicesModel == null) {
@@ -71,7 +73,7 @@ public class BankService implements BankPort {
 
         Optional<PlanModel> planSearch =
                 resourcesPort.getPlansBank("es", transactionId)
-                        .stream().filter(planModel -> planModel.id.equals(planId)).findFirst();
+                        .stream().filter(planModel -> planModel.id().equals(planId)).findFirst();
 
         if (planSearch.isEmpty()) {
             LOGGER.error("The requested plan is not available.");
@@ -84,24 +86,22 @@ public class BankService implements BankPort {
             throw new InternalException("You already have a loan.", transactionId);
         }
 
-        int monthPaymentPeriod = plan.monthPaymentPeriod;
+        int monthPaymentPeriod = plan.monthPaymentPeriod();
 
-        final double cost = calculateMonthlyPayment(plan.gold, plan.interest, monthPaymentPeriod);
+        final double cost = calculateMonthlyPayment(plan.gold(), plan.interest(), monthPaymentPeriod);
 
         LocalDateTime currentDate = LocalDateTime.now();
         LocalDateTime futurePaymentDate = currentDate.plusMonths(monthPaymentPeriod);
 
         CreditLoansEntity creditLoansEntity = new CreditLoansEntity();
-        creditLoansEntity.setAccountId(accountId);
         creditLoansEntity.setCharacterId(characterId);
         creditLoansEntity.setStatus(true);
-        creditLoansEntity.setUserId(verificationDto.accountGame().getUserId());
-        creditLoansEntity.setInterests(plan.interest);
-        creditLoansEntity.setServerId(serverId);
-        creditLoansEntity.setTransactionDate(currentDate);
+        creditLoansEntity.setAccountGameId(verificationDto.accountGame());
+        creditLoansEntity.setInterests(plan.interest());
+        creditLoansEntity.setRealmId(serverId);
         creditLoansEntity.setPaymentDate(futurePaymentDate);
         creditLoansEntity.setDebtToPay(cost);
-        creditLoansEntity.setAmountTransferred(plan.gold);
+        creditLoansEntity.setAmountTransferred(plan.gold());
         creditLoansEntity.setReferenceSerial(randomString.nextString());
         creditLoansEntity.setSend(false);
 

@@ -1,6 +1,7 @@
 package com.register.wowlibre.application.services.transaction;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.account_game.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.account_game.*;
@@ -41,14 +42,14 @@ public class TransactionService implements TransactionPort {
         AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
-        ServerEntity server = accountVerificationDto.server();
+        RealmEntity server = accountVerificationDto.server();
 
         if (server == null) {
             LOGGER.error("Server is not available");
             throw new InternalException("Server is not available", transactionId);
         }
 
-        integratorPort.purchase(server.getIp(), server.getJwt(), userId, accountId, reference, items, amount,
+        integratorPort.purchase(server.getHost(), server.getJwt(), userId, accountId, reference, items, amount,
                 transactionId);
     }
 
@@ -60,14 +61,14 @@ public class TransactionService implements TransactionPort {
         AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
-        ServerEntity server = accountVerificationDto.server();
+        RealmEntity server = accountVerificationDto.server();
 
         if (server == null) {
             LOGGER.error("Server is not available");
             throw new InternalException("Server is not available", transactionId);
         }
 
-        integratorPort.sendBenefitsPremium(server.getIp(), server.getJwt(), userId, accountId, characterId, items,
+        integratorPort.sendBenefitsPremium(server.getHost(), server.getJwt(), userId, accountId, characterId, items,
                 benefitType, amount, transactionId);
 
     }
@@ -80,7 +81,7 @@ public class TransactionService implements TransactionPort {
         AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
-        ServerEntity server = accountVerificationDto.server();
+        RealmEntity server = accountVerificationDto.server();
 
         if (server == null) {
             LOGGER.error("Server is not available");
@@ -115,7 +116,7 @@ public class TransactionService implements TransactionPort {
         AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
-        ServerEntity server = accountVerificationDto.server();
+        RealmEntity server = accountVerificationDto.server();
 
         if (server == null) {
             LOGGER.error("Server is not available");
@@ -132,7 +133,7 @@ public class TransactionService implements TransactionPort {
                     benefit.quantity)).toList();
         }
 
-        integratorPort.sendPromo(server.getIp(), server.getJwt(), userId, accountId, characterId, items,
+        integratorPort.sendPromo(server.getHost(), server.getJwt(), userId, accountId, characterId, items,
                 promo.getType(), promo.getAmount(), promo.getMinLvl(), promo.getMaxLvl(), promo.getLevel(),
                 transactionId);
 

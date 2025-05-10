@@ -1,21 +1,19 @@
 package com.register.wowlibre.infrastructure.repositories.server_services;
 
+import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.*;
 
 import java.util.*;
 
-public interface ServerServicesRepository extends CrudRepository<ServerServicesEntity, Long> {
-    List<ServerServicesEntity> findByServerId_Id(Long serverId);
+public interface ServerServicesRepository extends CrudRepository<RealmServicesEntity, Long> {
+    List<RealmServicesEntity> findByRealmId_Id(Long realmId);
 
-    Optional<ServerServicesEntity> findByNameAndServerId_id(String name, Long serverId);
+    Optional<RealmServicesEntity> findByNameAndRealmId_Id(RealmServices name, Long realmId_id);
 
-    @Query("SELECT ss FROM ServerServicesEntity ss " +
-            "INNER JOIN ss.serverId s " +
+    @Query("SELECT ss FROM RealmServicesEntity ss " +
+            "INNER JOIN ss.realmId s " +
             "WHERE ss.amount > 0 AND s.status = true")
-    List<ServerServicesEntity> findActiveServerServicesWithAmountGreaterThanZero();
-
-    @Override
-    Optional<ServerServicesEntity> findById(Long id);
+    List<RealmServicesEntity> findActiveServerServicesWithAmountGreaterThanZero();
 }
