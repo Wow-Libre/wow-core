@@ -51,7 +51,8 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
-    public void create(Long userId, String realmName, Integer expansionId, String username, String password,
+    public void create(Long userId, String realmName, Integer expansionId, String username,
+                       String gameMail, String password,
                        String transactionId) {
 
         Optional<UserEntity> userModel = userPort.findByUserId(userId, transactionId);
@@ -78,8 +79,10 @@ public class AccountGameService implements AccountGamePort {
             throw new InternalException("You cannot create more than 20 accounts per realm", transactionId);
         }
 
+        final String gameEMail = gameMail != null && !gameMail.isBlank() ? gameMail : user.getEmail();
+
         Long accountId = integratorPort.createAccount(realmModel.ip, realmModel.apiSecret, realmModel.expansion,
-                username, password, user.getEmail(), user.getId(), transactionId);
+                username, password, gameEMail, user.getId(), transactionId);
 
         AccountGameEntity accountGameEntity = new AccountGameEntity();
         accountGameEntity.setAccountId(accountId);
@@ -87,6 +90,7 @@ public class AccountGameService implements AccountGamePort {
         accountGameEntity.setUserId(user);
         accountGameEntity.setUsername(username);
         accountGameEntity.setStatus(true);
+        accountGameEntity.setGameEmail(gameEMail);
         saveAccountGamePort.save(accountGameEntity, transactionId);
     }
 
@@ -202,7 +206,7 @@ public class AccountGameService implements AccountGamePort {
         boolean status = accountGameEntity.isStatus() && accountGameEntity.getRealmId().isStatus();
         Expansion expansion = Expansion.getById(accountGameEntity.getRealmId().getExpansionId());
         return new AccountGameModel(accountGameEntity.getId(), accountGameEntity.getUsername(),
-                accountGameEntity.getAccountId(), accountGameEntity.getUserId().getEmail(),
+                accountGameEntity.getAccountId(), accountGameEntity.getGameEmail(),
                 accountGameEntity.getRealmId().getName(), accountGameEntity.getRealmId().getId(),
                 expansion.getName(), accountGameEntity.getRealmId().getAvatarUrl(),
                 accountGameEntity.getRealmId().getWeb(), status, accountGameEntity.getRealmId().getRealmlist());

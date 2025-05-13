@@ -71,6 +71,7 @@ CREATE TABLE platform.account_game
 (
     id         bigint auto_increment NOT NULL,
     username   varchar(40) NOT NULL,
+    game_email varchar(80) NOT NULL,
     status     boolean,
     account_id bigint      NOT NULL,
     realm_id   bigint      NOT NULL,

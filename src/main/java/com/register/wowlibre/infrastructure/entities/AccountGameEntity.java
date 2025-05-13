@@ -15,6 +15,8 @@ public class AccountGameEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
+    @Column(name = "game_email")
+    private String gameEmail;
     @Column(name = "account_id")
     private Long accountId;
     private boolean status;

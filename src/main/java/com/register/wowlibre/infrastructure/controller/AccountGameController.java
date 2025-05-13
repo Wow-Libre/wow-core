@@ -41,7 +41,7 @@ public class AccountGameController {
             @RequestBody @Valid CreateAccountGameDto account) {
 
         accountGamePort.create(userId, account.getRealmName(), account.getExpansion(), account.getUsername(),
-                account.getPassword(), transactionId);
+                account.getGameMail(), account.getPassword(), transactionId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new GenericResponseBuilder<Void>(transactionId).created().build());
