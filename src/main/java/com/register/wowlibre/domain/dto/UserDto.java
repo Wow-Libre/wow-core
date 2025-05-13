@@ -29,8 +29,7 @@ public class UserDto {
     @JsonProperty("last_name")
     private String lastName;
 
-    @NotNull
-    @Length(min = 5, max = 20)
+
     @JsonProperty("cell_phone")
     private String cellPhone;
 
