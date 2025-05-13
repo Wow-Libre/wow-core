@@ -42,7 +42,7 @@ class AccountGameControllerTest {
 
         List<AccountGameModel> accounts = List.of(
                 new AccountGameModel(1L, username, 100L, "test@mail.com", server, 10L,
-                        "WOTLK", "avatar.png", "web", true, "realmlist")
+                        "WOTLK", 2, "avatar.png", "web", true, "realmlist")
         );
         AccountsGameDto dto = new AccountsGameDto(accounts, 1L);
 
@@ -76,7 +76,7 @@ class AccountGameControllerTest {
         // Assert
         assertEquals(201, response.getStatusCode().value());
         assertThat(response.getBody()).isNotNull();
-        verify(accountGamePort).create(userId, "Azeroth", 2, "newUser", "pass123", transactionId);
+        verify(accountGamePort).create(userId, "Azeroth", 2, "newUser", null, "pass123", transactionId);
     }
 
     @Test
@@ -88,7 +88,7 @@ class AccountGameControllerTest {
 
         List<AccountGameModel> accounts = List.of(
                 new AccountGameModel(1L, "user1", 100L, "test@mail.com", "Azeroth", serverId,
-                        "WOTLK", "avatar.png", "web", true, "realmlist")
+                        "WOTLK", 2, "avatar.png", "web", true, "realmlist")
         );
         AccountsGameDto dto = new AccountsGameDto(accounts, 1L);
 

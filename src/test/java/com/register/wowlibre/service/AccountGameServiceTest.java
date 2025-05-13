@@ -122,7 +122,7 @@ class AccountGameServiceTest extends BaseTest {
         when(obtainAccountGamePort.findByUserIdAndRealmId(userId, realmModel.id, transactionId)).thenReturn(existingAccounts);
 
         assertThrows(InternalException.class, () ->
-                service.create(userId, serverName, expansionId, username, password, transactionId)
+                service.create(userId, serverName, expansionId, username, password, "gameMail", transactionId)
         );
     }
 
@@ -134,6 +134,7 @@ class AccountGameServiceTest extends BaseTest {
         Integer expansionId = 2;
         String username = "testuser";
         String password = "123456";
+        String gameMail = "gameMail";
         String transactionId = "tx-001";
 
         UserEntity userEntity = new UserEntity();
@@ -147,7 +148,7 @@ class AccountGameServiceTest extends BaseTest {
                 .thenReturn(999L);
 
         assertThrows(InternalException.class, () ->
-                service.create(userId, serverName, expansionId, username, password, transactionId)
+                service.create(userId, serverName, expansionId, username, password, gameMail, transactionId)
         );
     }
 
@@ -173,7 +174,7 @@ class AccountGameServiceTest extends BaseTest {
                 .thenReturn(999L);
 
         assertThrows(InternalException.class, () ->
-                service.create(userId, serverName, expansionId, username, password, transactionId)
+                service.create(userId, serverName, expansionId, username, null, password, transactionId)
         );
     }
 
@@ -199,7 +200,8 @@ class AccountGameServiceTest extends BaseTest {
         when(integratorPort.createAccount(any(), any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(999L);
 
-        assertDoesNotThrow(() -> service.create(userId, serverName, expansionId, username, password, transactionId));
+        assertDoesNotThrow(() -> service.create(userId, serverName, expansionId, username, "", password,
+                transactionId));
         verify(saveAccountGamePort).save(any(AccountGameEntity.class), eq(transactionId));
     }
 
@@ -208,7 +210,7 @@ class AccountGameServiceTest extends BaseTest {
         when(userPort.findByUserId(1L, "tx")).thenReturn(Optional.empty());
 
         UnauthorizedException ex = assertThrows(UnauthorizedException.class, () ->
-                service.create(1L, "Realm", 1, "user", "pass", "tx")
+                service.create(1L, "Realm", 1, "user", "", "pass", "tx")
         );
 
         assertEquals("The client is not available or does not exist", ex.getMessage());
@@ -437,12 +439,11 @@ class AccountGameServiceTest extends BaseTest {
         user.setId(userId);
 
 
-
         when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(user));
         when(obtainAccountGamePort.accounts(userId)).thenReturn(1L);
         when(obtainAccountGamePort.findByUserIdAndRealmNameAndUsernameStatusIsTrue(userId, page, size, realmName,
                 searchUsername, transactionId))
-                .thenReturn(List.of(buildAccountGameEntity() ));
+                .thenReturn(List.of(buildAccountGameEntity()));
 
         when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(user));
         when(obtainAccountGamePort.accounts(userId)).thenReturn(1L);
