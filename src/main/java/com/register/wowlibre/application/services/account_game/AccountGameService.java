@@ -204,11 +204,12 @@ public class AccountGameService implements AccountGamePort {
 
     private AccountGameModel mapToModel(AccountGameEntity accountGameEntity) {
         boolean status = accountGameEntity.isStatus() && accountGameEntity.getRealmId().isStatus();
-        Expansion expansion = Expansion.getById(accountGameEntity.getRealmId().getExpansionId());
+        Integer expansionId = accountGameEntity.getRealmId().getExpansionId();
+        Expansion expansion = Expansion.getById(expansionId);
         return new AccountGameModel(accountGameEntity.getId(), accountGameEntity.getUsername(),
                 accountGameEntity.getAccountId(), accountGameEntity.getGameEmail(),
                 accountGameEntity.getRealmId().getName(), accountGameEntity.getRealmId().getId(),
-                expansion.getName(), accountGameEntity.getRealmId().getAvatarUrl(),
+                expansion.getName(), expansionId, accountGameEntity.getRealmId().getAvatarUrl(),
                 accountGameEntity.getRealmId().getWeb(), status, accountGameEntity.getRealmId().getRealmlist());
     }
 }
