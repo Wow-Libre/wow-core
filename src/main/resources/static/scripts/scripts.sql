@@ -31,7 +31,6 @@ CREATE TABLE platform.user
     rol_id        BIGINT      NOT null,
     language      varchar(10) NOT NULL,
     CONSTRAINT uq_user_email UNIQUE (email),
-    CONSTRAINT uq_user_cell_phone UNIQUE (cell_phone),
     CONSTRAINT fk_user_rol_id FOREIGN KEY (rol_id) REFERENCES platform.rol (id),
     PRIMARY KEY (id)
 );
