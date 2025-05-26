@@ -252,5 +252,33 @@ CREATE TABLE platform.teleport
     orientation DOUBLE NOT NULL,
     zone    INT NOT NULL,
     area DOUBLE,
+    realm_id BIGINT NOT NULL,
     faction ENUM('HORDE', 'ALLIANCE','ALL') NOT NULL,
+    CONSTRAINT fk_teleport_realm_id FOREIGN KEY (realm_id) REFERENCES platform.realm (id),
+    CONSTRAINT uq_teleport_name_realm UNIQUE (name, realm_id)
+);
+
+CREATE TABLE platform.faqs
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    question   TEXT         NOT NULL,
+    answer     TEXT         NOT NULL,
+    language   VARCHAR(255) NOT NULL,
+    type ENUM('SUPPORT', 'SUBSCRIPTION') NOT NULL,
+    created_at DATETIME     NOT NULL,
+    updated_at DATETIME     NOT NULL
+);
+
+CREATE TABLE platform.realm_advertising (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(80) NOT NULL,
+    tag VARCHAR(255) NOT NULL,
+    sub_title VARCHAR(255) NOT NULL,
+    description TEXT,
+    cta_primary VARCHAR(255) NOT NULL,
+    img_url TEXT NOT NULL,
+    footer_disclaimer VARCHAR(255) NOT NULL,
+    language VARCHAR(10) NOT NULL,
+    realm_id BIGINT NOT NULL,
+    CONSTRAINT fk_realm_advertising_realm_id FOREIGN KEY (realm_id) REFERENCES platform.realm(id)
 );
