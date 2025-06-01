@@ -22,7 +22,6 @@ public class JsonLoader implements JsonLoaderPort {
     private final Resource serversPromos;
     private final Resource bannersHome;
     private final Resource widgetHomeSubscription;
-    private final Resource serverExperience;
     private final Resource plansAcquisition;
 
     private List<CountryModel> jsonCountryModel;
@@ -31,7 +30,6 @@ public class JsonLoader implements JsonLoaderPort {
     private Map<String, List<ServersPromotions>> jsonServerPromos;
     private Map<String, List<BannerHomeModel>> jsonBannerHome;
     private Map<String, List<WidgetHomeSubscriptionModel>> jsonWidgetSubscription;
-    private Map<String, List<ExperiencesHomeModel>> jsonServerExperienceModel;
     private Map<String, List<PlanAcquisitionModel>> jsonPlanAcquisitionModel;
 
     public JsonLoader(ObjectMapper objectMapper,
@@ -41,7 +39,6 @@ public class JsonLoader implements JsonLoaderPort {
                       @Value("classpath:/static/servers_promotions.json") Resource serverPromos,
                       @Value("classpath:/static/banner_home.json") Resource bannersHome,
                       @Value("classpath:/static/subscription_benefit.json") Resource widgetHomeSubscription,
-                      @Value("classpath:/static/server_experiences.json") Resource serverExperience,
                       @Value("classpath:/static/plans_acquisition.json") Resource plansAcquisition) {
         this.objectMapper = objectMapper;
         this.jsonFile = jsonFile;
@@ -50,7 +47,6 @@ public class JsonLoader implements JsonLoaderPort {
         this.serversPromos = serverPromos;
         this.bannersHome = bannersHome;
         this.widgetHomeSubscription = widgetHomeSubscription;
-        this.serverExperience = serverExperience;
         this.plansAcquisition = plansAcquisition;
     }
 
@@ -68,8 +64,6 @@ public class JsonLoader implements JsonLoaderPort {
             jsonServerPromos = readValue(serversPromos.getInputStream(), new TypeReference<>() {
             });
             jsonWidgetSubscription = readValue(widgetHomeSubscription.getInputStream(), new TypeReference<>() {
-            });
-            jsonServerExperienceModel = readValue(serverExperience.getInputStream(), new TypeReference<>() {
             });
             jsonPlanAcquisitionModel = readValue(plansAcquisition.getInputStream(), new TypeReference<>() {
             });
@@ -114,10 +108,6 @@ public class JsonLoader implements JsonLoaderPort {
                 .findFirst()).orElse(jsonWidgetSubscription.get("es").stream().findFirst()).orElse(null);
     }
 
-    @Override
-    public List<ExperiencesHomeModel> getExperiencesHome(String language, String transactionId) {
-        return Optional.of(jsonServerExperienceModel.get(language)).orElse(jsonServerExperienceModel.get("es"));
-    }
 
     @Override
     public List<PlanAcquisitionModel> getPlansAcquisition(String language, String transactionId) {
