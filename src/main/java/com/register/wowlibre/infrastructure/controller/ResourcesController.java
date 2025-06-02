@@ -85,16 +85,6 @@ public class ResourcesController {
     }
 
 
-    @GetMapping("/experiences")
-    public ResponseEntity<GenericResponse<List<ExperiencesHomeModel>>> experiences(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE, required = false) Locale locale) {
-        final List<ExperiencesHomeModel> faqsModels = resourcesPort.getExperiencesHome(locale.getLanguage(),
-                transactionId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(faqsModels, transactionId).ok().build());
-    }
 
     @GetMapping("/bank/plans")
     public ResponseEntity<GenericResponse<List<PlanModel>>> plans(

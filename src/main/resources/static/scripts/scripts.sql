@@ -271,7 +271,6 @@ CREATE TABLE platform.faqs
 
 CREATE TABLE platform.realm_advertising (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(80) NOT NULL,
     tag VARCHAR(255) NOT NULL,
     sub_title VARCHAR(255) NOT NULL,
     description TEXT,
@@ -282,3 +281,30 @@ CREATE TABLE platform.realm_advertising (
     realm_id BIGINT NOT NULL,
     CONSTRAINT fk_realm_advertising_realm_id FOREIGN KEY (realm_id) REFERENCES platform.realm(id)
 );
+
+CREATE TABLE IF NOT EXISTS platform.news (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  title VARCHAR(80) NOT NULL,
+  sub_title VARCHAR(80) NOT NULL,
+  img_url TEXT,
+  author VARCHAR(50),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+
+CREATE TABLE IF NOT EXISTS platform.news_sections (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  title VARCHAR(100) NOT NULL,
+  img_url TEXT,
+  news_id BIGINT NOT NULL,
+  content TEXT NOT NULL,
+  section_order INT NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT fk_news_sections_news_id FOREIGN KEY (news_id)
+    REFERENCES news(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+

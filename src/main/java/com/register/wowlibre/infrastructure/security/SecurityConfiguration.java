@@ -96,13 +96,13 @@ public class SecurityConfiguration {
                                         "/api/resources/bank/plans",
                                         "/api/resources/benefit",
                                         "/api/resources/benefits-guild",
-                                        "/api/resources/experiences",
                                         "/api/resources/plan-acquisition",
                                         "/api/realm",
                                         "/api/guilds",
                                         "/api/guilds/{id}",
                                         "/api/realm/vdp",
-
+                                        "/api/news",
+                                        "/api/news/{id}",
                                         //SWAGGER
                                         "/v2/api-docs",
                                         "/swagger-resources",
@@ -115,9 +115,12 @@ public class SecurityConfiguration {
                                         "/swagger-ui/**")
                                 .permitAll()
                                 .requestMatchers("/api/realm/key", "/api/realm/**", "/api/resources/create/faq",
-                                        "/api/resources/delete/faq").hasAuthority(Rol.ADMIN.getName())
-                                .requestMatchers("/api/transaction/purchase", "/api/transaction/subscription-benefits"
-                                ).hasAuthority(Rol.ADMIN.getName())
+                                        "/api/resources/delete/faq", "/api/transaction/purchase", "/api/transaction" +
+                                                "/subscription-benefits").hasAuthority(Rol.ADMIN.getName())
+                                .requestMatchers(HttpMethod.POST, "/api/news", "/api/news/{newsId}/sections").hasAuthority(Rol.ADMIN.getName())
+                                .requestMatchers(HttpMethod.PUT, "/api/news/{id}").hasAuthority(Rol.ADMIN.getName())
+                                .requestMatchers(HttpMethod.DELETE, "/api/news/{id}", "/api/news/{newsId}/sections" +
+                                        "/{sectionId}").hasAuthority(Rol.ADMIN.getName())
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
