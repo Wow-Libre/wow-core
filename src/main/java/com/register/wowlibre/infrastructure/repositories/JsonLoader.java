@@ -19,16 +19,12 @@ public class JsonLoader implements JsonLoaderPort {
     private final Resource jsonFile;
     private final Resource bankPlans;
     private final Resource benefitsGuild;
-    private final Resource serversPromos;
-    private final Resource bannersHome;
     private final Resource widgetHomeSubscription;
     private final Resource plansAcquisition;
 
     private List<CountryModel> jsonCountryModel;
     private Map<String, List<PlanModel>> jsonPlanModel;
     private Map<String, List<BenefitModel>> jsonBenefits;
-    private Map<String, List<ServersPromotions>> jsonServerPromos;
-    private Map<String, List<BannerHomeModel>> jsonBannerHome;
     private Map<String, List<WidgetHomeSubscriptionModel>> jsonWidgetSubscription;
     private Map<String, List<PlanAcquisitionModel>> jsonPlanAcquisitionModel;
 
@@ -36,16 +32,12 @@ public class JsonLoader implements JsonLoaderPort {
                       @Value("classpath:/static/countryAvailable.json") Resource jsonFile,
                       @Value("classpath:/static/bank_plans.json") Resource bankPlans,
                       @Value("classpath:/static/benefit_guild.json") Resource benefitsGuild,
-                      @Value("classpath:/static/servers_promotions.json") Resource serverPromos,
-                      @Value("classpath:/static/banner_home.json") Resource bannersHome,
                       @Value("classpath:/static/subscription_benefit.json") Resource widgetHomeSubscription,
                       @Value("classpath:/static/plans_acquisition.json") Resource plansAcquisition) {
         this.objectMapper = objectMapper;
         this.jsonFile = jsonFile;
         this.bankPlans = bankPlans;
         this.benefitsGuild = benefitsGuild;
-        this.serversPromos = serverPromos;
-        this.bannersHome = bannersHome;
         this.widgetHomeSubscription = widgetHomeSubscription;
         this.plansAcquisition = plansAcquisition;
     }
@@ -53,15 +45,11 @@ public class JsonLoader implements JsonLoaderPort {
     @PostConstruct
     public void loadJsonFile() {
         try {
-            jsonBannerHome = readValue(bannersHome.getInputStream(), new TypeReference<>() {
-            });
             jsonCountryModel = readValue(jsonFile.getInputStream(), new TypeReference<>() {
             });
             jsonPlanModel = readValue(bankPlans.getInputStream(), new TypeReference<>() {
             });
             jsonBenefits = readValue(benefitsGuild.getInputStream(), new TypeReference<>() {
-            });
-            jsonServerPromos = readValue(serversPromos.getInputStream(), new TypeReference<>() {
             });
             jsonWidgetSubscription = readValue(widgetHomeSubscription.getInputStream(), new TypeReference<>() {
             });
@@ -76,10 +64,6 @@ public class JsonLoader implements JsonLoaderPort {
         return objectMapper.readValue(src, valueTypeRef);
     }
 
-    @Override
-    public List<BannerHomeModel> getBannersHome(String language, String transactionId) {
-        return Optional.of(jsonBannerHome.get(language)).orElse(jsonBannerHome.get("es"));
-    }
 
     @Override
     public List<CountryModel> getJsonCountry(String transactionId) {
@@ -97,10 +81,6 @@ public class JsonLoader implements JsonLoaderPort {
         return Optional.of(jsonBenefits.get(language)).orElse(jsonBenefits.get("es"));
     }
 
-    @Override
-    public List<ServersPromotions> getJsonServersPromoGuild(String language, String transactionId) {
-        return Optional.of(jsonServerPromos.get(language)).orElse(jsonServerPromos.get("es"));
-    }
 
     @Override
     public WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId) {

@@ -1,6 +1,5 @@
 package com.register.wowlibre.infrastructure.entities;
 
-import com.register.wowlibre.domain.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,19 +7,32 @@ import java.time.*;
 
 @Data
 @Entity
-@Table(name = "faqs")
-public class FaqsEntity {
+@Table(name = "voting_platforms")
+public class VotingPlatformsEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    private String question;
-    private String answer;
-    private String language;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private FaqType type;
+
+    @Column(name = "img_url", nullable = false)
+    private String imgUrl;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "postback_url")
+    private String postbackUrl;
+
+    @Column(name = "allowed_host")
+    private String allowedHost;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
