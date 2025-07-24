@@ -58,12 +58,13 @@ CREATE TABLE platform.realm
     web               text,
     realmlist         varchar(80) NOT NULL,
     status            boolean     NOT NULL,
-    external_username varchar(50) NOT NULL,
-    external_password text        NOT NULL,
+    external_username varchar(50),
+    external_password text        ,
     salt              VARBINARY(16),
     retry             integer,
     disclaimer        varchar(80),
-
+    gm_username varchar(50),
+    gm_password text,
     CONSTRAINT uq_realm_name_expansion UNIQUE (name, expansion_id),
     CONSTRAINT uq_realm_api_key UNIQUE (api_key),
     PRIMARY KEY (id)
@@ -271,12 +272,12 @@ CREATE TABLE platform.faqs
 
 CREATE TABLE platform.realm_advertising (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    tag VARCHAR(255) NOT NULL,
-    sub_title VARCHAR(255) NOT NULL,
+    tag VARCHAR(10) NOT NULL,
+    sub_title VARCHAR(40) NOT NULL,
     description TEXT,
-    cta_primary VARCHAR(255) NOT NULL,
+    cta_primary VARCHAR(20) NOT NULL,
     img_url TEXT NOT NULL,
-    footer_disclaimer VARCHAR(255) NOT NULL,
+    footer_disclaimer VARCHAR(40) NOT NULL,
     language VARCHAR(10) NOT NULL,
     realm_id BIGINT NOT NULL,
     CONSTRAINT fk_realm_advertising_realm_id FOREIGN KEY (realm_id) REFERENCES platform.realm(id)
