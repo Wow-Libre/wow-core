@@ -43,6 +43,41 @@ class JpaFaqsAdapterTest {
         verify(faqsRepository, times(1)).findByTypeAndLanguage(FaqType.SUPPORT, language);
     }
 
+    @Test
+    void testSaveFaq() {
+        FaqsEntity entity = new FaqsEntity();
+        String txId = "tx123";
+
+        jpaFaqsAdapter.save(entity, txId);
+
+        verify(faqsRepository, times(1)).save(entity);
+    }
+
+    @Test
+    void testDeleteExistingFaq() {
+        Long faqId = 1L;
+        FaqsEntity entity = new FaqsEntity();
+
+        when(faqsRepository.findById(faqId)).thenReturn(Optional.of(entity));
+
+        jpaFaqsAdapter.delete(faqId, "tx123");
+
+        verify(faqsRepository, times(1)).findById(faqId);
+        verify(faqsRepository, times(1)).delete(entity);
+    }
+
+    @Test
+    void testDeleteNonExistingFaq() {
+        Long faqId = 99L;
+
+        when(faqsRepository.findById(faqId)).thenReturn(Optional.empty());
+
+        jpaFaqsAdapter.delete(faqId, "tx456");
+
+        verify(faqsRepository, times(1)).findById(faqId);
+        verify(faqsRepository, never()).delete(any());
+    }
+
     private FaqsEntity createFaqEntity(Long id, String question, String answer, String language) {
         FaqsEntity faq = new FaqsEntity();
         faq.setId(id);

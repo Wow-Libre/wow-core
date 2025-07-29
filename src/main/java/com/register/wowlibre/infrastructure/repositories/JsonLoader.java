@@ -43,7 +43,7 @@ public class JsonLoader implements JsonLoaderPort {
     }
 
     @PostConstruct
-    public void loadJsonFile() {
+    private void loadJsonFile() {
         try {
             jsonCountryModel = readValue(jsonFile.getInputStream(), new TypeReference<>() {
             });
