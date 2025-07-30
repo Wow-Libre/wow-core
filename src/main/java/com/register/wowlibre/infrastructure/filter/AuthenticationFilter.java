@@ -1,54 +1,50 @@
 package com.register.wowlibre.infrastructure.filter;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.register.wowlibre.domain.constant.Constants;
-import com.register.wowlibre.domain.exception.UnauthorizedException;
-import com.register.wowlibre.domain.port.in.jwt.JwtPort;
-import com.register.wowlibre.domain.security.JwtDto;
-import com.register.wowlibre.domain.shared.CustomUserDetails;
-import com.register.wowlibre.domain.security.UserLoginModel;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.apache.logging.log4j.ThreadContext;
-import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import com.fasterxml.jackson.databind.*;
+import com.register.wowlibre.domain.constant.*;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.port.in.jwt.*;
+import com.register.wowlibre.domain.security.*;
+import com.register.wowlibre.domain.shared.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import org.apache.logging.log4j.*;
+import org.springframework.http.*;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.*;
+import org.springframework.security.web.authentication.*;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import static com.register.wowlibre.domain.constant.Constants.CONSTANT_UNIQUE_ID;
+import static com.register.wowlibre.domain.constant.Constants.*;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private static final String PATH_AUTHENTICATION_FILTER = "/api/auth/login";
-    private final AuthenticationProvider authenticationProvider;
+    private final AuthenticationManager authenticationManager;
     private final JwtPort jwtPort;
 
-    public AuthenticationFilter(AuthenticationProvider authenticationProvider,
-                                JwtPort jwtPort) {
-        this.authenticationProvider = authenticationProvider;
+    public AuthenticationFilter(AuthenticationManager authenticationManager, JwtPort jwtPort) {
+        this.authenticationManager = authenticationManager;
         this.jwtPort = jwtPort;
-        setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(buildPattern(), "POST"));
     }
 
+    @Override
+    protected boolean requiresAuthentication(HttpServletRequest request, HttpServletResponse response) {
+        return "POST".equalsIgnoreCase(request.getMethod()) &&
+                PATH_AUTHENTICATION_FILTER.equals(request.getServletPath());
+    }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request,
-                                                HttpServletResponse response) {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         String transactionId = request.getHeader(Constants.HEADER_TRANSACTION_ID);
         ThreadContext.put(CONSTANT_UNIQUE_ID, transactionId);
         UserLoginModel user = getParamsUser(request, transactionId);
-        return authenticationProvider
-                .authenticate(new UsernamePasswordAuthenticationToken(user.username, user.password));
+        return authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.username, user.password)
+        );
     }
 
     @Override
@@ -97,10 +93,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     }
 
-
-    private String buildPattern() {
-        return PATH_AUTHENTICATION_FILTER;
-    }
 
     private UserLoginModel getParamsUser(HttpServletRequest request, String transactionId) {
         try {
