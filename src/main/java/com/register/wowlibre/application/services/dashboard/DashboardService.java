@@ -7,6 +7,7 @@ import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.dashboard.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
+import com.register.wowlibre.domain.port.in.notification_provider.*;
 import com.register.wowlibre.domain.port.in.promotion.*;
 import com.register.wowlibre.domain.port.in.realm.*;
 import com.register.wowlibre.domain.port.in.realm_services.*;
@@ -41,11 +42,12 @@ public class DashboardService implements DashboardPort {
 
     private final PromotionPort promotionPort;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationProviderPort notificationProviderPort;
 
     public DashboardService(ObtainCreditLoans obtainCreditLoans, RealmPort realmPort,
                             RealmServicesPort realmServicesPort, IntegratorPort integratorPort,
                             UserPromotionPort userPromotionPort, PromotionPort promotionPort,
-                            PasswordEncoder passwordEncoder) {
+                            PasswordEncoder passwordEncoder, NotificationProviderPort notificationProviderPort) {
         this.obtainCreditLoans = obtainCreditLoans;
         this.realmPort = realmPort;
         this.realmServicesPort = realmServicesPort;
@@ -53,6 +55,7 @@ public class DashboardService implements DashboardPort {
         this.userPromotionPort = userPromotionPort;
         this.promotionPort = promotionPort;
         this.passwordEncoder = passwordEncoder;
+        this.notificationProviderPort = notificationProviderPort;
     }
 
     @Override
@@ -251,5 +254,31 @@ public class DashboardService implements DashboardPort {
 
 
         return integratorPort.getConfigs(server.getHost(), server.getJwt(), url, authServer, transactionId);
+    }
+
+    @Override
+    public void configProvider(Long userId, CreateNotificationProviderDto request,
+                               String transactionId) {
+
+        NotificationType notificationType = NotificationType.fromName(request.getName());
+
+        if (notificationType == null) {
+            throw new InternalException("The notification type is not valid.", transactionId);
+        }
+
+        Optional<NotificationProvidersEntity> provider = notificationProviderPort.findByName(notificationType.name(),
+                transactionId);
+
+        if (provider.isPresent()) {
+            throw new InternalException("The notification provider with this name already exists.",
+                    transactionId);
+        }
+
+        NotificationProvidersEntity providersEntity = new NotificationProvidersEntity();
+        providersEntity.setName(notificationType.name());
+        providersEntity.setHost(request.getHost());
+        providersEntity.setFromMail(request.getClient());
+        providersEntity.setSecretKey(request.getSecret());
+        notificationProviderPort.save(providersEntity, transactionId);
     }
 }

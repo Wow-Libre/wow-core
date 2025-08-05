@@ -203,7 +203,7 @@ public class UserService implements UserPort {
             throw new InternalException("The email entered does not exist", transactionId);
         }
 
-        Locale locale = new Locale(account.get().getLanguage());
+        Locale locale = Locale.forLanguageTag(account.get().getLanguage());
 
         final String codeOtp = securityValidationPort.generateOtpRecoverAccount(account.get().getEmail(),
                 transactionId);
@@ -259,7 +259,7 @@ public class UserService implements UserPort {
             return;
         }
 
-        Locale locale = new Locale(account.get().getLanguage());
+        Locale locale = Locale.forLanguageTag(account.get().getLanguage());
         final String code = securityValidationPort.generateCodeValidationMail(user.getEmail(), transactionId);
         final String body = i18nService.tr("send-code-mail-validation-mail", new Object[]{code.toUpperCase()}, locale);
 

@@ -28,4 +28,6 @@ public interface DashboardPort {
 
     Map<String, String> getConfigs(Long userId, Long serverId, String url, boolean authServer,
                                    String transactionId);
+
+    void configProvider(Long userId, CreateNotificationProviderDto request, String transactionId);
 }

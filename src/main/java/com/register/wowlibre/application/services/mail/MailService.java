@@ -1,9 +1,14 @@
 package com.register.wowlibre.application.services.mail;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.dto.comunication.*;
+import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.port.in.mail.*;
+import com.register.wowlibre.domain.port.in.notification_provider.*;
+import com.register.wowlibre.infrastructure.client.*;
 import com.register.wowlibre.infrastructure.config.*;
+import com.register.wowlibre.infrastructure.entities.*;
 import org.springframework.scheduling.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -12,15 +17,19 @@ import java.util.*;
 @Service
 public class MailService implements MailPort {
 
-    private final AwsMailSender awsMailSender;
+    private static final long REGISTER_TEMPLATE_ID = 1L;
     private final Configurations configurations;
     private final MailSend mailSend;
+    private final NotificationProviderPort notificationProviderPort;
+    private final CommunicationsClient communicationsClient;
 
-
-    public MailService(Configurations configurations, AwsMailSender awsMailSender, MailSend mailSend) {
+    public MailService(Configurations configurations, MailSend mailSend,
+                       NotificationProviderPort notificationProviderPort,
+                       CommunicationsClient communicationsClient) {
         this.configurations = configurations;
-        this.awsMailSender = awsMailSender;
         this.mailSend = mailSend;
+        this.notificationProviderPort = notificationProviderPort;
+        this.communicationsClient = communicationsClient;
     }
 
     @Async
@@ -29,20 +38,47 @@ public class MailService implements MailPort {
         final String url = String.format("%s/confirmation?email=%s&code=%s", configurations.getHostDomain(), email,
                 code);
 
-        Map<String, String> templateVariables = new HashMap<>();
-        templateVariables.put("url", url);
+        Optional<NotificationProvidersEntity> provider =
+                notificationProviderPort.findByName(NotificationType.MAILS.name(), transactionId);
 
-        //awsMailSender.sendTemplatedEmail(email, subject, "register.ftlh", templateVariables);
-        mailSend.sendHTMLEmail(MailSenderVars.builder()
-                .emailFrom(email).idTemplate(1)
-                .data(RegisterSenderVarsDto.builder().url(url).build())
-                .subject(subject).transactionId(transactionId).build());
+        if (provider.isEmpty()) {
+            mailSend.sendHTMLEmail(MailSenderVars.builder()
+                    .emailFrom(email).idTemplate(1)
+                    .data(RegisterSenderVarsDto.builder().url(url).build())
+                    .subject(subject).transactionId(transactionId).build());
+            return;
+        }
+
+        NotificationProvidersEntity communication = provider.get();
+
+        Map<String, String> body = new HashMap<>();
+        body.put("url", url);
+
+        communicationsClient.sendMailTemplate(communication.getHost(), communication.getFromMail(),
+                SendMailTemplateRequest.builder()
+                        .templateId(REGISTER_TEMPLATE_ID)
+                        .email(email)
+                        .subject(subject)
+                        .body(body)
+                        .secret(communication.getSecretKey())
+                        .build(), transactionId);
+
     }
 
     @Override
     public void sendMail(String mail, String subject, String body, String transactionId) {
-        //awsMailSender.sendEmail(mail, subject, body, transactionId);
-        mailSend.sendMail(mail, subject, body, transactionId);
+
+        Optional<NotificationProvidersEntity> provider =
+                notificationProviderPort.findByName(NotificationType.MAILS.name(), transactionId);
+
+        if (provider.isEmpty()) {
+            mailSend.sendMail(mail, subject, body, transactionId);
+            return;
+        }
+
+        NotificationProvidersEntity communication = provider.get();
+        communicationsClient.sendMailBasic(communication.getHost(), communication.getFromMail(),
+                new SendMailCommunicationRequest(mail, subject, body, communication.getSecretKey()), transactionId);
     }
 
 

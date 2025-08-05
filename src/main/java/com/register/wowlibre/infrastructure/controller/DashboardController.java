@@ -173,4 +173,17 @@ public class DashboardController {
                 .status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(configServer, transactionId).ok().build());
     }
+
+    @PostMapping("/provider/config")
+    public ResponseEntity<GenericResponse<Void>> providerConfig(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestBody @Valid CreateNotificationProviderDto request) {
+
+        dashboardPort.configProvider(userId, request, transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
 }

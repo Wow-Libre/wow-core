@@ -311,15 +311,14 @@ CREATE TABLE IF NOT EXISTS platform.news_sections (
 
 CREATE TABLE platform.notification_providers (
    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-   provider_name ENUM('AWS', 'WOW_LIBRE') NOT NULL,
-   from_email VARCHAR(100),
-   access_key TEXT,
+   name ENUM('MAILS','METRICS') NOT NULL,
+   host VARCHAR(100) NOT NULL,
+   client VARCHAR(100),
    secret_key TEXT,
-   region VARCHAR(100),
    enabled BOOLEAN DEFAULT true,
    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-   CONSTRAINT uq_notification_providers_provider_name UNIQUE (provider_name)
+   CONSTRAINT uq_notification_providers_provider_name UNIQUE (name)
 );
 
 
