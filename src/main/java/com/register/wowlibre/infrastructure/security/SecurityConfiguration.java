@@ -113,7 +113,7 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .requestMatchers("/api/realm/**", "/api/resources/create/faq",
                                         "/api/resources/delete/faq", "/api/transaction/purchase", "/api/transaction" +
-                                                "/subscription-benefits").hasAuthority(Rol.ADMIN.getName())
+                                                "/subscription-benefits", "/api/provider/**").hasAuthority(Rol.ADMIN.getName())
                                 .requestMatchers(HttpMethod.POST, "/api/news", "/api/news/{newsId}/sections", "/api" +
                                         "/banners", "/api/voting/create").hasAuthority(Rol.ADMIN.getName())
                                 .requestMatchers(HttpMethod.PUT, "/api/news/{id}", "/api/voting/{id}").hasAuthority(Rol.ADMIN.getName())

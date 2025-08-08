@@ -7,5 +7,8 @@ import java.util.*;
 
 public interface NotificationProvidersRepository extends CrudRepository<NotificationProvidersEntity, Long> {
 
-    Optional<NotificationProvidersEntity> findByName(String name);
+    Optional<NotificationProvidersEntity> findByType(String type);
+
+    @Override
+    List<NotificationProvidersEntity> findAll();
 }

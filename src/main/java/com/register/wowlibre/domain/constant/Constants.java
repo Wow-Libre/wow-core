@@ -16,7 +16,10 @@ public class Constants {
 
     public static final String HEADER_LANGUAGE = "x-language";
 
-
+    /**
+     * PARAMS CUSTOM
+     **/
+    public static final String PARAM_PROVIDER_ID = "provider_id";
     public static final String PARAM_ACCOUNT_ID = "account_id";
     public static final String PARAM_SERVER_ID = "server_id";
     public static final String PARAM_CHARACTER_ID = "character_id";

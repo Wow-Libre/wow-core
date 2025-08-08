@@ -4,4 +4,6 @@ import com.register.wowlibre.infrastructure.entities.*;
 
 public interface SaveNotificationProvider {
     void save(NotificationProvidersEntity notificationProvider, String transactionId);
+
+    void delete(NotificationProvidersEntity notificationProvider, String transactionId);
 }

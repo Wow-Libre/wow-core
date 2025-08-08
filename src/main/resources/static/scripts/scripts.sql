@@ -311,14 +311,14 @@ CREATE TABLE IF NOT EXISTS platform.news_sections (
 
 CREATE TABLE platform.notification_providers (
    id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-   name ENUM('MAILS','METRICS') NOT NULL,
+   type ENUM('MAILS','METRICS') NOT NULL,
    host VARCHAR(100) NOT NULL,
    client VARCHAR(100),
    secret_key TEXT,
    enabled BOOLEAN DEFAULT true,
    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-   CONSTRAINT uq_notification_providers_provider_name UNIQUE (name)
+   CONSTRAINT uq_notification_providers_provider_type UNIQUE (type)
 );
 
 

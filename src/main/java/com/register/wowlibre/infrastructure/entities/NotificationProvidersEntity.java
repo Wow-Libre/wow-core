@@ -12,9 +12,8 @@ public class NotificationProvidersEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    @Column(name = "from_mail")
-    private String fromMail;
+    private String type;
+    private String client;
     private String host;
     @Column(name = "secret_key")
     private String secretKey;

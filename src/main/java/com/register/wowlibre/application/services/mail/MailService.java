@@ -54,7 +54,7 @@ public class MailService implements MailPort {
         Map<String, String> body = new HashMap<>();
         body.put("url", url);
 
-        communicationsClient.sendMailTemplate(communication.getHost(), communication.getFromMail(),
+        communicationsClient.sendMailTemplate(communication.getHost(), communication.getClient(),
                 SendMailTemplateRequest.builder()
                         .templateId(REGISTER_TEMPLATE_ID)
                         .email(email)
@@ -77,7 +77,7 @@ public class MailService implements MailPort {
         }
 
         NotificationProvidersEntity communication = provider.get();
-        communicationsClient.sendMailBasic(communication.getHost(), communication.getFromMail(),
+        communicationsClient.sendMailBasic(communication.getHost(), communication.getClient(),
                 new SendMailCommunicationRequest(mail, subject, body, communication.getSecretKey()), transactionId);
     }
 

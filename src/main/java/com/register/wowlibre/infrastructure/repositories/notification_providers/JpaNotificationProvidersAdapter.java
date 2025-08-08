@@ -14,13 +14,27 @@ public class JpaNotificationProvidersAdapter implements ObtainNotificationProvid
         this.notificationProvidersRepository = notificationProvidersRepository;
     }
 
+    public Optional<NotificationProvidersEntity> findByType(String name, String transactionId) {
+        return notificationProvidersRepository.findByType(name);
+    }
+
     @Override
-    public Optional<NotificationProvidersEntity> findByName(String name, String transactionId) {
-        return notificationProvidersRepository.findByName(name);
+    public Optional<NotificationProvidersEntity> findById(Long id, String transactionId) {
+        return notificationProvidersRepository.findById(id);
+    }
+
+    @Override
+    public List<NotificationProvidersEntity> findAll(String transactionId) {
+        return notificationProvidersRepository.findAll();
     }
 
     @Override
     public void save(NotificationProvidersEntity notificationProvider, String transactionId) {
         notificationProvidersRepository.save(notificationProvider);
+    }
+
+    @Override
+    public void delete(NotificationProvidersEntity notificationProvider, String transactionId) {
+        notificationProvidersRepository.delete(notificationProvider);
     }
 }
