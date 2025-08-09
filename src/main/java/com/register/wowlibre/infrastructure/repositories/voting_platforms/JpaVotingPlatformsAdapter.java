@@ -29,9 +29,4 @@ public class JpaVotingPlatformsAdapter implements ObtainVotingPlatforms, SaveVot
     public void save(VotingPlatformsEntity entity) {
         votingPlatformsRepository.save(entity);
     }
-
-    @Override
-    public void deleteById(Long id) {
-        votingPlatformsRepository.deleteById(id);
-    }
 }
