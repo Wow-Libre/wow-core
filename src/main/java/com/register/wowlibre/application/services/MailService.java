@@ -1,4 +1,4 @@
-package com.register.wowlibre.application.services.mail;
+package com.register.wowlibre.application.services;
 
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.dto.client.*;
