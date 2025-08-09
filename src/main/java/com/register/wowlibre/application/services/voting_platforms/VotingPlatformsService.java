@@ -74,17 +74,32 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         }
         VotingPlatformsEntity entity = optional.get();
         entity.setActive(false);
-        entity.setName( randomString.nextString());
+        entity.setName(randomString.nextString());
         saveVotingPlatformPort.save(entity);
     }
 
     @Override
     public void postbackVotingPlatform(String referenceCode, String transactionId) {
-        VoteWalletEntity walletVote = voteWalletPort.findByReferenceCode(referenceCode, transactionId);
+        String code = referenceCode.split("-", 2)[0];
+
+        if (code == null) {
+            throw new InternalException("Invalid WebHook ", transactionId);
+        }
+
+        VoteWalletEntity walletVote = voteWalletPort.findByReferenceCode(code, transactionId);
         walletVote.setTotalVotes(walletVote.getVoteBalance() + 1);
         walletVote.setUpdatedAt(LocalDateTime.now());
         walletVote.setVoteBalance(walletVote.getVoteBalance() + 1);
         voteWalletPort.saveVoteWallet(walletVote, transactionId);
+    }
+
+    @Override
+    public Integer votes(Long userId, String transactionId) {
+        return voteWalletPort
+                .findByUserId(userId, transactionId).stream()
+                .filter(voteWallet -> voteWallet.getVoteBalance() > 0)
+                .mapToInt(VoteWalletEntity::getVoteBalance)
+                .sum();
     }
 
     private VotingPlatformsModel mapToModel(Long userId, VotingPlatformsEntity entity, String transactionId) {

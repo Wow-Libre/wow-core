@@ -6,5 +6,7 @@ import java.util.*;
 
 public interface ObtainVotingPlatforms {
     List<VotingPlatformsEntity> findAllActiveVotingPlatforms();
+
     Optional<VotingPlatformsEntity> findById(Long id);
+
 }

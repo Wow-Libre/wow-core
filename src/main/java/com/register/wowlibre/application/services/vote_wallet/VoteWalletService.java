@@ -55,4 +55,9 @@ public class VoteWalletService implements VoteWalletPort {
     public Optional<VoteWalletEntity> findByUserIdAndPlatformId(Long userId, Long platformId) {
         return obtainVoteWallet.findByUserIdAndPlatformId(userId, platformId);
     }
+
+    @Override
+    public List<VoteWalletEntity> findByUserId(Long userId, String transactionId) {
+        return obtainVoteWallet.findByUserId(userId, transactionId);
+    }
 }
