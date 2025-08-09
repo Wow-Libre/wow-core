@@ -59,7 +59,9 @@ public class CommunicationsClient {
     public void sendMailTemplate(String host, String client, SendMailTemplateRequest request,
                                  String transactionId) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        if (transactionId != null) {
+            headers.set(HEADER_TRANSACTION_ID, transactionId);
+        }
         headers.set(HEADER_CLIENT, client);
 
         HttpEntity<SendMailTemplateRequest> entity = new HttpEntity<>(request, headers);
@@ -74,7 +76,6 @@ public class CommunicationsClient {
                 Objects.requireNonNull(response.getBody());
                 return;
             }
-
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[CommunicationsClient] [sendMailTemplate] Client/Server Error: {}. The request failed with " +
                             "a client or realm error. HTTP Status: {}, Response Body: {}", e.getMessage(),
