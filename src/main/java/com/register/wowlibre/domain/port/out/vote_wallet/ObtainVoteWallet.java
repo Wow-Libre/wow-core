@@ -8,4 +8,6 @@ public interface ObtainVoteWallet {
     Optional<VoteWalletEntity> findByReferenceCode(String referenceCode, String transactionId);
 
     Optional<VoteWalletEntity> findByUserIdAndPlatformId(Long userId, Long platformId);
+
+    List<VoteWalletEntity> findByUserId(Long userId, String transactionId);
 }
