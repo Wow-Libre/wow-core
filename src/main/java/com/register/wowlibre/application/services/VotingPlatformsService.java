@@ -1,4 +1,4 @@
-package com.register.wowlibre.application.services.voting_platforms;
+package com.register.wowlibre.application.services;
 
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
@@ -82,7 +82,7 @@ public class VotingPlatformsService implements VotingPlatformsPort {
     public void postbackVotingPlatform(String referenceCode, String transactionId) {
         String code = referenceCode.split("-", 2)[0];
 
-        if (code == null) {
+        if (code == null || code.isBlank()) {
             throw new InternalException("Invalid WebHook ", transactionId);
         }
 
