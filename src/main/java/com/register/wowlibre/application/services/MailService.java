@@ -9,7 +9,6 @@ import com.register.wowlibre.domain.port.in.notification_provider.*;
 import com.register.wowlibre.infrastructure.client.*;
 import com.register.wowlibre.infrastructure.config.*;
 import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.scheduling.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -32,7 +31,7 @@ public class MailService implements MailPort {
         this.communicationsClient = communicationsClient;
     }
 
-    @Async
+
     @Override
     public void sendCodeMail(String email, String subject, String code, Locale locale, String transactionId) {
         final String url = String.format("%s/confirmation?email=%s&code=%s", configurations.getHostDomain(), email,

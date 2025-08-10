@@ -19,4 +19,5 @@ public interface ObtainAccountGamePort {
 
     List<AccountGameEntity> findByUserIdAndRealmId(Long userId, Long serverId, String transactionId);
 
+    Optional<AccountGameEntity> findByIdAndUserId(Long id, Long userId, String transactionId);
 }

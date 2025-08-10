@@ -249,8 +249,7 @@ public class UserService implements UserPort {
         Optional<UserEntity> account = findByEmailEntity(mail, transactionId);
 
         if (account.isEmpty()) {
-            throw new InternalException("It was not possible to assign a new password, please contact support",
-                    transactionId);
+            throw new InternalException("Please contact support", transactionId);
         }
 
         UserEntity user = account.get();
