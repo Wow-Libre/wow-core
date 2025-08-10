@@ -127,7 +127,7 @@ public class UserController {
     @PutMapping("/validated-mail/send")
     public ResponseEntity<GenericResponse<Void>> sendValidationEmail(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_EMAIL, required = false) final String email) {
+            @RequestHeader(name = HEADER_EMAIL) final String email) {
 
         userPort.sendMailValidation(email, transactionId);
 

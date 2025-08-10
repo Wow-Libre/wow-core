@@ -1,8 +1,8 @@
 package com.register.wowlibre.domain.security;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
-import java.util.Date;
+import java.util.*;
 
 public class JwtDto {
     public Long id;
@@ -16,7 +16,6 @@ public class JwtDto {
 
     public String language;
     @JsonProperty("pending_validation")
-
     public boolean pendingValidation;
 
     public JwtDto(Long userId, String jwt, String refreshToken, Date expirationDate, String avatarUrl, String language,

@@ -25,6 +25,11 @@ public class JpaVoteWalletAdapter implements SaveVoteWallet, ObtainVoteWallet {
     }
 
     @Override
+    public List<VoteWalletEntity> findByUserId(Long userId, String transactionId) {
+        return voteWalletRepository.findByUserId_Id(userId);
+    }
+
+    @Override
     public void saveVoteWallet(VoteWalletEntity voteWallet, String transactionId) {
         voteWalletRepository.save(voteWallet);
     }

@@ -1,7 +1,6 @@
 package com.register.wowlibre.application.services.account_game;
 
 import com.register.wowlibre.domain.dto.account_game.*;
-import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
@@ -199,6 +198,21 @@ public class AccountGameService implements AccountGamePort {
                 .realm(realmDetail.getName())
                 .failedLogins(account.failedLogins())
                 .accountBanned(account.accountBanned()).build();
+    }
+
+    @Override
+    public void desactive(List<Long> id, Long userId, String transactionId) {
+        id.forEach(account -> {
+                    Optional<AccountGameEntity> accountGame =
+                            obtainAccountGamePort.findByIdAndUserId(account, userId, transactionId);
+                    if (accountGame.isEmpty()) {
+                        throw new InternalException("Invalid desactive user", transactionId);
+                    }
+                    AccountGameEntity accountDesactive = accountGame.get();
+                    accountDesactive.setStatus(false);
+                    saveAccountGamePort.save(accountDesactive, transactionId);
+                }
+        );
     }
 
 

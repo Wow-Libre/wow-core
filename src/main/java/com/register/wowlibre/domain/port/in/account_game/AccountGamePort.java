@@ -1,7 +1,8 @@
 package com.register.wowlibre.domain.port.in.account_game;
 
 import com.register.wowlibre.domain.dto.account_game.*;
-import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
+
+import java.util.*;
 
 public interface AccountGamePort {
 
@@ -17,4 +18,5 @@ public interface AccountGamePort {
 
     AccountGameDetailDto account(Long userId, Long accountId, Long realmId, String transactionId);
 
+    void desactive(List<Long> id, Long userId, String transactionId);
 }
