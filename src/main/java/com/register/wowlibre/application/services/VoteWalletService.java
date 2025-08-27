@@ -1,4 +1,4 @@
-package com.register.wowlibre.application.services.vote_wallet;
+package com.register.wowlibre.application.services;
 
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.port.in.user.*;
@@ -36,8 +36,8 @@ public class VoteWalletService implements VoteWalletPort {
     public void create(Long userId, VotingPlatformsEntity platFormId, String referenceCode, String transactionId) {
         Optional<UserEntity> user = userPort.findByUserId(userId, transactionId);
 
-        if (user.isEmpty()) {
-            throw new InternalException("User with id " + userId + " does not exist.", transactionId);
+        if (user.isEmpty() || !user.get().getStatus()) {
+            throw new InternalException("User is not exist or inactive", transactionId);
         }
 
         VoteWalletEntity voteWallet = new VoteWalletEntity();
@@ -50,9 +50,13 @@ public class VoteWalletService implements VoteWalletPort {
 
     }
 
-
     @Override
     public Optional<VoteWalletEntity> findByUserIdAndPlatformId(Long userId, Long platformId) {
         return obtainVoteWallet.findByUserIdAndPlatformId(userId, platformId);
+    }
+
+    @Override
+    public List<VoteWalletEntity> findByUserId(Long userId, String transactionId) {
+        return obtainVoteWallet.findByUserId(userId, transactionId);
     }
 }

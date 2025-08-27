@@ -12,4 +12,7 @@ public interface VoteWalletPort {
     void create(Long userId, VotingPlatformsEntity platFormId, String referenceCode, String transactionId);
 
     Optional<VoteWalletEntity> findByUserIdAndPlatformId(Long userId, Long platformId);
+
+    List<VoteWalletEntity> findByUserId(Long userId, String transactionId);
+
 }

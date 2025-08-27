@@ -57,7 +57,7 @@ public class VotingController {
         );
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<Void>(null, transactionId).ok().build());
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
 
     @PutMapping("/{id}")
@@ -81,7 +81,7 @@ public class VotingController {
         votingPlatformsPort.deleteVotingPlatform(id, transactionId);
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<Void>(null, transactionId).ok().build());
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
 
     @GetMapping("/postback")
@@ -89,11 +89,22 @@ public class VotingController {
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestParam("p_resp") String parameter,
             @RequestParam("ip") String ipUsuario) {
-
         votingPlatformsPort.postbackVotingPlatform(parameter, transactionId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<Void>(null, transactionId).ok().build());
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
+
+    @GetMapping("/wallet")
+    public ResponseEntity<GenericResponse<Integer>> wallet(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId) {
+
+        Integer votes = votingPlatformsPort.votes(userId, transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(votes, transactionId).ok().build());
     }
 }

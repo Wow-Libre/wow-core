@@ -7,5 +7,8 @@ import java.util.*;
 
 public interface VoteWalletRepository extends CrudRepository<VoteWalletEntity, Long> {
     Optional<VoteWalletEntity> findByReferenceCode(String referenceCode);
+
     Optional<VoteWalletEntity> findByUserId_IdAndPlatformId_Id(Long userId, Long platformId);
+
+    List<VoteWalletEntity> findByUserId_Id(Long userId);
 }

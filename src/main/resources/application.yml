@@ -46,12 +46,6 @@ spring:
           starttls:
             enable: true
     default-encoding: 'UTF-8'
-aws:
-  ses:
-    access-key: ${CORE_AWS_ACCESS_KEY:test}
-    secret-key: ${CORE_AWS_SECRET_KEY:test}
-    region: ${CORE_AWS_REGION:us-east-1}
-    from-email: ${CORE_AWS_FROM_EMAIL:wowlibrecomunidad@gmail.com}
 google:
   api-key: ${GOOGLE_API_SECRET:6Lcd3iArAAAAAMBZ30BN1hry_nhXsfnoHQWIfejg}
 server:
@@ -98,12 +92,6 @@ spring:
           starttls:
             enable: false
     default-encoding: UTF-8
-aws:
-  ses:
-    access-key: ${CORE_AWS_ACCESS_KEY:test}
-    secret-key: ${CORE_AWS_SECRET_KEY:xx}
-    region: ${CORE_AWS_REGION:us-east-1}
-    from-email: ${CORE_AWS_FROM_EMAIL:xx}
 google:
   api-key: ${GOOGLE_API_SECRET}
 server:
