@@ -3,7 +3,6 @@ package com.register.wowlibre.domain.dto.client;
 import lombok.*;
 
 @Data
-@AllArgsConstructor
 public class ClaimMachineResponse {
     private String logo;
     private String name;

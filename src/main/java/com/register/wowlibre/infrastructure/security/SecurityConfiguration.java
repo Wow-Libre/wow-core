@@ -109,10 +109,11 @@ public class SecurityConfiguration {
                                         "/webjars/**",
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
+                                        "/api/transaction/purchase",
                                         "/api/banners")
                                 .permitAll()
                                 .requestMatchers("/api/realm/**", "/api/resources/create/faq",
-                                        "/api/resources/delete/faq", "/api/transaction/purchase", "/api/transaction" +
+                                        "/api/resources/delete/faq",  "/api/transaction" +
                                                 "/subscription-benefits", "/api/provider/**").hasAuthority(Rol.ADMIN.getName())
                                 .requestMatchers(HttpMethod.POST, "/api/news", "/api/news/{newsId}/sections", "/api" +
                                         "/banners", "/api/voting/create").hasAuthority(Rol.ADMIN.getName())
