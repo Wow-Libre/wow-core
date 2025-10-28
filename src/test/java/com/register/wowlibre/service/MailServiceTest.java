@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 class MailServiceTest {
 
     private Configurations configurations;
-    private MailSend mailSend;
+    private GoogleMailSend googleMailSend;
     private NotificationProviderPort notificationProviderPort;
     private CommunicationsClient communicationsClient;
     private MailService mailService;
@@ -25,10 +25,10 @@ class MailServiceTest {
     @BeforeEach
     void setUp() {
         configurations = mock(Configurations.class);
-        mailSend = mock(MailSend.class);
+        googleMailSend = mock(GoogleMailSend.class);
         notificationProviderPort = mock(NotificationProviderPort.class);
         communicationsClient = mock(CommunicationsClient.class);
-        mailService = new MailService(configurations, mailSend, notificationProviderPort, communicationsClient);
+        mailService = new MailService(configurations, googleMailSend, notificationProviderPort, communicationsClient);
     }
 
     @Test
@@ -39,7 +39,7 @@ class MailServiceTest {
 
         mailService.sendCodeMail("test@mail.com", "subject", "1234", Locale.ENGLISH, "tx");
 
-        verify(mailSend).sendHTMLEmail(any());
+        verify(googleMailSend).sendHTMLEmail(any(), anyString());
         verifyNoInteractions(communicationsClient);
     }
 
@@ -57,7 +57,7 @@ class MailServiceTest {
 
         verify(communicationsClient).sendMailTemplate(eq("host"), eq("client"), any(SendMailTemplateRequest.class),
                 eq("tx"));
-        verifyNoInteractions(mailSend);
+        verifyNoInteractions(googleMailSend);
     }
 
     @Test
@@ -67,7 +67,7 @@ class MailServiceTest {
 
         mailService.sendMail("test@mail.com", "subject", "body", "tx");
 
-        verify(mailSend).sendMail("test@mail.com", "subject", "body", "tx");
+        verify(googleMailSend).sendMail("test@mail.com", "subject", "body", "tx");
         verifyNoInteractions(communicationsClient);
     }
 
@@ -84,6 +84,6 @@ class MailServiceTest {
 
         verify(communicationsClient).sendMailBasic(eq("host"), eq("client"),
                 any(SendMailCommunicationRequest.class), eq("tx"));
-        verifyNoInteractions(mailSend);
+        verifyNoInteractions(googleMailSend);
     }
 }

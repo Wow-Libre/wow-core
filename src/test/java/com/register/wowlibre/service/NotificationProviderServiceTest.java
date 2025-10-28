@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class NotificationProviderServiceTest {
-    
+
     private ObtainNotificationProvider obtainNotificationProvider;
     private SaveNotificationProvider saveNotificationProvider;
     private NotificationProviderService service;
@@ -75,7 +75,8 @@ class NotificationProviderServiceTest {
         CreateNotificationProviderDto dto = new CreateNotificationProviderDto();
         dto.setName(NotificationType.MAILS.name());
 
-        when(obtainNotificationProvider.findByType(NotificationType.MAILS.name(), "tx")).thenReturn(Optional.of(new NotificationProvidersEntity()));
+        when(obtainNotificationProvider.findByType(NotificationType.MAILS.name(), "tx"))
+                .thenReturn(Optional.of(new NotificationProvidersEntity()));
 
         Exception ex = assertThrows(InternalException.class, () -> service.configProvider(dto, "tx"));
         assertTrue(ex.getMessage().contains("already exists"));
@@ -113,6 +114,6 @@ class NotificationProviderServiceTest {
         List<NotificationProviderModel> result = service.allProviders("tx");
 
         assertEquals(1, result.size());
-        assertEquals("EMAIL", result.getFirst().getName());
+        assertEquals("EMAIL", result.get(0).getName());
     }
 }

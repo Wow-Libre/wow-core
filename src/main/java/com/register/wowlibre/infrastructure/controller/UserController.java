@@ -4,6 +4,9 @@ import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.security.*;
 import com.register.wowlibre.domain.shared.*;
+import io.swagger.v3.oas.annotations.*;
+import io.swagger.v3.oas.annotations.responses.*;
+import io.swagger.v3.oas.annotations.tags.*;
 import jakarta.servlet.http.*;
 import jakarta.validation.*;
 import org.springframework.http.*;
@@ -15,6 +18,7 @@ import static com.register.wowlibre.domain.constant.Constants.*;
 
 @RestController
 @RequestMapping("/api/account")
+@Tag(name = "User Management", description = "APIs for user account management and authentication")
 public class UserController {
     private final UserPort userPort;
 
@@ -22,11 +26,21 @@ public class UserController {
         this.userPort = userPort;
     }
 
+    @Operation(
+            summary = "Create new user account",
+            description = "Creates a new user account and returns JWT authentication tokens")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "User account created successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid input data"),
+            @ApiResponse(responseCode = "409", description = "Conflict - User already exists"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PostMapping(path = "/create")
     public ResponseEntity<GenericResponse<JwtDto>> create(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_ACCEPT_LANGUAGE, required = false) Locale locale,
-            @RequestBody @Valid UserDto createUser, HttpServletRequest request) {
+            @RequestBody @Valid UserDto createUser,
+            HttpServletRequest request) {
 
         final JwtDto jwtDto = userPort.create(createUser, request.getRemoteAddr(), locale, transactionId);
 
@@ -58,7 +72,6 @@ public class UserController {
                         .ok(new UserExistenceDto(exists)).build());
     }
 
-
     @GetMapping
     public ResponseEntity<GenericResponse<UserDetailDto>> detail(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
@@ -76,7 +89,8 @@ public class UserController {
                         .rolName(model.getRolId().getName())
                         .status(model.getStatus())
                         .verified(model.getVerified())
-                        .build()).orElse(null);
+                        .build())
+                .orElse(null);
 
         if (userResponse == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -84,9 +98,9 @@ public class UserController {
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok(userResponse).build());
+                .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok(userResponse)
+                        .build());
     }
-
 
     @PutMapping("/email/confirmation")
     public ResponseEntity<GenericResponse<Void>> validateEmailCodeForAccount(

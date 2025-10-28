@@ -1,14 +1,13 @@
 package com.register.wowlibre.domain.shared;
 
-import com.register.wowlibre.domain.model.RolModel;
-import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.register.wowlibre.infrastructure.entities.*;
+import lombok.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.authority.*;
+import org.springframework.security.core.userdetails.*;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -27,11 +26,13 @@ public class CustomUserDetails implements UserDetails {
     private final String language;
     @Getter
     private final boolean pendingValidation;
+    @Getter
+    private final boolean isAdmin;
 
     public CustomUserDetails(Collection<? extends GrantedAuthority> authorities, String password, String username,
                              boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired,
                              boolean enabled, Long accountWebId, String avatarUrl, String language,
-                             boolean pendingValidation) {
+                             boolean pendingValidation, boolean isAdmin) {
         this.authorities = authorities;
         this.password = password;
         this.username = username;
@@ -43,14 +44,15 @@ public class CustomUserDetails implements UserDetails {
         this.avatarUrl = avatarUrl;
         this.language = language;
         this.pendingValidation = pendingValidation;
+        this.isAdmin = isAdmin;
     }
 
-    public CustomUserDetails(List<RolModel> authorities, String password, String username,
+    public CustomUserDetails(List<RolEntity> authorities, String password, String username,
                              boolean accountNonExpired, boolean accountNonLocked, boolean credentialsNonExpired,
-                             boolean enabled, Long userId, String avatarUrl, String language) {
+                             boolean enabled, Long userId, String avatarUrl, String language, boolean isAdmin) {
 
         this.authorities = authorities.stream()
-                .map(rolModel -> new SimpleGrantedAuthority(rolModel.name()))
+                .map(rolModel -> new SimpleGrantedAuthority(rolModel.getName()))
                 .collect(Collectors.toList());
         this.password = password;
         this.username = username;
@@ -62,6 +64,7 @@ public class CustomUserDetails implements UserDetails {
         this.avatarUrl = avatarUrl;
         this.language = language;
         this.pendingValidation = true;
+        this.isAdmin = isAdmin;
     }
 
     @Override

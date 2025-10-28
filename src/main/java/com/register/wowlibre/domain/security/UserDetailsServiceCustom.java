@@ -4,6 +4,7 @@ import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.port.out.user.ObtainUserPort;
 import com.register.wowlibre.domain.shared.CustomUserDetails;
 import com.register.wowlibre.infrastructure.entities.UserEntity;
+import com.register.wowlibre.infrastructure.util.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,10 +14,10 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 
-import static com.register.wowlibre.domain.constant.Constants.Errors.CONSTANT_GENERIC_ERROR_ACCOUNT_IS_NOT_AVAILABLE;
 
 @Component
 public class UserDetailsServiceCustom implements UserDetailsService {
+
     private final ObtainUserPort obtainUserPort;
 
     public UserDetailsServiceCustom(ObtainUserPort obtainUserPort) {
@@ -27,10 +28,13 @@ public class UserDetailsServiceCustom implements UserDetailsService {
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserEntity account = obtainUserPort.findByEmailAndStatusIsTrue(username)
-                .orElseThrow(() -> new UnauthorizedException(CONSTANT_GENERIC_ERROR_ACCOUNT_IS_NOT_AVAILABLE + username
-                        , ""));
+                .orElseThrow(() -> new UnauthorizedException("The data supplied is valid or not found" + username
+                        , "[loadUserByUsername]"));
 
-        return new CustomUserDetails(assignRol(account.getRolId().getName()), account.getPassword(),
+        final String rolName = account.getRolId().getName();
+        boolean isAdmin = Rol.ADMIN.getName().equals(rolName);
+
+        return new CustomUserDetails(assignRol(rolName), account.getPassword(),
                 account.getEmail(),
                 true,
                 true,
@@ -39,14 +43,13 @@ public class UserDetailsServiceCustom implements UserDetailsService {
                 account.getId(),
                 account.getAvatarUrl(),
                 account.getLanguage(),
-                !account.getVerified()
+                !account.getVerified(),
+                isAdmin
         );
     }
-
 
     private List<GrantedAuthority> assignRol(String name) {
         return Collections.singletonList(new SimpleGrantedAuthority(name));
     }
-
 
 }

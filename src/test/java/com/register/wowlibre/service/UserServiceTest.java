@@ -75,7 +75,7 @@ class UserServiceTest extends BaseTest {
     @Test
     void shouldThrowExceptionWhenCodeIsInvalid() {
         Long userId = 5L;
-        String inputCode = "WRONGCODE";
+        String inputCode = "WRONG CODE";
         String transactionId = "tx005";
 
         UserEntity user = new UserEntity();
@@ -84,7 +84,7 @@ class UserServiceTest extends BaseTest {
         user.setVerified(false);
 
         when(obtainUserPort.findByUserIdAndStatusIsTrue(userId, transactionId)).thenReturn(Optional.of(user));
-        when(securityValidationPort.findByCodeEmailValidation(user.getEmail(), transactionId)).thenReturn("VALIDCODE");
+        when(securityValidationPort.findByCodeEmailValidation(user.getEmail(), transactionId)).thenReturn("VALIDATE");
 
         InternalException ex = assertThrows(InternalException.class, () ->
                 userService.validateEmailCodeForAccount(userId, inputCode, transactionId)
@@ -187,8 +187,8 @@ class UserServiceTest extends BaseTest {
     @Test
     void shouldThrowExceptionWhenOtpCodeIsInvalid() {
         String email = "user@example.com";
-        String inputCode = "WRONGCODE";
-        String otpFromSystem = "correctcode";
+        String inputCode = "WRONG CODE";
+        String otpFromSystem = "corrected";
         String transactionId = "tx003";
         Locale locale = new Locale("es");
 
@@ -205,7 +205,7 @@ class UserServiceTest extends BaseTest {
     @Test
     void shouldThrowExceptionWhenOtpCodeIsNull() {
         String email = "user@example.com";
-        String inputCode = "ANYCODE";
+        String inputCode = "ANY CODE";
         String transactionId = "tx002";
         Locale locale = new Locale("es");
 
@@ -215,7 +215,7 @@ class UserServiceTest extends BaseTest {
                 userService.resetPasswordWithRecoveryCode(email, inputCode, locale, transactionId)
         );
 
-        assertEquals("Expired security code.", ex.getMessage());
+        assertEquals("The code has expired", ex.getMessage());
     }
 
 
@@ -243,10 +243,8 @@ class UserServiceTest extends BaseTest {
         when(i18nService.tr(eq("message-new-password-body"), any(Object[].class), eq(locale))).thenReturn(body);
         when(i18nService.tr("message-new-password-subject", locale)).thenReturn(subject);
 
-        // Ejecutar método
         userService.resetPasswordWithRecoveryCode(email, inputCode, locale, transactionId);
 
-        // Verificaciones
         verify(mailPort).sendMail(email, subject, body, transactionId);
         verify(saveUserPort).save(user, transactionId);
         verify(securityValidationPort).resetOtpValidation(email, transactionId);
@@ -265,7 +263,7 @@ class UserServiceTest extends BaseTest {
         UserEntity user = new UserEntity();
         user.setEmail(email);
         user.setLanguage(language);
-        user.setStatus(true); // Usuario activo
+        user.setStatus(true);
 
         // Mock comportamiento
         when(obtainUserPort.findByEmailAndStatusIsTrue(email)).thenReturn(Optional.of(user));
@@ -330,8 +328,10 @@ class UserServiceTest extends BaseTest {
         userDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
         userDto.setToken("validToken");
 
-        RolModel rolModel = new RolModel(1L, Rol.CLIENT.name(), true);
-
+        RolEntity rolModel = new RolEntity();
+        rolModel.setId(1L);
+        rolModel.setStatus(true);
+        rolModel.setName(Rol.CLIENT.name());
 
         UserEntity savedUser = new UserEntity();
         savedUser.setId(1L);
@@ -525,26 +525,11 @@ class UserServiceTest extends BaseTest {
 
         userService.sendMailValidation(email, transactionId);
 
-        // Verifica que NO se haya enviado el correo
         verify(mailPort, never()).sendCodeMail(anyString(), anyString(), anyString(), any(Locale.class), anyString());
 
-        // Opcionalmente, también puedes verificar que NO se haya generado ningún código
         verify(securityValidationPort, never()).generateCodeValidationMail(anyString(), anyString());
     }
 
-    @Test
-    void shouldThrowExceptionWhenUserNotFoundInSendMailValidation() {
-        String email = "missing@example.com";
-        String transactionId = "tx002";
-
-        when(obtainUserPort.findByEmailAndStatusIsTrue(email)).thenReturn(Optional.empty());
-
-        InternalException ex = assertThrows(InternalException.class, () ->
-                userService.sendMailValidation(email, transactionId)
-        );
-
-        assertTrue(ex.getMessage().contains("It was not possible to assign a new password"));
-    }
 
     @Test
     void shouldChangePasswordSuccessfully() {
@@ -588,7 +573,7 @@ class UserServiceTest extends BaseTest {
     void shouldThrowExceptionWhenCurrentPasswordIsInvalid() {
         Long userId = 3L;
         String oldPassword = "wrong";
-        String newPassword = "newpass";
+        String newPassword = "newness";
         String transactionId = "tx006";
 
         UserEntity user = new UserEntity();

@@ -2,7 +2,6 @@ package com.register.wowlibre.infrastructure.config;
 
 import com.register.wowlibre.domain.dto.comunication.*;
 import com.register.wowlibre.domain.enums.*;
-import com.register.wowlibre.domain.exception.*;
 import freemarker.template.*;
 import jakarta.mail.internet.*;
 import org.slf4j.*;
@@ -13,18 +12,17 @@ import java.io.*;
 import java.util.*;
 
 @Component
-public class MailSend {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MailSend.class);
+public class GoogleMailSend {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GoogleMailSend.class);
     private final JavaMailSender mailSender;
     private final Configuration freeMakerConfiguration;
 
-    public MailSend(JavaMailSender mailSender, Configuration freeMakerConfiguration) {
+    public GoogleMailSend(JavaMailSender mailSender, Configuration freeMakerConfiguration) {
         this.mailSender = mailSender;
         this.freeMakerConfiguration = freeMakerConfiguration;
     }
 
-
-    public void sendHTMLEmail(MailSenderVars<?> messageVars) {
+    public void sendHTMLEmail(MailSenderVars<?> messageVars, String transactionId) {
         try {
             MimeMessage emailMessage = mailSender.createMimeMessage();
 
@@ -36,8 +34,9 @@ public class MailSend {
             mailBuilder.setSubject(messageVars.subject);
             mailSender.send(emailMessage);
         } catch (Exception e) {
-            LOGGER.error("It was not possible to send the communication message: [{}] Template [{}] ",
-                    e.getMessage(), messageVars.idTemplate);
+            LOGGER.error("[GoogleMailSend] [sendHTMLEmail] It was not possible to send the communication " +
+                            "message: [{}] Template [{}] ID [{}] ",
+                    e.getMessage(), messageVars.idTemplate, transactionId);
         }
 
     }
@@ -54,12 +53,10 @@ public class MailSend {
 
             mailSender.send(emailMessage);
         } catch (Exception e) {
-            LOGGER.error("It was not possible to send the communication message: [{}] transactionId {}",
-                    e.getMessage(), transactionId);
-            throw new InternalException("It was not possible to send the communication message", transactionId);
+            LOGGER.error("[GoogleMailSend] [sendMail] It was not possible to send the communication" +
+                    " message: [{}] transactionId {}", e.getMessage(), transactionId);
         }
     }
-
 
     private String sendRegisterConfirmation(MailSenderVars<?> body, String template) {
         StringWriter stringWriter = new StringWriter();

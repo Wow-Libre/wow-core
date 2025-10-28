@@ -31,7 +31,7 @@ public class JpaUserAdapter implements ObtainUserPort, SaveUserPort {
     }
 
     @Override
-    public UserEntity save(UserEntity user, String email) {
+    public UserEntity save(UserEntity user, String transactionId) {
         return userRepository.save(user);
     }
 }

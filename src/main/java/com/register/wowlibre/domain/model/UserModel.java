@@ -1,9 +1,10 @@
 package com.register.wowlibre.domain.model;
 
 
-import lombok.Builder;
+import com.register.wowlibre.infrastructure.entities.*;
+import lombok.*;
 
-import java.time.LocalDate;
+import java.time.*;
 
 @Builder
 public class UserModel {
@@ -19,5 +20,5 @@ public class UserModel {
     public boolean verified;
     public String avatar;
     public String language;
-    public RolModel rolModel;
+    public RolEntity rolModel;
 }
