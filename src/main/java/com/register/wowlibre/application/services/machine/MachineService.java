@@ -43,7 +43,7 @@ public class MachineService implements MachinePort {
 
         final RealmEntity realm = verificationDto.realm();
 
-        int[] weights = {21, 1, 8, 3, 70};
+        int[] weights = {21, 1, 5, 3, 70};
         String[] outcomes = {"Item", "Level", "Mount", "Gold", "None"};
 
         Optional<MachineEntity> machine = obtainMachine.findByUserIdAndRealmId(userId,
