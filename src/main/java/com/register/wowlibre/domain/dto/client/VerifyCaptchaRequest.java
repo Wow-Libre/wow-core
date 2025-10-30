@@ -9,5 +9,5 @@ public class VerifyCaptchaRequest {
     private String secret;
     private String response;
     @JsonProperty("remoteip")
-    private String remoteip;
+    private String remoteIp;
 }

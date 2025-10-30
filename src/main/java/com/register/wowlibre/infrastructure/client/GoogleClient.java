@@ -16,6 +16,7 @@ import static com.register.wowlibre.domain.constant.Constants.*;
 @Component
 public class GoogleClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleClient.class);
+    private static final String HOST_GOOGLE_VERIFY_CAPTCHA = "https://www.google.com/recaptcha/api/siteverify";
 
     private final RestTemplate restTemplate;
 
@@ -34,10 +35,8 @@ public class GoogleClient {
 
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/recaptcha/api/siteverify", "https://www" +
-                        ".google.com"))
-                .toUriString();
-
+        String url = UriComponentsBuilder
+                .fromUriString(HOST_GOOGLE_VERIFY_CAPTCHA).toUriString();
         try {
             ResponseEntity<VerifyCaptchaResponse> response = restTemplate.exchange(
                     url,
@@ -55,15 +54,17 @@ public class GoogleClient {
                             "or realm error. " +
                             "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
-            throw new InternalException("Transaction failed due to client or realm error", transactionId);
+            throw new InternalException("The captcha could not be validated.", transactionId);
         } catch (Exception e) {
             LOGGER.error("[GoogleClient] [verifyRecaptcha] Unexpected Error: {}. An unexpected error occurred during " +
                             "the transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
-            throw new InternalException("Unexpected transaction failure", transactionId);
+            throw new InternalException("The captcha could not be validated - Unexpected transaction failure",
+                    transactionId);
         }
 
-        throw new InternalException("Unexpected transaction failure", transactionId);
+        throw new InternalException("The captcha could not be validated - Unexpected transaction failure",
+                transactionId);
     }
 
 }

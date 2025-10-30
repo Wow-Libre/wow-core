@@ -44,8 +44,8 @@ class BannersServiceTest {
         List<BannerModel> result = service.findByLanguage("es");
 
         assertEquals(1, result.size());
-        assertEquals("url", result.getFirst().mediaUrl());
-        assertEquals("IMAGE", result.getFirst().type());
+        assertEquals("url", result.get(0).mediaUrl());
+        assertEquals("IMAGE", result.get(0).type());
     }
 
     @Test

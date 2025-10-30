@@ -46,7 +46,7 @@ public class VotingPlatformsServiceTest {
         List<VotingPlatformsModel> result = service.findAllActiveVotingPlatforms(2L, "tx");
 
         assertEquals(1, result.size());
-        assertEquals("name", result.getFirst().name());
+        assertEquals("name", result.get(0).name());
     }
 
     @Test

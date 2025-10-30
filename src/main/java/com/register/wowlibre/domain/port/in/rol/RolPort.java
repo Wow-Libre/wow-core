@@ -1,7 +1,7 @@
 package com.register.wowlibre.domain.port.in.rol;
 
-import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.infrastructure.entities.*;
 
 public interface RolPort {
-    RolModel findByName(String name, String transactionId);
+    RolEntity findByName(String name, String transactionId);
 }

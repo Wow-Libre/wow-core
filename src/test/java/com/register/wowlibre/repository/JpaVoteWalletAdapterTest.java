@@ -68,7 +68,7 @@ class JpaVoteWalletAdapterTest {
         List<VoteWalletEntity> result = adapter.findByUserId(1L, "tx");
 
         assertEquals(1, result.size());
-        assertEquals(entity, result.getFirst());
+        assertEquals(entity, result.get(0));
     }
 
     @Test

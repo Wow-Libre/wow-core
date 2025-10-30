@@ -42,7 +42,8 @@ public class NotificationProviderService implements NotificationProviderPort {
         NotificationType notificationType = NotificationType.fromName(request.getName());
 
         if (notificationType == null) {
-            LOGGER.error("The notification type is not valid. TransactionId: {}", transactionId);
+            LOGGER.error("[NotificationProviderService] The notification type is not valid. [ID]: {}",
+                    transactionId);
             throw new InternalException("The notification type is not valid.", transactionId);
         }
 
@@ -50,7 +51,8 @@ public class NotificationProviderService implements NotificationProviderPort {
                 transactionId);
 
         if (provider.isPresent()) {
-            LOGGER.error("The notification provider with this name already exists. TransactionId: {}", transactionId);
+            LOGGER.error("[NotificationProviderService] The notification provider with this name already exists. " +
+                    "[ID]: {}", transactionId);
             throw new InternalException("The notification provider with this name already exists.",
                     transactionId);
         }
@@ -70,7 +72,7 @@ public class NotificationProviderService implements NotificationProviderPort {
                 .ifPresentOrElse(
                         provider -> saveNotificationProvider.delete(provider, transactionId),
                         () -> {
-                            LOGGER.error("The notification provider with this id does not exist. TransactionId: {}",
+                            LOGGER.error("The notification provider with this id does not exist. [ID]: {}",
                                     transactionId);
                             throw new InternalException("The notification provider with this id does not exist.",
                                     transactionId);
@@ -81,7 +83,6 @@ public class NotificationProviderService implements NotificationProviderPort {
 
     @Override
     public List<NotificationProviderModel> allProviders(String transactionId) {
-
         return obtainNotificationProvider.findAll(transactionId).stream()
                 .map(provider -> new NotificationProviderModel(provider.getId(), provider.getType(),
                         provider.getClient(), provider.getHost(), provider.getClient(), provider.getSecretKey()))

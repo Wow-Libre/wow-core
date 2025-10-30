@@ -37,7 +37,7 @@ class ResourcesServiceTest {
         List<CountryModel> result = resourcesService.getCountry("tx123");
 
         assertEquals(1, result.size());
-        assertEquals("US", result.getFirst().value());
+        assertEquals("US", result.get(0).value());
     }
 
     @Test
@@ -54,8 +54,8 @@ class ResourcesServiceTest {
         List<FaqsModel> result = resourcesService.getFaqs(FaqType.SUPPORT, "en", "tx123");
 
         assertEquals(1, result.size());
-        assertEquals("Q?", result.getFirst().question());
-        assertEquals(FaqType.SUPPORT, result.getFirst().type());
+        assertEquals("Q?", result.get(0).question());
+        assertEquals(FaqType.SUPPORT, result.get(0).type());
     }
 
     @Test
@@ -99,7 +99,7 @@ class ResourcesServiceTest {
         List<PlanModel> result = resourcesService.getPlansBank("en", "tx123");
 
         assertEquals(1, result.size());
-        assertEquals("Plan A", result.getFirst().name());
+        assertEquals("Plan A", result.get(0).name());
     }
 
     @Test
@@ -111,7 +111,7 @@ class ResourcesServiceTest {
         List<BenefitModel> result = resourcesService.getBenefitsGuild("en", "tx123");
 
         assertEquals(1, result.size());
-        assertTrue(result.getFirst().status);
+        assertTrue(result.get(0).status);
     }
 
     @Test
@@ -141,11 +141,11 @@ class ResourcesServiceTest {
 
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals("Basic", result.getFirst().name());
-        assertEquals("10.99", result.getFirst().price());
-        assertEquals("Info", result.getFirst().description());
-        assertEquals(List.of("Feature1"), result.getFirst().features());
-        assertEquals("Buy now", result.getFirst().buttonText());
-        assertEquals("https://link.com", result.getFirst().url());
+        assertEquals("Basic", result.get(0).name());
+        assertEquals("10.99", result.get(0).price());
+        assertEquals("Info", result.get(0).description());
+        assertEquals(List.of("Feature1"), result.get(0).features());
+        assertEquals("Buy now", result.get(0).buttonText());
+        assertEquals("https://link.com", result.get(0).url());
     }
 }

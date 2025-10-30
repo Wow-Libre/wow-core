@@ -1,12 +1,11 @@
 package com.register.wowlibre.infrastructure.entities;
 
-import com.register.wowlibre.domain.mapper.*;
-import com.register.wowlibre.domain.model.UserModel;
+import com.register.wowlibre.domain.model.*;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.*;
-import java.time.LocalDate;
+import java.time.*;
 
 @Data
 @Entity
@@ -46,7 +45,8 @@ public class UserEntity implements Serializable {
     public UserModel mapToModelEntity() {
         return UserModel.builder()
                 .id(id).avatar(avatarUrl).country(country)
-                .firstName(firstName).rolModel(RolMapper.toModel(rolId))
+                .firstName(firstName)
+                .rolModel(rolId)
                 .dateOfBirth(dateOfBirth).email(email)
                 .status(status).verified(verified)
                 .lastName(lastName).cellPhone(cellPhone)

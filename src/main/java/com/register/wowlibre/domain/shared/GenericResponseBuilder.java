@@ -1,6 +1,6 @@
 package com.register.wowlibre.domain.shared;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 
 public class GenericResponseBuilder<D> {
     private final GenericResponse<D> genericResponse;
@@ -13,7 +13,6 @@ public class GenericResponseBuilder<D> {
 
     public GenericResponseBuilder(String transactionId) {
         this.genericResponse = new GenericResponse<>();
-        this.genericResponse.setTransactionId(transactionId);
     }
 
     public GenericResponseBuilder<D> ok() {

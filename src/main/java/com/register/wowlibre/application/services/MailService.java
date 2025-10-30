@@ -9,24 +9,26 @@ import com.register.wowlibre.domain.port.in.notification_provider.*;
 import com.register.wowlibre.infrastructure.client.*;
 import com.register.wowlibre.infrastructure.config.*;
 import com.register.wowlibre.infrastructure.entities.*;
+import org.slf4j.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
 @Service
 public class MailService implements MailPort {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MailService.class);
 
     private static final long REGISTER_TEMPLATE_ID = 1L;
     private final Configurations configurations;
-    private final MailSend mailSend;
+    private final GoogleMailSend googleMailSend;
     private final NotificationProviderPort notificationProviderPort;
     private final CommunicationsClient communicationsClient;
 
-    public MailService(Configurations configurations, MailSend mailSend,
+    public MailService(Configurations configurations, GoogleMailSend googleMailSend,
                        NotificationProviderPort notificationProviderPort,
                        CommunicationsClient communicationsClient) {
         this.configurations = configurations;
-        this.mailSend = mailSend;
+        this.googleMailSend = googleMailSend;
         this.notificationProviderPort = notificationProviderPort;
         this.communicationsClient = communicationsClient;
     }
@@ -41,14 +43,17 @@ public class MailService implements MailPort {
                 notificationProviderPort.findByName(NotificationType.MAILS.name(), transactionId);
 
         if (provider.isEmpty()) {
-            mailSend.sendHTMLEmail(MailSenderVars.builder()
-                    .emailFrom(email).idTemplate(1)
+            googleMailSend.sendHTMLEmail(MailSenderVars.builder()
+                    .emailFrom(email).idTemplate((int) REGISTER_TEMPLATE_ID)
                     .data(RegisterSenderVarsDto.builder().url(url).build())
-                    .subject(subject).transactionId(transactionId).build());
+                    .subject(subject).build(), transactionId);
+            LOGGER.info("[MailService] [sendCodeMail] Send Email Success GoogleClient ID {} Mail {}", transactionId,
+                    email);
             return;
         }
 
         NotificationProvidersEntity communication = provider.get();
+
 
         Map<String, String> body = new HashMap<>();
         body.put("url", url);
@@ -61,7 +66,7 @@ public class MailService implements MailPort {
                         .body(body)
                         .secret(communication.getSecretKey())
                         .build(), transactionId);
-
+        LOGGER.info("[MailService] [sendCodeMail] Send Email Success Provider ID {} Mail {}", transactionId, email);
     }
 
     @Override
@@ -71,13 +76,17 @@ public class MailService implements MailPort {
                 notificationProviderPort.findByName(NotificationType.MAILS.name(), transactionId);
 
         if (provider.isEmpty()) {
-            mailSend.sendMail(mail, subject, body, transactionId);
+            googleMailSend.sendMail(mail, subject, body, transactionId);
+            LOGGER.info("[MailService] [sendMail] Send Email Success GoogleClient ID {} Mail {}", transactionId,
+                    mail);
             return;
         }
 
         NotificationProvidersEntity communication = provider.get();
         communicationsClient.sendMailBasic(communication.getHost(), communication.getClient(),
                 new SendMailCommunicationRequest(mail, subject, body, communication.getSecretKey()), transactionId);
+        LOGGER.info("[MailService] [sendMail] Send Email Success Provider ID {} Mail {}", transactionId,
+                mail);
     }
 
 

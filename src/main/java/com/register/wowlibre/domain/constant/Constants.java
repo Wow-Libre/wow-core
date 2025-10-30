@@ -30,7 +30,6 @@ public class Constants {
     public static class Errors {
         public static final String CONSTANT_GENERIC_ERROR_MESSAGE = "An unexpected error has occurred and it was not " +
                 "possible to authenticate to the system, please try again later";
-        public static final String CONSTANT_GENERIC_ERROR_ACCOUNT_IS_NOT_AVAILABLE = "The account is not available or" +
-                " does not exist ";
+      
     }
 }

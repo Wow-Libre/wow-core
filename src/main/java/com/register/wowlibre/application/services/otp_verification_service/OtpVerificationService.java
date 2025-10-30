@@ -106,7 +106,6 @@ public class OtpVerificationService implements SecurityValidationPort {
     @Override
     public String findByOtpRecoverPassword(String email, String transactionId) {
         return obtainOtpVerification.findByEmail(email, transactionId)
-                .map(OtpVerificationEntity::getOtp).orElseThrow(() -> new InternalException("NotFound " +
-                        "getCodeEmailRecoverPassword", transactionId));
+                .map(OtpVerificationEntity::getOtp).orElse(null);
     }
 }

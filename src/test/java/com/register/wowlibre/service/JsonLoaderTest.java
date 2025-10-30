@@ -47,11 +47,11 @@ class JsonLoaderTest {
 
         // Mock deserialización en orden correcto
         when(objectMapper.readValue(any(InputStream.class), any(TypeReference.class)))
-                .thenReturn(countries)      // jsonCountryModel
-                .thenReturn(plans)          // jsonPlanModel
-                .thenReturn(benefits)       // jsonBenefits
-                .thenReturn(widgets)        // jsonWidgetSubscription
-                .thenReturn(acquisitions);  // jsonPlanAcquisitionModel
+                .thenReturn(countries) // jsonCountryModel
+                .thenReturn(plans) // jsonPlanModel
+                .thenReturn(benefits) // jsonBenefits
+                .thenReturn(widgets) // jsonWidgetSubscription
+                .thenReturn(acquisitions); // jsonPlanAcquisitionModel
 
         // Instanciar y cargar los datos con reflexión
         jsonLoader = new JsonLoader(objectMapper, jsonFile, bankPlans, benefitsGuild, widgetHomeSubscription,
@@ -70,28 +70,27 @@ class JsonLoaderTest {
     void testGetJsonCountry() {
         List<CountryModel> result = jsonLoader.getJsonCountry("tx123");
         assertEquals(1, result.size());
-        assertEquals("us", result.getFirst().value());
+        assertEquals("us", result.get(0).value());
     }
 
     @Test
     void testGetJsonPlans() {
         List<PlanModel> result = jsonLoader.getJsonPlans("en", "tx123");
         assertEquals(1, result.size());
-        assertEquals("Plan1", result.getFirst().name());
+        assertEquals("Plan1", result.get(0).name());
     }
 
     @Test
     void testGetJsonBenefitsGuild() {
         List<BenefitModel> result = jsonLoader.getJsonBenefitsGuild("en", "tx123");
         assertEquals(1, result.size());
-        assertEquals("Title", result.getFirst().title);
+        assertEquals("Title", result.get(0).title);
     }
-
 
     @Test
     void testGetPlansAcquisition() {
         List<PlanAcquisitionModel> result = jsonLoader.getPlansAcquisition("en", "tx123");
         assertEquals(1, result.size());
-        assertEquals("Plan", result.getFirst().name());
+        assertEquals("Plan", result.get(0).name());
     }
 }

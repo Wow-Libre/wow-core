@@ -3,7 +3,6 @@ package com.register.wowlibre.application.services.user;
 import com.register.wowlibre.application.services.*;
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.mapper.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.google.*;
 import com.register.wowlibre.domain.port.in.jwt.*;
@@ -28,8 +27,8 @@ import java.util.*;
 public class UserService implements UserPort {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
-    private static final String PICTURE_DEFAULT_PROFILE_WEB = "https://static.wixstatic" +
-            ".com/media/5dd8a0_32431551f29b4644a774d8c55d2666fd~mv2.webp";
+    private static final String PICTURE_DEFAULT_PROFILE_WEB = "https://static.wixstatic.com/media" +
+            "/5dd8a0_d9deb983d04d41f792aa6f3bc49eaab5~mv2.png";
 
     /**
      * USERS PORT
@@ -51,11 +50,12 @@ public class UserService implements UserPort {
      **/
     private final JwtPort jwtPort;
     private final SecurityValidationPort securityValidationPort;
-    private final MailPort mailPort;
     /**
-     * VERIFY CAPTCHAT PORT
+     * CLIENTS
      **/
     private final GooglePort googlePort;
+    private final MailPort mailPort;
+
     /**
      * Configurations
      **/
@@ -79,34 +79,7 @@ public class UserService implements UserPort {
         this.configurations = configurations;
     }
 
-
-    @Override
-    public JwtDto create(UserDto userDto, String ip, Locale locale, String transactionId) {
-
-        if (!googlePort.verifyCaptcha(configurations.getGoogleSecret(), userDto.getToken(), ip,
-                transactionId)) {
-            LOGGER.error("[UserService] [create] An error occurred while verifying the captcha. -  " +
-                    "[transactionId: {}]", transactionId);
-            throw new InternalException("The captcha is invalid", transactionId);
-        }
-
-        final String email = userDto.getEmail();
-
-        if (findByEmail(email, transactionId) != null) {
-            throw new FoundException("There is already a registered client with this data", transactionId);
-        }
-
-        final RolModel rolModel = rolPort.findByName(Rol.CLIENT.name(), transactionId);
-
-        if (rolModel == null) {
-            LOGGER.error("[UserService] [create] An error occurred while assigning a role. - [transactionId: {}]",
-                    transactionId);
-            throw new InternalException("An unexpected error has occurred", transactionId);
-        }
-
-        final String passwordEncode = passwordEncoder.encode(userDto.getPassword());
-        userDto.setPassword(passwordEncode);
-
+    private static UserEntity create(UserDto userDto, RolEntity rolModel) {
         UserEntity userRegister = new UserEntity();
         userRegister.setAvatarUrl(PICTURE_DEFAULT_PROFILE_WEB);
         userRegister.setEmail(userDto.getEmail());
@@ -119,7 +92,42 @@ public class UserService implements UserPort {
         userRegister.setDateOfBirth(userDto.getDateOfBirth());
         userRegister.setStatus(true);
         userRegister.setVerified(false);
-        userRegister.setRolId(RolMapper.toEntity(rolModel));
+        userRegister.setRolId(rolModel);
+        return userRegister;
+    }
+
+    @Override
+    public JwtDto create(UserDto userDto, String ip, Locale locale, String transactionId) {
+
+        if (!googlePort.verifyCaptcha(configurations.getGoogleSecret(), userDto.getToken(), ip,
+                transactionId)) {
+            LOGGER.error("[UserService] [create] An error occurred while verifying the captcha. -  " +
+                    "[Id: {}]", transactionId);
+            throw new InternalException("The captcha is invalid", transactionId);
+        }
+
+        final boolean isAdmin = false;
+        final boolean requiredValidationMail = true;
+        final String email = userDto.getEmail();
+
+        if (findByEmail(email, transactionId) != null) {
+            LOGGER.error("[UserService] [create]  There is already a registered customer with this information. " +
+                    "Id: {}]", transactionId);
+            throw new FoundException("There is already a registered client with this data", transactionId);
+        }
+
+        final RolEntity rolModel = rolPort.findByName(Rol.CLIENT.name(), transactionId);
+
+        if (rolModel == null) {
+            LOGGER.error("[UserService] [create] An error occurred while assigning a role. - [transactionId: {}]",
+                    transactionId);
+            throw new InternalException("An unexpected error has occurred", transactionId);
+        }
+
+        final String passwordEncode = passwordEncoder.encode(userDto.getPassword());
+        userDto.setPassword(passwordEncode);
+
+        UserEntity userRegister = create(userDto, rolModel);
 
         final UserEntity user = saveUserPort.save(userRegister, transactionId);
 
@@ -133,7 +141,8 @@ public class UserService implements UserPort {
                 user.getStatus(),
                 user.getId(),
                 user.getAvatarUrl(),
-                userDto.getLanguage()
+                userDto.getLanguage(),
+                isAdmin
         );
 
         final String token = jwtPort.generateToken(customUserDetails);
@@ -141,10 +150,8 @@ public class UserService implements UserPort {
         final String refreshToken = jwtPort.generateRefreshToken(customUserDetails);
 
         return new JwtDto(user.getId(), token, refreshToken, expiration, user.getAvatarUrl(),
-                customUserDetails.getLanguage(),
-                true);
+                customUserDetails.getLanguage(), requiredValidationMail, isAdmin);
     }
-
 
     @Override
     public UserModel findByEmail(String email, String transactionId) {
@@ -173,6 +180,8 @@ public class UserService implements UserPort {
         Optional<UserEntity> userFound = findByUserId(userId, transactionId);
 
         if (userFound.isEmpty() || !userFound.get().getStatus()) {
+            LOGGER.error("[UserService] [create] The email cannot be validated because the user is in an invalid " +
+                    "state. [Id: {}]", transactionId);
             throw new InternalException("It was not possible to validate your code, the " +
                     "account is disabled or does not exist.", transactionId);
         }
@@ -200,6 +209,9 @@ public class UserService implements UserPort {
         Optional<UserEntity> account = findByEmailEntity(email, transactionId);
 
         if (account.isEmpty() || !account.get().getStatus()) {
+            LOGGER.error("[UserService] [generateRecoveryCode] The account does not exist or is disabled from " +
+                    "generating a recovery code. " +
+                    "[ID]: {}", transactionId);
             throw new InternalException("The email entered does not exist", transactionId);
         }
 
@@ -210,6 +222,7 @@ public class UserService implements UserPort {
 
         final String body = i18nService.tr("recovery-password-body", new Object[]{codeOtp.toUpperCase()}, locale);
         final String subject = i18nService.tr("recovery-password-subject", locale);
+
         mailPort.sendMail(account.get().getEmail(), subject, body, transactionId);
     }
 
@@ -219,16 +232,21 @@ public class UserService implements UserPort {
         final String codeObtain = securityValidationPort.findByOtpRecoverPassword(email, transactionId);
 
         if (codeObtain == null) {
-            throw new InternalException("Expired security code.", transactionId);
+            LOGGER.error("[UserService] [resetPasswordWithRecoveryCode] The code has expired  [ID] {}", transactionId);
+            throw new InternalException("The code has expired", transactionId);
         }
 
         if (!codeObtain.toUpperCase().equals(code)) {
+            LOGGER.error("[UserService] [resetPasswordWithRecoveryCode] The security code is invalid  [ID] {}",
+                    transactionId);
             throw new InternalException("The security code is invalid", transactionId);
         }
 
         Optional<UserEntity> account = findByEmailEntity(email, transactionId);
 
         if (account.isEmpty()) {
+            LOGGER.error("[UserService] [resetPasswordWithRecoveryCode] The account could not be retrieved when " +
+                    "searching for the customer's email or it is in an inactive status. [ID] {}", transactionId);
             throw new InternalException("It was not possible to assign a new password, please contact support",
                     transactionId);
         }
@@ -238,8 +256,11 @@ public class UserService implements UserPort {
 
         final String body = i18nService.tr("message-new-password-body", new Object[]{password}, locale);
         final String subject = i18nService.tr("message-new-password-subject", locale);
+
         mailPort.sendMail(account.get().getEmail(), subject, body, transactionId);
+
         user.setPassword(passwordEncoder.encode(password));
+
         saveUserPort.save(user, transactionId);
         securityValidationPort.resetOtpValidation(email, transactionId);
     }
@@ -249,6 +270,8 @@ public class UserService implements UserPort {
         Optional<UserEntity> account = findByEmailEntity(mail, transactionId);
 
         if (account.isEmpty()) {
+            LOGGER.error("[UserService] [sendMailValidation] The account could not be retrieved when " +
+                    "searching for the customer's email or it is in an inactive status. [ID] {}", transactionId);
             throw new InternalException("Please contact support", transactionId);
         }
 
@@ -271,6 +294,8 @@ public class UserService implements UserPort {
         Optional<UserEntity> userFound = findByUserId(userId, transactionId);
 
         if (userFound.isEmpty() || !userFound.get().getStatus()) {
+            LOGGER.error("[UserService] [changePassword] The email cannot be validated because the user is in an " +
+                    "invalid state. [Id: {}]", transactionId);
             throw new InternalException("It was not possible to change the password because the account cannot be " +
                     "found", transactionId);
         }

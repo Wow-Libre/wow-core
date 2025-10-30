@@ -4,6 +4,9 @@ import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.security.*;
 import com.register.wowlibre.domain.shared.*;
+import io.swagger.v3.oas.annotations.*;
+import io.swagger.v3.oas.annotations.responses.*;
+import io.swagger.v3.oas.annotations.tags.*;
 import jakarta.servlet.http.*;
 import jakarta.validation.*;
 import org.springframework.http.*;
@@ -15,6 +18,7 @@ import static com.register.wowlibre.domain.constant.Constants.*;
 
 @RestController
 @RequestMapping("/api/account")
+@Tag(name = "User Management", description = "APIs for user account management and authentication")
 public class UserController {
     private final UserPort userPort;
 
@@ -22,11 +26,21 @@ public class UserController {
         this.userPort = userPort;
     }
 
+    @Operation(
+            summary = "Create new user account",
+            description = "Creates a new user account and returns JWT authentication tokens")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "User account created successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid input data"),
+            @ApiResponse(responseCode = "409", description = "Conflict - User already exists"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @PostMapping(path = "/create")
     public ResponseEntity<GenericResponse<JwtDto>> create(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE, required = false) Locale locale,
-            @RequestBody @Valid UserDto createUser, HttpServletRequest request) {
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
+            @RequestBody @Valid UserDto createUser,
+            HttpServletRequest request) {
 
         final JwtDto jwtDto = userPort.create(createUser, request.getRemoteAddr(), locale, transactionId);
 
@@ -35,6 +49,14 @@ public class UserController {
     }
 
     @GetMapping(path = "/search")
+    @Operation(
+            summary = "Check user existence",
+            description = "Checks if a user exists by email or cell phone.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Existence status returned"),
+            @ApiResponse(responseCode = "400", description = "Bad request - Missing parameters"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<GenericResponse<UserExistenceDto>> search(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestParam(name = "email", required = false) final String email,
@@ -58,8 +80,14 @@ public class UserController {
                         .ok(new UserExistenceDto(exists)).build());
     }
 
-
     @GetMapping
+    @Operation(
+            summary = "Get user details",
+            description = "Returns the user profile for the given user id.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User details returned"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<GenericResponse<UserDetailDto>> detail(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_USER_ID) final Long userId) {
@@ -76,7 +104,8 @@ public class UserController {
                         .rolName(model.getRolId().getName())
                         .status(model.getStatus())
                         .verified(model.getVerified())
-                        .build()).orElse(null);
+                        .build())
+                .orElse(null);
 
         if (userResponse == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -84,11 +113,19 @@ public class UserController {
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok(userResponse).build());
+                .body(new GenericResponseBuilder<UserDetailDto>(transactionId).ok(userResponse)
+                        .build());
     }
 
-
     @PutMapping("/email/confirmation")
+    @Operation(
+            summary = "Confirm email code",
+            description = "Validates the email confirmation code for the account.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Email confirmed successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid code or parameters"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<GenericResponse<Void>> validateEmailCodeForAccount(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_USER_ID) final Long userId,
@@ -101,6 +138,14 @@ public class UserController {
     }
 
     @GetMapping("/password-recovery/request")
+    @Operation(
+            summary = "Request password recovery code",
+            description = "Sends a password recovery code to the provided email.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Recovery code sent"),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid email"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<GenericResponse<Void>> requestPasswordRecoveryCode(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestParam final String email) {
@@ -112,6 +157,14 @@ public class UserController {
     }
 
     @PutMapping("/password-recovery/confirm")
+    @Operation(
+            summary = "Confirm recovery code and reset password",
+            description = "Validates the recovery code and resets the user's password.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Password reset successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid code or email"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<GenericResponse<Void>> validateRecoveryCodeAndResetPassword(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
@@ -125,6 +178,14 @@ public class UserController {
     }
 
     @PutMapping("/validated-mail/send")
+    @Operation(
+            summary = "Resend validation email",
+            description = "Sends the email validation message to the provided email.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Validation email sent"),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid email"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<GenericResponse<Void>> sendValidationEmail(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_EMAIL) final String email) {
@@ -136,6 +197,14 @@ public class UserController {
     }
 
     @PutMapping(path = "/user-password/change")
+    @Operation(
+            summary = "Change user password",
+            description = "Changes the user's password using the current and new password.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Password changed successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid input"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<GenericResponse<Void>> newPassword(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_USER_ID) final Long userId,

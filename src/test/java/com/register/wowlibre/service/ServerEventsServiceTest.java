@@ -42,7 +42,7 @@ class ServerEventsServiceTest {
 
         // Assert
         assertEquals(2, result.size());
-        assertEquals("Event 1", result.getFirst().getTitle());
+        assertEquals("Event 1", result.get(0).getTitle());
         verify(obtainServerEvents).findByServerId(realm, "tx456");
     }
 }

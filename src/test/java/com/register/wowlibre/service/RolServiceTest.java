@@ -1,7 +1,6 @@
 package com.register.wowlibre.service;
 
 import com.register.wowlibre.application.services.rol.*;
-import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.out.rol.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import org.junit.jupiter.api.*;
@@ -40,11 +39,11 @@ class RolServiceTest {
 
         when(obtainRolPort.findByName(name)).thenReturn(Optional.of(entity));
 
-        RolModel result = rolService.findByName(name, txId);
+        RolEntity result = rolService.findByName(name, txId);
 
         assertNotNull(result);
-        assertEquals("CLIENT", result.name());
-        assertTrue(result.status());
+        assertEquals("CLIENT", result.getName());
+        assertTrue(result.isStatus());
         verify(obtainRolPort).findByName(name);
     }
 
@@ -52,7 +51,7 @@ class RolServiceTest {
     void findByName_shouldReturnNull_whenRolDoesNotExist() {
         when(obtainRolPort.findByName("ADMIN")).thenReturn(Optional.empty());
 
-        RolModel result = rolService.findByName("ADMIN", "tx456");
+        RolEntity result = rolService.findByName("ADMIN", "tx456");
 
         assertNull(result);
         verify(obtainRolPort).findByName("ADMIN");
