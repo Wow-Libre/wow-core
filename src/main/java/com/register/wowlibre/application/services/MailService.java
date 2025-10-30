@@ -47,6 +47,8 @@ public class MailService implements MailPort {
                     .emailFrom(email).idTemplate((int) REGISTER_TEMPLATE_ID)
                     .data(RegisterSenderVarsDto.builder().url(url).build())
                     .subject(subject).build(), transactionId);
+            LOGGER.info("[MailService] [sendCodeMail] Send Email Success GoogleClient ID {} Mail {}", transactionId,
+                    email);
             return;
         }
 
@@ -64,6 +66,7 @@ public class MailService implements MailPort {
                         .body(body)
                         .secret(communication.getSecretKey())
                         .build(), transactionId);
+        LOGGER.info("[MailService] [sendCodeMail] Send Email Success Provider ID {} Mail {}", transactionId, email);
     }
 
     @Override
@@ -74,12 +77,16 @@ public class MailService implements MailPort {
 
         if (provider.isEmpty()) {
             googleMailSend.sendMail(mail, subject, body, transactionId);
+            LOGGER.info("[MailService] [sendMail] Send Email Success GoogleClient ID {} Mail {}", transactionId,
+                    mail);
             return;
         }
 
         NotificationProvidersEntity communication = provider.get();
         communicationsClient.sendMailBasic(communication.getHost(), communication.getClient(),
                 new SendMailCommunicationRequest(mail, subject, body, communication.getSecretKey()), transactionId);
+        LOGGER.info("[MailService] [sendMail] Send Email Success Provider ID {} Mail {}", transactionId,
+                mail);
     }
 
 
