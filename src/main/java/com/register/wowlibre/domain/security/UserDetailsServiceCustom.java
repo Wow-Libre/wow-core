@@ -1,18 +1,16 @@
 package com.register.wowlibre.domain.security;
 
 import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.port.out.user.ObtainUserPort;
-import com.register.wowlibre.domain.shared.CustomUserDetails;
-import com.register.wowlibre.infrastructure.entities.UserEntity;
+import com.register.wowlibre.domain.port.out.user.*;
+import com.register.wowlibre.domain.shared.*;
+import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.security.core.*;
+import org.springframework.security.core.authority.*;
+import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.*;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 
 @Component
@@ -28,7 +26,7 @@ public class UserDetailsServiceCustom implements UserDetailsService {
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         UserEntity account = obtainUserPort.findByEmailAndStatusIsTrue(username)
-                .orElseThrow(() -> new UnauthorizedException("The data supplied is valid or not found" + username
+                .orElseThrow(() -> new UnauthorizedException("The data provided is invalid or cannot be found" + username
                         , "[loadUserByUsername]"));
 
         final String rolName = account.getRolId().getName();
