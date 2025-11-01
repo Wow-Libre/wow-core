@@ -225,9 +225,8 @@ CREATE TABLE platform.user_promotion
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     realm_id        bigint                              NOT NULL,
-    user_id         bigint                              NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT uq_user_promotion_user_account_promo_realm UNIQUE (user_id, account_game_id, promotion_id, realm_id),
+    CONSTRAINT uq_user_promotion_user_account_promo_realm UNIQUE (character_id,account_game_id, promotion_id, realm_id),
     CONSTRAINT fk_user_promotion_promotion_id FOREIGN KEY (promotion_id) REFERENCES platform.promotion (id),
     CONSTRAINT fk_user_promotion_account_game_id FOREIGN KEY (account_game_id) REFERENCES platform.account_game (id)
 );
