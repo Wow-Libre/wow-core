@@ -19,7 +19,7 @@ public class PromotionModel {
     private Integer maxLvl;
     private List<Items> items;
     private Double amount;
-    private Long serverId;
+    private Long realmId;
     private Long classId;
     private boolean status;
     private Integer level;

@@ -7,7 +7,7 @@ import org.springframework.stereotype.*;
 import java.util.*;
 
 @Repository
-public class JpaPromotionItemAdapter implements SavePromotionItem, ObtainPromotionItem {
+public class JpaPromotionItemAdapter implements SavePromotionItem, ObtainPromotionItem, DeletePromotionItem {
     private final PromotionItemRepository promotionItemRepository;
 
     public JpaPromotionItemAdapter(PromotionItemRepository promotionItemRepository) {
@@ -22,5 +22,10 @@ public class JpaPromotionItemAdapter implements SavePromotionItem, ObtainPromoti
     @Override
     public List<PromotionItemEntity> findByPromotionId(PromotionEntity promotion, String transactionId) {
         return promotionItemRepository.findByPromotionId(promotion);
+    }
+
+    @Override
+    public void delete(PromotionItemEntity promotionItem, String transactionId) {
+        promotionItemRepository.delete(promotionItem);
     }
 }

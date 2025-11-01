@@ -91,7 +91,7 @@ public class TransactionService implements TransactionPort {
         List<PromotionModel> promotions =
                 promotionPort.findByPromotionServerIdAndClassIdAndLanguage(serverId, classId, language,
                                 transactionId).stream()
-                        .filter(promos -> Objects.equals(promos.getServerId(), serverId)).toList();
+                        .filter(promos -> Objects.equals(promos.getRealmId(), serverId)).toList();
 
         if (promotions.isEmpty()) {
             return new PromotionsDto(new ArrayList<>(), 0);

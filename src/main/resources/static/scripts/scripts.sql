@@ -203,7 +203,7 @@ CREATE TABLE platform.promotion
     name            varchar(30) NOT NULL,
     description     varchar(80) NOT NULL,
     btn_text        varchar(30) NOT NULL,
-    send_item       boolean     NOT NULL,
+    send_item       boolean     NOT NULL DEFAULT FALSE,
     realm_id        bigint      NOT NULL,
     min_level       integer     NOT NULL,
     max_level       integer     NOT NULL,

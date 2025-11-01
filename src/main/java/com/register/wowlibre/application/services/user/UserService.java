@@ -27,8 +27,8 @@ import java.util.*;
 public class UserService implements UserPort {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
-    private static final String PICTURE_DEFAULT_PROFILE_WEB = "https://static.wixstatic.com/media" +
-            "/5dd8a0_d9deb983d04d41f792aa6f3bc49eaab5~mv2.png";
+    private static final String PICTURE_DEFAULT_PROFILE_WEB = "https://static.wixstatic.com/media/" +
+            "5dd8a0_bc62a8e593dd44cfb14a5c308ebfacf9~mv2.png";
 
     /**
      * USERS PORT

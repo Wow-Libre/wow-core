@@ -6,11 +6,12 @@ import java.util.*;
 
 public interface ObtainPromotion {
 
-    List<PromotionEntity> findByPromotionServerIdAndLanguage(Long serverId, String language);
+    List<PromotionEntity> findByPromotionRealmIdAndLanguage(Long realmId, String language, String transactionId);
 
-    Optional<PromotionEntity> findByIdAndServerIdAndLanguage(Long id, Long serverId, String language);
+    Optional<PromotionEntity> findById(Long id, String transactionId);
 
-    List<PromotionEntity> findByPromotionServerId(Long serverId);
+    List<PromotionEntity> findByPromotionRealmId(Long realmId, String transactionId);
 
+    List<PromotionEntity> findActiveByRealmId(Long realmId, String language, String transactionId);
 
 }
