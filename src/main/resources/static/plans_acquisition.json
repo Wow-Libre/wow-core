@@ -1,270 +1,149 @@
 {
   "es": [
     {
-      "name": "Gratis",
-      "price": "$0",
-      "description": "Empieza sin costo y accede a nuestras funciones esenciales.",
+      "name": "Aventurero",
+      "price": "$5 / cuenta",
+      "description": "Crea tu cuenta web y accede al servidor completamente gratis. Ideal para nuevos jugadores.",
       "features": [
-        "Vinculaciones ilimitadas",
-        "Tráfico sin restricciones",
-        "Landing page incluida",
-        "Dashboard para gestionar todo",
-        "Requiere integración con plan VIP",
-        "Launcher (Próximamente)"
+        "Acceso completo al juego sin límites",
+        "Dashboard web para gestionar tu cuenta",
+        "Foro y soporte comunitario",
+        "Protección anti-bots y seguridad avanzada",
+        "Actualizaciones automáticas del juego",
+        "Launcher oficial incluido"
       ],
-      "button_text": "¡Regístrate Gratis!",
-      "url": "https://www.wowlibre.com/register"
+      "button_text": "¡Crea tu cuenta!",
+      "url": "https://tu-servidor.com/register"
     },
     {
-      "name": "Pro",
-      "price": "$300/año",
-      "description": "La mejor opción para empresas y startups. Solo $25/mes facturado anualmente.",
+      "name": "Héroe",
+      "price": "$10 / cuenta",
+      "description": "Para jugadores que buscan más comodidad y ventajas dentro y fuera del juego.",
       "features": [
-        "Vinculaciones ilimitadas",
-        "Tráfico sin restricciones",
-        "Landing page personalizada",
-        "Dashboard avanzado",
-        "Sin obligación de plan VIP",
-        "App móvil (Próximamente)",
-        "Launcher (Próximamente)",
-        "Soporte prioritario",
-        "Servidor VPS incluido",
-        "Monitoreo y alertas 24/7",
-        "Descargas de recursos ilimitadas",
-        "Vinculación automática",
-        "Estrategias de marketing en redes",
-        "Instalación web completa",
-        "Módulos Azeroth Core",
-        "Dominio personalizado gratis"
+        "Todo lo del plan Aventurero",
+        "Acceso prioritario en cola de conexión",
+        "Soporte técnico prioritario",
+        "Gestión avanzada de personajes desde la web",
+        "Recompensas automáticas semanales",
+        "Estadísticas detalladas del jugador",
+        "Launcher premium con actualizaciones rápidas"
       ],
-      "button_text": "¡Adquiere el Plan Pro!",
-      "url": "https://wa.link/ab85xk"
+      "button_text": "¡Hazte Héroe!",
+      "url": "https://tu-servidor.com/register"
     },
     {
-      "name": "Starter",
-      "price": "$192 cada 6 meses",
-      "description": "Ideal para pequeñas empresas y emprendedores. Solo $30/mes facturado cada 6 meses.",
+      "name": "Legendario",
+      "price": "$20 / cuenta",
+      "description": "La experiencia completa para fanáticos del WoW. Todo en un solo lugar.",
       "features": [
-        "Vinculaciones ilimitadas",
-        "Tráfico sin restricciones",
-        "Landing page personalizada",
-        "Dashboard avanzado",
-        "Sin obligación de plan VIP",
-        "App móvil (Próximamente)",
-        "Launcher (Próximamente)",
-        "Soporte prioritario",
-        "Servidor VPS incluido",
-        "Monitoreo y alertas 24/7",
-        "Descargas de recursos ilimitadas",
-        "Vinculación automática",
-        "Estrategias de marketing en redes",
-        "Instalación web completa",
-        "Módulos Azeroth Core",
-        "Dominio personalizado gratis"
+        "Todo lo del plan Héroe",
+        "Acceso anticipado a nuevos contenidos",
+        "Personalización visual en el panel web",
+        "Sin publicidad en el sitio",
+        "Soporte 24/7 vía Discord",
+        "Estadísticas y logros personalizados",
+        "Eventos exclusivos para miembros legendarios"
       ],
-      "button_text": "¡Empieza Ahora!",
-      "url": "https://wa.link/ab85xk"
-    },
-    {
-      "name": "Mensual",
-      "price": "$39/mes",
-      "description": "La flexibilidad que necesitas. Pago mensual de $39",
-      "features": [
-        "Vinculaciones ilimitadas",
-        "Tráfico sin restricciones",
-        "Landing page personalizada",
-        "Dashboard avanzado",
-        "Sin obligación de plan VIP",
-        "App móvil (Próximamente)",
-        "Launcher (Próximamente)",
-        "Soporte prioritario",
-        "Servidor VPS incluido",
-        "Monitoreo y alertas 24/7",
-        "Vinculación automática",
-        "Instalación web completa",
-        "Estrategias de marketing en redes"
-      ],
-      "button_text": "¡Suscríbete Hoy!",
-      "url": "https://wa.link/ab85xk"
+      "button_text": "¡Únete a los Legendarios!",
+      "url": "https://tu-servidor.com/register"
     }
   ],
   "en": [
     {
-      "name": "Free",
-      "price": "$0",
-      "description": "Get started at no cost and access our essential features.",
+      "name": "Adventurer",
+      "price": "$5 / account",
+      "description": "Create your web account and play for free. Perfect for new players.",
       "features": [
-        "Unlimited linkages",
-        "Unlimited traffic",
-        "Landing page included",
-        "Dashboard to manage everything",
-        "Requires integration with VIP plan",
-        "Launcher (Coming Soon)"
+        "Full access to the game",
+        "Web dashboard to manage your account",
+        "Community forum and support",
+        "Anti-bot and advanced protection",
+        "Automatic game updates",
+        "Official launcher included"
       ],
-      "button_text": "Sign Up Free!",
-      "url": "https://www.wowlibre.com/register"
+      "button_text": "Create Your Account!",
+      "url": "https://your-server.com/register"
     },
     {
-      "name": "Pro",
-      "price": "$300/year",
-      "description": "The best choice for companies and startups. Only $25/month billed annually.",
+      "name": "Hero",
+      "price": "$10 / account",
+      "description": "For players who want more comfort and advantages in and out of the game.",
       "features": [
-        "Unlimited linkages",
-        "Unlimited traffic",
-        "Custom landing page",
-        "Advanced dashboard",
-        "No VIP plan required",
-        "Mobile app (Coming Soon)",
-        "Launcher (Coming Soon)",
-        "Priority support",
-        "VPS server included",
-        "24/7 monitoring and alerts",
-        "Unlimited resource downloads",
-        "Automatic linking",
-        "Social media marketing strategies",
-        "Complete web installation",
-        "Azeroth Core modules",
-        "Free custom domain"
+        "Everything in Adventurer plan",
+        "Priority login queue access",
+        "Priority technical support",
+        "Advanced character management",
+        "Weekly automatic rewards",
+        "Detailed player stats",
+        "Premium launcher with fast updates"
       ],
-      "button_text": "Get the Pro Plan!",
-      "url": "https://wa.link/ab85xk"
+      "button_text": "Become a Hero!",
+      "url": "https://your-server.com/register"
     },
     {
-      "name": "Starter",
-      "price": "$192 every 6 months",
-      "description": "Ideal for small businesses and entrepreneurs. Only $30/month billed every 6 months.",
+      "name": "Legendary",
+      "price": "$20 / account",
+      "description": "The ultimate experience for WoW fans. All features unlocked.",
       "features": [
-        "Unlimited linkages",
-        "Unlimited traffic",
-        "Custom landing page",
-        "Advanced dashboard",
-        "No VIP plan required",
-        "Mobile app (Coming Soon)",
-        "Launcher (Coming Soon)",
-        "Priority support",
-        "VPS server included",
-        "24/7 monitoring and alerts",
-        "Unlimited resource downloads",
-        "Automatic linking",
-        "Social media marketing strategies",
-        "Complete web installation",
-        "Azeroth Core modules",
-        "Free custom domain"
+        "Everything in Hero plan",
+        "Early access to new content",
+        "Custom dashboard themes",
+        "Ad-free experience",
+        "24/7 Discord support",
+        "Custom achievements and stats",
+        "Exclusive events for Legendary members"
       ],
-      "button_text": "Start Now!",
-      "url": "https://wa.link/ab85xk"
-    },
-    {
-      "name": "Monthly",
-      "price": "$39/month",
-      "description": "The flexibility you need. Monthly payment of $39, with an additional one-time domain payment.",
-      "features": [
-        "Unlimited linkages",
-        "Unlimited traffic",
-        "Custom landing page",
-        "Advanced dashboard",
-        "No VIP plan required",
-        "Mobile app (Coming Soon)",
-        "Launcher (Coming Soon)",
-        "Priority support",
-        "VPS server included",
-        "24/7 monitoring and alerts",
-        "Automatic linking",
-        "Custom domain (requires one-time payment)",
-        "Complete web installation",
-        "Social media marketing strategies"
-      ],
-      "button_text": "Subscribe Today!",
-      "url": "https://wa.link/ab85xk"
+      "button_text": "Join the Legendary Tier!",
+      "url": "https://your-server.com/register"
     }
   ],
   "pt": [
     {
-      "name": "Gratuito",
-      "price": "$0",
-      "description": "Comece sem custo e acesse nossos recursos essenciais.",
+      "name": "Aventureiro",
+      "price": "$5 / conta",
+      "description": "Crie sua conta web e jogue gratuitamente. Ideal para novos jogadores.",
       "features": [
-        "Vinculações ilimitadas",
-        "Tráfego sem limites",
-        "Landing page incluída",
-        "Painel para gerenciar tudo",
-        "Requer integração com plano VIP",
-        "Launcher (Em breve)"
+        "Acesso completo ao jogo",
+        "Painel web para gerenciar sua conta",
+        "Fórum e suporte comunitário",
+        "Proteção anti-bots e segurança avançada",
+        "Atualizações automáticas do jogo",
+        "Launcher oficial incluído"
       ],
-      "button_text": "Cadastre-se Gratuitamente!",
-      "url": "https://www.wowlibre.com/register"
+      "button_text": "Crie Sua Conta!",
+      "url": "https://seu-servidor.com/register"
     },
     {
-      "name": "Pro",
-      "price": "$300/ano",
-      "description": "A melhor opção para empresas e startups. Apenas $25/mês cobrados anualmente.",
+      "name": "Herói",
+      "price": "$10 / conta",
+      "description": "Para jogadores que desejam mais conforto e vantagens dentro e fora do jogo.",
       "features": [
-        "Vinculações ilimitadas",
-        "Tráfego sem limites",
-        "Landing page personalizada",
-        "Painel avançado",
-        "Sem exigência de plano VIP",
-        "App móvel (Em breve)",
-        "Launcher (Em breve)",
-        "Suporte prioritário",
-        "Servidor VPS incluído",
-        "Monitoramento e alertas 24/7",
-        "Vinculação automática",
-        "Estratégias de marketing nas redes sociais",
-        "Instalação web completa",
-        "Módulos Azeroth Core",
-        "Domínio personalizado gratuito"
+        "Tudo do plano Aventureiro",
+        "Acesso prioritário na fila de login",
+        "Suporte técnico prioritário",
+        "Gerenciamento avançado de personagens",
+        "Recompensas automáticas semanais",
+        "Estatísticas detalhadas do jogador",
+        "Launcher premium com atualizações rápidas"
       ],
-      "button_text": "Adquira o Plano Pro!",
-      "url": "https://wa.link/ab85xk"
+      "button_text": "Torne-se um Herói!",
+      "url": "https://seu-servidor.com/register"
     },
     {
-      "name": "Starter",
-      "price": "$192 a cada 6 meses",
-      "description": "Ideal para pequenos negócios e empreendedores. Apenas $30/mês cobrados a cada 6 meses.",
+      "name": "Lendário",
+      "price": "$20 / conta",
+      "description": "A experiência completa para fãs de WoW. Tudo em um só lugar.",
       "features": [
-        "Vinculações ilimitadas",
-        "Tráfego sem limites",
-        "Landing page personalizada",
-        "Painel avançado",
-        "Sem exigência de plano VIP",
-        "App móvel (Em breve)",
-        "Launcher (Em breve)",
-        "Suporte prioritário",
-        "Servidor VPS incluído",
-        "Monitoramento e alertas 24/7",
-        "Downloads de recursos ilimitados",
-        "Vinculação automática",
-        "Estratégias de marketing nas redes sociais",
-        "Instalação web completa",
-        "Módulos Azeroth Core",
-        "Domínio personalizado gratuito"
+        "Tudo do plano Herói",
+        "Acesso antecipado a novos conteúdos",
+        "Personalização visual no painel web",
+        "Sem anúncios no site",
+        "Suporte 24/7 via Discord",
+        "Conquistas e estatísticas personalizadas",
+        "Eventos exclusivos para membros lendários"
       ],
-      "button_text": "Comece Agora!",
-      "url": "https://wa.link/ab85xk"
-    },
-    {
-      "name": "Mensal",
-      "price": "$39/mês",
-      "description": "A flexibilidade que você precisa. Pagamento mensal de $39, com pagamento inicial adicional para o domínio.",
-      "features": [
-        "Vinculações ilimitadas",
-        "Tráfego sem limites",
-        "Landing page personalizada",
-        "Painel avançado",
-        "Sem exigência de plano VIP",
-        "App móvel (Em breve)",
-        "Launcher (Em breve)",
-        "Suporte prioritário",
-        "Servidor VPS incluído",
-        "Monitoramento e alertas 24/7",
-        "Vinculação automática",
-        "Domínio personalizado (requer pagamento inicial)",
-        "Instalação web completa",
-        "Social media marketing strategies"
-      ],
-      "button_text": "Assine Hoje!",
-      "url": "https://wa.link/ab85xk"
+      "button_text": "Junte-se aos Lendários!",
+      "url": "https://seu-servidor.com/register"
     }
   ]
 }
