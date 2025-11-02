@@ -1,17 +1,21 @@
 package com.register.wowlibre.infrastructure.controller;
 
-import com.register.wowlibre.domain.dto.faqs.*;
-import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.domain.dto.faqs.CreateFaqDto;
+import com.register.wowlibre.domain.enums.FaqType;
 import com.register.wowlibre.domain.model.resources.*;
-import com.register.wowlibre.domain.port.in.*;
-import com.register.wowlibre.domain.shared.*;
-import jakarta.validation.*;
-import org.springframework.http.*;
+import com.register.wowlibre.domain.port.in.ResourcesPort;
+import com.register.wowlibre.domain.shared.GenericResponse;
+import com.register.wowlibre.domain.shared.GenericResponseBuilder;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
 
-import static com.register.wowlibre.domain.constant.Constants.*;
+import static com.register.wowlibre.domain.constant.Constants.HEADER_ACCEPT_LANGUAGE;
+import static com.register.wowlibre.domain.constant.Constants.HEADER_TRANSACTION_ID;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -106,16 +110,4 @@ public class ResourcesController {
                 .body(new GenericResponseBuilder<>(serversPromotions, transactionId).ok().build());
     }
 
-
-    @GetMapping("/plan-acquisition")
-    public ResponseEntity<GenericResponse<List<PlanAcquisitionModel>>> planAcquisition(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
-
-        final List<PlanAcquisitionModel> benefitsGuild = resourcesPort.getPlansAcquisition(locale.getLanguage(),
-                transactionId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(benefitsGuild, transactionId).ok().build());
-    }
 }

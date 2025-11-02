@@ -54,8 +54,7 @@ class JsonLoaderTest {
                 .thenReturn(acquisitions); // jsonPlanAcquisitionModel
 
         // Instanciar y cargar los datos con reflexión
-        jsonLoader = new JsonLoader(objectMapper, jsonFile, bankPlans, benefitsGuild, widgetHomeSubscription,
-                plansAcquisition);
+        jsonLoader = new JsonLoader(objectMapper, jsonFile, bankPlans, benefitsGuild, widgetHomeSubscription);
 
         Method loadJsonFile = JsonLoader.class.getDeclaredMethod("loadJsonFile");
         loadJsonFile.setAccessible(true);

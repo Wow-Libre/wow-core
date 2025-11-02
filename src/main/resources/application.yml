@@ -32,7 +32,7 @@ spring:
       pool-name: HikariPoolCore
     url: ${DB_CORE_URL:jdbc:mysql://localhost:3306/platform}
     username: ${DB_CORE_USERNAME:root}
-    password: ${DB_CORE_PASSWORD:Wowlibre96@@}
+    password: ${DB_CORE_PASSWORD:sebastian}
     driver-class-name: com.mysql.cj.jdbc.Driver
   mail:
     host: ${CORE_GOOGLE_HOST:smtp.gmail.com}

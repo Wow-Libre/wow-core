@@ -23,6 +23,5 @@ public interface ResourcesPort {
 
     WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId);
 
-    List<PlanAcquisitionModel> getPlansAcquisition(String language, String transactionId);
 
 }
