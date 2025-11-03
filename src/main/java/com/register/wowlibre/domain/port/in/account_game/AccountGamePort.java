@@ -19,4 +19,6 @@ public interface AccountGamePort {
     AccountGameDetailDto account(Long userId, Long accountId, Long realmId, String transactionId);
 
     void desactive(List<Long> id, Long userId, String transactionId);
+
+    AccountGameStatsDto stats(Long userId, String transactionId);
 }

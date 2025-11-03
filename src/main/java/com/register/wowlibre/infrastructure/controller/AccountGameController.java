@@ -1,6 +1,9 @@
 package com.register.wowlibre.infrastructure.controller;
 
-import com.register.wowlibre.domain.dto.account_game.*;
+import com.register.wowlibre.domain.dto.account_game.AccountGameDetailDto;
+import com.register.wowlibre.domain.dto.account_game.AccountGameStatsDto;
+import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
+import com.register.wowlibre.domain.dto.account_game.CreateAccountGameDto;
 import com.register.wowlibre.domain.port.in.account_game.*;
 import com.register.wowlibre.domain.shared.*;
 import jakarta.validation.*;
@@ -90,5 +93,16 @@ public class AccountGameController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<Void>(transactionId).created().build());
+    }
+
+    @GetMapping(path = "/stats")
+    public ResponseEntity<GenericResponse<AccountGameStatsDto>> stats(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId) {
+
+        AccountGameStatsDto stats = accountGamePort.stats(userId, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(stats, transactionId).ok().build());
     }
 }

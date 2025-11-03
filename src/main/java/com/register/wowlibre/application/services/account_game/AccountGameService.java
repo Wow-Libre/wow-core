@@ -215,6 +215,18 @@ public class AccountGameService implements AccountGamePort {
         );
     }
 
+    @Override
+    public AccountGameStatsDto stats(Long userId, String transactionId) {
+        if (userPort.findByUserId(userId, transactionId).isEmpty()) {
+            throw new UnauthorizedException("The client is not available or does not exist", transactionId);
+        }
+
+        long totalAccounts = obtainAccountGamePort.countActiveAccountsByUserId(userId, transactionId);
+        long totalRealms = obtainAccountGamePort.countDistinctRealmsByUserId(userId, transactionId);
+
+        return new AccountGameStatsDto(totalAccounts, totalRealms);
+    }
+
 
     private AccountGameModel mapToModel(AccountGameEntity accountGameEntity) {
         boolean status = accountGameEntity.isStatus() && accountGameEntity.getRealmId().isStatus();

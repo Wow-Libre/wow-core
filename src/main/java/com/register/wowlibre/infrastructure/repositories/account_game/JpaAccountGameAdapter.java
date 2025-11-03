@@ -56,4 +56,14 @@ public class JpaAccountGameAdapter implements ObtainAccountGamePort, SaveAccount
     public AccountGameEntity save(AccountGameEntity accountGameEntity, String transactionId) {
         return accountGameRepository.save(accountGameEntity);
     }
+
+    @Override
+    public long countActiveAccountsByUserId(Long userId, String transactionId) {
+        return accountGameRepository.countActiveAccountsByUserId(userId);
+    }
+
+    @Override
+    public long countDistinctRealmsByUserId(Long userId, String transactionId) {
+        return accountGameRepository.countDistinctRealmsByUserId(userId);
+    }
 }
