@@ -204,13 +204,13 @@
                                         <tr>
                                             <td class="pad"
                                                 style="padding-bottom:25px;padding-left:10px;padding-right:10px;padding-top:10px;text-align:center;">
-                                                <div align="center" class="alignment"><a href="${url}"
+                                                <div align="center" class="alignment"><a href="${body.url}"
                                                                                          style="color:#ffffff;text-decoration:none;"
                                                                                          target="_blank">
                                                     <!--[if mso]>
                                                     <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml"
                                                                  xmlns:w="urn:schemas-microsoft-com:office:word"
-                                                                 href="${url}"
+                                                                 href="${body.url}"
                                                                  style="height:52px;width:182px;v-text-anchor:middle;"
                                                                  arcsize="0%" fillcolor="#ff821c">
                                                         <v:stroke dashstyle="Solid" weight="0px" color="#ff821c"/>
