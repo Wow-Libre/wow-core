@@ -90,6 +90,107 @@
 - 🗄️ **MySQL 8.0+** o **MariaDB 10.5+**
 - 📦 **Maven 3.6+** (o usar el wrapper incluido)
 
+### 📦 Instalación de Prerrequisitos
+
+#### ☕ Instalar Java 21
+
+**macOS (usando Homebrew):**
+```bash
+# Instalar Homebrew si no lo tienes
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Instalar Java 21
+brew install openjdk@21
+
+# Configurar JAVA_HOME (agregar a ~/.zshrc o ~/.bash_profile)
+echo 'export JAVA_HOME=$(/usr/libexec/java_home -v 21)' >> ~/.zshrc
+echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+
+# Verificar instalación
+java -version
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+# Actualizar repositorios
+sudo apt update
+
+# Instalar Java 21
+sudo apt install openjdk-21-jdk
+
+# Verificar instalación
+java -version
+
+# Configurar JAVA_HOME (opcional)
+echo 'export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**Linux (CentOS/RHEL/Fedora):**
+```bash
+# Instalar Java 21
+sudo dnf install java-21-openjdk-devel
+
+# Verificar instalación
+java -version
+```
+
+**Windows:**
+1. Descargar Java 21 desde [Oracle](https://www.oracle.com/java/technologies/downloads/#java21) o [Adoptium](https://adoptium.net/)
+2. Ejecutar el instalador y seguir las instrucciones
+3. Verificar instalación:
+   ```cmd
+   java -version
+   ```
+4. Configurar variables de entorno (opcional):
+   - Ir a `Configuración del sistema` > `Variables de entorno`
+   - Agregar `JAVA_HOME` apuntando a la carpeta de instalación (ej: `C:\Program Files\Java\jdk-21`)
+   - Agregar `%JAVA_HOME%\bin` al `PATH`
+
+#### 📦 Instalar Maven
+
+**Nota:** El proyecto incluye Maven Wrapper (`mvnw`), por lo que **no es necesario instalar Maven** si usas los scripts de ejecución. Sin embargo, si prefieres instalar Maven globalmente:
+
+**macOS (usando Homebrew):**
+```bash
+brew install maven
+
+# Verificar instalación
+mvn -version
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt update
+sudo apt install maven
+
+# Verificar instalación
+mvn -version
+```
+
+**Linux (CentOS/RHEL/Fedora):**
+```bash
+sudo dnf install maven
+
+# Verificar instalación
+mvn -version
+```
+
+**Windows:**
+1. Descargar Maven desde [Apache Maven](https://maven.apache.org/download.cgi)
+2. Extraer el archivo ZIP (ej: `C:\Program Files\Apache\maven`)
+3. Configurar variables de entorno:
+   - Agregar `MAVEN_HOME` apuntando a la carpeta de Maven
+   - Agregar `%MAVEN_HOME%\bin` al `PATH`
+4. Verificar instalación:
+   ```cmd
+   mvn -version
+   ```
+
+**Alternativa: Usar Maven Wrapper (Recomendado)**
+El proyecto incluye Maven Wrapper, por lo que puedes usar `./mvnw` (Linux/macOS) o `mvnw.cmd` (Windows) sin instalar Maven globalmente. Los scripts `run.sh` y `run.bat` lo usan automáticamente.
+
 ### Instalación Rápida
 
 ```bash
@@ -142,28 +243,58 @@ Hemos incluido scripts para facilitar la ejecución de la aplicación:
 
 **Linux/macOS:**
 ```bash
-./run.sh dev          # Modo desarrollo (recomendado)
+./run.sh dev          # Modo desarrollo (foreground)
+./run.sh start        # Modo desarrollo (background) ⭐ NUEVO
+./run.sh stop         # Detener aplicación en segundo plano ⭐ NUEVO
+./run.sh status       # Ver estado de la aplicación ⭐ NUEVO
 ./run.sh build        # Solo compilar
 ./run.sh run          # Ejecutar JAR compilado
-./run.sh run prod      # Ejecutar con perfil de producción
-./run.sh check         # Verificar dependencias
-./run.sh help          # Ver ayuda
+./run.sh run prod     # Ejecutar con perfil de producción
+./run.sh check        # Verificar dependencias
+./run.sh help         # Ver ayuda
 ```
 
 **Windows:**
 ```cmd
-run.bat dev           # Modo desarrollo (recomendado)
+run.bat dev           # Modo desarrollo (foreground)
+run.bat start         # Modo desarrollo (background) ⭐ NUEVO
+run.bat stop          # Detener aplicación ⭐ NUEVO
+run.bat status        # Ver estado ⭐ NUEVO
 run.bat build         # Solo compilar
 run.bat run           # Ejecutar JAR compilado
-run.bat run prod       # Ejecutar con perfil de producción
+run.bat run prod      # Ejecutar con perfil de producción
 run.bat help          # Ver ayuda
 ```
 
-El script verifica automáticamente:
+#### ✨ Características del Script
+
+**Verificaciones automáticas:**
 - ✅ Java instalado (versión 21+)
 - ✅ Maven wrapper disponible
-- ✅ Archivo .env configurado
+- ✅ Archivo .env configurado (con advertencia llamativa si falta)
 - ✅ Carga variables de entorno
+- ✅ Compilación automática si es necesario
+
+**Ejecución en segundo plano:**
+- 🚀 `start` - Ejecuta la aplicación en segundo plano
+- 📝 Logs guardados automáticamente en `logs/app.log`
+- 🛑 `stop` - Detiene la aplicación de forma segura
+- 📊 `status` - Verifica si la aplicación está corriendo
+
+**Ejemplos de uso:**
+```bash
+# Iniciar en segundo plano
+./run.sh start
+
+# Ver logs en tiempo real
+tail -f logs/app.log
+
+# Verificar estado
+./run.sh status
+
+# Detener aplicación
+./run.sh stop
+```
 
 ---
 

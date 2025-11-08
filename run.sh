@@ -63,19 +63,62 @@ check_maven() {
 # Verificar archivo .env
 check_env() {
     if [ ! -f ".env" ]; then
-        print_warning "Archivo .env no encontrado"
+        echo ""
+        echo -e "${RED}╔════════════════════════════════════════════════════════════════╗${NC}"
+        echo -e "${RED}║                    ⚠️  ADVERTENCIA IMPORTANTE ⚠️                  ║${NC}"
+        echo -e "${RED}╠════════════════════════════════════════════════════════════════╣${NC}"
+        echo -e "${RED}║${NC}  ${YELLOW}Archivo .env NO encontrado${NC}                                    ${RED}║${NC}"
+        echo -e "${RED}║${NC}                                                              ${RED}║${NC}"
+        echo -e "${RED}║${NC}  ${YELLOW}⚠️  La aplicación usará valores por DEFECTO${NC}                    ${RED}║${NC}"
+        echo -e "${RED}║${NC}  ${YELLOW}⚠️  Esto puede causar errores de conexión a BD${NC}                 ${RED}║${NC}"
+        echo -e "${RED}║${NC}  ${YELLOW}⚠️  y otros problemas de configuración${NC}                         ${RED}║${NC}"
+        echo -e "${RED}║${NC}                                                              ${RED}║${NC}"
+        echo -e "${RED}║${NC}  ${YELLOW}Recomendación:${NC}                                                ${RED}║${NC}"
+        echo -e "${RED}║${NC}  1. Crea un archivo .env basado en .env.example            ${RED}║${NC}"
+        echo -e "${RED}║${NC}  2. Configura tus credenciales de base de datos            ${RED}║${NC}"
+        echo -e "${RED}║${NC}  3. Configura las demás variables de entorno              ${RED}║${NC}"
+        echo -e "${RED}╚════════════════════════════════════════════════════════════════╝${NC}"
+        echo ""
+        
         if [ -f ".env.example" ]; then
-            print_info "Copiando .env.example a .env..."
-            cp .env.example .env
-            print_warning "Por favor, edita el archivo .env con tus credenciales antes de continuar."
+            print_info "Se encontró .env.example. ¿Deseas copiarlo a .env? (S/n): "
+            read -p "" -n 1 -r
+            echo
+            if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+                print_info "Copiando .env.example a .env..."
+                cp .env.example .env
+                echo ""
+                print_warning "⚠️  IMPORTANTE: Edita el archivo .env con tus credenciales antes de continuar."
+                echo ""
+                read -p "¿Deseas continuar de todas formas? (s/N): " -n 1 -r
+                echo
+                if [[ ! $REPLY =~ ^[Ss]$ ]]; then
+                    print_info "Ejecución cancelada. Configura el archivo .env y vuelve a intentar."
+                    exit 1
+                fi
+            else
+                print_warning "No se copió .env.example. La aplicación usará valores por defecto."
+                echo ""
+                read -p "¿Deseas continuar de todas formas? (s/N): " -n 1 -r
+                echo
+                if [[ ! $REPLY =~ ^[Ss]$ ]]; then
+                    print_info "Ejecución cancelada."
+                    exit 1
+                fi
+            fi
+        else
+            print_warning "Archivo .env.example no encontrado."
+            echo ""
+            print_warning "La aplicación se ejecutará con valores por defecto."
+            echo ""
             read -p "¿Deseas continuar de todas formas? (s/N): " -n 1 -r
             echo
             if [[ ! $REPLY =~ ^[Ss]$ ]]; then
+                print_info "Ejecución cancelada. Crea un archivo .env con tus variables de entorno."
                 exit 1
             fi
-        else
-            print_warning "Archivo .env.example no encontrado. Continuando sin variables de entorno..."
         fi
+        echo ""
     else
         print_success "Archivo .env encontrado"
     fi
@@ -130,9 +173,127 @@ run_app() {
 
 # Ejecutar con Maven (desarrollo)
 run_dev() {
+    local background=$1
     print_info "Ejecutando en modo desarrollo con Maven..."
     load_env
-    ./mvnw spring-boot:run
+    
+    # Verificar si necesita compilar
+    local jar_file="target/wowlibre-0.0.1-SNAPSHOT.jar"
+    if [ ! -f "$jar_file" ]; then
+        print_warning "JAR no encontrado. Compilando primero..."
+        build_app true
+    else
+        # Verificar si el código fuente es más reciente que el JAR
+        local source_newer=false
+        if [ -d "src" ]; then
+            local latest_source=$(find src -type f -name "*.java" -newer "$jar_file" 2>/dev/null | head -1)
+            if [ -n "$latest_source" ]; then
+                source_newer=true
+            fi
+        fi
+        
+        if [ "$source_newer" = true ]; then
+            print_info "Código fuente modificado. Recompilando..."
+            build_app true
+        fi
+    fi
+    
+    if [ "$background" = true ]; then
+        print_info "Iniciando aplicación en segundo plano..."
+        nohup ./mvnw spring-boot:run > logs/app.log 2>&1 &
+        local pid=$!
+        echo $pid > .app.pid
+        print_success "Aplicación iniciada en segundo plano (PID: $pid)"
+        print_info "Logs: tail -f logs/app.log"
+        print_info "Para detener: ./run.sh stop"
+        echo ""
+        sleep 2
+        print_info "Verificando estado..."
+        if ps -p $pid > /dev/null 2>&1; then
+            print_success "✅ Aplicación corriendo correctamente"
+        else
+            print_error "❌ La aplicación se detuvo. Revisa los logs: cat logs/app.log"
+        fi
+    else
+        ./mvnw spring-boot:run
+    fi
+}
+
+# Detener la aplicación
+stop_app() {
+    local pid_file=".app.pid"
+    
+    if [ ! -f "$pid_file" ]; then
+        print_warning "No se encontró archivo de PID. Buscando proceso..."
+        local pid=$(pgrep -f "spring-boot:run" || pgrep -f "wowlibre-0.0.1-SNAPSHOT.jar" || echo "")
+        if [ -z "$pid" ]; then
+            print_warning "No se encontró proceso de la aplicación corriendo."
+            return 1
+        fi
+    else
+        local pid=$(cat "$pid_file")
+    fi
+    
+    if [ -z "$pid" ]; then
+        print_warning "No se encontró PID de la aplicación."
+        rm -f "$pid_file"
+        return 1
+    fi
+    
+    if ! ps -p $pid > /dev/null 2>&1; then
+        print_warning "El proceso $pid no está corriendo."
+        rm -f "$pid_file"
+        return 1
+    fi
+    
+    print_info "Deteniendo aplicación (PID: $pid)..."
+    kill $pid 2>/dev/null || true
+    
+    # Esperar un poco y verificar
+    sleep 2
+    if ps -p $pid > /dev/null 2>&1; then
+        print_warning "El proceso no se detuvo. Forzando terminación..."
+        kill -9 $pid 2>/dev/null || true
+        sleep 1
+    fi
+    
+    if ps -p $pid > /dev/null 2>&1; then
+        print_error "No se pudo detener el proceso $pid"
+        return 1
+    else
+        print_success "Aplicación detenida correctamente"
+        rm -f "$pid_file"
+        return 0
+    fi
+}
+
+# Ver estado de la aplicación
+status_app() {
+    local pid_file=".app.pid"
+    
+    if [ -f "$pid_file" ]; then
+        local pid=$(cat "$pid_file")
+        if ps -p $pid > /dev/null 2>&1; then
+            print_success "✅ Aplicación corriendo (PID: $pid)"
+            print_info "Para ver logs: tail -f logs/app.log"
+            print_info "Para detener: ./run.sh stop"
+            return 0
+        else
+            print_warning "El PID $pid no está activo. Limpiando archivo..."
+            rm -f "$pid_file"
+        fi
+    fi
+    
+    # Buscar proceso manualmente
+    local pid=$(pgrep -f "spring-boot:run" || pgrep -f "wowlibre-0.0.1-SNAPSHOT.jar" || echo "")
+    if [ -n "$pid" ]; then
+        print_success "✅ Aplicación corriendo (PID: $pid)"
+        print_info "Para detener: ./run.sh stop"
+        return 0
+    else
+        print_warning "❌ Aplicación no está corriendo"
+        return 1
+    fi
 }
 
 # Mostrar ayuda
@@ -142,14 +303,20 @@ show_help() {
     echo "Uso: ./run.sh [OPCIÓN]"
     echo ""
     echo "Opciones:"
-    echo "  dev          Ejecuta en modo desarrollo (spring-boot:run)"
+    echo "  dev          Ejecuta en modo desarrollo (foreground)"
+    echo "  start        Ejecuta en modo desarrollo (background)"
+    echo "  stop         Detiene la aplicación en segundo plano"
+    echo "  status       Muestra el estado de la aplicación"
     echo "  build        Solo compila la aplicación"
     echo "  run [perfil] Ejecuta el JAR compilado (opcional: perfil Spring)"
     echo "  check        Verifica dependencias y configuración"
     echo "  help         Muestra esta ayuda"
     echo ""
     echo "Ejemplos:"
-    echo "  ./run.sh dev              # Modo desarrollo"
+    echo "  ./run.sh dev              # Modo desarrollo (foreground)"
+    echo "  ./run.sh start            # Modo desarrollo (background)"
+    echo "  ./run.sh stop             # Detener aplicación"
+    echo "  ./run.sh status           # Ver estado"
     echo "  ./run.sh run              # Ejecuta JAR"
     echo "  ./run.sh run prod         # Ejecuta JAR con perfil prod"
     echo "  ./run.sh build            # Solo compilar"
@@ -170,13 +337,29 @@ check_all() {
 
 # Main
 main() {
+    # Crear directorio de logs si no existe
+    mkdir -p logs
+    
     case "${1:-dev}" in
         dev)
             check_java
             check_maven
             check_env
             load_env
-            run_dev
+            run_dev false
+            ;;
+        start)
+            check_java
+            check_maven
+            check_env
+            load_env
+            run_dev true
+            ;;
+        stop)
+            stop_app
+            ;;
+        status)
+            status_app
             ;;
         build)
             check_java
