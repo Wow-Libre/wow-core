@@ -104,7 +104,11 @@ mysql -u root -p < src/main/resources/static/scripts/scripts.sql
 cp .env.example .env
 # Editar .env con tus credenciales
 
-# 4. Compilar y ejecutar
+# 4. Ejecutar la aplicación (método fácil)
+./run.sh dev          # Linux/macOS
+run.bat dev            # Windows
+
+# O manualmente:
 ./mvnw clean install -DskipTests
 ./mvnw spring-boot:run
 ```
@@ -131,6 +135,35 @@ curl http://localhost:8091/core/actuator/health
 # Swagger UI
 open http://localhost:8091/core/swagger-ui/index.html
 ```
+
+### 🎯 Script de Ejecución Rápida
+
+Hemos incluido scripts para facilitar la ejecución de la aplicación:
+
+**Linux/macOS:**
+```bash
+./run.sh dev          # Modo desarrollo (recomendado)
+./run.sh build        # Solo compilar
+./run.sh run          # Ejecutar JAR compilado
+./run.sh run prod      # Ejecutar con perfil de producción
+./run.sh check         # Verificar dependencias
+./run.sh help          # Ver ayuda
+```
+
+**Windows:**
+```cmd
+run.bat dev           # Modo desarrollo (recomendado)
+run.bat build         # Solo compilar
+run.bat run           # Ejecutar JAR compilado
+run.bat run prod       # Ejecutar con perfil de producción
+run.bat help          # Ver ayuda
+```
+
+El script verifica automáticamente:
+- ✅ Java instalado (versión 21+)
+- ✅ Maven wrapper disponible
+- ✅ Archivo .env configurado
+- ✅ Carga variables de entorno
 
 ---
 
