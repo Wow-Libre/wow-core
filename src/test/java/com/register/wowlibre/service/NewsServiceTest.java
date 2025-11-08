@@ -80,7 +80,7 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void newsSectionId_shouldReturnNewsSectionsDto() {
-        Long newsId = 1L;
+        long newsId = 1L;
         String transactionId = "tx-news-002";
         NewsEntity newsEntity = createNewsEntity(newsId, "Title", "SubTitle", "img.jpg", "Author");
         NewsSectionsEntity section = createNewsSectionEntity(1L, newsEntity, "Section Title", "Content", 1);
@@ -99,7 +99,7 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void newsSectionId_shouldThrowExceptionWhenNewsNotFound() {
-        Long newsId = 999L;
+        long newsId = 999L;
         String transactionId = "tx-news-003";
 
         when(obtainNews.findById(newsId)).thenReturn(Optional.empty());
@@ -135,7 +135,7 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void deleteNews_shouldDeleteNewsEntity() {
-        Long newsId = 1L;
+        long newsId = 1L;
         String transactionId = "tx-news-005";
         NewsEntity newsEntity = createNewsEntity(newsId, "Title", "SubTitle", "img.jpg", "Author");
 
@@ -149,7 +149,7 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void deleteNews_shouldThrowExceptionWhenNewsNotFound() {
-        Long newsId = 999L;
+        long newsId = 999L;
         String transactionId = "tx-news-006";
 
         when(obtainNews.findById(newsId)).thenReturn(Optional.empty());
@@ -165,7 +165,7 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void updateNews_shouldUpdateNewsEntity() {
-        Long newsId = 1L;
+        long newsId = 1L;
         String transactionId = "tx-news-007";
         NewsEntity newsEntity = createNewsEntity(newsId, "Old Title", "Old SubTitle", "old-img.jpg", "Old Author");
         UpdateNewsDto updateNewsDto = new UpdateNewsDto();
@@ -188,7 +188,7 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void updateNews_shouldThrowExceptionWhenNewsNotFound() {
-        Long newsId = 999L;
+        long newsId = 999L;
         String transactionId = "tx-news-008";
         UpdateNewsDto updateNewsDto = new UpdateNewsDto();
 
@@ -205,7 +205,7 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void createNewsSection_shouldCreateNewsSection() {
-        Long newsId = 1L;
+        long newsId = 1L;
         String transactionId = "tx-news-009";
         NewsEntity newsEntity = createNewsEntity(newsId, "Title", "SubTitle", "img.jpg", "Author");
         CreateNewsSectionDto createNewsSectionDto = new CreateNewsSectionDto();
@@ -247,8 +247,8 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void deleteNewsSection_shouldDeleteNewsSection() {
-        Long newsId = 1L;
-        Long sectionId = 1L;
+        long newsId = 1L;
+        long sectionId = 1L;
         String transactionId = "tx-news-011";
         NewsEntity newsEntity = createNewsEntity(newsId, "Title", "SubTitle", "img.jpg", "Author");
         NewsSectionsEntity section = createNewsSectionEntity(sectionId, newsEntity, "Section Title", "Content", 1);
@@ -265,8 +265,8 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void deleteNewsSection_shouldThrowExceptionWhenNewsNotFound() {
-        Long newsId = 999L;
-        Long sectionId = 1L;
+        long newsId = 999L;
+        long sectionId = 1L;
         String transactionId = "tx-news-012";
 
         when(obtainNews.findById(newsId)).thenReturn(Optional.empty());
@@ -282,8 +282,8 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void deleteNewsSection_shouldThrowExceptionWhenSectionNotFound() {
-        Long newsId = 1L;
-        Long sectionId = 999L;
+        long newsId = 1L;
+        long sectionId = 999L;
         String transactionId = "tx-news-013";
         NewsEntity newsEntity = createNewsEntity(newsId, "Title", "SubTitle", "img.jpg", "Author");
 

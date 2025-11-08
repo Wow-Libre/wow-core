@@ -27,7 +27,7 @@ class RealmControllerTest {
     void create_callsPortAndReturnsCreated() {
         RealmCreateDto dto = new RealmCreateDto();
         String tx = "tx";
-        Long userId = 1L;
+        long userId = 1L;
 
         ResponseEntity<GenericResponse<Void>> response = controller.create(tx, userId, dto);
 

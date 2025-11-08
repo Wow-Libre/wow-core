@@ -41,7 +41,7 @@ class RealmAdvertisingServiceTest extends BaseTest {
 
     @Test
     void getRealmAdvertisingById_shouldReturnModelWhenFound() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String language = "es";
         String transactionId = "tx-adv-001";
         RealmEntity realm = createRealmEntity(realmId);
@@ -63,7 +63,7 @@ class RealmAdvertisingServiceTest extends BaseTest {
 
     @Test
     void getRealmAdvertisingById_shouldReturnDefaultModelWhenNotFound() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String language = "es";
         String transactionId = "tx-adv-002";
         RealmEntity realm = createRealmEntity(realmId);
@@ -84,7 +84,7 @@ class RealmAdvertisingServiceTest extends BaseTest {
 
     @Test
     void getRealmAdvertisingById_shouldThrowExceptionWhenRealmNotFound() {
-        Long realmId = 999L;
+        long realmId = 999L;
         String language = "es";
         String transactionId = "tx-adv-003";
 
@@ -101,7 +101,7 @@ class RealmAdvertisingServiceTest extends BaseTest {
 
     @Test
     void save_shouldCreateNewRealmAdvertising() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-adv-004";
         RealmEntity realm = createRealmEntity(realmId);
         RealmAdvertisingDto dto = new RealmAdvertisingDto();
@@ -131,7 +131,7 @@ class RealmAdvertisingServiceTest extends BaseTest {
 
     @Test
     void save_shouldUpdateExistingRealmAdvertising() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-adv-005";
         RealmEntity realm = createRealmEntity(realmId);
         RealmAdvertisingEntity existing = createRealmAdvertisingEntity(1L, realm, "es");
@@ -159,7 +159,7 @@ class RealmAdvertisingServiceTest extends BaseTest {
 
     @Test
     void save_shouldThrowExceptionWhenRealmNotFound() {
-        Long realmId = 999L;
+        long realmId = 999L;
         String transactionId = "tx-adv-006";
         RealmAdvertisingDto dto = new RealmAdvertisingDto();
         dto.setLanguage("es");

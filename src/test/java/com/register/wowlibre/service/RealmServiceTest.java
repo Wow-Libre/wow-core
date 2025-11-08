@@ -128,7 +128,7 @@ class RealmServiceTest extends BaseTest {
 
     @Test
     void findById_shouldReturnOptionalRealmEntity() {
-        Long id = 1L;
+        long id = 1L;
         String transactionId = "tx-realm-005";
         RealmEntity realm = createRealmEntity(id, "Test Realm", true);
 
@@ -143,7 +143,7 @@ class RealmServiceTest extends BaseTest {
 
     @Test
     void findById_shouldReturnEmptyWhenNotFound() {
-        Long id = 999L;
+        long id = 999L;
         String transactionId = "tx-realm-006";
 
         when(obtainRealmPort.findById(id, transactionId)).thenReturn(Optional.empty());
@@ -156,7 +156,7 @@ class RealmServiceTest extends BaseTest {
 
     @Test
     void create_shouldCreateRealmSuccessfully() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-realm-007";
         String apiKey = "api-key-123";
         String apiSecret = "api-secret-456";
@@ -194,7 +194,7 @@ class RealmServiceTest extends BaseTest {
 
     @Test
     void create_shouldThrowExceptionWhenRealmAlreadyExists() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-realm-008";
         RealmCreateDto realmCreateDto = new RealmCreateDto();
         realmCreateDto.setName("Existing Realm");
@@ -230,8 +230,8 @@ class RealmServiceTest extends BaseTest {
 
     @Test
     void findByIdAndUserId_shouldReturnOptionalRealmEntity() {
-        Long id = 1L;
-        Long userId = 1L;
+        long id = 1L;
+        long userId = 1L;
         String transactionId = "tx-realm-010";
         RealmEntity realm = createRealmEntity(id, "Test Realm", true);
 
@@ -246,8 +246,8 @@ class RealmServiceTest extends BaseTest {
 
     @Test
     void findByIdAndUserId_shouldReturnEmptyWhenNotFound() {
-        Long id = 999L;
-        Long userId = 1L;
+        long id = 999L;
+        long userId = 1L;
         String transactionId = "tx-realm-011";
 
         when(obtainRealmPort.findAndIdByUser(id, userId, transactionId)).thenReturn(Optional.empty());

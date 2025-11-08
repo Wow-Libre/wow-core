@@ -159,7 +159,7 @@ class JpaCreditLoansAdapterTest {
 
     @Test
     void findByRealmIdAndPagination_shouldReturnListWithAscendingSort() {
-        Long realmId = 1L;
+        long realmId = 1L;
         int size = 10;
         int page = 0;
         String filter = "ALL";
@@ -184,7 +184,7 @@ class JpaCreditLoansAdapterTest {
 
     @Test
     void findByRealmIdAndPagination_shouldReturnListWithDescendingSort() {
-        Long realmId = 1L;
+        long realmId = 1L;
         int size = 10;
         int page = 0;
         String filter = "DEBTOR";
@@ -208,7 +208,7 @@ class JpaCreditLoansAdapterTest {
 
     @Test
     void findByRealmIdAndPagination_shouldReturnEmptyListWhenNoResults() {
-        Long realmId = 1L;
+        long realmId = 1L;
         int size = 10;
         int page = 0;
         String filter = "NON_DEBTOR";

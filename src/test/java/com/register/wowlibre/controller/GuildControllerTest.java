@@ -79,8 +79,8 @@ class GuildControllerTest {
     @Test
     void shouldReturnGuild() {
         String transactionId = "tx-guild-003";
-        Long guildId = 1L;
-        Long realmId = 1L;
+        long guildId = 1L;
+        long realmId = 1L;
         Locale locale = Locale.ENGLISH;
         GuildDto guildDto = new GuildDto(1L, "Test Guild", "Leader", 1L, 1L, 1L, 1L,
                 "Info", "MOTD", new java.util.Date(), 1000L, 10L, true, null,
@@ -100,7 +100,7 @@ class GuildControllerTest {
     @Test
     void shouldAttachGuild() {
         String transactionId = "tx-guild-004";
-        Long userId = 1L;
+        long userId = 1L;
         GuildAttachDto request = new GuildAttachDto();
         request.setServerId(1L);
         request.setAccountId(101L);
@@ -120,10 +120,10 @@ class GuildControllerTest {
     @Test
     void shouldReturnMemberGuild() {
         String transactionId = "tx-guild-005";
-        Long serverId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
+        long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
         GuildMemberDetailDto memberDto = GuildMemberDetailDto.builder().build();
 
         when(guildPort.guildMember(serverId, userId, accountId, characterId, transactionId))
@@ -141,7 +141,7 @@ class GuildControllerTest {
     @Test
     void shouldUnInviteGuild() {
         String transactionId = "tx-guild-006";
-        Long userId = 1L;
+        long userId = 1L;
         UnInviteGuildDto request = new UnInviteGuildDto();
         request.setServerId(1L);
         request.setAccountId(101L);
@@ -160,7 +160,7 @@ class GuildControllerTest {
     @Test
     void shouldUpdateGuild() {
         String transactionId = "tx-guild-007";
-        Long userId = 1L;
+        long userId = 1L;
         UpdateGuildDto request = new UpdateGuildDto();
         request.setServerId(1L);
         request.setAccountId(101L);
@@ -183,7 +183,7 @@ class GuildControllerTest {
     @Test
     void shouldClaimBenefits() {
         String transactionId = "tx-guild-008";
-        Long userId = 1L;
+        long userId = 1L;
         Locale locale = Locale.ENGLISH;
         ClaimBenefitsGuildDto request = new ClaimBenefitsGuildDto();
         request.setServerId(1L);

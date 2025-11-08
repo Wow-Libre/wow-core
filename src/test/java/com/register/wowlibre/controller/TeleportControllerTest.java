@@ -37,8 +37,8 @@ class TeleportControllerTest {
     @Test
     void shouldReturnAllTeleports() {
         String transactionId = "tx-teleport-001";
-        Long raceId = 1L;
-        Long realmId = 1L;
+        long raceId = 1L;
+        long realmId = 1L;
         TeleportModel teleport = TeleportModel.builder()
                 .id(1L)
                 .name("Test Teleport")
@@ -59,7 +59,7 @@ class TeleportControllerTest {
     @Test
     void shouldTeleportCharacter() {
         String transactionId = "tx-teleport-002";
-        Long userId = 1L;
+        long userId = 1L;
         CharacterTeleportDto teleportDto = new CharacterTeleportDto();
         teleportDto.setTeleportId(1L);
         teleportDto.setAccountId(101L);
@@ -89,8 +89,8 @@ class TeleportControllerTest {
     @Test
     void shouldDeleteTeleport() {
         String transactionId = "tx-teleport-004";
-        Long realmId = 1L;
-        Long teleportId = 1L;
+        long realmId = 1L;
+        long teleportId = 1L;
 
         ResponseEntity<GenericResponse<Void>> response = controller.delete(transactionId, realmId, teleportId);
 

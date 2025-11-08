@@ -51,8 +51,8 @@ class TeleportServiceTest extends BaseTest {
 
     @Test
     void findByAll_shouldReturnFilteredTeleportsByFaction() {
-        Long realmId = 1L;
-        Long raceId = 1L; // HUMAN -> ALLIANCE
+        long realmId = 1L;
+        long raceId = 1L; // HUMAN -> ALLIANCE
         String transactionId = "tx-teleport-001";
         TeleportEntity teleport1 = createTeleportEntity(1L, realmId, Faction.ALLIANCE);
         TeleportEntity teleport2 = createTeleportEntity(2L, realmId, Faction.ALL);
@@ -69,8 +69,8 @@ class TeleportServiceTest extends BaseTest {
 
     @Test
     void findByAll_shouldReturnAllTeleportsWhenFactionIsAll() {
-        Long realmId = 1L;
-        Long raceId = 0L; // UNKNOWN -> ALL
+        long realmId = 1L;
+        long raceId = 0L; // UNKNOWN -> ALL
         String transactionId = "tx-teleport-002";
         TeleportEntity teleport1 = createTeleportEntity(1L, realmId, Faction.ALLIANCE);
         TeleportEntity teleport2 = createTeleportEntity(2L, realmId, Faction.HORDE);
@@ -164,11 +164,11 @@ class TeleportServiceTest extends BaseTest {
 
     @Test
     void teleport_shouldTeleportCharacter() {
-        Long teleportId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
-        Long realmId = 1L;
+        long teleportId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
+        long realmId = 1L;
         String transactionId = "tx-teleport-006";
         RealmEntity realm = createRealmEntity(realmId);
         realm.setHost("http://test.com");
@@ -189,8 +189,8 @@ class TeleportServiceTest extends BaseTest {
 
     @Test
     void delete_shouldDeleteTeleport() {
-        Long id = 1L;
-        Long realmId = 1L;
+        long id = 1L;
+        long realmId = 1L;
         String transactionId = "tx-teleport-007";
         TeleportEntity teleport = createTeleportEntity(id, realmId, Faction.ALLIANCE);
 
@@ -204,8 +204,8 @@ class TeleportServiceTest extends BaseTest {
 
     @Test
     void delete_shouldThrowExceptionWhenTeleportNotFound() {
-        Long id = 999L;
-        Long realmId = 1L;
+        long id = 999L;
+        long realmId = 1L;
         String transactionId = "tx-teleport-008";
 
         when(obtainTeleport.findByIdAndRealmId(id, realmId)).thenReturn(Optional.empty());

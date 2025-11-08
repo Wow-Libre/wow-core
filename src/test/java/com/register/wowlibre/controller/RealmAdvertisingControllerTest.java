@@ -38,7 +38,7 @@ class RealmAdvertisingControllerTest {
     @Test
     void shouldReturnRealmAdvertisingByRealmId() {
         String transactionId = "tx-realm-adv-001";
-        Long realmId = 1L;
+        long realmId = 1L;
         Locale locale = Locale.ENGLISH;
         RealmAdvertisingModel model = RealmAdvertisingModel.builder()
                 .id(realmId)
@@ -71,7 +71,7 @@ class RealmAdvertisingControllerTest {
     @Test
     void shouldSaveRealmAdvertising() {
         String transactionId = "tx-realm-adv-002";
-        Long realmId = 1L;
+        long realmId = 1L;
         RealmAdvertisingDto dto = new RealmAdvertisingDto();
         dto.setTag("TEST");
         dto.setSubTitle("Test Subtitle");

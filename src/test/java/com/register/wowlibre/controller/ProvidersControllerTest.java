@@ -36,7 +36,7 @@ class ProvidersControllerTest {
 
     @Test
     void delete_shouldCallDeleteProviderAndReturnOk() {
-        Long providerId = 1L;
+        long providerId = 1L;
         String transactionId = "tx-2";
 
         ResponseEntity<?> response = controller.delete(transactionId, providerId);

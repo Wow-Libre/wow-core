@@ -36,9 +36,9 @@ class CharactersControllerTest {
 
     @Test
     void shouldReturnCharacters() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
         String transactionId = "tx-char-001";
         CharactersDto charactersDto = new CharactersDto();
         charactersDto.setCharacters(new ArrayList<>());
@@ -57,9 +57,9 @@ class CharactersControllerTest {
 
     @Test
     void shouldReturnNoContentWhenCharactersIsNull() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
         String transactionId = "tx-char-002";
 
         when(charactersPort.characters(userId, accountId, serverId, transactionId)).thenReturn(null);
@@ -74,9 +74,9 @@ class CharactersControllerTest {
 
     @Test
     void shouldReturnLoanApplicationCharacters() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
         String transactionId = "tx-char-003";
         CharactersDto charactersDto = new CharactersDto();
         charactersDto.setCharacters(new ArrayList<>());
@@ -96,9 +96,9 @@ class CharactersControllerTest {
 
     @Test
     void shouldReturnNoContentWhenLoanApplicationCharactersIsNull() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
         String transactionId = "tx-char-004";
 
         when(charactersPort.loanApplicationCharacters(userId, accountId, serverId, transactionId))
@@ -114,7 +114,7 @@ class CharactersControllerTest {
 
     @Test
     void shouldDeleteFriend() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-char-005";
         DeleteFriendDto deleteFriendDto = new DeleteFriendDto();
         deleteFriendDto.setAccountId(101L);
@@ -134,10 +134,10 @@ class CharactersControllerTest {
 
     @Test
     void shouldReturnMails() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
-        Long characterId = 201L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
+        long characterId = 201L;
         String transactionId = "tx-char-006";
         MailsDto mailsDto = new MailsDto(new ArrayList<>(), 0);
 
@@ -155,10 +155,10 @@ class CharactersControllerTest {
 
     @Test
     void shouldReturnNoContentWhenMailsIsNull() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
-        Long characterId = 201L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
+        long characterId = 201L;
         String transactionId = "tx-char-007";
 
         when(charactersPort.mails(userId, accountId, serverId, characterId, transactionId))
@@ -174,10 +174,10 @@ class CharactersControllerTest {
 
     @Test
     void shouldReturnFriends() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
-        Long characterId = 201L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
+        long characterId = 201L;
         String transactionId = "tx-char-008";
         CharacterSocialDto characterSocialDto = new CharacterSocialDto(new ArrayList<>(), 0);
 
@@ -195,10 +195,10 @@ class CharactersControllerTest {
 
     @Test
     void shouldReturnNoContentWhenFriendsIsNull() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
-        Long characterId = 201L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
+        long characterId = 201L;
         String transactionId = "tx-char-009";
 
         when(charactersPort.friends(userId, accountId, serverId, characterId, transactionId))
@@ -214,7 +214,7 @@ class CharactersControllerTest {
 
     @Test
     void shouldChangePassword() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-char-010";
         ChangePasswordDto changePasswordDto = new ChangePasswordDto();
         changePasswordDto.setAccountId(101L);
@@ -235,10 +235,10 @@ class CharactersControllerTest {
 
     @Test
     void shouldReturnProfessions() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
-        Long characterId = 201L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
+        long characterId = 201L;
         String transactionId = "tx-char-011";
         List<CharacterProfessionsDto> professions = new ArrayList<>();
 
@@ -256,7 +256,7 @@ class CharactersControllerTest {
 
     @Test
     void shouldSendLevel() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-char-012";
         SendLevelDto sendLevelDto = new SendLevelDto();
         sendLevelDto.setAccountId(101L);
@@ -278,7 +278,7 @@ class CharactersControllerTest {
 
     @Test
     void shouldSendMoney() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-char-013";
         SendMoneyDto sendMoneyDto = new SendMoneyDto();
         sendMoneyDto.setAccountId(101L);
@@ -300,7 +300,7 @@ class CharactersControllerTest {
 
     @Test
     void shouldSendAnnouncement() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-char-014";
         AnnouncementDto announcementDto = new AnnouncementDto(101L, 201L, 401L, "Test message", 1L);
 
@@ -317,10 +317,10 @@ class CharactersControllerTest {
 
     @Test
     void shouldReturnInventory() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
-        Long characterId = 201L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
+        long characterId = 201L;
         String transactionId = "tx-char-015";
         List<CharacterInventoryResponse> inventory = new ArrayList<>();
 
@@ -338,7 +338,7 @@ class CharactersControllerTest {
 
     @Test
     void shouldTransferInventoryItem() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-char-016";
         TransferItemDto transferItemDto = new TransferItemDto();
         transferItemDto.setAccountId(101L);

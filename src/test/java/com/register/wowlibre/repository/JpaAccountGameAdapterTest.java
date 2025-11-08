@@ -25,7 +25,7 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void findByUserIdAndStatusIsTrue_shouldReturnListFromPage() {
-        Long userId = 1L;
+        long userId = 1L;
         int page = 0;
         int size = 10;
         Pageable pageable = PageRequest.of(page, size);
@@ -42,7 +42,7 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue_shouldReturnOptional() {
-        Long userId = 1L, accountId = 2L, realmId = 3L;
+        long userId = 1L, accountId = 2L, realmId = 3L;
         Optional<AccountGameEntity> expected = Optional.of(new AccountGameEntity());
 
         when(accountGameRepository.findByUserId_IdAndAccountIdAndRealmId_idAndStatusIsTrue(userId, accountId, realmId))
@@ -57,7 +57,7 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void accounts_shouldReturnCount() {
-        Long userId = 1L;
+        long userId = 1L;
         when(accountGameRepository.countByUserId(userId)).thenReturn(5L);
 
         Long result = adapter.accounts(userId);
@@ -68,7 +68,7 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void findByUserIdAndRealmNameAndUsernameStatusIsTrue_shouldReturnListFromPage() {
-        Long userId = 1L;
+        long userId = 1L;
         int page = 0, size = 5;
         String realmName = "RealmA";
         String username = "user123";
@@ -89,7 +89,7 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void findByUserIdAndRealmId_shouldReturnList() {
-        Long userId = 1L, realmId = 99L;
+        long userId = 1L, realmId = 99L;
         List<AccountGameEntity> expected = List.of(new AccountGameEntity());
 
         when(accountGameRepository.findByUserId_IdAndRealmId_IdAndStatusIsTrue(userId, realmId))
@@ -103,8 +103,8 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void findByIdAndUserId_shouldReturnOptionalWhenFound() {
-        Long id = 100L;
-        Long userId = 1L;
+        long id = 100L;
+        long userId = 1L;
         String transactionId = "tx-find-001";
         AccountGameEntity expectedEntity = new AccountGameEntity();
         expectedEntity.setId(id);
@@ -121,8 +121,8 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void findByIdAndUserId_shouldReturnEmptyWhenNotFound() {
-        Long id = 100L;
-        Long userId = 1L;
+        long id = 100L;
+        long userId = 1L;
         String transactionId = "tx-find-002";
 
         when(accountGameRepository.findByIdAndUserId_Id(id, userId))
@@ -147,7 +147,7 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void countActiveAccountsByUserId_shouldReturnCount() {
-        Long userId = 1L;
+        long userId = 1L;
         long expectedCount = 5L;
         String transactionId = "tx-count-001";
 
@@ -161,7 +161,7 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void countActiveAccountsByUserId_shouldReturnZeroWhenNoAccounts() {
-        Long userId = 1L;
+        long userId = 1L;
         long expectedCount = 0L;
         String transactionId = "tx-count-002";
 
@@ -175,7 +175,7 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void countDistinctRealmsByUserId_shouldReturnCount() {
-        Long userId = 1L;
+        long userId = 1L;
         long expectedCount = 3L;
         String transactionId = "tx-realms-001";
 
@@ -189,7 +189,7 @@ class JpaAccountGameAdapterTest {
 
     @Test
     void countDistinctRealmsByUserId_shouldReturnZeroWhenNoRealms() {
-        Long userId = 1L;
+        long userId = 1L;
         long expectedCount = 0L;
         String transactionId = "tx-realms-002";
 

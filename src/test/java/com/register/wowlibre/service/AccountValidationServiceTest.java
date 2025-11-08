@@ -35,7 +35,7 @@ class AccountValidationServiceTest extends BaseTest {
 
     @Test
     void testVerifyAccount_success() {
-        Long userId = 1L, realmId = 1L, accountId = 101L;
+        long userId = 1L, realmId = 1L, accountId = 101L;
         String transactionId = "tx-001";
 
         RealmEntity realm = new RealmEntity();
@@ -61,7 +61,7 @@ class AccountValidationServiceTest extends BaseTest {
 
     @Test
     void testVerifyAccount_realmNotFound_throwsException() {
-        Long userId = 1L, realmId = 1L, accountId = 101L;
+        long userId = 1L, realmId = 1L, accountId = 101L;
         String transactionId = "tx-002";
 
         when(realmPort.findById(realmId, transactionId)).thenReturn(Optional.empty());
@@ -77,7 +77,7 @@ class AccountValidationServiceTest extends BaseTest {
 
     @Test
     void testVerifyAccount_accountGameNotFound_throwsException() {
-        Long userId = 1L, realmId = 1L, accountId = 101L;
+        long userId = 1L, realmId = 1L, accountId = 101L;
         String transactionId = "tx-003";
 
         RealmEntity realm = new RealmEntity();

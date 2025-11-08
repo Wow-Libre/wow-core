@@ -38,8 +38,8 @@ class DashboardControllerTest {
 
     @Test
     void shouldReturnCreditsLoans() {
-        Long userId = 1L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long serverId = 1L;
         int size = 10;
         int page = 0;
         String filter = "ALL";
@@ -61,8 +61,8 @@ class DashboardControllerTest {
 
     @Test
     void shouldEnableLoan() {
-        Long userId = 1L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long serverId = 1L;
         Double loans = 1000.0;
         String service = "BANK";
         String transactionId = "tx-dash-002";
@@ -78,8 +78,8 @@ class DashboardControllerTest {
 
     @Test
     void shouldReturnLoansForLineChart() {
-        Long userId = 1L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long serverId = 1L;
         String transactionId = "tx-dash-003";
         Map<Integer, Map<String, Map<Integer, Map<String, Integer>>>> loansData = new HashMap<>();
 
@@ -96,8 +96,8 @@ class DashboardControllerTest {
 
     @Test
     void shouldReturnAccountsServer() {
-        Long userId = 1L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long serverId = 1L;
         int size = 10;
         int page = 0;
         String filter = "ALL";
@@ -118,8 +118,8 @@ class DashboardControllerTest {
 
     @Test
     void shouldReturnAccountUpdate() {
-        Long userId = 1L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long serverId = 1L;
         int size = 10;
         int page = 0;
         String filter = "ALL";
@@ -140,8 +140,8 @@ class DashboardControllerTest {
 
     @Test
     void shouldReturnDashboard() {
-        Long userId = 1L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long serverId = 1L;
         String transactionId = "tx-dash-006";
         DashboardMetricsDto metrics = new DashboardMetricsDto(1000L, 100L, 50L, 10L, 500L, 200L, 300L, 5L, new ArrayList<>());
 
@@ -158,8 +158,8 @@ class DashboardControllerTest {
 
     @Test
     void shouldUpdateMailAccount() {
-        Long userId = 1L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long serverId = 1L;
         String transactionId = "tx-dash-007";
         AccountUpdateMailDto request = new AccountUpdateMailDto();
         request.setUsername("testuser");
@@ -177,8 +177,8 @@ class DashboardControllerTest {
 
     @Test
     void shouldReturnPromotions() {
-        Long userId = 1L;
-        Long serverId = 1L;
+        long userId = 1L;
+        long serverId = 1L;
         String transactionId = "tx-dash-008";
         List<PromotionModel> promotions = new ArrayList<>();
 
@@ -195,7 +195,7 @@ class DashboardControllerTest {
 
     @Test
     void shouldBanAccount() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-dash-009";
         AccountBanDto request = new AccountBanDto();
 
@@ -210,7 +210,7 @@ class DashboardControllerTest {
 
     @Test
     void shouldReturnConfigsServer() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-dash-010";
         EmulatorConfigDto request = new EmulatorConfigDto();
         request.setServerId(1L);

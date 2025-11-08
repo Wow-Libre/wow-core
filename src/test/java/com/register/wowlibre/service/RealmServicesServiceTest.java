@@ -37,7 +37,7 @@ class RealmServicesServiceTest extends BaseTest {
 
     @Test
     void testFindByRealmId_shouldReturnListOfModels() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-001";
 
         RealmServicesEntity entity1 = buildRealmServicesEntity(1L, RealmServices.BANK, 1000.0, realmId);
@@ -58,7 +58,7 @@ class RealmServicesServiceTest extends BaseTest {
 
     @Test
     void testFindByRealmId_shouldReturnEmptyList() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-002";
 
         when(obtainRealmServices.findByRealmId(realmId, transactionId))
@@ -73,7 +73,7 @@ class RealmServicesServiceTest extends BaseTest {
 
     @Test
     void testFindByNameAndRealmId_shouldReturnModel() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-003";
         RealmServices serviceName = RealmServices.BANK;
 
@@ -93,7 +93,7 @@ class RealmServicesServiceTest extends BaseTest {
 
     @Test
     void testFindByNameAndRealmId_shouldReturnNullWhenNotFound() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-004";
         RealmServices serviceName = RealmServices.BANK;
 
@@ -139,7 +139,7 @@ class RealmServicesServiceTest extends BaseTest {
 
     @Test
     void testUpdateAmount_shouldUpdateSuccessfully() {
-        Long id = 1L;
+        long id = 1L;
         Double newAmount = 2000.0;
         String transactionId = "tx-007";
 
@@ -156,7 +156,7 @@ class RealmServicesServiceTest extends BaseTest {
 
     @Test
     void testUpdateAmount_shouldThrowExceptionWhenNotFound() {
-        Long id = 1L;
+        long id = 1L;
         Double newAmount = 2000.0;
         String transactionId = "tx-008";
 
@@ -172,7 +172,7 @@ class RealmServicesServiceTest extends BaseTest {
 
     @Test
     void testUpdateOrCreateAmountByServerId_shouldUpdateExisting() {
-        Long realmId = 1L;
+        long realmId = 1L;
         Double amount = 3000.0;
         String transactionId = "tx-009";
         RealmServices serviceName = RealmServices.BANK;
@@ -193,7 +193,7 @@ class RealmServicesServiceTest extends BaseTest {
 
     @Test
     void testUpdateOrCreateAmountByServerId_shouldCreateNew() {
-        Long realmId = 1L;
+        long realmId = 1L;
         Double amount = 3000.0;
         String transactionId = "tx-010";
         RealmServices serviceName = RealmServices.BANK;
@@ -218,7 +218,7 @@ class RealmServicesServiceTest extends BaseTest {
 
     @Test
     void testUpdateOrCreateAmountByServerId_shouldSetCorrectAmount() {
-        Long realmId = 1L;
+        long realmId = 1L;
         Double amount = 5000.0;
         String transactionId = "tx-011";
         RealmServices serviceName = RealmServices.BANK;

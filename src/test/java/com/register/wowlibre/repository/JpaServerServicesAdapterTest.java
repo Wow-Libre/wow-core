@@ -31,7 +31,7 @@ class JpaServerServicesAdapterTest {
 
     @Test
     void findByRealmId_shouldReturnList() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-find-001";
         RealmServicesEntity entity1 = createRealmServicesEntity(1L, RealmServices.BANK, 1000.0, realmId);
         RealmServicesEntity entity2 = createRealmServicesEntity(2L, RealmServices.SEND_LEVEL, 500.0, realmId);
@@ -48,7 +48,7 @@ class JpaServerServicesAdapterTest {
 
     @Test
     void findByRealmId_shouldReturnEmptyListWhenNoServices() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-find-002";
         List<RealmServicesEntity> expected = List.of();
 
@@ -63,7 +63,7 @@ class JpaServerServicesAdapterTest {
     @Test
     void findByNameAndRealmId_shouldReturnOptionalWhenFound() {
         RealmServices serviceName = RealmServices.BANK;
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-find-name-001";
         RealmServicesEntity expectedEntity = createRealmServicesEntity(1L, serviceName, 1000.0, realmId);
 
@@ -81,7 +81,7 @@ class JpaServerServicesAdapterTest {
     @Test
     void findByNameAndRealmId_shouldReturnEmptyWhenNotFound() {
         RealmServices serviceName = RealmServices.BANK;
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-find-name-002";
 
         when(realmServicesRepository.findByNameAndRealmId_Id(serviceName, realmId))
@@ -126,7 +126,7 @@ class JpaServerServicesAdapterTest {
 
     @Test
     void findById_shouldReturnOptionalWhenFound() {
-        Long id = 100L;
+        long id = 100L;
         RealmServicesEntity expectedEntity = createRealmServicesEntity(id, RealmServices.BANK, 1000.0, 1L);
 
         when(realmServicesRepository.findById(id)).thenReturn(Optional.of(expectedEntity));
@@ -140,7 +140,7 @@ class JpaServerServicesAdapterTest {
 
     @Test
     void findById_shouldReturnEmptyWhenNotFound() {
-        Long id = 100L;
+        long id = 100L;
 
         when(realmServicesRepository.findById(id)).thenReturn(Optional.empty());
 

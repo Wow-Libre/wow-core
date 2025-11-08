@@ -52,8 +52,8 @@ class PromotionServiceTest extends BaseTest {
 
     @Test
     void findByPromotionServerIdAndClassIdAndLanguage_shouldReturnFilteredPromotions() {
-        Long realmId = 1L;
-        Long classId = 1L;
+        long realmId = 1L;
+        long classId = 1L;
         String language = "es";
         String transactionId = "tx-promo-001";
         PromotionEntity promotion1 = createPromotionEntity(1L, realmId, classId, true);
@@ -76,8 +76,8 @@ class PromotionServiceTest extends BaseTest {
 
     @Test
     void findByPromotionServerIdAndClassIdAndLanguage_shouldReturnEmptyWhenNoPromotions() {
-        Long realmId = 1L;
-        Long classId = 1L;
+        long realmId = 1L;
+        long classId = 1L;
         String language = "es";
         String transactionId = "tx-promo-002";
 
@@ -93,8 +93,8 @@ class PromotionServiceTest extends BaseTest {
 
     @Test
     void findByPromotionServerIdAndLanguage_shouldReturnPromotionModel() {
-        Long id = 1L;
-        Long realmId = 1L;
+        long id = 1L;
+        long realmId = 1L;
         String language = "es";
         String transactionId = "tx-promo-003";
         PromotionEntity promotionEntity = createPromotionEntity(id, realmId, 1L, true);
@@ -114,8 +114,8 @@ class PromotionServiceTest extends BaseTest {
 
     @Test
     void findByPromotionServerIdAndLanguage_shouldThrowExceptionWhenNotFound() {
-        Long id = 999L;
-        Long realmId = 1L;
+        long id = 999L;
+        long realmId = 1L;
         String language = "es";
         String transactionId = "tx-promo-004";
 
@@ -132,7 +132,7 @@ class PromotionServiceTest extends BaseTest {
 
     @Test
     void findByPromotionServerId_shouldReturnList() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String transactionId = "tx-promo-005";
         PromotionEntity promotion = createPromotionEntity(1L, realmId, 1L, true);
         PromotionItemEntity item = createPromotionItemEntity(1L, promotion, "ITEM001", 5);
@@ -216,7 +216,7 @@ class PromotionServiceTest extends BaseTest {
 
     @Test
     void findActiveByRealmId_shouldReturnActivePromotions() {
-        Long realmId = 1L;
+        long realmId = 1L;
         String language = "es";
         String transactionId = "tx-promo-008";
         PromotionEntity promotion = createPromotionEntity(1L, realmId, 1L, true);
@@ -234,7 +234,7 @@ class PromotionServiceTest extends BaseTest {
 
     @Test
     void deleteLogical_shouldDeletePromotionAndItems() {
-        Long promotionId = 1L;
+        long promotionId = 1L;
         String transactionId = "tx-promo-009";
         PromotionEntity promotion = createPromotionEntity(promotionId, 1L, 1L, true);
         PromotionItemEntity item1 = createPromotionItemEntity(1L, promotion, "ITEM001", 5);
@@ -257,7 +257,7 @@ class PromotionServiceTest extends BaseTest {
 
     @Test
     void deleteLogical_shouldThrowExceptionWhenPromotionNotFound() {
-        Long promotionId = 999L;
+        long promotionId = 999L;
         String transactionId = "tx-promo-010";
 
         when(obtainPromotion.findById(promotionId, transactionId)).thenReturn(Optional.empty());

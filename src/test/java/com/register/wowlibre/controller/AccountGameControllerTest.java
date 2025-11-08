@@ -40,7 +40,7 @@ class AccountGameControllerTest {
     @Test
     void shouldReturnAvailableAccounts() {
         // Arrange
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx123";
         int page = 0;
         int size = 5;
@@ -70,7 +70,7 @@ class AccountGameControllerTest {
     @Test
     void shouldCreateAccount() {
         // Arrange
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx123";
         CreateAccountGameDto createDto = new CreateAccountGameDto();
         createDto.setExpansion(2);
@@ -89,9 +89,9 @@ class AccountGameControllerTest {
     @Test
     void shouldReturnAccountsByRealm() {
         // Arrange
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx123";
-        Long serverId = 10L;
+        long serverId = 10L;
 
         List<AccountGameModel> accounts = List.of(
                 new AccountGameModel(1L, "user1", 100L, "test@mail.com", "Azeroth", serverId,
@@ -116,9 +116,9 @@ class AccountGameControllerTest {
     @Test
     void shouldReturnAccountDetails() {
         // Arrange
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 10L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 10L;
         String transactionId = "tx123";
 
         AccountBannedResponse bannedResponse =
@@ -158,9 +158,9 @@ class AccountGameControllerTest {
     @Test
     void shouldReturnNoContentWhenAccountNotFound() {
         // Arrange
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 10L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 10L;
         String transactionId = "tx123";
 
         when(accountGamePort.account(userId, accountId, serverId, transactionId)).thenReturn(null);

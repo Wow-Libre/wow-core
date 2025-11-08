@@ -56,8 +56,8 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testAccounts_returnsAccountListSuccessfully() {
-        Long userId = 1L;
-        Long realmId = 2L;
+        long userId = 1L;
+        long realmId = 2L;
         String transactionId = "tx-004";
 
 
@@ -90,7 +90,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testCreateAccount_userReachedMaxAccounts() {
-        Long userId = 1L;
+        long userId = 1L;
         String serverName = "Azeroth";
         Integer expansionId = 2;
         String username = "testuser";
@@ -127,7 +127,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testCreateAccount_server() {
-        Long userId = 1L;
+        long userId = 1L;
         String serverName = "Azeroth";
         Integer expansionId = 2;
         String username = "testuser";
@@ -153,7 +153,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testCreateAccount_serverNotFound() {
-        Long userId = 1L;
+        long userId = 1L;
         String serverName = "Azeroth";
         Integer expansionId = 2;
         String username = "testuser";
@@ -179,7 +179,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testCreateAccount_success() {
-        Long userId = 1L;
+        long userId = 1L;
         String serverName = "Azeroth";
         Integer expansionId = 2;
         String username = "testuser";
@@ -216,7 +216,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testAccounts_byPage_success() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx";
         when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(new UserEntity()));
         when(obtainAccountGamePort.accounts(userId)).thenReturn(1L);
@@ -253,7 +253,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testAccount_realmNotFoundOrInactive_throwsException() {
-        Long userId = 1L, accountId = 100L, realmId = 10L;
+        long userId = 1L, accountId = 100L, realmId = 10L;
         String transactionId = "tx-001";
 
         when(realmPort.findById(realmId, transactionId)).thenReturn(Optional.empty());
@@ -265,7 +265,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testAccount_realmInactive_throwsException() {
-        Long userId = 1L, accountId = 100L, realmId = 10L;
+        long userId = 1L, accountId = 100L, realmId = 10L;
         String transactionId = "tx-002";
 
         RealmEntity realm = new RealmEntity();
@@ -280,7 +280,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testAccount_accountNotFound_throwsException() {
-        Long userId = 1L, accountId = 100L, realmId = 10L;
+        long userId = 1L, accountId = 100L, realmId = 10L;
         String transactionId = "tx-003";
 
         RealmEntity realm = new RealmEntity();
@@ -302,7 +302,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testAccount_success_returnsAccountGameDetailDto() {
-        Long userId = 1L, accountId = 100L, realmId = 10L;
+        long userId = 1L, accountId = 100L, realmId = 10L;
         String transactionId = "tx-004";
 
         RealmEntity realm = new RealmEntity();
@@ -338,7 +338,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testAccounts_sizeGreaterThan30_shouldLimitTo30() {
-        Long userId = 1L;
+        long userId = 1L;
         int page = 0;
         int size = 50; // mayor a 30
         String searchUsername = null;
@@ -361,7 +361,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testAccounts_withSearchFilters_shouldCallFilteredQuery() {
-        Long userId = 1L;
+        long userId = 1L;
         int page = 0;
         int size = 10;
         String searchUsername = "testuser";
@@ -396,7 +396,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testStats_success_returnsAccountGameStatsDto() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-stats-001";
         long expectedTotalAccounts = 5L;
         long expectedTotalRealms = 2L;
@@ -417,7 +417,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testStats_zeroAccounts_returnsZeroStats() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-stats-002";
 
         when(obtainAccountGamePort.countActiveAccountsByUserId(userId, transactionId)).thenReturn(0L);
@@ -432,7 +432,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testDesactive_success_deactivatesAccounts() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-desactive-001";
         List<Long> accountIds = List.of(100L, 200L, 300L);
 
@@ -468,7 +468,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testDesactive_accountNotFound_throwsException() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-desactive-002";
         List<Long> accountIds = List.of(100L);
 
@@ -485,7 +485,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testDesactive_partialFailure_throwsExceptionOnFirstNotFound() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-desactive-003";
         List<Long> accountIds = List.of(100L, 200L);
 
@@ -509,7 +509,7 @@ class AccountGameServiceTest extends BaseTest {
 
     @Test
     void testDesactive_emptyList_doesNothing() {
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-desactive-004";
         List<Long> accountIds = Collections.emptyList();
 

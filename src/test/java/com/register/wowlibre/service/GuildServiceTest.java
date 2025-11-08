@@ -151,8 +151,8 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void detail_shouldReturnGuildDtoWithBenefits() {
-        Long realmId = 1L;
-        Long guildId = 1L;
+        long realmId = 1L;
+        long guildId = 1L;
         Locale locale = Locale.ENGLISH;
         String transactionId = "tx-guild-005";
         RealmEntity realm = createRealmEntity(realmId, "Test Realm");
@@ -183,8 +183,8 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void detail_shouldThrowExceptionWhenRealmNotFound() {
-        Long realmId = 999L;
-        Long guildId = 1L;
+        long realmId = 999L;
+        long guildId = 1L;
         Locale locale = Locale.ENGLISH;
         String transactionId = "tx-guild-006";
 
@@ -201,8 +201,8 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void detail_shouldThrowExceptionWhenRealmNotActive() {
-        Long realmId = 1L;
-        Long guildId = 1L;
+        long realmId = 1L;
+        long guildId = 1L;
         Locale locale = Locale.ENGLISH;
         String transactionId = "tx-guild-007";
         RealmEntity realm = createRealmEntity(realmId, "Test Realm");
@@ -221,11 +221,11 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void attach_shouldAttachCharacterToGuild() {
-        Long serverId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
-        Long guildId = 1L;
+        long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
+        long guildId = 1L;
         String transactionId = "tx-guild-008";
         RealmEntity realm = createRealmEntity(serverId, "Test Realm");
         AccountGameEntity accountGame = createAccountGameEntity(accountId);
@@ -243,10 +243,10 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void unInviteGuild_shouldUninviteCharacterFromGuild() {
-        Long serverId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
+        long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
         String transactionId = "tx-guild-009";
         RealmEntity realm = createRealmEntity(serverId, "Test Realm");
         AccountGameEntity accountGame = createAccountGameEntity(accountId);
@@ -264,10 +264,10 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void guildMember_shouldReturnGuildMemberDetailDto() {
-        Long serverId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
+        long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
         String transactionId = "tx-guild-010";
         RealmEntity realm = createRealmEntity(serverId, "Test Realm");
         AccountGameEntity accountGame = createAccountGameEntity(accountId);
@@ -296,10 +296,10 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void update_shouldUpdateGuild() {
-        Long serverId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
+        long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
         String discord = "discord#1234";
         boolean multiFaction = true;
         boolean isPublic = true;
@@ -320,10 +320,10 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void claimBenefits_shouldClaimBenefitsSuccessfully() {
-        Long serverId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
+        long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
         String language = "es";
         String transactionId = "tx-guild-012";
         RealmEntity realm = createRealmEntity(serverId, "Test Realm");
@@ -358,10 +358,10 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void claimBenefits_shouldThrowExceptionWhenGuildMemberIsNull() {
-        Long serverId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
+        long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
         String language = "es";
         String transactionId = "tx-guild-013";
         RealmEntity realm = createRealmEntity(serverId, "Test Realm");
@@ -385,10 +385,10 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void claimBenefits_shouldThrowExceptionWhenNoBenefitsAvailable() {
-        Long serverId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
+        long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
         String language = "es";
         String transactionId = "tx-guild-014";
         RealmEntity realm = createRealmEntity(serverId, "Test Realm");
@@ -415,10 +415,10 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void claimBenefits_shouldThrowExceptionWhenNoRemainingBenefits() {
-        Long serverId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
+        long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
         String language = "es";
         String transactionId = "tx-guild-015";
         RealmEntity realm = createRealmEntity(serverId, "Test Realm");
@@ -450,10 +450,10 @@ class GuildServiceTest extends BaseTest {
 
     @Test
     void claimBenefits_shouldThrowExceptionWhenNoFilteredBenefits() {
-        Long serverId = 1L;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
+        long serverId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
         String language = "es";
         String transactionId = "tx-guild-016";
         RealmEntity realm = createRealmEntity(serverId, "Test Realm");

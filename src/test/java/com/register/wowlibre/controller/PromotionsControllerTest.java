@@ -49,7 +49,7 @@ class PromotionsControllerTest {
     @Test
     void shouldReturnActivePromotions() {
         String transactionId = "tx-promo-002";
-        Long realmId = 1L;
+        long realmId = 1L;
         String language = "es";
         PromotionModel promotion = PromotionModel.builder().id(1L).build();
         List<PromotionModel> promotions = List.of(promotion);
@@ -67,7 +67,7 @@ class PromotionsControllerTest {
     @Test
     void shouldReturnNoContentWhenNoActivePromotions() {
         String transactionId = "tx-promo-003";
-        Long realmId = 1L;
+        long realmId = 1L;
         String language = "es";
         List<PromotionModel> promotions = Collections.emptyList();
 
@@ -83,7 +83,7 @@ class PromotionsControllerTest {
     @Test
     void shouldDeletePromotion() {
         String transactionId = "tx-promo-004";
-        Long id = 1L;
+        long id = 1L;
 
         ResponseEntity<GenericResponse<Void>> response = controller.delete(transactionId, id);
 

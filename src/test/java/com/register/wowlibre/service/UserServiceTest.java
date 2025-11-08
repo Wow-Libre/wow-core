@@ -74,7 +74,7 @@ class UserServiceTest extends BaseTest {
 
     @Test
     void shouldThrowExceptionWhenCodeIsInvalid() {
-        Long userId = 5L;
+        long userId = 5L;
         String inputCode = "WRONG CODE";
         String transactionId = "tx005";
 
@@ -96,7 +96,7 @@ class UserServiceTest extends BaseTest {
 
     @Test
     void shouldDoNothingWhenUserIsAlreadyVerified() {
-        Long userId = 4L;
+        long userId = 4L;
         String code = "ANY";
         String transactionId = "tx004";
 
@@ -115,7 +115,7 @@ class UserServiceTest extends BaseTest {
 
     @Test
     void shouldValidateEmailCodeSuccessfully() {
-        Long userId = 1L;
+        long userId = 1L;
         String code = "ABC123";
         String transactionId = "tx001";
 
@@ -136,7 +136,7 @@ class UserServiceTest extends BaseTest {
 
     @Test
     void shouldThrowExceptionWhenUserNotFoundOrInactive() {
-        Long userId = 2L;
+        long userId = 2L;
         String code = "XYZ";
         String transactionId = "tx002";
 
@@ -151,7 +151,7 @@ class UserServiceTest extends BaseTest {
 
     @Test
     void ValidateEmailCodeForAccountShouldThrowExceptionWhenUserIsInactive() {
-        Long userId = 3L;
+        long userId = 3L;
         String code = "XYZ";
         String transactionId = "tx003";
 
@@ -533,7 +533,7 @@ class UserServiceTest extends BaseTest {
 
     @Test
     void shouldChangePasswordSuccessfully() {
-        Long userId = 1L;
+        long userId = 1L;
         String oldPassword = "old123";
         String newPassword = "new123";
         String encodedPassword = "encodedNewPass";
@@ -555,7 +555,7 @@ class UserServiceTest extends BaseTest {
 
     @Test
     void shouldThrowExceptionWhenUserNotFoundInChangePassword() {
-        Long userId = 2L;
+        long userId = 2L;
         String oldPassword = "old";
         String newPassword = "new";
         String transactionId = "tx005";
@@ -571,7 +571,7 @@ class UserServiceTest extends BaseTest {
 
     @Test
     void shouldThrowExceptionWhenCurrentPasswordIsInvalid() {
-        Long userId = 3L;
+        long userId = 3L;
         String oldPassword = "wrong";
         String newPassword = "newness";
         String transactionId = "tx006";

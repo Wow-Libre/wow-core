@@ -57,7 +57,7 @@ class NewsControllerTest {
     @Test
     void shouldReturnNewsDetail() {
         String transactionId = "tx-news-002";
-        Long id = 1L;
+        long id = 1L;
         NewsSectionsDto news = new NewsSectionsDto();
 
         when(newsPort.newsSectionId(id, transactionId)).thenReturn(news);
@@ -84,7 +84,7 @@ class NewsControllerTest {
     @Test
     void shouldDeleteNews() {
         String transactionId = "tx-news-004";
-        Long id = 1L;
+        long id = 1L;
 
         ResponseEntity<GenericResponse<Void>> response = controller.deleteNews(transactionId, id);
 
@@ -96,7 +96,7 @@ class NewsControllerTest {
     @Test
     void shouldUpdateNews() {
         String transactionId = "tx-news-005";
-        Long id = 1L;
+        long id = 1L;
         UpdateNewsDto updateNewsDto = new UpdateNewsDto();
 
         ResponseEntity<GenericResponse<Void>> response = controller.updateNews(transactionId, id, updateNewsDto);
@@ -109,7 +109,7 @@ class NewsControllerTest {
     @Test
     void shouldCreateNewsSection() {
         String transactionId = "tx-news-006";
-        Long newsId = 1L;
+        long newsId = 1L;
         CreateNewsSectionDto createNewsSectionDto = new CreateNewsSectionDto();
 
         ResponseEntity<GenericResponse<Void>> response = controller.createNewsSection(transactionId, newsId, createNewsSectionDto);
@@ -122,8 +122,8 @@ class NewsControllerTest {
     @Test
     void shouldDeleteNewsSection() {
         String transactionId = "tx-news-007";
-        Long newsId = 1L;
-        Long sectionId = 1L;
+        long newsId = 1L;
+        long sectionId = 1L;
 
         ResponseEntity<GenericResponse<Void>> response = controller.deleteNewsSection(transactionId, newsId, sectionId);
 

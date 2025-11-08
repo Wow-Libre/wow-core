@@ -56,7 +56,7 @@ class MachineServiceTest {
 
     @Test
     void evaluate_ShouldThrowException_WhenUserHasNoPoints() {
-        Long userId = 1L, accountId = 2L, characterId = 3L, realmId = 4L;
+        long userId = 1L, accountId = 2L, characterId = 3L, realmId = 4L;
         AccountVerificationDto verificationDto = createAccountVerificationDto(realmId);
 
         MachineEntity machine = new MachineEntity();
@@ -75,7 +75,7 @@ class MachineServiceTest {
 
     @Test
     void evaluate_ShouldReturnLoss_WhenClaimFails() {
-        Long userId = 1L, accountId = 2L, characterId = 3L, realmId = 4L;
+        long userId = 1L, accountId = 2L, characterId = 3L, realmId = 4L;
         AccountVerificationDto verificationDto = createAccountVerificationDto(realmId);
 
         MachineEntity machine = new MachineEntity();
@@ -100,7 +100,7 @@ class MachineServiceTest {
 
     @Test
     void points_ShouldReturnInitialPoints_WhenMachineNotExist() {
-        Long userId = 1L, accountId = 2L, realmId = 3L;
+        long userId = 1L, accountId = 2L, realmId = 3L;
         AccountVerificationDto verificationDto = createAccountVerificationDto(realmId);
 
         when(accountValidationPort.verifyAccount(userId, accountId, realmId, transactionId)).thenReturn(verificationDto);
@@ -114,7 +114,7 @@ class MachineServiceTest {
 
     @Test
     void points_ShouldReturnExistingPoints_WhenMachineExists() {
-        Long userId = 1L, accountId = 2L, realmId = 3L;
+        long userId = 1L, accountId = 2L, realmId = 3L;
         AccountVerificationDto verificationDto = createAccountVerificationDto(realmId);
 
         MachineEntity machine = new MachineEntity();

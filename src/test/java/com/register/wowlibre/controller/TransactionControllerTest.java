@@ -72,11 +72,11 @@ class TransactionControllerTest {
     void shouldGetPromotions() {
         String transactionId = "tx-tx-003";
         Locale locale = Locale.ENGLISH;
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 1L;
-        Long characterId = 201L;
-        Long classId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 1L;
+        long characterId = 201L;
+        long classId = 1L;
         PromotionsDto promotionsDto = new PromotionsDto(List.of(), 0);
 
         when(transactionPort.getPromotions(serverId, userId, accountId, characterId, classId,
@@ -95,7 +95,7 @@ class TransactionControllerTest {
     void shouldClaimPromotions() {
         String transactionId = "tx-tx-004";
         Locale locale = Locale.ENGLISH;
-        Long userId = 1L;
+        long userId = 1L;
         ClaimPromoDto request = new ClaimPromoDto();
         request.setServerId(1L);
         request.setAccountId(101L);
