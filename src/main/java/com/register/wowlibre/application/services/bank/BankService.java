@@ -28,18 +28,26 @@ import java.util.Optional;
 @Service
 public class BankService implements BankPort {
     private static final Logger LOGGER = LoggerFactory.getLogger(BankService.class);
-    /** CREDIT LOANS PORTS **/
+    /**
+     * CREDIT LOANS PORTS
+     **/
     private final ObtainCreditLoans obtainCreditLoans;
     private final SaveCreditLoans saveCreditLoans;
-    /** REALM SERVICES PORT (Servicios de reino y costos) **/
+    /**
+     * REALM SERVICES PORT (Servicios de reino y costos)
+     **/
     private final RealmServicesPort realmServicesPort;
     /**
      * ACCOUNT VALIDATION PORT
      **/
     private final AccountValidationPort accountValidationPort;
-    /** RANDOM STRING GENERATOR **/
+    /**
+     * RANDOM STRING GENERATOR
+     **/
     private final RandomString randomString;
-    /** RESOURCES PORT (Recursos de planes bancarios) **/
+    /**
+     * RESOURCES PORT (Recursos de planes bancarios)
+     **/
     private final ResourcesPort resourcesPort;
 
     public BankService(ObtainCreditLoans obtainCreditLoans, SaveCreditLoans saveCreditLoans,
@@ -126,13 +134,16 @@ public class BankService implements BankPort {
 
         realmServicesPort.updateAmount(realmServicesModel.id(), realmServicesModel.amount() - 1, transactionId);
         saveCreditLoans.save(creditLoansEntity, transactionId);
+
+        LOGGER.info("[BankService] [applyForLoan] Loan successfully applied - userId: {}, accountId: {}, " +
+                "realmId: {}, planId: {}, transactionId: {}", userId, accountId, realmId, planId, transactionId);
     }
 
     @Override
     public List<RealmAvailableBankDto> getAvailableLoansByRealm(String transactionId) {
         return realmServicesPort.findByServersAvailableLoa(transactionId)
                 .stream()
-                .map(server -> new RealmAvailableBankDto(server.serverId(), server.serverName()))
+                .map(server -> new RealmAvailableBankDto(server.realmId(), server.serverName()))
                 .toList();
     }
 

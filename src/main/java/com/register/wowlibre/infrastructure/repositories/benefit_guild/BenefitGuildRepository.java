@@ -17,10 +17,10 @@ public interface BenefitGuildRepository extends CrudRepository<BenefitGuildEntit
             "   AND cbg.characterId = :characterId " +
             "   AND cbg.accountId = :accountId " +
             "WHERE bg.guildId = :guildId " +
-            "  AND bg.realmId.id = :serverId " +
+            "  AND bg.realmId.id = :realmId " +
             "  AND cbg.id IS NULL")
     List<BenefitGuildEntity> findRemainingBenefitsForGuildAndServerIdAndCharacter(
-            @Param("serverId") Long serverId,
+            @Param("realmId") Long serverId,
             @Param("guildId") Long guildId,
             @Param("characterId") Long characterId,
             @Param("accountId") Long accountId

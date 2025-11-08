@@ -52,7 +52,7 @@ class RealmServicesServiceTest extends BaseTest {
         assertEquals(2, result.size());
         assertEquals(1L, result.getFirst().id());
         assertEquals(1000.0, result.getFirst().amount());
-        assertEquals(realmId, result.getFirst().serverId());
+        assertEquals(realmId, result.getFirst().realmId());
         verify(obtainRealmServices).findByRealmId(realmId, transactionId);
     }
 
@@ -87,7 +87,7 @@ class RealmServicesServiceTest extends BaseTest {
         assertNotNull(result);
         assertEquals(1L, result.id());
         assertEquals(1000.0, result.amount());
-        assertEquals(realmId, result.serverId());
+        assertEquals(realmId, result.realmId());
         verify(obtainRealmServices).findByNameAndRealmId(serviceName, realmId, transactionId);
     }
 

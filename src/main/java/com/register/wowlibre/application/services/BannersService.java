@@ -37,24 +37,26 @@ public class BannersService implements BannersPort {
         final String language = bannerModel.getLanguage();
 
         if (bannersType == null) {
-            LOGGER.error("Invalid Type Is Null - TransactionId {}", transactionId);
+            LOGGER.error("[BannersService] [saveBanner] Invalid banner type - type: {}, language: {}, transactionId: {}",
+                    bannerModel.getType(), language, transactionId);
             throw new InternalException("Invalid banner type: " + bannerModel.getType(), transactionId);
         }
 
         if (!obtainBanners.isValidBanner(language, bannersType, transactionId)) {
-            LOGGER.error("You cannot add a banner of two different types, either an image or a video,  and the " +
-                    "maximum is 5 resources - TransactionId {}", transactionId);
+            LOGGER.error("[BannersService] [saveBanner] Banner validation failed - type: {}, language: {}, " +
+                    "mediaUrl: {}, transactionId: {}", bannersType.name(), language, bannerModel.getMediaUrl(), transactionId);
             throw new InternalException("You cannot add a banner of two different types, either an image or a video," +
                     " and the maximum is 5 resources.", transactionId);
         }
 
-        BannersEntity entity = new BannersEntity();
-        entity.setMediaUrl(bannerModel.getMediaUrl());
-        entity.setAlt(bannerModel.getAlt());
-        entity.setLanguage(bannerModel.getLanguage());
-        entity.setType(bannersType);
-        entity.setLabel(bannerModel.getLabel());
-        saveBanners.save(entity);
+        BannersEntity bannersEntity = new BannersEntity();
+        bannersEntity.setMediaUrl(bannerModel.getMediaUrl());
+        bannersEntity.setAlt(bannerModel.getAlt());
+        bannersEntity.setLanguage(bannerModel.getLanguage());
+        bannersEntity.setType(bannersType);
+        bannersEntity.setLabel(bannerModel.getLabel());
+
+        saveBanners.save(bannersEntity);
     }
 
     @Override
