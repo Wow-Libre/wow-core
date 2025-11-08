@@ -1,24 +1,29 @@
 package com.register.wowlibre.application.services.bank;
 
-import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.domain.dto.account_game.*;
-import com.register.wowlibre.domain.enums.*;
-import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.model.resources.*;
-import com.register.wowlibre.domain.port.in.*;
-import com.register.wowlibre.domain.port.in.account_game.*;
-import com.register.wowlibre.domain.port.in.bank.*;
-import com.register.wowlibre.domain.port.in.realm_services.*;
-import com.register.wowlibre.domain.port.out.credit_loans.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import com.register.wowlibre.infrastructure.util.*;
-import org.slf4j.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.domain.dto.ServerAvailableBankDto;
+import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
+import com.register.wowlibre.domain.enums.RealmServices;
+import com.register.wowlibre.domain.exception.InternalException;
+import com.register.wowlibre.domain.model.RealmServicesModel;
+import com.register.wowlibre.domain.model.resources.PlanModel;
+import com.register.wowlibre.domain.port.in.ResourcesPort;
+import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
+import com.register.wowlibre.domain.port.in.bank.BankPort;
+import com.register.wowlibre.domain.port.in.realm_services.RealmServicesPort;
+import com.register.wowlibre.domain.port.out.credit_loans.ObtainCreditLoans;
+import com.register.wowlibre.domain.port.out.credit_loans.SaveCreditLoans;
+import com.register.wowlibre.infrastructure.entities.AccountGameEntity;
+import com.register.wowlibre.infrastructure.entities.CreditLoansEntity;
+import com.register.wowlibre.infrastructure.entities.RealmEntity;
+import com.register.wowlibre.infrastructure.util.RandomString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import java.time.*;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BankService implements BankPort {
@@ -29,18 +34,21 @@ public class BankService implements BankPort {
 
     private final RealmServicesPort realmServicesPort;
     private final ResourcesPort resourcesPort;
-    private final AccountGamePort accountGamePort;
+    /**
+     * ACCOUNT VALIDATION PORT
+     **/
+    private final AccountValidationPort accountValidationPort;
     private final RandomString randomString;
 
     public BankService(ObtainCreditLoans obtainCreditLoans, SaveCreditLoans saveCreditLoans,
                        RealmServicesPort realmServicesPort,
-                       ResourcesPort resourcesPort, AccountGamePort accountGamePort,
+                       ResourcesPort resourcesPort, AccountValidationPort accountValidationPort,
                        @Qualifier("reference-serial-bank") RandomString randomString) {
         this.obtainCreditLoans = obtainCreditLoans;
         this.saveCreditLoans = saveCreditLoans;
         this.realmServicesPort = realmServicesPort;
         this.resourcesPort = resourcesPort;
-        this.accountGamePort = accountGamePort;
+        this.accountValidationPort = accountValidationPort;
         this.randomString = randomString;
     }
 
@@ -49,7 +57,7 @@ public class BankService implements BankPort {
     public void applyForLoan(Long userId, Long accountId, Long characterId, Long serverId, Long planId,
                              String transactionId) {
 
-        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         RealmEntity server = verificationDto.realm();

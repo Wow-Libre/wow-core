@@ -1,23 +1,30 @@
 package com.register.wowlibre.application.services.guild;
 
-import com.register.wowlibre.domain.dto.account_game.*;
-import com.register.wowlibre.domain.dto.client.*;
-import com.register.wowlibre.domain.dto.guilds.*;
-import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.mapper.*;
-import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.model.resources.*;
-import com.register.wowlibre.domain.port.in.*;
-import com.register.wowlibre.domain.port.in.account_game.*;
-import com.register.wowlibre.domain.port.in.benefit_guild.*;
-import com.register.wowlibre.domain.port.in.character_benefit_guild.*;
-import com.register.wowlibre.domain.port.in.guild.*;
-import com.register.wowlibre.domain.port.in.integrator.*;
-import com.register.wowlibre.domain.port.in.realm.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
+import com.register.wowlibre.domain.dto.client.GuildDetailMemberResponse;
+import com.register.wowlibre.domain.dto.guilds.GuildDto;
+import com.register.wowlibre.domain.dto.guilds.GuildMemberDetailDto;
+import com.register.wowlibre.domain.dto.guilds.GuildsDto;
+import com.register.wowlibre.domain.exception.InternalException;
+import com.register.wowlibre.domain.mapper.RealmMapper;
+import com.register.wowlibre.domain.model.ItemQuantityModel;
+import com.register.wowlibre.domain.model.RealmModel;
+import com.register.wowlibre.domain.model.resources.BenefitModel;
+import com.register.wowlibre.domain.port.in.ResourcesPort;
+import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
+import com.register.wowlibre.domain.port.in.benefit_guild.BenefitGuildPort;
+import com.register.wowlibre.domain.port.in.character_benefit_guild.CharacterBenefitGuildPort;
+import com.register.wowlibre.domain.port.in.guild.GuildPort;
+import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
+import com.register.wowlibre.domain.port.in.realm.RealmPort;
+import com.register.wowlibre.infrastructure.entities.BenefitGuildEntity;
+import com.register.wowlibre.infrastructure.entities.RealmEntity;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 @Service
 public class GuildService implements GuildPort {
@@ -26,17 +33,20 @@ public class GuildService implements GuildPort {
     private final RealmPort realmPort;
     private final ResourcesPort resourcesPort;
     private final BenefitGuildPort benefitGuildPort;
-    private final AccountGamePort accountGamePort;
     private final CharacterBenefitGuildPort characterBenefitGuildPort;
+    /**
+     * ACCOUNT VALIDATION PORT
+     **/
+    private final AccountValidationPort accountValidationPort;
 
     public GuildService(IntegratorPort integratorPort, RealmPort realmPort, ResourcesPort resourcesPort,
-                        BenefitGuildPort benefitGuildPort, AccountGamePort accountGamePort,
-                        CharacterBenefitGuildPort characterBenefitGuildPort) {
+                        BenefitGuildPort benefitGuildPort, CharacterBenefitGuildPort characterBenefitGuildPort,
+                        AccountValidationPort accountValidationPort) {
         this.integratorPort = integratorPort;
         this.realmPort = realmPort;
         this.resourcesPort = resourcesPort;
         this.benefitGuildPort = benefitGuildPort;
-        this.accountGamePort = accountGamePort;
+        this.accountValidationPort = accountValidationPort;
         this.characterBenefitGuildPort = characterBenefitGuildPort;
     }
 
@@ -101,7 +111,7 @@ public class GuildService implements GuildPort {
     public void attach(Long serverId, Long userId, Long accountId, Long characterId, Long guildId,
                        String transactionId) {
 
-        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         integratorPort.attachGuild(verificationDto.realm().getHost(), verificationDto.realm().getJwt(),
@@ -112,7 +122,7 @@ public class GuildService implements GuildPort {
     @Override
     public void unInviteGuild(Long serverId, Long userId, Long accountId, Long characterId, String transactionId) {
 
-        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         integratorPort.unInviteGuild(verificationDto.realm().getHost(), verificationDto.realm().getJwt(), userId,
@@ -122,7 +132,7 @@ public class GuildService implements GuildPort {
     @Override
     public GuildMemberDetailDto guildMember(Long serverId, Long userId, Long accountId, Long characterId,
                                             String transactionId) {
-        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         GuildDetailMemberResponse response = integratorPort.guildMember(verificationDto.realm().getHost(),
@@ -156,7 +166,7 @@ public class GuildService implements GuildPort {
     @Override
     public void update(Long serverId, Long userId, Long accountId, Long characterId, String discord,
                        boolean multiFaction, boolean isPublic, String transactionId) {
-        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         integratorPort.updateGuild(verificationDto.realm().getHost(),
@@ -169,7 +179,7 @@ public class GuildService implements GuildPort {
                               String language,
                               String transactionId) {
 
-        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         RealmEntity serverModel = verificationDto.realm();

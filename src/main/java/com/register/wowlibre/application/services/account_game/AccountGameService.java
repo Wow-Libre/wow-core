@@ -2,7 +2,6 @@ package com.register.wowlibre.application.services.account_game;
 
 import com.register.wowlibre.domain.dto.account_game.AccountGameDetailDto;
 import com.register.wowlibre.domain.dto.account_game.AccountGameStatsDto;
-import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
 import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
 import com.register.wowlibre.domain.dto.client.AccountDetailResponse;
 import com.register.wowlibre.domain.enums.Expansion;
@@ -49,6 +48,7 @@ public class AccountGameService implements AccountGamePort {
      * EXTERNAL CLIENT PORT
      **/
     private final IntegratorPort integratorPort;
+
 
     public AccountGameService(SaveAccountGamePort saveAccountGamePort, ObtainAccountGamePort obtainAccountGamePort,
                               RealmPort realmPort, UserPort userPort,
@@ -140,30 +140,6 @@ public class AccountGameService implements AccountGamePort {
         return new AccountsGameDto(accountsGame, (long) accountsGame.size());
     }
 
-    @Override
-    public AccountVerificationDto verifyAccount(Long userId, Long accountId, Long realmId, String transactionId) {
-
-        Optional<RealmEntity> realm = realmPort.findById(realmId, transactionId);
-
-        if (realm.isEmpty()) {
-            LOGGER.error("[AccountGameService] [verifyAccount] Realm not found - realmId: {}, userId: {}, accountId: {}, transactionId: {}",
-                    realmId, userId, accountId, transactionId);
-            throw new InternalException("The realm where your character is currently located is not available",
-                    transactionId);
-        }
-
-        Optional<AccountGameEntity> accountGame =
-                obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, accountId,
-                        realm.get().getId(), transactionId);
-
-        if (accountGame.isEmpty()) {
-            LOGGER.error("[AccountGameService] [verifyAccount] Account game not found or inactive - userId: {}, accountId: {}, realmId: {}, transactionId: {}",
-                    userId, accountId, realmId, transactionId);
-            throw new InternalException("Currently your account is not found or is not available, please contact " +
-                    "support", transactionId);
-        }
-        return new AccountVerificationDto(realm.get(), accountGame.get());
-    }
 
     @Override
     public AccountGameDetailDto account(Long userId, Long accountId, Long realmId, String transactionId) {

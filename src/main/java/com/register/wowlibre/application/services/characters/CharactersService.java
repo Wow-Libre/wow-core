@@ -1,32 +1,39 @@
 package com.register.wowlibre.application.services.characters;
 
-import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.domain.dto.account_game.*;
-import com.register.wowlibre.domain.dto.client.*;
-import com.register.wowlibre.domain.enums.*;
-import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.port.in.account_game.*;
-import com.register.wowlibre.domain.port.in.characters.*;
-import com.register.wowlibre.domain.port.in.integrator.*;
-import com.register.wowlibre.domain.port.in.realm_services.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.security.crypto.password.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.domain.dto.CharacterProfessionsDto;
+import com.register.wowlibre.domain.dto.CharacterSocialDto;
+import com.register.wowlibre.domain.dto.CharactersDto;
+import com.register.wowlibre.domain.dto.MailsDto;
+import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
+import com.register.wowlibre.domain.dto.client.CharacterInventoryResponse;
+import com.register.wowlibre.domain.enums.RealmServices;
+import com.register.wowlibre.domain.exception.InternalException;
+import com.register.wowlibre.domain.model.RealmServicesModel;
+import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
+import com.register.wowlibre.domain.port.in.characters.CharactersPort;
+import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
+import com.register.wowlibre.domain.port.in.realm_services.RealmServicesPort;
+import com.register.wowlibre.infrastructure.entities.AccountGameEntity;
+import com.register.wowlibre.infrastructure.entities.RealmEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 public class CharactersService implements CharactersPort {
     private final IntegratorPort integratorService;
-    private final AccountGamePort accountGamePort;
+    /**
+     * ACCOUNT VALIDATION PORT
+     **/
+    private final AccountValidationPort accountValidationPort;
     private final PasswordEncoder passwordEncoder;
     private final RealmServicesPort realmServicesPort;
 
-    public CharactersService(IntegratorPort integratorService, AccountGamePort accountGamePort,
+    public CharactersService(IntegratorPort integratorService, AccountValidationPort accountValidationPort,
                              PasswordEncoder passwordEncoder, RealmServicesPort realmServicesPort) {
         this.integratorService = integratorService;
-        this.accountGamePort = accountGamePort;
+        this.accountValidationPort = accountValidationPort;
         this.passwordEncoder = passwordEncoder;
         this.realmServicesPort = realmServicesPort;
     }
@@ -35,7 +42,7 @@ public class CharactersService implements CharactersPort {
     @Override
     public CharactersDto characters(Long userId, Long accountId, Long serverId, String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         return integratorService.characters(accountVerificationDto.realm().getHost(),
@@ -45,7 +52,7 @@ public class CharactersService implements CharactersPort {
 
     @Override
     public CharactersDto loanApplicationCharacters(Long userId, Long accountId, Long serverId, String transactionId) {
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         return integratorService.loanApplicationCharacters(accountVerificationDto.realm().getHost(),
@@ -57,7 +64,7 @@ public class CharactersService implements CharactersPort {
     public void deleteFriend(Long userId, Long accountId, Long serverId, Long characterId, Long friendId,
                              String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
 
@@ -70,7 +77,7 @@ public class CharactersService implements CharactersPort {
     @Override
     public MailsDto mails(Long userId, Long accountId, Long serverId, Long characterId, String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         return integratorService.mails(accountVerificationDto.realm().getHost(),
@@ -81,7 +88,7 @@ public class CharactersService implements CharactersPort {
     public CharacterSocialDto friends(Long userId, Long accountId, Long serverId, Long characterId,
                                       String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         return integratorService.friends(accountVerificationDto.realm().getHost(),
@@ -93,7 +100,7 @@ public class CharactersService implements CharactersPort {
     public void changePassword(Long userId, Long accountId, Long serverId, String password, String newPassword,
                                String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         AccountGameEntity accountGameModel = accountVerificationDto.accountGame();
@@ -115,7 +122,7 @@ public class CharactersService implements CharactersPort {
     public List<CharacterProfessionsDto> professions(Long userId, Long accountId, Long serverId, Long characterId,
                                                      String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         return integratorService.professions(accountVerificationDto.realm().getHost(),
@@ -126,7 +133,7 @@ public class CharactersService implements CharactersPort {
     public void sendLevel(Long userId, Long accountId, Long realmId, Long characterId, Long friendId, Integer level,
                           String transactionId) {
 
-        AccountVerificationDto verifyAccount = accountGamePort.verifyAccount(userId, accountId, realmId,
+        AccountVerificationDto verifyAccount = accountValidationPort.verifyAccount(userId, accountId, realmId,
                 transactionId);
 
         final RealmEntity realm = verifyAccount.realm();
@@ -151,7 +158,7 @@ public class CharactersService implements CharactersPort {
     @Override
     public void sendMoney(Long userId, Long accountId, Long serverId, Long characterId, Long friendId, Long money,
                           String transactionId) {
-        AccountVerificationDto verifyData = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto verifyData = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         final RealmEntity serverModel = verifyData.realm();
@@ -169,7 +176,7 @@ public class CharactersService implements CharactersPort {
     public void sendAnnouncement(Long userId, Long accountId, Long serverId, Long characterId, Long skillId,
                                  String message,
                                  String transactionId) {
-        AccountVerificationDto verifyData = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto verifyData = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         final RealmEntity serverModel = verifyData.realm();
@@ -185,7 +192,7 @@ public class CharactersService implements CharactersPort {
     @Override
     public List<CharacterInventoryResponse> getCharacterInventory(Long userId, Long accountId, Long serverId,
                                                                   Long characterId, String transactionId) {
-        AccountVerificationDto verifyData = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto verifyData = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         final RealmEntity serverModel = verifyData.realm();
@@ -199,7 +206,7 @@ public class CharactersService implements CharactersPort {
     public void transferInventoryItem(Long userId, Long accountId, Long serverId, Long characterId, Long friendId,
                                       Integer count, Long itemId, String transactionId) {
 
-        AccountVerificationDto verifyData = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto verifyData = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         final RealmEntity serverModel = verifyData.realm();

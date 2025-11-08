@@ -3,7 +3,6 @@ package com.register.wowlibre.service;
 import com.register.wowlibre.application.services.account_game.AccountGameService;
 import com.register.wowlibre.domain.dto.account_game.AccountGameDetailDto;
 import com.register.wowlibre.domain.dto.account_game.AccountGameStatsDto;
-import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
 import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
 import com.register.wowlibre.domain.dto.client.AccountDetailResponse;
 import com.register.wowlibre.domain.enums.Expansion;
@@ -85,7 +84,7 @@ class AccountGameServiceTest extends BaseTest {
 
         assertNotNull(result);
         assertEquals(1, result.getAccounts().size());
-        assertEquals("testaccount", result.getAccounts().get(0).username());
+        assertEquals("testaccount", result.getAccounts().getFirst().username());
     }
 
 
@@ -230,27 +229,6 @@ class AccountGameServiceTest extends BaseTest {
         assertEquals(1, result.getAccounts().size());
     }
 
-    @Test
-    void testVerifyAccount_success() {
-        Long userId = 1L, realmId = 1L, accountId = 101L;
-        String transactionId = "tx";
-
-        RealmEntity realm = new RealmEntity();
-        realm.setId(realmId);
-        realm.setStatus(true);
-
-        AccountGameEntity account = buildAccountGameEntity();
-
-        when(realmPort.findById(realmId, transactionId)).thenReturn(Optional.of(realm));
-        when(obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, accountId, realmId,
-                transactionId))
-                .thenReturn(Optional.of(account));
-
-        AccountVerificationDto result = service.verifyAccount(userId, accountId, realmId, transactionId);
-
-        assertNotNull(result);
-        assertEquals(account.getId(), result.accountGame().getId());
-    }
 
     private AccountGameEntity buildAccountGameEntity() {
         AccountGameEntity entity = new AccountGameEntity();
@@ -357,35 +335,6 @@ class AccountGameServiceTest extends BaseTest {
         assertEquals(accountId, result.id());
     }
 
-    @Test
-    void testVerifyAccount_realmIsEmpty() {
-        Long userId = 1L, realmId = 1L, accountId = 101L;
-        String transactionId = "tx";
-
-        when(realmPort.findById(realmId, transactionId)).thenReturn(Optional.empty());
-
-        assertThrows(InternalException.class, () ->
-                service.verifyAccount(userId, accountId, realmId, transactionId)
-        );
-    }
-
-    @Test
-    void testVerifyAccount_accountGameIsEmpty_shouldThrowException() {
-        Long userId = 1L, accountId = 101L, realmId = 1L;
-        String transactionId = "tx";
-
-        RealmEntity realm = new RealmEntity();
-        realm.setId(realmId);
-
-        when(realmPort.findById(realmId, transactionId)).thenReturn(Optional.of(realm));
-        when(obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, accountId, realmId,
-                transactionId))
-                .thenReturn(Optional.empty());
-
-        assertThrows(InternalException.class, () ->
-                service.verifyAccount(userId, accountId, realmId, transactionId)
-        );
-    }
 
     @Test
     void testAccounts_sizeGreaterThan30_shouldLimitTo30() {

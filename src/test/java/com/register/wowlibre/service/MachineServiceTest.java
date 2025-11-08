@@ -6,7 +6,7 @@ import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.dto.account_game.*;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.port.in.account_game.*;
+import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.out.machine.*;
 import com.register.wowlibre.infrastructure.entities.*;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 class MachineServiceTest {
     @Mock
-    private AccountGamePort accountGamePort;
+    private AccountValidationPort accountValidationPort;
 
     @Mock
     private ObtainMachine obtainMachine;
@@ -64,7 +64,7 @@ class MachineServiceTest {
         machine.setPoints(0);
         machine.setRealmId(verificationDto.realm());
 
-        when(accountGamePort.verifyAccount(userId, accountId, realmId, transactionId))
+        when(accountValidationPort.verifyAccount(userId, accountId, realmId, transactionId))
                 .thenReturn(verificationDto);
         when(obtainMachine.findByUserIdAndRealmId(userId, realmId)).thenReturn(Optional.of(machine));
 
@@ -83,7 +83,7 @@ class MachineServiceTest {
         machine.setPoints(1);
         machine.setRealmId(verificationDto.realm());
 
-        when(accountGamePort.verifyAccount(userId, accountId, realmId, transactionId))
+        when(accountValidationPort.verifyAccount(userId, accountId, realmId, transactionId))
                 .thenReturn(verificationDto);
         when(obtainMachine.findByUserIdAndRealmId(userId, realmId)).thenReturn(Optional.of(machine));
         when(integratorPort.claimMachine(any(), any(), eq(userId), eq(accountId), eq(characterId), any(),
@@ -103,7 +103,7 @@ class MachineServiceTest {
         Long userId = 1L, accountId = 2L, realmId = 3L;
         AccountVerificationDto verificationDto = createAccountVerificationDto(realmId);
 
-        when(accountGamePort.verifyAccount(userId, accountId, realmId, transactionId)).thenReturn(verificationDto);
+        when(accountValidationPort.verifyAccount(userId, accountId, realmId, transactionId)).thenReturn(verificationDto);
         when(obtainMachine.findByUserIdAndRealmId(userId, realmId)).thenReturn(Optional.empty());
 
         MachineDetailDto detailDto = machineService.points(userId, accountId, realmId, transactionId);
@@ -120,7 +120,7 @@ class MachineServiceTest {
         MachineEntity machine = new MachineEntity();
         machine.setPoints(3);
 
-        when(accountGamePort.verifyAccount(userId, accountId, realmId, transactionId)).thenReturn(verificationDto);
+        when(accountValidationPort.verifyAccount(userId, accountId, realmId, transactionId)).thenReturn(verificationDto);
         when(obtainMachine.findByUserIdAndRealmId(userId, realmId)).thenReturn(Optional.of(machine));
 
         MachineDetailDto detailDto = machineService.points(userId, accountId, realmId, transactionId);

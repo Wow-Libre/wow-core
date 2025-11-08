@@ -1,33 +1,40 @@
 package com.register.wowlibre.application.services.machine;
 
-import com.register.wowlibre.application.services.*;
-import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.domain.dto.account_game.*;
-import com.register.wowlibre.domain.dto.client.*;
-import com.register.wowlibre.domain.enums.*;
-import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.port.in.account_game.*;
-import com.register.wowlibre.domain.port.in.integrator.*;
-import com.register.wowlibre.domain.port.in.machine.*;
-import com.register.wowlibre.domain.port.out.machine.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.application.services.I18nService;
+import com.register.wowlibre.domain.dto.MachineDetailDto;
+import com.register.wowlibre.domain.dto.MachineDto;
+import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
+import com.register.wowlibre.domain.dto.client.ClaimMachineResponse;
+import com.register.wowlibre.domain.enums.MachineType;
+import com.register.wowlibre.domain.exception.InternalException;
+import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
+import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
+import com.register.wowlibre.domain.port.in.machine.MachinePort;
+import com.register.wowlibre.domain.port.out.machine.ObtainMachine;
+import com.register.wowlibre.domain.port.out.machine.SaveMachine;
+import com.register.wowlibre.infrastructure.entities.MachineEntity;
+import com.register.wowlibre.infrastructure.entities.RealmEntity;
+import org.springframework.stereotype.Service;
 
-import java.time.*;
-import java.util.*;
-import java.util.concurrent.*;
+import java.time.LocalDateTime;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class MachineService implements MachinePort {
-    private final AccountGamePort accountGamePort;
+    /**
+     * ACCOUNT VALIDATION PORT
+     **/
+    private final AccountValidationPort accountValidationPort;
     private final ObtainMachine obtainMachine;
     private final SaveMachine saveMachine;
     private final IntegratorPort integratorPort;
     private final I18nService i18nService;
 
-    public MachineService(AccountGamePort accountGamePort, ObtainMachine obtainMachine, SaveMachine saveMachine,
+    public MachineService(AccountValidationPort accountValidationPort, ObtainMachine obtainMachine, SaveMachine saveMachine,
                           IntegratorPort integratorPort, I18nService i18nService) {
-        this.accountGamePort = accountGamePort;
+        this.accountValidationPort = accountValidationPort;
         this.obtainMachine = obtainMachine;
         this.saveMachine = saveMachine;
         this.integratorPort = integratorPort;
@@ -38,7 +45,7 @@ public class MachineService implements MachinePort {
     public MachineDto evaluate(Long userId, Long accountId, Long characterId, Long realmId, Locale locale,
                                String transactionId) {
 
-        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, realmId,
+        AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, realmId,
                 transactionId);
 
         final RealmEntity realm = verificationDto.realm();
@@ -112,7 +119,7 @@ public class MachineService implements MachinePort {
     @Override
     public MachineDetailDto points(Long userId, Long accountId, Long realmId, String transactionId) {
 
-        AccountVerificationDto verificationDto = accountGamePort.verifyAccount(userId, accountId, realmId,
+        AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, realmId,
                 transactionId);
 
         final RealmEntity realm = verificationDto.realm();

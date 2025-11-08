@@ -1,21 +1,28 @@
 package com.register.wowlibre.controller;
 
-import com.register.wowlibre.domain.dto.account_game.*;
-import com.register.wowlibre.domain.dto.client.*;
-import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.port.in.account_game.*;
-import com.register.wowlibre.domain.shared.*;
-import com.register.wowlibre.infrastructure.controller.*;
-import org.junit.jupiter.api.*;
-import org.mockito.*;
-import org.springframework.http.*;
+import com.register.wowlibre.domain.dto.account_game.AccountGameDetailDto;
+import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
+import com.register.wowlibre.domain.dto.account_game.CreateAccountGameDto;
+import com.register.wowlibre.domain.dto.client.AccountBannedResponse;
+import com.register.wowlibre.domain.model.AccountGameModel;
+import com.register.wowlibre.domain.port.in.account_game.AccountGamePort;
+import com.register.wowlibre.domain.shared.GenericResponse;
+import com.register.wowlibre.infrastructure.controller.AccountGameController;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 
-import java.time.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class AccountGameControllerTest {
 
@@ -50,7 +57,7 @@ class AccountGameControllerTest {
 
         // Act
         ResponseEntity<GenericResponse<AccountsGameDto>> response = controller.accounts(
-                transactionId, userId, page, size, username, server
+                transactionId, userId, username, server, page, size
         );
 
         // Assert

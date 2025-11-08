@@ -5,6 +5,7 @@ import com.register.wowlibre.domain.dto.account_game.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.account_game.*;
+import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.promotion.*;
 import com.register.wowlibre.domain.port.in.transaction.*;
@@ -20,16 +21,19 @@ public class TransactionService implements TransactionPort {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
 
     private final IntegratorPort integratorPort;
-    private final AccountGamePort accountGamePort;
+    /**
+     * ACCOUNT VALIDATION PORT
+     **/
+    private final AccountValidationPort accountValidationPort;
     private final UserPromotionPort userPromotionPort;
 
     private final PromotionPort promotionPort;
 
 
-    public TransactionService(IntegratorPort integratorPort, AccountGamePort accountGamePort,
+    public TransactionService(IntegratorPort integratorPort, AccountValidationPort accountValidationPort,
                               UserPromotionPort userPromotionPort, PromotionPort promotionPort) {
         this.integratorPort = integratorPort;
-        this.accountGamePort = accountGamePort;
+        this.accountValidationPort = accountValidationPort;
         this.userPromotionPort = userPromotionPort;
         this.promotionPort = promotionPort;
     }
@@ -39,7 +43,7 @@ public class TransactionService implements TransactionPort {
     public void purchase(Long serverId, Long userId, Long accountId, String reference, List<ItemQuantityModel> items,
                          Double amount, String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         RealmEntity server = accountVerificationDto.realm();
@@ -58,7 +62,7 @@ public class TransactionService implements TransactionPort {
                                          List<ItemQuantityModel> items, String benefitType, Double amount,
                                          String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         RealmEntity server = accountVerificationDto.realm();
@@ -78,7 +82,7 @@ public class TransactionService implements TransactionPort {
                                        String language,
                                        String transactionId) {
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         RealmEntity server = accountVerificationDto.realm();
@@ -113,7 +117,7 @@ public class TransactionService implements TransactionPort {
             throw new InternalException("You have already consumed the promotion", transactionId);
         }
 
-        AccountVerificationDto accountVerificationDto = accountGamePort.verifyAccount(userId, accountId, serverId,
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
                 transactionId);
 
         RealmEntity server = accountVerificationDto.realm();

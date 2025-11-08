@@ -1,35 +1,42 @@
 package com.register.wowlibre.application.services.teleport;
 
-import com.register.wowlibre.domain.dto.account_game.*;
-import com.register.wowlibre.domain.dto.client.*;
-import com.register.wowlibre.domain.dto.teleport.*;
-import com.register.wowlibre.domain.enums.*;
-import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.port.in.account_game.*;
-import com.register.wowlibre.domain.port.in.integrator.*;
-import com.register.wowlibre.domain.port.in.realm.*;
-import com.register.wowlibre.domain.port.in.teleport.*;
-import com.register.wowlibre.domain.port.out.teleport.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
+import com.register.wowlibre.domain.dto.client.TeleportRequest;
+import com.register.wowlibre.domain.dto.teleport.TeleportDto;
+import com.register.wowlibre.domain.enums.Faction;
+import com.register.wowlibre.domain.enums.WowFactionRace;
+import com.register.wowlibre.domain.exception.InternalException;
+import com.register.wowlibre.domain.model.TeleportModel;
+import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
+import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
+import com.register.wowlibre.domain.port.in.realm.RealmPort;
+import com.register.wowlibre.domain.port.in.teleport.TeleportPort;
+import com.register.wowlibre.domain.port.out.teleport.ObtainTeleport;
+import com.register.wowlibre.domain.port.out.teleport.SaveTeleport;
+import com.register.wowlibre.infrastructure.entities.RealmEntity;
+import com.register.wowlibre.infrastructure.entities.TeleportEntity;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeleportService implements TeleportPort {
     private final ObtainTeleport obtainTeleport;
     private final SaveTeleport saveTeleport;
     private final IntegratorPort integratorPort;
-    private final AccountGamePort accountGamePort;
     private final RealmPort realmPort;
+    /**
+     * ACCOUNT VALIDATION PORT
+     **/
+    private final AccountValidationPort accountValidationPort;
 
     public TeleportService(ObtainTeleport obtainTeleport, SaveTeleport saveTeleport, IntegratorPort integratorPort,
-                           AccountGamePort accountGamePort, RealmPort realmPort) {
+                           RealmPort realmPort, AccountValidationPort accountValidationPort) {
         this.obtainTeleport = obtainTeleport;
         this.saveTeleport = saveTeleport;
         this.integratorPort = integratorPort;
-        this.accountGamePort = accountGamePort;
+        this.accountValidationPort = accountValidationPort;
         this.realmPort = realmPort;
     }
 
@@ -76,20 +83,20 @@ public class TeleportService implements TeleportPort {
     @Override
     public void teleport(Long teleportId, Long userId, Long accountId, Long characterId, Long realmId,
                          String transactionId) {
-        AccountVerificationDto account = accountGamePort.verifyAccount(userId, accountId, realmId, transactionId);
+        AccountVerificationDto account = accountValidationPort.verifyAccount(userId, accountId, realmId, transactionId);
 
         obtainTeleport.findById(teleportId).ifPresent(teleport ->
                 integratorPort.teleport(account.realm().getHost(), account.realm().getJwt(),
-                TeleportRequest.builder()
-                        .map(teleport.getMap())
-                        .positionX(teleport.getPositionX())
-                        .positionY(teleport.getPositionY())
-                        .positionZ(teleport.getPositionZ())
-                        .userId(userId)
-                        .orientation(teleport.getOrientation())
-                        .characterId(characterId)
-                        .accountId(accountId)
-                        .zone(teleport.getZone()).build(), transactionId));
+                        TeleportRequest.builder()
+                                .map(teleport.getMap())
+                                .positionX(teleport.getPositionX())
+                                .positionY(teleport.getPositionY())
+                                .positionZ(teleport.getPositionZ())
+                                .userId(userId)
+                                .orientation(teleport.getOrientation())
+                                .characterId(characterId)
+                                .accountId(accountId)
+                                .zone(teleport.getZone()).build(), transactionId));
     }
 
     @Override
