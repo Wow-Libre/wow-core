@@ -144,7 +144,7 @@ public class CharactersService implements CharactersPort {
         }
 
         RealmServicesModel realmServicesModel =
-                realmServicesPort.findByNameAndServerId(RealmServices.SEND_LEVEL, realmId, transactionId);
+                realmServicesPort.findByNameAndRealmId(RealmServices.SEND_LEVEL, realmId, transactionId);
 
         double cost = 0.0;
         if (realmServicesModel != null && realmServicesModel.amount() > 0) {

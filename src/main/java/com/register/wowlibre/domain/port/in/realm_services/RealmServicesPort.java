@@ -9,7 +9,7 @@ import java.util.*;
 public interface RealmServicesPort {
     List<RealmServicesModel> findByRealmId(Long serverId, String transactionId);
 
-    RealmServicesModel findByNameAndServerId(RealmServices name, Long serverId, String transactionId);
+    RealmServicesModel findByNameAndRealmId(RealmServices name, Long serverId, String transactionId);
 
     List<RealmServicesModel> findByServersAvailableLoa(String transactionId);
 

@@ -72,7 +72,7 @@ class RealmServicesServiceTest extends BaseTest {
     }
 
     @Test
-    void testFindByNameAndServerId_shouldReturnModel() {
+    void testFindByNameAndRealmId_shouldReturnModel() {
         Long realmId = 1L;
         String transactionId = "tx-003";
         RealmServices serviceName = RealmServices.BANK;
@@ -82,7 +82,7 @@ class RealmServicesServiceTest extends BaseTest {
         when(obtainRealmServices.findByNameAndRealmId(serviceName, realmId, transactionId))
                 .thenReturn(Optional.of(entity));
 
-        RealmServicesModel result = service.findByNameAndServerId(serviceName, realmId, transactionId);
+        RealmServicesModel result = service.findByNameAndRealmId(serviceName, realmId, transactionId);
 
         assertNotNull(result);
         assertEquals(1L, result.id());
@@ -92,7 +92,7 @@ class RealmServicesServiceTest extends BaseTest {
     }
 
     @Test
-    void testFindByNameAndServerId_shouldReturnNullWhenNotFound() {
+    void testFindByNameAndRealmId_shouldReturnNullWhenNotFound() {
         Long realmId = 1L;
         String transactionId = "tx-004";
         RealmServices serviceName = RealmServices.BANK;
@@ -100,7 +100,7 @@ class RealmServicesServiceTest extends BaseTest {
         when(obtainRealmServices.findByNameAndRealmId(serviceName, realmId, transactionId))
                 .thenReturn(Optional.empty());
 
-        RealmServicesModel result = service.findByNameAndServerId(serviceName, realmId, transactionId);
+        RealmServicesModel result = service.findByNameAndRealmId(serviceName, realmId, transactionId);
 
         assertNull(result);
         verify(obtainRealmServices).findByNameAndRealmId(serviceName, realmId, transactionId);

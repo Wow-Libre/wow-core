@@ -28,17 +28,19 @@ import java.util.Optional;
 @Service
 public class BankService implements BankPort {
     private static final Logger LOGGER = LoggerFactory.getLogger(BankService.class);
-
+    /** CREDIT LOANS PORTS **/
     private final ObtainCreditLoans obtainCreditLoans;
     private final SaveCreditLoans saveCreditLoans;
-
+    /** REALM SERVICES PORT (Servicios de reino y costos) **/
     private final RealmServicesPort realmServicesPort;
-    private final ResourcesPort resourcesPort;
     /**
      * ACCOUNT VALIDATION PORT
      **/
     private final AccountValidationPort accountValidationPort;
+    /** RANDOM STRING GENERATOR **/
     private final RandomString randomString;
+    /** RESOURCES PORT (Recursos de planes bancarios) **/
+    private final ResourcesPort resourcesPort;
 
     public BankService(ObtainCreditLoans obtainCreditLoans, SaveCreditLoans saveCreditLoans,
                        RealmServicesPort realmServicesPort,
@@ -70,7 +72,7 @@ public class BankService implements BankPort {
                     "administrator.", transactionId);
         }
 
-        RealmServicesModel realmServicesModel = realmServicesPort.findByNameAndServerId(RealmServices.BANK, realmId,
+        RealmServicesModel realmServicesModel = realmServicesPort.findByNameAndRealmId(RealmServices.BANK, realmId,
                 transactionId);
 
         if (realmServicesModel == null) {
