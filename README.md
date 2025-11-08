@@ -7,7 +7,7 @@
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.3-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue.svg)](https://www.mysql.com/)
-[![License](https://img.shields.io/badge/License-MIT--NC-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Maven](https://img.shields.io/badge/Maven-3.6+-red.svg)](https://maven.apache.org/)
 
 *API REST robusta y escalable para la administración de servidores WoW privados*
@@ -375,23 +375,28 @@ Las contribuciones son bienvenidas! Por favor:
 
 ## 📄 Licencia
 
-Este proyecto está bajo la **Licencia MIT - Uso No Comercial**. 
+Este proyecto está bajo la **Licencia MIT** - una licencia de código abierto completamente libre.
 
-### ✅ Permite:
-- Uso personal y educativo
-- Proyectos de código abierto
-- Investigación y desarrollo
-- Organizaciones sin fines de lucro
+### ✅ ¿Qué permite esta licencia?
 
-### ❌ No Permite:
-- Uso comercial
-- Venta del software o derivados
-- Servicios de pago que utilicen este software
-- Incorporación en productos comerciales
+La Licencia MIT es una de las licencias de código abierto más permisivas y ampliamente utilizadas. Permite:
 
-Para uso comercial, por favor contacta a: **licensing@wowlibre.com**
+- ✅ **Uso comercial y no comercial** - Puedes usar este software en proyectos comerciales sin restricciones
+- ✅ **Modificación** - Puedes modificar el código fuente según tus necesidades
+- ✅ **Distribución** - Puedes distribuir el software original o modificado
+- ✅ **Uso privado y público** - Sin restricciones de uso
+- ✅ **Incorporación en proyectos propios** - Puedes integrarlo en tus propios proyectos
+- ✅ **Venta del software** - Puedes vender el software o servicios basados en él
+- ✅ **Sublicenciar** - Puedes usar una licencia diferente para tus modificaciones
 
-Ver el archivo [LICENSE](LICENSE) para más detalles.
+### 📋 Única condición
+
+**Debes incluir el aviso de copyright y la licencia completa** en todas las copias o partes sustanciales del software.
+
+### 📖 Más información
+
+- Ver el archivo [LICENSE](LICENSE) para el texto completo de la licencia (disponible en inglés y español)
+- [Más información sobre la Licencia MIT](https://opensource.org/licenses/MIT)
 
 ---
 
