@@ -102,6 +102,39 @@ class JpaAccountGameAdapterTest {
     }
 
     @Test
+    void findByIdAndUserId_shouldReturnOptionalWhenFound() {
+        Long id = 100L;
+        Long userId = 1L;
+        String transactionId = "tx-find-001";
+        AccountGameEntity expectedEntity = new AccountGameEntity();
+        expectedEntity.setId(id);
+
+        when(accountGameRepository.findByIdAndUserId_Id(id, userId))
+                .thenReturn(Optional.of(expectedEntity));
+
+        Optional<AccountGameEntity> result = adapter.findByIdAndUserId(id, userId, transactionId);
+
+        assertTrue(result.isPresent());
+        assertEquals(id, result.get().getId());
+        verify(accountGameRepository).findByIdAndUserId_Id(id, userId);
+    }
+
+    @Test
+    void findByIdAndUserId_shouldReturnEmptyWhenNotFound() {
+        Long id = 100L;
+        Long userId = 1L;
+        String transactionId = "tx-find-002";
+
+        when(accountGameRepository.findByIdAndUserId_Id(id, userId))
+                .thenReturn(Optional.empty());
+
+        Optional<AccountGameEntity> result = adapter.findByIdAndUserId(id, userId, transactionId);
+
+        assertFalse(result.isPresent());
+        verify(accountGameRepository).findByIdAndUserId_Id(id, userId);
+    }
+
+    @Test
     void save_shouldReturnSavedEntity() {
         AccountGameEntity entity = new AccountGameEntity();
         when(accountGameRepository.save(entity)).thenReturn(entity);
@@ -110,5 +143,61 @@ class JpaAccountGameAdapterTest {
 
         assertEquals(entity, result);
         verify(accountGameRepository).save(entity);
+    }
+
+    @Test
+    void countActiveAccountsByUserId_shouldReturnCount() {
+        Long userId = 1L;
+        long expectedCount = 5L;
+        String transactionId = "tx-count-001";
+
+        when(accountGameRepository.countActiveAccountsByUserId(userId)).thenReturn(expectedCount);
+
+        long result = adapter.countActiveAccountsByUserId(userId, transactionId);
+
+        assertEquals(expectedCount, result);
+        verify(accountGameRepository).countActiveAccountsByUserId(userId);
+    }
+
+    @Test
+    void countActiveAccountsByUserId_shouldReturnZeroWhenNoAccounts() {
+        Long userId = 1L;
+        long expectedCount = 0L;
+        String transactionId = "tx-count-002";
+
+        when(accountGameRepository.countActiveAccountsByUserId(userId)).thenReturn(expectedCount);
+
+        long result = adapter.countActiveAccountsByUserId(userId, transactionId);
+
+        assertEquals(0L, result);
+        verify(accountGameRepository).countActiveAccountsByUserId(userId);
+    }
+
+    @Test
+    void countDistinctRealmsByUserId_shouldReturnCount() {
+        Long userId = 1L;
+        long expectedCount = 3L;
+        String transactionId = "tx-realms-001";
+
+        when(accountGameRepository.countDistinctRealmsByUserId(userId)).thenReturn(expectedCount);
+
+        long result = adapter.countDistinctRealmsByUserId(userId, transactionId);
+
+        assertEquals(expectedCount, result);
+        verify(accountGameRepository).countDistinctRealmsByUserId(userId);
+    }
+
+    @Test
+    void countDistinctRealmsByUserId_shouldReturnZeroWhenNoRealms() {
+        Long userId = 1L;
+        long expectedCount = 0L;
+        String transactionId = "tx-realms-002";
+
+        when(accountGameRepository.countDistinctRealmsByUserId(userId)).thenReturn(expectedCount);
+
+        long result = adapter.countDistinctRealmsByUserId(userId, transactionId);
+
+        assertEquals(0L, result);
+        verify(accountGameRepository).countDistinctRealmsByUserId(userId);
     }
 }

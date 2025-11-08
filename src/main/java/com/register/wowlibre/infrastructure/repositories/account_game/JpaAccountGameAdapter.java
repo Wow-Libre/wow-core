@@ -1,11 +1,13 @@
 package com.register.wowlibre.infrastructure.repositories.account_game;
 
-import com.register.wowlibre.domain.port.out.account_game.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.data.domain.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.domain.port.out.account_game.ObtainAccountGamePort;
+import com.register.wowlibre.domain.port.out.account_game.SaveAccountGamePort;
+import com.register.wowlibre.infrastructure.entities.AccountGameEntity;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class JpaAccountGameAdapter implements ObtainAccountGamePort, SaveAccountGamePort {

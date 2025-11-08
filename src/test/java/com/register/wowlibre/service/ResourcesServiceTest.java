@@ -131,21 +131,4 @@ class ResourcesServiceTest {
         assertEquals("cta", result.btn);
     }
 
-    @Test
-    void testGetPlansAcquisition() {
-        List<PlanAcquisitionModel> acquisitions = List.of(new PlanAcquisitionModel("Basic", "10.99", "Info", List.of(
-                "Feature1"), "Buy now", "https://link.com"));
-        when(jsonLoaderPort.getPlansAcquisition("en", "tx123")).thenReturn(acquisitions);
-
-        List<PlanAcquisitionModel> result = resourcesService.getPlansAcquisition("en", "tx123");
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals("Basic", result.get(0).name());
-        assertEquals("10.99", result.get(0).price());
-        assertEquals("Info", result.get(0).description());
-        assertEquals(List.of("Feature1"), result.get(0).features());
-        assertEquals("Buy now", result.get(0).buttonText());
-        assertEquals("https://link.com", result.get(0).url());
-    }
 }

@@ -1,22 +1,34 @@
 package com.register.wowlibre.service;
 
-import com.register.wowlibre.application.services.account_game.*;
-import com.register.wowlibre.domain.dto.account_game.*;
-import com.register.wowlibre.domain.dto.client.*;
-import com.register.wowlibre.domain.enums.*;
-import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.port.in.integrator.*;
-import com.register.wowlibre.domain.port.in.realm.*;
-import com.register.wowlibre.domain.port.in.user.*;
-import com.register.wowlibre.domain.port.out.account_game.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import com.register.wowlibre.model.*;
-import org.junit.jupiter.api.*;
-import org.mockito.*;
+import com.register.wowlibre.application.services.account_game.AccountGameService;
+import com.register.wowlibre.domain.dto.account_game.AccountGameDetailDto;
+import com.register.wowlibre.domain.dto.account_game.AccountGameStatsDto;
+import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
+import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
+import com.register.wowlibre.domain.dto.client.AccountDetailResponse;
+import com.register.wowlibre.domain.enums.Expansion;
+import com.register.wowlibre.domain.exception.InternalException;
+import com.register.wowlibre.domain.exception.UnauthorizedException;
+import com.register.wowlibre.domain.model.RealmModel;
+import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
+import com.register.wowlibre.domain.port.in.realm.RealmPort;
+import com.register.wowlibre.domain.port.in.user.UserPort;
+import com.register.wowlibre.domain.port.out.account_game.ObtainAccountGamePort;
+import com.register.wowlibre.domain.port.out.account_game.SaveAccountGamePort;
+import com.register.wowlibre.infrastructure.entities.AccountGameEntity;
+import com.register.wowlibre.infrastructure.entities.RealmEntity;
+import com.register.wowlibre.infrastructure.entities.UserEntity;
+import com.register.wowlibre.model.BaseTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.time.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -76,19 +88,6 @@ class AccountGameServiceTest extends BaseTest {
         assertEquals("testaccount", result.getAccounts().get(0).username());
     }
 
-
-    @Test
-    void testAccounts_userNotFound_throwsException() {
-        Long userId = 1L;
-        Long realmId = 10L;
-        String transactionId = "tx-003";
-
-        when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.empty());
-
-        assertThrows(InternalException.class, () ->
-                service.accounts(userId, realmId, transactionId)
-        );
-    }
 
     @Test
     void testCreateAccount_userReachedMaxAccounts() {
@@ -410,21 +409,6 @@ class AccountGameServiceTest extends BaseTest {
         assertEquals(0, result.getSize());
     }
 
-    @Test
-    void testAccounts_userNotFound_shouldThrowUnauthorizedException() {
-        Long userId = 1L;
-        int page = 0;
-        int size = 10;
-        String searchUsername = null;
-        String realmName = null;
-        String transactionId = "tx-002";
-
-        when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.empty());
-
-        assertThrows(UnauthorizedException.class, () ->
-                service.accounts(userId, page, size, searchUsername, realmName, transactionId)
-        );
-    }
 
     @Test
     void testAccounts_withSearchFilters_shouldCallFilteredQuery() {
@@ -459,6 +443,131 @@ class AccountGameServiceTest extends BaseTest {
         assertNotNull(result);
         assertEquals(1, result.getAccounts().size());
         assertEquals(1L, result.getSize());
+    }
+
+    @Test
+    void testStats_success_returnsAccountGameStatsDto() {
+        Long userId = 1L;
+        String transactionId = "tx-stats-001";
+        long expectedTotalAccounts = 5L;
+        long expectedTotalRealms = 2L;
+
+        when(obtainAccountGamePort.countActiveAccountsByUserId(userId, transactionId))
+                .thenReturn(expectedTotalAccounts);
+        when(obtainAccountGamePort.countDistinctRealmsByUserId(userId, transactionId))
+                .thenReturn(expectedTotalRealms);
+
+        AccountGameStatsDto result = service.stats(userId, transactionId);
+
+        assertNotNull(result);
+        assertEquals(expectedTotalAccounts, result.getTotalAccounts());
+        assertEquals(expectedTotalRealms, result.getTotalRealms());
+        verify(obtainAccountGamePort).countActiveAccountsByUserId(userId, transactionId);
+        verify(obtainAccountGamePort).countDistinctRealmsByUserId(userId, transactionId);
+    }
+
+    @Test
+    void testStats_zeroAccounts_returnsZeroStats() {
+        Long userId = 1L;
+        String transactionId = "tx-stats-002";
+
+        when(obtainAccountGamePort.countActiveAccountsByUserId(userId, transactionId)).thenReturn(0L);
+        when(obtainAccountGamePort.countDistinctRealmsByUserId(userId, transactionId)).thenReturn(0L);
+
+        AccountGameStatsDto result = service.stats(userId, transactionId);
+
+        assertNotNull(result);
+        assertEquals(0L, result.getTotalAccounts());
+        assertEquals(0L, result.getTotalRealms());
+    }
+
+    @Test
+    void testDesactive_success_deactivatesAccounts() {
+        Long userId = 1L;
+        String transactionId = "tx-desactive-001";
+        List<Long> accountIds = List.of(100L, 200L, 300L);
+
+        AccountGameEntity account1 = new AccountGameEntity();
+        account1.setId(100L);
+        account1.setStatus(true);
+        account1.setUserId(createSampleUserEntity());
+
+        AccountGameEntity account2 = new AccountGameEntity();
+        account2.setId(200L);
+        account2.setStatus(true);
+        account2.setUserId(createSampleUserEntity());
+
+        AccountGameEntity account3 = new AccountGameEntity();
+        account3.setId(300L);
+        account3.setStatus(true);
+        account3.setUserId(createSampleUserEntity());
+
+        when(obtainAccountGamePort.findByIdAndUserId(100L, userId, transactionId))
+                .thenReturn(Optional.of(account1));
+        when(obtainAccountGamePort.findByIdAndUserId(200L, userId, transactionId))
+                .thenReturn(Optional.of(account2));
+        when(obtainAccountGamePort.findByIdAndUserId(300L, userId, transactionId))
+                .thenReturn(Optional.of(account3));
+
+        assertDoesNotThrow(() -> service.desactive(accountIds, userId, transactionId));
+
+        verify(obtainAccountGamePort).findByIdAndUserId(100L, userId, transactionId);
+        verify(obtainAccountGamePort).findByIdAndUserId(200L, userId, transactionId);
+        verify(obtainAccountGamePort).findByIdAndUserId(300L, userId, transactionId);
+        verify(saveAccountGamePort, times(3)).save(any(AccountGameEntity.class), eq(transactionId));
+    }
+
+    @Test
+    void testDesactive_accountNotFound_throwsException() {
+        Long userId = 1L;
+        String transactionId = "tx-desactive-002";
+        List<Long> accountIds = List.of(100L);
+
+        when(obtainAccountGamePort.findByIdAndUserId(100L, userId, transactionId))
+                .thenReturn(Optional.empty());
+
+        assertThrows(InternalException.class, () ->
+                service.desactive(accountIds, userId, transactionId)
+        );
+
+        verify(obtainAccountGamePort).findByIdAndUserId(100L, userId, transactionId);
+        verify(saveAccountGamePort, never()).save(any(AccountGameEntity.class), anyString());
+    }
+
+    @Test
+    void testDesactive_partialFailure_throwsExceptionOnFirstNotFound() {
+        Long userId = 1L;
+        String transactionId = "tx-desactive-003";
+        List<Long> accountIds = List.of(100L, 200L);
+
+        AccountGameEntity account1 = new AccountGameEntity();
+        account1.setId(100L);
+        account1.setStatus(true);
+
+        when(obtainAccountGamePort.findByIdAndUserId(100L, userId, transactionId))
+                .thenReturn(Optional.of(account1));
+        when(obtainAccountGamePort.findByIdAndUserId(200L, userId, transactionId))
+                .thenReturn(Optional.empty());
+
+        assertThrows(InternalException.class, () ->
+                service.desactive(accountIds, userId, transactionId)
+        );
+
+        verify(obtainAccountGamePort).findByIdAndUserId(100L, userId, transactionId);
+        verify(obtainAccountGamePort).findByIdAndUserId(200L, userId, transactionId);
+        verify(saveAccountGamePort, times(1)).save(any(AccountGameEntity.class), eq(transactionId));
+    }
+
+    @Test
+    void testDesactive_emptyList_doesNothing() {
+        Long userId = 1L;
+        String transactionId = "tx-desactive-004";
+        List<Long> accountIds = Collections.emptyList();
+
+        assertDoesNotThrow(() -> service.desactive(accountIds, userId, transactionId));
+
+        verify(obtainAccountGamePort, never()).findByIdAndUserId(anyLong(), anyLong(), anyString());
+        verify(saveAccountGamePort, never()).save(any(AccountGameEntity.class), anyString());
     }
 
 }

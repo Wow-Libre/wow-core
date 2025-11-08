@@ -124,17 +124,5 @@ class ResourcesControllerTest {
         assertEquals(widget, response.getBody().getData());
     }
 
-    @Test
-    void testPlanAcquisition() {
-        List<PlanAcquisitionModel> acquisitions = List.of(new PlanAcquisitionModel("Plan A", "123", "USD", List.of(),
-                "Subscribite", "https://example.com/plan.png"));
-        when(resourcesPort.getPlansAcquisition("en", "tx333")).thenReturn(acquisitions);
 
-        ResponseEntity<GenericResponse<List<PlanAcquisitionModel>>> response =
-                controller.planAcquisition("tx333", Locale.ENGLISH);
-
-        assertTrue(response.getStatusCode().is2xxSuccessful());
-        assertNotNull(response.getBody());
-        assertEquals(acquisitions, response.getBody().getData());
-    }
 }

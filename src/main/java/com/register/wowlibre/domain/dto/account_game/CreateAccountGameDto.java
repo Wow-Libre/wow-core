@@ -13,6 +13,7 @@ public class CreateAccountGameDto {
     @JsonProperty("game_mail")
     private String gameMail;
     @NotNull
+    @Length(min = 3, max = 30)
     private String password;
     @NotNull
     private String realmName;
