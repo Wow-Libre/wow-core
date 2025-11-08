@@ -6,17 +6,17 @@
       "btn": "Subscribirme",
       "benefits": [
         {
-          "img": "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmRtZm4waHpjeTF0c2l0Mjl4NDd4Zmt5djA4bmFiOGM2MWE5cGY0cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kOXmbScrUSyl3vMeto/giphy.gif",
-          "alt": "Migraciones",
-          "title": "Transfiere tus personajes a otros servidores sin complicaciones"
+          "img": "https://static.wixstatic.com/media/5dd8a0_1f585e6cc79344d7b2d2c6646ebda385~mv2.webp",
+          "alt": "Puntos de ruleta",
+          "title": "Obtén puntos de ruleta al adquirir tu pase y gana premios increíbles"
         },
         {
-          "img": "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGViZGRyNmhibDZiMHBqZGl4ZzlkeTVpeDZoNmpmaGZ6MDNmenlsayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uoLnPG6eJrLyfwpU6C/giphy.gif",
+          "img": "https://static.wixstatic.com/media/5dd8a0_64c36b1bf4024770a149623cc1abbb01~mv2.webp",
           "alt": "Servicios de juego",
           "title": "Acceso ilimitado a nuestros servicios de juego"
         },
         {
-          "img": "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2tyemowcGJkZ2pueTg3b2F0ZGZjemJ5aGdybWFnMjBpc2ExeHhsZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UVfAv84TzrlGKAortv/giphy.gif",
+          "img": "https://static.wixstatic.com/media/5dd8a0_d61b732646574794a53cf539c7f677d9~mv2.webp",
           "alt": "Regalos y beneficios",
           "title": "Recibe increíbles regalos y beneficios exclusivos"
         }
@@ -25,46 +25,46 @@
   ],
   "en": [
     {
-      "title": "Join the Azeroth Pass",
-      "description": "Get the most exclusive benefits",
-      "btn": "Subscribirme",
+      "title": "Subscribe to the Azeroth Pass",
+      "description": "Unlock the most exclusive benefits",
+      "btn": "Subscribe",
       "benefits": [
         {
-          "img": "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmRtZm4waHpjeTF0c2l0Mjl4NDd4Zmt5djA4bmFiOGM2MWE5cGY0cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kOXmbScrUSyl3vMeto/giphy.gif",
-          "alt": "Migrations",
-          "title": "Transfer your characters to other servers effortlessly"
+          "img": "https://static.wixstatic.com/media/5dd8a0_1f585e6cc79344d7b2d2c6646ebda385~mv2.webp",
+          "alt": "Roulette Points",
+          "title": "Earn roulette points when you purchase your pass and win amazing rewards"
         },
         {
-          "img": "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGViZGRyNmhibDZiMHBqZGl4ZzlkeTVpeDZoNmpmaGZ6MDNmenlsayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uoLnPG6eJrLyfwpU6C/giphy.gif",
-          "alt": "Gaming Services",
-          "title": "Unlimited access to our gaming services"
+          "img": "https://static.wixstatic.com/media/5dd8a0_64c36b1bf4024770a149623cc1abbb01~mv2.webp",
+          "alt": "Game Services",
+          "title": "Enjoy unlimited access to our gaming services"
         },
         {
-          "img": "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2tyemowcGJkZ2pueTg3b2F0ZGZjemJ5aGdybWFnMjBpc2ExeHhsZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UVfAv84TzrlGKAortv/giphy.gif",
+          "img": "https://static.wixstatic.com/media/5dd8a0_d61b732646574794a53cf539c7f677d9~mv2.webp",
           "alt": "Gifts and Benefits",
-          "title": "Receive amazing gifts and exclusive benefits"
+          "title": "Receive amazing gifts and exclusive rewards"
         }
       ]
     }
   ],
   "pt": [
     {
-      "title": "Junte-se ao Passe Azeroth",
-      "description": "Obtenha os benefícios mais exclusivos",
-      "btn": "Subscribirme",
+      "title": "Assine o Passe Azeroth",
+      "description": "Garanta os benefícios mais exclusivos",
+      "btn": "Assinar",
       "benefits": [
         {
-          "img": "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmRtZm4waHpjeTF0c2l0Mjl4NDd4Zmt5djA4bmFiOGM2MWE5cGY0cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kOXmbScrUSyl3vMeto/giphy.gif",
-          "alt": "Migrações",
-          "title": "Transfira seus personagens para outros servidores sem complicações"
+          "img": "https://static.wixstatic.com/media/5dd8a0_1f585e6cc79344d7b2d2c6646ebda385~mv2.webp",
+          "alt": "Pontos de roleta",
+          "title": "Ganhe pontos de roleta ao adquirir seu passe e conquiste prêmios incríveis"
         },
         {
-          "img": "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGViZGRyNmhibDZiMHBqZGl4ZzlkeTVpeDZoNmpmaGZ6MDNmenlsayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uoLnPG6eJrLyfwpU6C/giphy.gif",
-          "alt": "Serviços de jogos",
-          "title": "Acesso ilimitado aos nossos serviços de jogos"
+          "img": "https://static.wixstatic.com/media/5dd8a0_64c36b1bf4024770a149623cc1abbb01~mv2.webp",
+          "alt": "Serviços de jogo",
+          "title": "Acesso ilimitado aos nossos serviços de jogo"
         },
         {
-          "img": "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2tyemowcGJkZ2pueTg3b2F0ZGZjemJ5aGdybWFnMjBpc2ExeHhsZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/UVfAv84TzrlGKAortv/giphy.gif",
+          "img": "https://static.wixstatic.com/media/5dd8a0_d61b732646574794a53cf539c7f677d9~mv2.webp",
           "alt": "Presentes e benefícios",
           "title": "Receba presentes incríveis e benefícios exclusivos"
         }

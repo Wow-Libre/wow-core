@@ -22,10 +22,10 @@ class MachineControllerTest {
     private MachinePort machinePort;
 
     private final String TRANSACTION_ID = "txn-001";
-    private final Long USER_ID = 1L;
-    private final Long ACCOUNT_ID = 2L;
-    private final Long SERVER_ID = 3L;
-    private final Long CHARACTER_ID = 4L;
+    private final long USER_ID = 1L;
+    private final long ACCOUNT_ID = 2L;
+    private final long SERVER_ID = 3L;
+    private final long CHARACTER_ID = 4L;
 
     private ClaimMachineDto claimRequest;
 

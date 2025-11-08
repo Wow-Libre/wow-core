@@ -36,7 +36,8 @@ public class JpaBannersAdapter implements ObtainBanners, SaveBanners, DeleteBann
 
         return Optional.of(banners)
                 .filter(list -> list.size() < 5)
-                .map(list -> list.stream().allMatch(banner -> banner.getType().equals(type)))
+                .map(list -> list.stream()
+                        .allMatch(banner -> banner.getType().equals(type)))
                 .orElse(false);
     }
 

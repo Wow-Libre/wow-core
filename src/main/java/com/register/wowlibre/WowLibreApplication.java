@@ -7,10 +7,10 @@ import org.springframework.scheduling.annotation.*;
 @EnableAsync
 //@EnableCaching
 @SpringBootApplication
-public class WowlibreApplication {
+public class WowLibreApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WowlibreApplication.class, args);
+		SpringApplication.run(WowLibreApplication.class, args);
 	}
 
 }

@@ -65,7 +65,7 @@ class JpaUserAdapterTest {
     @Test
     void findByUserIdAndStatusIsTrue_shouldReturnUser_whenUserExists() {
         // Arrange
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx456";
         UserEntity user = new UserEntity();
         user.setId(userId);

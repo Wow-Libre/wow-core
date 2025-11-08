@@ -14,20 +14,28 @@ public class JpaPromotionAdapter implements SavePromotion, ObtainPromotion {
         this.promotionRepository = promotionRepository;
     }
 
-
     @Override
-    public List<PromotionEntity> findByPromotionServerIdAndLanguage(Long serverId, String language) {
-        return null;
+    public List<PromotionEntity> findByPromotionRealmIdAndLanguage(Long realmId, String language,
+            String transactionId) {
+        return promotionRepository.findByLanguageAndRealmIdAndStatusIsTrue(language, realmId);
     }
 
     @Override
-    public Optional<PromotionEntity> findByIdAndServerIdAndLanguage(Long id, Long serverId, String language) {
-        return null;
+    public Optional<PromotionEntity> findById(Long id, String transactionId) {
+        return promotionRepository.findById(id);
     }
 
     @Override
-    public List<PromotionEntity> findByPromotionServerId(Long serverId) {
-        return null;
+    public List<PromotionEntity> findByPromotionRealmId(Long realmId, String transactionId) {
+        return promotionRepository.findByRealmIdAndStatusIsTrue(realmId);
+    }
+
+    @Override
+    public List<PromotionEntity> findActiveByRealmId(Long realmId, String language, String transactionId) {
+        if (language != null && !language.isEmpty()) {
+            return promotionRepository.findByLanguageAndRealmIdAndStatusIsTrue(language, realmId);
+        }
+        return promotionRepository.findByRealmIdAndStatusIsTrue(realmId);
     }
 
     @Override

@@ -55,7 +55,7 @@ class JpaFaqsAdapterTest {
 
     @Test
     void testDeleteExistingFaq() {
-        Long faqId = 1L;
+        long faqId = 1L;
         FaqsEntity entity = new FaqsEntity();
 
         when(faqsRepository.findById(faqId)).thenReturn(Optional.of(entity));
@@ -68,7 +68,7 @@ class JpaFaqsAdapterTest {
 
     @Test
     void testDeleteNonExistingFaq() {
-        Long faqId = 99L;
+        long faqId = 99L;
 
         when(faqsRepository.findById(faqId)).thenReturn(Optional.empty());
 

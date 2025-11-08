@@ -8,35 +8,35 @@ import org.springframework.stereotype.*;
 import java.util.*;
 
 @Repository
-public class JpaServerServicesAdapterObtain implements ObtainRealmServices, SaveRealmServices {
-    private final ServerServicesRepository serverServicesRepository;
+public class JpaServerServicesAdapter implements ObtainRealmServices, SaveRealmServices {
+    private final RealmServicesRepository realmServicesRepository;
 
-    public JpaServerServicesAdapterObtain(ServerServicesRepository serverServicesRepository) {
-        this.serverServicesRepository = serverServicesRepository;
+    public JpaServerServicesAdapter(RealmServicesRepository realmServicesRepository) {
+        this.realmServicesRepository = realmServicesRepository;
     }
 
     @Override
     public List<RealmServicesEntity> findByRealmId(Long realmId, String transactionId) {
-        return serverServicesRepository.findByRealmId_Id(realmId);
+        return realmServicesRepository.findByRealmId_Id(realmId);
     }
 
     @Override
     public Optional<RealmServicesEntity> findByNameAndRealmId(RealmServices name, Long realmId, String transactionId) {
-        return serverServicesRepository.findByNameAndRealmId_Id(name, realmId);
+        return realmServicesRepository.findByNameAndRealmId_Id(name, realmId);
     }
 
     @Override
     public List<RealmServicesEntity> findByServersAvailableRequestLoa(String transactionId) {
-        return serverServicesRepository.findActiveRealmServicesWithAmountGreaterThanZero(RealmServices.BANK);
+        return realmServicesRepository.findActiveRealmServicesWithAmountGreaterThanZero(RealmServices.BANK);
     }
 
     @Override
     public Optional<RealmServicesEntity> findById(Long id) {
-        return serverServicesRepository.findById(id);
+        return realmServicesRepository.findById(id);
     }
 
     @Override
     public void save(RealmServicesEntity realmServicesEntity, String transactionId) {
-        serverServicesRepository.save(realmServicesEntity);
+        realmServicesRepository.save(realmServicesEntity);
     }
 }

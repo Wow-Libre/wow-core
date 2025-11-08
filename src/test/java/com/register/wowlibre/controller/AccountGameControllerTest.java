@@ -1,21 +1,28 @@
 package com.register.wowlibre.controller;
 
-import com.register.wowlibre.domain.dto.account_game.*;
-import com.register.wowlibre.domain.dto.client.*;
-import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.port.in.account_game.*;
-import com.register.wowlibre.domain.shared.*;
-import com.register.wowlibre.infrastructure.controller.*;
-import org.junit.jupiter.api.*;
-import org.mockito.*;
-import org.springframework.http.*;
+import com.register.wowlibre.domain.dto.account_game.AccountGameDetailDto;
+import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
+import com.register.wowlibre.domain.dto.account_game.CreateAccountGameDto;
+import com.register.wowlibre.domain.dto.client.AccountBannedResponse;
+import com.register.wowlibre.domain.model.AccountGameModel;
+import com.register.wowlibre.domain.port.in.account_game.AccountGamePort;
+import com.register.wowlibre.domain.shared.GenericResponse;
+import com.register.wowlibre.infrastructure.controller.AccountGameController;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 
-import java.time.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class AccountGameControllerTest {
 
@@ -33,7 +40,7 @@ class AccountGameControllerTest {
     @Test
     void shouldReturnAvailableAccounts() {
         // Arrange
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx123";
         int page = 0;
         int size = 5;
@@ -50,7 +57,7 @@ class AccountGameControllerTest {
 
         // Act
         ResponseEntity<GenericResponse<AccountsGameDto>> response = controller.accounts(
-                transactionId, userId, page, size, username, server
+                transactionId, userId, username, server, page, size
         );
 
         // Assert
@@ -63,7 +70,7 @@ class AccountGameControllerTest {
     @Test
     void shouldCreateAccount() {
         // Arrange
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx123";
         CreateAccountGameDto createDto = new CreateAccountGameDto();
         createDto.setExpansion(2);
@@ -82,9 +89,9 @@ class AccountGameControllerTest {
     @Test
     void shouldReturnAccountsByRealm() {
         // Arrange
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx123";
-        Long serverId = 10L;
+        long serverId = 10L;
 
         List<AccountGameModel> accounts = List.of(
                 new AccountGameModel(1L, "user1", 100L, "test@mail.com", "Azeroth", serverId,
@@ -109,9 +116,9 @@ class AccountGameControllerTest {
     @Test
     void shouldReturnAccountDetails() {
         // Arrange
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 10L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 10L;
         String transactionId = "tx123";
 
         AccountBannedResponse bannedResponse =
@@ -151,9 +158,9 @@ class AccountGameControllerTest {
     @Test
     void shouldReturnNoContentWhenAccountNotFound() {
         // Arrange
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long serverId = 10L;
+        long userId = 1L;
+        long accountId = 101L;
+        long serverId = 10L;
         String transactionId = "tx123";
 
         when(accountGamePort.account(userId, accountId, serverId, transactionId)).thenReturn(null);

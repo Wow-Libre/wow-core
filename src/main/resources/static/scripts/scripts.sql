@@ -203,7 +203,7 @@ CREATE TABLE platform.promotion
     name            varchar(30) NOT NULL,
     description     varchar(80) NOT NULL,
     btn_text        varchar(30) NOT NULL,
-    send_item       boolean     NOT NULL,
+    send_item       boolean     NOT NULL DEFAULT FALSE,
     realm_id        bigint      NOT NULL,
     min_level       integer     NOT NULL,
     max_level       integer     NOT NULL,
@@ -225,9 +225,8 @@ CREATE TABLE platform.user_promotion
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     realm_id        bigint                              NOT NULL,
-    user_id         bigint                              NOT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT uq_user_promotion_user_account_promo_realm UNIQUE (user_id, account_game_id, promotion_id, realm_id),
+    CONSTRAINT uq_user_promotion_user_account_promo_realm UNIQUE (character_id,account_game_id, promotion_id, realm_id),
     CONSTRAINT fk_user_promotion_promotion_id FOREIGN KEY (promotion_id) REFERENCES platform.promotion (id),
     CONSTRAINT fk_user_promotion_account_game_id FOREIGN KEY (account_game_id) REFERENCES platform.account_game (id)
 );

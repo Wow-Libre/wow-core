@@ -33,4 +33,10 @@ public interface AccountGameRepository extends CrudRepository<AccountGameEntity,
     List<AccountGameEntity> findByUserId_IdAndRealmId_IdAndStatusIsTrue(Long userId, Long serverId);
 
     Optional<AccountGameEntity> findByIdAndUserId_Id(Long id, Long userId);
+
+    @Query("SELECT COUNT(a) FROM AccountGameEntity a WHERE a.userId.id = :userId AND a.status = true")
+    long countActiveAccountsByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT COUNT(DISTINCT a.realmId.id) FROM AccountGameEntity a WHERE a.userId.id = :userId AND a.status = true")
+    long countDistinctRealmsByUserId(@Param("userId") Long userId);
 }

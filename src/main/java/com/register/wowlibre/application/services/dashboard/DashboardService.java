@@ -67,7 +67,7 @@ public class DashboardService implements DashboardPort {
         }
 
         LoansDto loansDto = new LoansDto();
-        loansDto.setLoans(Optional.ofNullable(realmServicesPort.findByNameAndServerId(RealmServices.BANK, realmId,
+        loansDto.setLoans(Optional.ofNullable(realmServicesPort.findByNameAndRealmId(RealmServices.BANK, realmId,
                 transactionId)).map(RealmServicesModel::amount).orElse(null));
         loansDto.setUsers(obtainCreditLoans.findByRealmIdAndPagination(realmId, size, page, filter, asc,
                 transactionId).stream().map(credit -> new LoansDto.UsersCreditLoans(credit.getId(),

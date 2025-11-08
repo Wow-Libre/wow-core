@@ -30,7 +30,8 @@ COPY --from=builder /app/target/newrelic/newrelic.yml /app/newrelic.yml
 COPY --from=builder /app/target/wowlibre-0.0.1-SNAPSHOT.jar .
 COPY --from=builder /app/target/newrelic/newrelic.jar .
 
-ENV NEW_RELIC_LICENSE_KEY=82ff848c92a86cfccb796e3c22d3b01aFFFFNRAL
+# New Relic license key should be provided as environment variable at runtime
+# Example: docker run -e NEW_RELIC_LICENSE_KEY=your_key_here ...
 ENV SPRING_PROFILES_ACTIVE=prod
 ENV NEW_RELIC_APP_NAME=wow-libre-core
 ENV NEW_RELIC_LOG_LEVEL=info

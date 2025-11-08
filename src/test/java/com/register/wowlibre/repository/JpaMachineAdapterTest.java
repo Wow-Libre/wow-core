@@ -26,8 +26,8 @@ class JpaMachineAdapterTest {
     @Test
     void testFindByUserIdAndRealmId_returnsMachine() {
         // Given
-        Long userId = 1L;
-        Long realmId = 2L;
+        long userId = 1L;
+        long realmId = 2L;
         MachineEntity machine = new MachineEntity();
         machine.setId(10L);
         machine.setUserId(userId);
@@ -51,8 +51,8 @@ class JpaMachineAdapterTest {
     @Test
     void testFindByUserIdAndRealmId_returnsEmpty() {
         // Given
-        Long userId = 1L;
-        Long realmId = 2L;
+        long userId = 1L;
+        long realmId = 2L;
 
         when(machineRepository.findByUserIdAndRealmId_Id(userId, realmId)).thenReturn(Optional.empty());
 

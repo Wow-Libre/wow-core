@@ -1,17 +1,18 @@
 package com.register.wowlibre.application.services.resources;
 
 
-import com.register.wowlibre.domain.dto.faqs.*;
-import com.register.wowlibre.domain.enums.*;
-import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.dto.faqs.CreateFaqDto;
+import com.register.wowlibre.domain.enums.FaqType;
+import com.register.wowlibre.domain.exception.InternalException;
 import com.register.wowlibre.domain.model.resources.*;
-import com.register.wowlibre.domain.port.in.*;
-import com.register.wowlibre.domain.port.out.*;
-import com.register.wowlibre.domain.port.out.faqs.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.domain.port.in.ResourcesPort;
+import com.register.wowlibre.domain.port.out.JsonLoaderPort;
+import com.register.wowlibre.domain.port.out.faqs.ObtainFaqs;
+import com.register.wowlibre.domain.port.out.faqs.SaveFaqs;
+import com.register.wowlibre.infrastructure.entities.FaqsEntity;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 public class ResourcesService implements ResourcesPort {
@@ -75,9 +76,5 @@ public class ResourcesService implements ResourcesPort {
         return jsonLoaderPort.getWidgetSubscription(language, transactionId);
     }
 
-    @Override
-    public List<PlanAcquisitionModel> getPlansAcquisition(String language, String transactionId) {
-        return jsonLoaderPort.getPlansAcquisition(language, transactionId);
-    }
 
 }

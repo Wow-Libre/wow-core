@@ -22,6 +22,8 @@ public class Constants {
     public static final String PARAM_PROVIDER_ID = "provider_id";
     public static final String PARAM_ACCOUNT_ID = "account_id";
     public static final String PARAM_SERVER_ID = "server_id";
+    public static final String PARAM_REALM_ID = "realm_id";
+
     public static final String PARAM_CHARACTER_ID = "character_id";
 
     public static final String PATH_VARIABLE_FRIEND_ID = "friend_id";
@@ -30,6 +32,6 @@ public class Constants {
     public static class Errors {
         public static final String CONSTANT_GENERIC_ERROR_MESSAGE = "An unexpected error has occurred and it was not " +
                 "possible to authenticate to the system, please try again later";
-      
+
     }
 }

@@ -1,8 +1,11 @@
 package com.register.wowlibre.domain.port.out;
 
-import com.register.wowlibre.domain.model.resources.*;
+import com.register.wowlibre.domain.model.resources.BenefitModel;
+import com.register.wowlibre.domain.model.resources.CountryModel;
+import com.register.wowlibre.domain.model.resources.PlanModel;
+import com.register.wowlibre.domain.model.resources.WidgetHomeSubscriptionModel;
 
-import java.util.*;
+import java.util.List;
 
 public interface JsonLoaderPort {
 
@@ -14,5 +17,4 @@ public interface JsonLoaderPort {
 
     WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId);
 
-    List<PlanAcquisitionModel> getPlansAcquisition(String language, String transactionId);
 }

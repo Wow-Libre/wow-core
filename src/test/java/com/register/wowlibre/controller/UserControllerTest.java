@@ -38,7 +38,7 @@ class UserControllerTest extends BaseTest {
 
     @Test
     void detail_shouldReturnUserDetails() {
-        Long userId = 1L;
+        long userId = 1L;
         var mockUser = createSampleUserEntity();
         when(userPort.findByUserId(userId, TRANSACTION_ID)).thenReturn(Optional.of(mockUser));
         ResponseEntity<GenericResponse<UserDetailDto>> response =
@@ -50,7 +50,7 @@ class UserControllerTest extends BaseTest {
 
     @Test
     void detail_shouldReturnNull() {
-        Long userId = 1L;
+        long userId = 1L;
         when(userPort.findByUserId(userId, TRANSACTION_ID)).thenReturn(Optional.empty());
         ResponseEntity<GenericResponse<UserDetailDto>> response =
                 userController.detail(TRANSACTION_ID, userId);
@@ -119,7 +119,7 @@ class UserControllerTest extends BaseTest {
 
     @Test
     void validateEmailCodeForAccount_shouldCallPort() {
-        Long userId = 1L;
+        long userId = 1L;
         String code = "abc123";
 
         ResponseEntity<GenericResponse<Void>> response =
@@ -165,7 +165,7 @@ class UserControllerTest extends BaseTest {
 
     @Test
     void newPassword_shouldCallPort() {
-        Long userId = 1L;
+        long userId = 1L;
         ChangePasswordUserDto dto = new ChangePasswordUserDto();
         dto.setPassword("oldPass");
         dto.setNewPassword("newPass");
