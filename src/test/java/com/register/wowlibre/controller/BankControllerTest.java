@@ -36,7 +36,7 @@ class BankControllerTest {
     @Test
     void shouldRequestLoan() {
         // Arrange
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = "tx-bank-001";
         BankRequestDto requestDto = new BankRequestDto();
         requestDto.setAccountId(101L);
@@ -59,7 +59,7 @@ class BankControllerTest {
     @Test
     void shouldRequestLoanWithNullTransactionId() {
         // Arrange
-        Long userId = 1L;
+        long userId = 1L;
         String transactionId = null;
         BankRequestDto requestDto = new BankRequestDto();
         requestDto.setAccountId(101L);

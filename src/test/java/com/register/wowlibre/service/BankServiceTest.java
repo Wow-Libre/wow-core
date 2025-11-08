@@ -56,11 +56,11 @@ class BankServiceTest extends BaseTest {
 
     @Test
     void applyForLoan_success_createsLoan() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
-        Long realmId = 1L;
-        Long planId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
+        long realmId = 1L;
+        long planId = 1L;
         String transactionId = "tx-loan-001";
         String referenceSerial = "REF-123";
 
@@ -94,11 +94,11 @@ class BankServiceTest extends BaseTest {
 
     @Test
     void applyForLoan_realmNotAvailable_throwsException() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
-        Long realmId = 1L;
-        Long planId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
+        long realmId = 1L;
+        long planId = 1L;
         String transactionId = "tx-loan-002";
 
         RealmEntity realm = createRealmEntity(realmId, false);
@@ -119,11 +119,11 @@ class BankServiceTest extends BaseTest {
 
     @Test
     void applyForLoan_realmServicesNotConfigured_throwsException() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
-        Long realmId = 1L;
-        Long planId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
+        long realmId = 1L;
+        long planId = 1L;
         String transactionId = "tx-loan-003";
 
         RealmEntity realm = createRealmEntity(realmId, true);
@@ -147,11 +147,11 @@ class BankServiceTest extends BaseTest {
 
     @Test
     void applyForLoan_noMoneyAvailable_throwsException() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
-        Long realmId = 1L;
-        Long planId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
+        long realmId = 1L;
+        long planId = 1L;
         String transactionId = "tx-loan-004";
 
         RealmEntity realm = createRealmEntity(realmId, true);
@@ -177,11 +177,11 @@ class BankServiceTest extends BaseTest {
 
     @Test
     void applyForLoan_planNotFound_throwsException() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
-        Long realmId = 1L;
-        Long planId = 999L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
+        long realmId = 1L;
+        long planId = 999L;
         String transactionId = "tx-loan-005";
 
         RealmEntity realm = createRealmEntity(realmId, true);
@@ -211,11 +211,11 @@ class BankServiceTest extends BaseTest {
 
     @Test
     void applyForLoan_userAlreadyHasActiveLoan_throwsException() {
-        Long userId = 1L;
-        Long accountId = 101L;
-        Long characterId = 201L;
-        Long realmId = 1L;
-        Long planId = 1L;
+        long userId = 1L;
+        long accountId = 101L;
+        long characterId = 201L;
+        long realmId = 1L;
+        long planId = 1L;
         String transactionId = "tx-loan-006";
 
         RealmEntity realm = createRealmEntity(realmId, true);

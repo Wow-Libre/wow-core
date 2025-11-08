@@ -230,7 +230,7 @@ class NewsServiceTest extends BaseTest {
 
     @Test
     void createNewsSection_shouldThrowExceptionWhenNewsNotFound() {
-        Long newsId = 999L;
+        long newsId = 999L;
         String transactionId = "tx-news-010";
         CreateNewsSectionDto createNewsSectionDto = new CreateNewsSectionDto();
 
