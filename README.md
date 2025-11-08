@@ -9,6 +9,9 @@
 [![MySQL](https://img.shields.io/badge/MySQL-8.0+-blue.svg)](https://www.mysql.com/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Maven](https://img.shields.io/badge/Maven-3.6+-red.svg)](https://maven.apache.org/)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Wow-Libre_wow-core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Wow-Libre_wow-core&branch=master)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Wow-Libre_wow-core&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Wow-Libre_wow-core&branch=master)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Wow-Libre_wow-core&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Wow-Libre_wow-core&branch=master)
 
 *API REST robusta y escalable para la administración de servidores WoW privados*
 
@@ -342,6 +345,22 @@ tail -f logs/app.log
 - **Maven** - Gestión de dependencias
 - **Docker** - Contenedores
 - **New Relic** - Monitoreo (opcional)
+- **SonarCloud** - Análisis de calidad de código
+
+### 🔍 Calidad de Código
+
+Este proyecto mantiene altos estándares de calidad mediante análisis continuo con [SonarCloud](https://sonarcloud.io/summary/new_code?id=Wow-Libre_wow-core&branch=master):
+
+- ✅ **Quality Gate**: Siempre en estado verde
+- ✅ **Cobertura de Tests**: Monitoreada y mejorada continuamente
+- ✅ **Code Smells**: Identificados y corregidos proactivamente
+- ✅ **Vulnerabilidades**: Escaneadas y resueltas inmediatamente
+- ✅ **Mantenibilidad**: Código limpio y fácil de mantener
+- ✅ **Duplicación**: Minimizada para mejor mantenimiento
+
+**Nuestro compromiso:** Mantenemos el código en excelente estado, siguiendo las mejores prácticas y estándares de la industria. Cada commit es analizado automáticamente para asegurar la calidad.
+
+🔗 [Ver análisis completo en SonarCloud](https://sonarcloud.io/summary/new_code?id=Wow-Libre_wow-core&branch=master)
 
 ---
 
