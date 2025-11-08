@@ -4,7 +4,7 @@ import lombok.*;
 
 @AllArgsConstructor
 @Data
-public class ServerAvailableBankDto {
+public class RealmAvailableBankDto {
     private Long id;
     private String name;
 }

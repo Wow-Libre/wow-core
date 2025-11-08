@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.*;
 
 import java.util.*;
 
-public interface ServerServicesRepository extends CrudRepository<RealmServicesEntity, Long> {
+public interface RealmServicesRepository extends CrudRepository<RealmServicesEntity, Long> {
     List<RealmServicesEntity> findByRealmId_Id(Long realmId);
 
     Optional<RealmServicesEntity> findByNameAndRealmId_Id(RealmServices name, Long realmId_id);

@@ -1,14 +1,17 @@
 package com.register.wowlibre.application.services.realm_services;
 
-import com.register.wowlibre.domain.enums.*;
-import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.port.in.realm_services.*;
-import com.register.wowlibre.domain.port.out.realm_services.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.domain.enums.RealmServices;
+import com.register.wowlibre.domain.exception.InternalException;
+import com.register.wowlibre.domain.model.RealmServicesModel;
+import com.register.wowlibre.domain.port.in.realm_services.RealmServicesPort;
+import com.register.wowlibre.domain.port.out.realm_services.ObtainRealmServices;
+import com.register.wowlibre.domain.port.out.realm_services.SaveRealmServices;
+import com.register.wowlibre.infrastructure.entities.RealmEntity;
+import com.register.wowlibre.infrastructure.entities.RealmServicesEntity;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RealmServicesService implements RealmServicesPort {
@@ -21,18 +24,21 @@ public class RealmServicesService implements RealmServicesPort {
     }
 
     @Override
-    public List<RealmServicesModel> findByRealmId(Long serverId, String transactionId) {
-        return obtainRealmServices.findByRealmId(serverId, transactionId).stream().map(this::mapToModel).toList();
+    public List<RealmServicesModel> findByRealmId(Long realmId, String transactionId) {
+        return obtainRealmServices.findByRealmId(realmId, transactionId).stream()
+                .map(this::mapToModel).toList();
     }
 
     @Override
-    public RealmServicesModel findByNameAndServerId(RealmServices name, Long serverId, String transactionId) {
-        return obtainRealmServices.findByNameAndRealmId(name, serverId, transactionId).map(this::mapToModel).orElse(null);
+    public RealmServicesModel findByNameAndServerId(RealmServices name, Long realmId, String transactionId) {
+        return obtainRealmServices.findByNameAndRealmId(name, realmId, transactionId)
+                .map(this::mapToModel).orElse(null);
     }
 
     @Override
     public List<RealmServicesModel> findByServersAvailableLoa(String transactionId) {
-        return obtainRealmServices.findByServersAvailableRequestLoa(transactionId).stream().map(this::mapToModel).toList();
+        return obtainRealmServices.findByServersAvailableRequestLoa(transactionId).stream()
+                .map(this::mapToModel).toList();
     }
 
     @Override
@@ -42,6 +48,7 @@ public class RealmServicesService implements RealmServicesPort {
         if (updateAmount.isEmpty()) {
             throw new InternalException("The available money from the loan limit could not be updated", transactionId);
         }
+
         RealmServicesEntity update = updateAmount.get();
         update.setAmount(amount);
         saveRealmServices.save(update, transactionId);

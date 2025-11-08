@@ -1,11 +1,11 @@
 package com.register.wowlibre.domain.port.in.bank;
 
-import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.RealmAvailableBankDto;
 
-import java.util.*;
+import java.util.List;
 
 public interface BankPort {
-    void applyForLoan(Long userId, Long accountId, Long characterId, Long serverId, Long planId, String transactionId);
+    void applyForLoan(Long userId, Long accountId, Long characterId, Long realmId, Long planId, String transactionId);
 
-    List<ServerAvailableBankDto> serverAvailableLoan(String transactionId);
+    List<RealmAvailableBankDto> getAvailableLoansByRealm(String transactionId);
 }
