@@ -305,16 +305,52 @@ tail -f logs/app.log
 
 ### 📖 Guías Disponibles
 
-- 📘 [Guía de Instalación Completa](wiki/Setup-Guide) - Configuración paso a paso
-- 🗄️ [Guía de Scripts SQL](wiki/Database-Scripts-Guide) - Configuración de base de datos
-- 🔧 [Variables de Entorno](wiki/Setup-Guide#variables-de-entorno) - Configuración completa
-- 🐳 [Docker Setup](wiki/Setup-Guide#instalación-con-docker) - Despliegue con contenedores
+- 📘 [Guía de Instalación Completa](https://github.com/Wow-Libre/wow-core/wiki/Instalación-(español)) - Configuración paso a paso
 
 ### 🔗 Enlaces Útiles
 
-- **Swagger UI**: `http://localhost:8091/core/swagger-ui/index.html`
-- **Health Check**: `http://localhost:8091/core/actuator/health`
-- **API Base**: `http://localhost:8091/core/api`
+Una vez que la aplicación esté corriendo, puedes acceder a estos endpoints:
+
+#### 📖 Swagger UI - Documentación Interactiva de la API
+```
+http://localhost:8091/core/swagger-ui/index.html
+```
+- **¿Qué es?** Interfaz web interactiva para explorar y probar todos los endpoints de la API
+- **¿Para qué sirve?** 
+  - Ver toda la documentación de la API en un solo lugar
+  - Probar endpoints directamente desde el navegador
+  - Ver ejemplos de requests y responses
+  - Entender los modelos de datos y validaciones
+- **Cuándo usarlo:** Ideal para desarrolladores que quieren entender o probar la API sin usar Postman o curl
+
+#### ❤️ Health Check - Estado de la Aplicación
+```
+http://localhost:8091/core/actuator/health
+```
+- **¿Qué es?** Endpoint de Spring Boot Actuator que muestra el estado de salud de la aplicación
+- **¿Para qué sirve?**
+  - Verificar que la aplicación esté corriendo correctamente
+  - Comprobar la conexión a la base de datos
+  - Monitorear el estado general del sistema
+  - Útil para sistemas de monitoreo y alertas
+- **Respuesta esperada:** `{"status":"UP"}` cuando todo está bien
+- **Cuándo usarlo:** Para verificar rápidamente si la app está funcionando
+
+#### 🌐 API Base - Punto de Entrada Principal
+```
+http://localhost:8091/core/api
+```
+- **¿Qué es?** El prefijo base para todos los endpoints de la API REST
+- **¿Para qué sirve?**
+  - Todos los endpoints de la API comienzan con este prefijo
+  - Ejemplos de endpoints:
+    - `POST /api/account/create` - Crear cuenta
+    - `GET /api/bank/available/servers` - Servidores disponibles para préstamos
+    - `GET /api/realm` - Listar realms
+    - `POST /api/auth/login` - Autenticación
+- **Cuándo usarlo:** Como referencia al construir clientes o hacer integraciones
+
+> 💡 **Tip:** Si cambias el puerto en `CORE_SERVER_PORT`, reemplaza `8091` con tu puerto configurado.
 
 ---
 
