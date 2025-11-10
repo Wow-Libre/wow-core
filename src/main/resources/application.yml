@@ -66,7 +66,21 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health,metrics,prometheus
+  metrics:
+    export:
+      datadog:
+        api-key: ${DD_API_KEY:}
+        application-key: ${DD_APP_KEY:}
+        uri: ${DD_SITE:https://api.datadoghq.com}
+        enabled: ${DD_ENABLED:false}
+        step: 10s
+        descriptions: true
+        host-tag: instance
+        tags:
+          - env:${DD_ENV:local}
+          - service:wow-libre-core
+          - version:0.0.1
 ---
 spring:
   config:
@@ -108,3 +122,22 @@ application:
       expiration: 604800000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+  metrics:
+    export:
+      datadog:
+        api-key: ${DD_API_KEY:}
+        application-key: ${DD_APP_KEY:}
+        uri: ${DD_SITE:https://api.datadoghq.com}
+        enabled: ${DD_ENABLED:true}
+        step: 10s
+        descriptions: true
+        host-tag: instance
+        tags:
+          - env:${DD_ENV:prod}
+          - service:wow-libre-core
+          - version:0.0.1
