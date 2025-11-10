@@ -6,11 +6,9 @@ spring:
     property-naming-strategy: SNAKE_CASE
   profiles:
     active: local
-  # Excluir auto-configuración de Datadog por defecto
-  # Se puede habilitar en producción si es necesario
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.actuate.autoconfigure.metrics.export.datadog.DatadogMetricsExportAutoConfiguration
+  # Permitir sobrescritura de beans para resolver conflictos de auto-configuración
+  main:
+    allow-bean-definition-overriding: true
   freemarker:
     template-loader-path: classpath:/templates/
   messages:
@@ -72,18 +70,15 @@ management:
     web:
       exposure:
         include: health,metrics,prometheus
-  metrics:
-    export:
-      datadog:
-        # API Key es OBLIGATORIA para enviar métricas
-        # Puedes configurarla como variable de entorno DD_API_KEY o usar el valor por defecto
-        api-key: ${DD_API_KEY:434a9c5c-1158-4f4c-a615-7f0727a6b966}
+  datadog:
+    metrics:
+      export:
+        api-key: 434a9c5c-1158-4f4c-a615-7f0727a6b966
         application-key: ${DD_APP_KEY:}
         uri: ${DD_SITE:https://api.datadoghq.com}
-        # Deshabilitado por defecto - Solo se habilita si DD_ENABLED=true
-        # Para habilitar: export DD_ENABLED=true
-        enabled: ${DD_ENABLED:false}
-        step: 10s
+        # Habilitado por defecto - Para deshabilitar: export DD_ENABLED=false
+        enabled: ${DD_ENABLED:true}
+        step: 20s
         descriptions: true
         host-tag: instance
         tags:
@@ -143,9 +138,9 @@ management:
   metrics:
     export:
       datadog:
-        # API Key es OBLIGATORIA para enviar métricas
-        # En producción, DD_API_KEY debe estar configurada como variable de entorno
-        api-key: ${DD_API_KEY:placeholder-key-when-disabled}
+        # API Key - En producción, se recomienda usar variable de entorno DD_API_KEY
+        # Valor por defecto: 434a9c5c-1158-4f4c-a615-7f0727a6b966
+        api-key: 434a9c5c-1158-4f4c-a615-7f0727a6b966
         application-key: ${DD_APP_KEY:}
         uri: ${DD_SITE:https://api.datadoghq.com}
         # Habilitado por defecto en producción - Asegúrate de tener DD_API_KEY configurada
