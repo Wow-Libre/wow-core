@@ -35,7 +35,7 @@ spring:
       pool-name: HikariPoolCore
     url: ${DB_CORE_URL:jdbc:mysql://localhost:3306/platform}
     username: ${DB_CORE_USERNAME:root}
-    password: ${DB_CORE_PASSWORD:sebastian}
+    password: ${DB_CORE_PASSWORD:Wowlibre96@@}
     driver-class-name: com.mysql.cj.jdbc.Driver
   mail:
     host: ${CORE_GOOGLE_HOST:smtp.gmail.com}
@@ -69,22 +69,16 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,metrics,prometheus
+        include: health,metrics
   datadog:
     metrics:
       export:
-        api-key: 434a9c5c-1158-4f4c-a615-7f0727a6b966
-        application-key: ${DD_APP_KEY:}
+        api-key: d8bdf7a0104144c94d2c066c8147c557
         uri: ${DD_SITE:https://api.datadoghq.com}
-        # Habilitado por defecto - Para deshabilitar: export DD_ENABLED=false
-        enabled: ${DD_ENABLED:true}
-        step: 20s
-        descriptions: true
-        host-tag: instance
-        tags:
-          - env:${DD_ENV:local}
-          - service:wow-libre-core
-          - version:0.0.1
+        step: 10s
+  metrics:
+    tags:
+      application: "wow-core"
 ---
 spring:
   config:

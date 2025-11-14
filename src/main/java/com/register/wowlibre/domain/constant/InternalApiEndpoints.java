@@ -1,7 +1,6 @@
 package com.register.wowlibre.domain.constant;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class InternalApiEndpoints {
 
@@ -51,7 +50,8 @@ public class InternalApiEndpoints {
 
     // Banners endpoints
     private static final String[] BANNERS_ENDPOINTS = {
-            "/api/banners"
+            "/api/banners",
+            "/actuator/**"
     };
 
     /**
