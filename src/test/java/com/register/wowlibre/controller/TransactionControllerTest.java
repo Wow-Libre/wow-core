@@ -1,9 +1,9 @@
 package com.register.wowlibre.controller;
 
-import com.register.wowlibre.domain.dto.CreateTransactionItemsDto;
-import com.register.wowlibre.domain.dto.SubscriptionBenefitsDto;
-import com.register.wowlibre.domain.dto.PromotionsDto;
 import com.register.wowlibre.domain.dto.ClaimPromoDto;
+import com.register.wowlibre.domain.dto.CreateTransactionItemsDto;
+import com.register.wowlibre.domain.dto.PromotionsDto;
+import com.register.wowlibre.domain.dto.SubscriptionBenefitsDto;
 import com.register.wowlibre.domain.port.in.transaction.TransactionPort;
 import com.register.wowlibre.domain.shared.GenericResponse;
 import com.register.wowlibre.infrastructure.controller.TransactionController;
@@ -59,7 +59,7 @@ class TransactionControllerTest {
         SubscriptionBenefitsDto request = new SubscriptionBenefitsDto(1L, 1L, 101L, 201L,
                 List.of(), "MONTHLY", 100.0);
 
-        ResponseEntity<GenericResponse<Void>> response = controller.sendSubscriptionBenefits(transactionId, request);
+        ResponseEntity<GenericResponse<Void>> response = controller.sendSubscriptionBenefits(transactionId, "", request);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
         assertThat(response.getBody()).isNotNull();

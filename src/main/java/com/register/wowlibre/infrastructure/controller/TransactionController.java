@@ -1,13 +1,20 @@
 package com.register.wowlibre.infrastructure.controller;
 
-import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.domain.port.in.transaction.*;
-import com.register.wowlibre.domain.shared.*;
-import jakarta.validation.*;
-import org.springframework.http.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.register.wowlibre.domain.dto.ClaimPromoDto;
+import com.register.wowlibre.domain.dto.CreateTransactionItemsDto;
+import com.register.wowlibre.domain.dto.PromotionsDto;
+import com.register.wowlibre.domain.dto.SubscriptionBenefitsDto;
+import com.register.wowlibre.domain.port.in.transaction.TransactionPort;
+import com.register.wowlibre.domain.shared.GenericResponse;
+import com.register.wowlibre.domain.shared.GenericResponseBuilder;
+import com.register.wowlibre.infrastructure.util.SignatureService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Locale;
 
 import static com.register.wowlibre.domain.constant.Constants.*;
 
@@ -16,9 +23,13 @@ import static com.register.wowlibre.domain.constant.Constants.*;
 public class TransactionController {
 
     private final TransactionPort transactionPort;
+    private final SignatureService signatureService;
+    private final ObjectMapper objectMapper;
 
-    public TransactionController(TransactionPort transactionPort) {
+    public TransactionController(TransactionPort transactionPort, SignatureService signatureService, ObjectMapper objectMapper) {
         this.transactionPort = transactionPort;
+        this.signatureService = signatureService;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping("/purchase")
@@ -37,14 +48,27 @@ public class TransactionController {
     @PostMapping("/subscription-benefits")
     public ResponseEntity<GenericResponse<Void>> sendSubscriptionBenefits(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_SIGNATURE) final String signature,
             @RequestBody @Valid SubscriptionBenefitsDto request) {
 
-        transactionPort.sendSubscriptionBenefits(request.getServerId(), request.getUserId(), request.getAccountId(),
-                request.getCharacterId(),
-                request.getItems(), request.getBenefitType(), request.getAmount(), transactionId);
+        try {
+            String requestBodyJson = objectMapper.writeValueAsString(request);
+            
+            if (!signatureService.validateSignature(requestBodyJson, signature)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+            }  
+            
+            transactionPort.sendSubscriptionBenefits(request.getServerId(), request.getUserId(), request.getAccountId(),
+            request.getCharacterId(),
+            request.getItems(), request.getBenefitType(), request.getAmount(), transactionId);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+        }
     }
 
     @GetMapping("/promotions")

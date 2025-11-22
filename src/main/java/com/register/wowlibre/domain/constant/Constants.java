@@ -19,6 +19,7 @@ public class Constants {
     /**
      * PARAMS CUSTOM
      **/
+    public static final String HEADER_SIGNATURE = "X-Signature";
     public static final String PARAM_PROVIDER_ID = "provider_id";
     public static final String PARAM_ACCOUNT_ID = "account_id";
     public static final String PARAM_SERVER_ID = "server_id";
