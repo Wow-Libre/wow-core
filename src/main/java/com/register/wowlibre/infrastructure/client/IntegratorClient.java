@@ -64,7 +64,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/characters", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/characters", host))
                 .queryParam(PARAM_ACCOUNT_ID, accountId)
                 .toUriString();
 
@@ -79,14 +79,12 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [characters] Client/Server Error: {}. The request failed with a client " +
-                            "or realm error. " +
-                            "HTTP Status: {}, Response Body: {}",
+                            "or realm error. HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [characters] Unexpected Error: {}. An unexpected error occurred during " +
-                            "the transaction with ID: {}.",
-                    e.getMessage(), transactionId, e);
+                    "the transaction with ID: {}.", e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
 
@@ -101,7 +99,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/account/%s", host, accountId))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/account/%s", host, accountId))
                 .toUriString();
 
         try {
@@ -114,12 +112,13 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("Client/Server Error: {}. The request failed with a client or realm error. " +
-                            "HTTP Status: {}, Response Body: {}",
-                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            LOGGER.error("[IntegratorClient] [account]  Client/Server Error: {}. The request failed with a client or " +
+                            "realm error. HTTP Status: {}, Response Body: {}", e.getMessage(),
+                    e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
         } catch (Exception e) {
-            LOGGER.error("Unexpected Error: {}. An unexpected error occurred during the transaction with ID: {}.",
+            LOGGER.error("[IntegratorClient] [account] Unexpected Error: {}. An unexpected error occurred during the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -135,7 +134,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/mails/%s", host, characterId))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/mails/%s", host, characterId))
                 .toUriString();
 
         try {
@@ -148,8 +147,8 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("Client/Server Error: {}. The request failed with a client or realm error. " +
-                            "HTTP Status: {}, Response Body: {}",
+            LOGGER.error("[IntegratorClient] [mails] Client/Server Error: {}. The request failed with a client or " +
+                            "realm error. HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
         } catch (Exception e) {
@@ -170,7 +169,8 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/social/%s/%s", host, characterId, friendId))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/social/%s/%s", host, characterId,
+                        friendId))
                 .queryParam("account_id", accountId)
                 .queryParam("user_id", userId)
                 .toUriString();
@@ -185,13 +185,13 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("Client/Server Error: {}. The request failed with a client or realm error. " +
-                            "HTTP Status: {}, Response Body: {}",
+            LOGGER.error("[IntegratorClient] [deleteFriend] Client/Server Error: {}. The request failed with a client" +
+                            " or realm error. HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
         } catch (Exception e) {
-            LOGGER.error("Unexpected Error: {}. An unexpected error occurred during the transaction with ID: {}.",
-                    e.getMessage(), transactionId, e);
+            LOGGER.error("[IntegratorClient] [deleteFriend] Unexpected Error: {}. An unexpected error occurred during" +
+                    " the transaction with ID: {}.", e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
 
@@ -206,7 +206,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/social/%s/friends", host, characterId))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/social/%s/friends", host, characterId))
                 .toUriString();
 
         try {
@@ -220,13 +220,13 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("Client/Server Error: {}. The request failed with a client or realm error. " +
-                            "HTTP Status: {}, Response Body: {}",
+            LOGGER.error("[IntegratorClient] [friends]  Client/Server Error: {}. The request failed with a client or " +
+                            "realm error. HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
         } catch (Exception e) {
-            LOGGER.error("Unexpected Error: {}. An unexpected error occurred during the transaction with ID: {}.",
-                    e.getMessage(), transactionId, e);
+            LOGGER.error("[IntegratorClient] [friends] Unexpected Error: {}. An unexpected error occurred during the " +
+                    "transaction with ID: {}.", e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
 
@@ -244,7 +244,7 @@ public class IntegratorClient {
                 userId, expansionId,
                 salt), headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/account/change-password", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/account/change-password", host))
                 .toUriString();
 
         try {
@@ -258,14 +258,15 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("[changePasswordGame] Client/Server Error: {}. The request failed with a client or realm " +
+            LOGGER.error("[IntegratorClient] [changePasswordGame] Client/Server Error: {}. The request failed with a " +
+                            "client or realm " +
                             "error. " +
                             "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
-            LOGGER.error("Unexpected Error: {}. An unexpected error occurred during the transaction with ID: {}.",
-                    e.getMessage(), transactionId, e);
+            LOGGER.error("[IntegratorClient] [changePasswordGame]  Unexpected Error: {}. An unexpected error occurred" +
+                    " during the transaction with ID: {}.", e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
 
@@ -281,7 +282,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/professions", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/professions", host))
                 .queryParam(PARAM_ACCOUNT_ID, accountId)
                 .queryParam("character_id", characterId)
                 .toUriString();
@@ -297,9 +298,8 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("Client/Server Error: {}. The request failed with a client or realm error. " +
-                            "HTTP Status: {}, Response Body: {}",
-                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            LOGGER.error("[IntegratorClient] [professions] Client/Server Error: {}.  HTTP Status: {}, Response Body: " +
+                    "{}", e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
         } catch (Exception e) {
             LOGGER.error("Unexpected Error: {}. An unexpected error occurred during the transaction with ID: {}.",
@@ -311,8 +311,8 @@ public class IntegratorClient {
     }
 
 
-    public GenericResponse<Void> sendLevel(String host, String jwt, SendLevelRequest sendLevelRequest,
-                                           String transactionId) {
+    public void sendLevel(String host, String jwt, SendLevelRequest sendLevelRequest,
+                          String transactionId) {
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -320,7 +320,7 @@ public class IntegratorClient {
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
         HttpEntity<SendLevelRequest> entity = new HttpEntity<>(sendLevelRequest, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/social/send/level", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/social/send/level", host))
                 .toUriString();
 
         try {
@@ -330,7 +330,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return response.getBody();
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -356,7 +356,7 @@ public class IntegratorClient {
 
         HttpEntity<SendMoneyRequest> entity = new HttpEntity<>(sendMoneyRequest, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/social/send/money", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/social/send/money", host))
                 .toUriString();
 
         try {
@@ -391,7 +391,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/characters/loan/bank", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/characters/loan/bank", host))
                 .queryParam(PARAM_ACCOUNT_ID, accountId)
                 .queryParam("time", 7200) //2horas
                 .queryParam("level", 80)
@@ -428,7 +428,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/guilds", host))
                 .queryParam("size", size)
                 .queryParam("page", page)
                 .queryParam("search", search)
@@ -467,7 +467,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds/%s", host, guid))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/guilds/%s", host, guid))
                 .toUriString();
 
         try {
@@ -504,7 +504,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds/attach", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/guilds/attach", host))
                 .queryParam("account_id", accountId)
                 .queryParam("guild_id", guildId)
                 .queryParam("character_id", characterId)
@@ -545,7 +545,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds/member", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/guilds/member", host))
                 .queryParam("account_id", accountId)
                 .queryParam("character_id", characterId)
                 .toUriString();
@@ -561,7 +561,7 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("[IntegratorClient] [attachGuild] Client/Server Error: {}. Error with realm client getting " +
+            LOGGER.error("[IntegratorClient] [guildMember] Client/Server Error: {}. Error with realm client getting " +
                             "associated guilds. " +
                             "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
@@ -586,7 +586,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds/member", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/guilds/member", host))
                 .queryParam("user_id", userId)
                 .queryParam("account_id", accountId)
                 .queryParam("character_id", characterId)
@@ -620,8 +620,8 @@ public class IntegratorClient {
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
 
-    public GenericResponse<Void> sendCommand(String host, String jwt, String message, byte[] salt,
-                                             String transactionId) {
+    public void sendCommand(String host, String jwt, String message, byte[] salt,
+                            String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -629,7 +629,7 @@ public class IntegratorClient {
         ExecuteCommandRequest request = new ExecuteCommandRequest(message, salt);
         HttpEntity<ExecuteCommandRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/commands", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/commands", host))
                 .toUriString();
 
         try {
@@ -638,7 +638,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody());
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -667,7 +667,7 @@ public class IntegratorClient {
         BankCollectGoldRequest request = new BankCollectGoldRequest(userId, moneyToPay);
         HttpEntity<BankCollectGoldRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/bank/payment", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/bank/payment", host))
                 .toUriString();
 
         try {
@@ -699,8 +699,8 @@ public class IntegratorClient {
     }
 
 
-    public GenericResponse<Void> purchase(String host, String jwt, Long userId, Long accountId, String reference,
-                                          List<ItemQuantityModel> items, Double amount, String transactionId) {
+    public void purchase(String host, String jwt, Long userId, Long accountId, String reference,
+                         List<ItemQuantityModel> items, Double amount, String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -710,7 +710,7 @@ public class IntegratorClient {
                 amount);
         HttpEntity<CreateTransactionItemsRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/purchase", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/transaction/purchase", host))
                 .toUriString();
 
         try {
@@ -719,7 +719,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody());
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -743,9 +743,9 @@ public class IntegratorClient {
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
 
-    public GenericResponse<Void> updateGuild(String host, String jwt, Long characterId, Long accountId,
-                                             boolean isPublic,
-                                             boolean multiFaction, String discord, String transactionId) {
+    public void updateGuild(String host, String jwt, Long characterId, Long accountId,
+                            boolean isPublic,
+                            boolean multiFaction, String discord, String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -754,7 +754,7 @@ public class IntegratorClient {
         UpdateGuildRequest request = new UpdateGuildRequest(discord, isPublic, multiFaction, accountId, characterId);
         HttpEntity<UpdateGuildRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/guilds/edit", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/guilds/edit", host))
                 .toUriString();
 
         try {
@@ -763,7 +763,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody());
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -788,8 +788,8 @@ public class IntegratorClient {
     }
 
 
-    public GenericResponse<Void> sendAnnouncement(String host, String jwt, AnnouncementRequest request,
-                                                  String transactionId) {
+    public void sendAnnouncement(String host, String jwt, AnnouncementRequest request,
+                                 String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -797,7 +797,7 @@ public class IntegratorClient {
 
         HttpEntity<AnnouncementRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/professions/announcement", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/professions/announcement", host))
                 .toUriString();
 
         try {
@@ -806,7 +806,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody());
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -831,8 +831,8 @@ public class IntegratorClient {
     }
 
 
-    public GenericResponse<Void> sendBenefitsPremium(String host, String jwt, SubscriptionBenefitsRequest request,
-                                                     String transactionId) {
+    public void sendBenefitsPremium(String host, String jwt, SubscriptionBenefitsRequest request,
+                                    String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -841,7 +841,7 @@ public class IntegratorClient {
 
         HttpEntity<SubscriptionBenefitsRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/subscription-benefits", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/transaction/subscription-benefits", host))
                 .toUriString();
 
         try {
@@ -850,7 +850,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody());
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -875,8 +875,8 @@ public class IntegratorClient {
     }
 
 
-    public GenericResponse<Void> sendPromo(String host, String jwt, ClaimPromoRequest request,
-                                           String transactionId) {
+    public void sendPromo(String host, String jwt, ClaimPromoRequest request,
+                          String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -885,7 +885,7 @@ public class IntegratorClient {
 
         HttpEntity<ClaimPromoRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/claim-promotions", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/transaction/claim-promotions", host))
                 .toUriString();
 
         try {
@@ -894,7 +894,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody());
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -919,8 +919,8 @@ public class IntegratorClient {
     }
 
 
-    public GenericResponse<Void> sendGuildBenefits(String host, String jwt, BenefitsGuildRequest request,
-                                                   String transactionId) {
+    public void sendGuildBenefits(String host, String jwt, BenefitsGuildRequest request,
+                                  String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -929,7 +929,7 @@ public class IntegratorClient {
 
         HttpEntity<BenefitsGuildRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/claim-guild-benefits", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/transaction/claim-guild-benefits", host))
                 .toUriString();
 
         try {
@@ -938,7 +938,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody());
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -973,7 +973,7 @@ public class IntegratorClient {
 
         HttpEntity<ClaimMachineRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/transaction/claim-machine", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/transaction/claim-machine", host))
                 .toUriString();
 
         try {
@@ -1016,7 +1016,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/account/all", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/account/all", host))
                 .queryParam("size", size)
                 .queryParam("page", page)
                 .queryParam("filter", filter)
@@ -1061,7 +1061,7 @@ public class IntegratorClient {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/dashboard/stats", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/dashboard/stats", host))
                 .toUriString();
 
 
@@ -1077,8 +1077,7 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [accountsServer]  Client/Server Error: {}. Could not get realm accounts" +
-                            "  " +
-                            "HTTP Status: {}, Response Body: {}",
+                            " HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(), transactionId);
         } catch (Exception e) {
@@ -1095,9 +1094,9 @@ public class IntegratorClient {
     }
 
 
-    public GenericResponse<Void> updateMail(String host, String jwt,
-                                            AccountUpdateMailRequest request,
-                                            String transactionId) {
+    public void updateMail(String host, String jwt,
+                           AccountUpdateMailRequest request,
+                           String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -1106,7 +1105,7 @@ public class IntegratorClient {
 
         HttpEntity<AccountUpdateMailRequest> entity = new HttpEntity<>(request, headers);
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/dashboard/account/email", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/dashboard/account/email", host))
                 .toUriString();
 
 
@@ -1117,7 +1116,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody());
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -1153,7 +1152,7 @@ public class IntegratorClient {
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/characters/%d/inventory", host,
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/characters/%d/inventory", host,
                         characterId))
                 .queryParam(PARAM_ACCOUNT_ID, accountId)
                 .toUriString();
@@ -1187,8 +1186,8 @@ public class IntegratorClient {
     }
 
 
-    public GenericResponse<Void> transferInventoryItem(String host, String jwt, TransferInventoryRequest request,
-                                                       String transactionId) {
+    public void transferInventoryItem(String host, String jwt, TransferInventoryRequest request,
+                                      String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
@@ -1198,7 +1197,7 @@ public class IntegratorClient {
         HttpEntity<TransferInventoryRequest> entity = new HttpEntity<>(request, headers);
 
 
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/characters/inventory/transfer", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/characters/inventory/transfer", host))
                 .toUriString();
 
         try {
@@ -1208,7 +1207,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody());
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -1232,15 +1231,15 @@ public class IntegratorClient {
     }
 
 
-    public GenericResponse<Void> banAccount(String host, String jwt, AccountBanRequest request,
-                                            String transactionId) {
+    public void banAccount(String host, String jwt, AccountBanRequest request,
+                           String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
         headers.set(HEADER_TRANSACTION_ID, transactionId);
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
         HttpEntity<AccountBanRequest> entity = new HttpEntity<>(request, headers);
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/dashboard/account/ban", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/dashboard/account/ban", host))
                 .toUriString();
 
         try {
@@ -1250,7 +1249,7 @@ public class IntegratorClient {
                     });
 
             if (response.getStatusCode().is2xxSuccessful()) {
-                return Objects.requireNonNull(response.getBody());
+                return;
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -1276,7 +1275,7 @@ public class IntegratorClient {
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
         HttpEntity<EmulatorConfigRequest> entity = new HttpEntity<>(request, headers);
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/dashboard/emulator-config", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/dashboard/emulator-config", host))
                 .toUriString();
 
         try {
@@ -1311,7 +1310,7 @@ public class IntegratorClient {
         headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
 
         HttpEntity<TeleportRequest> entity = new HttpEntity<>(request, headers);
-        String url = UriComponentsBuilder.fromHttpUrl(String.format("%s/api/characters/teleport", host))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/characters/teleport", host))
                 .toUriString();
 
         try {

@@ -1,20 +1,15 @@
 package com.register.wowlibre.infrastructure.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.register.wowlibre.domain.dto.ClaimPromoDto;
-import com.register.wowlibre.domain.dto.CreateTransactionItemsDto;
-import com.register.wowlibre.domain.dto.PromotionsDto;
-import com.register.wowlibre.domain.dto.SubscriptionBenefitsDto;
-import com.register.wowlibre.domain.port.in.transaction.TransactionPort;
-import com.register.wowlibre.domain.shared.GenericResponse;
-import com.register.wowlibre.domain.shared.GenericResponseBuilder;
-import com.register.wowlibre.infrastructure.util.SignatureService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.databind.*;
+import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.port.in.transaction.*;
+import com.register.wowlibre.domain.shared.*;
+import com.register.wowlibre.infrastructure.util.*;
+import jakarta.validation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Locale;
+import java.util.*;
 
 import static com.register.wowlibre.domain.constant.Constants.*;
 
@@ -26,7 +21,8 @@ public class TransactionController {
     private final SignatureService signatureService;
     private final ObjectMapper objectMapper;
 
-    public TransactionController(TransactionPort transactionPort, SignatureService signatureService, ObjectMapper objectMapper) {
+    public TransactionController(TransactionPort transactionPort, SignatureService signatureService,
+                                 ObjectMapper objectMapper) {
         this.transactionPort = transactionPort;
         this.signatureService = signatureService;
         this.objectMapper = objectMapper;
@@ -53,15 +49,15 @@ public class TransactionController {
 
         try {
             String requestBodyJson = objectMapper.writeValueAsString(request);
-            
+
             if (!signatureService.validateSignature(requestBodyJson, signature)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                return ResponseEntity.internalServerError()
                         .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
-            }  
-            
-            transactionPort.sendSubscriptionBenefits(request.getServerId(), request.getUserId(), request.getAccountId(),
-            request.getCharacterId(),
-            request.getItems(), request.getBenefitType(), request.getAmount(), transactionId);
+            }
+
+            transactionPort.sendSubscriptionBenefits(request.getRealmId(), request.getUserId(), request.getAccountId(),
+                    request.getCharacterId(),
+                    request.getItems(), request.getBenefitType(), request.getAmount(), transactionId);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new GenericResponseBuilder<Void>(transactionId).ok().build());

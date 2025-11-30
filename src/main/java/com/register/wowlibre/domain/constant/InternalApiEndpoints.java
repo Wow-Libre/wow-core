@@ -45,7 +45,8 @@ public class InternalApiEndpoints {
 
     // Transaction endpoints
     private static final String[] TRANSACTION_ENDPOINTS = {
-            "/api/transaction/purchase"
+            "/api/transaction/purchase",
+            "/api/transaction/subscription-benefits"
     };
 
     // Banners endpoints

@@ -1,16 +1,14 @@
 package com.register.wowlibre.infrastructure.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
+import javax.crypto.*;
+import javax.crypto.spec.*;
+import java.nio.charset.*;
+import java.security.*;
+import java.util.*;
 
 @Component
 public class SignatureService {
@@ -65,6 +63,7 @@ public class SignatureService {
             LOGGER.warn("Signature secret key is not configured. Cannot validate signature.");
             return false;
         }
+        LOGGER.error("[WowLibreClient] Generated signature: {} JsonBody {}", receivedSignature, message);
 
         if (message == null || receivedSignature == null) {
             return false;
