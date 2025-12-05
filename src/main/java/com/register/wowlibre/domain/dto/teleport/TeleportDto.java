@@ -27,7 +27,7 @@ public class TeleportDto {
     @NotNull
     private Double area;
     @NotNull
-    @Length(min = 5, max = 10)
+    @Length(min = 1, max = 10)
     private String faction;
     @NotNull
     private Long realmId;

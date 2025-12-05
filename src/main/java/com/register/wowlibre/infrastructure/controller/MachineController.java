@@ -51,4 +51,17 @@ public class MachineController {
                 .body(new GenericResponseBuilder<>(response, transactionId).ok().build());
     }
 
+    @PostMapping("/change-points")
+    public ResponseEntity<GenericResponse<Void>> changePoints(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestBody @Valid ChangePointsMachineDto request) {
+
+        machinePort.changePoints(userId, request.getAccountId(), request.getCharacterId(),
+                request.getRealmId(), request.getPoints(), request.getType(), transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
 }

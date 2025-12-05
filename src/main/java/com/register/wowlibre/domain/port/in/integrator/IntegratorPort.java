@@ -100,4 +100,7 @@ public interface IntegratorPort {
     Map<String, String> getConfigs(String host, String jwt, String url, boolean authServer, String transactionId);
 
     void teleport(String host, String jwt, TeleportRequest request, String transactionId);
+
+    void changeCoins(String host, String jwt, Long userId, Long accountId, Long characterId, Long coins,
+                     String transactionId);
 }

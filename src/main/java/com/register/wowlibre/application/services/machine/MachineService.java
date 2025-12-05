@@ -1,25 +1,22 @@
 package com.register.wowlibre.application.services.machine;
 
-import com.register.wowlibre.application.services.I18nService;
-import com.register.wowlibre.domain.dto.MachineDetailDto;
-import com.register.wowlibre.domain.dto.MachineDto;
-import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
-import com.register.wowlibre.domain.dto.client.ClaimMachineResponse;
-import com.register.wowlibre.domain.enums.MachineType;
-import com.register.wowlibre.domain.exception.InternalException;
-import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
-import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
-import com.register.wowlibre.domain.port.in.machine.MachinePort;
-import com.register.wowlibre.domain.port.out.machine.ObtainMachine;
-import com.register.wowlibre.domain.port.out.machine.SaveMachine;
-import com.register.wowlibre.infrastructure.entities.MachineEntity;
-import com.register.wowlibre.infrastructure.entities.RealmEntity;
-import org.springframework.stereotype.Service;
+import com.register.wowlibre.application.services.*;
+import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.account_game.*;
+import com.register.wowlibre.domain.dto.client.*;
+import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.port.in.account_validation.*;
+import com.register.wowlibre.domain.port.in.integrator.*;
+import com.register.wowlibre.domain.port.in.machine.*;
+import com.register.wowlibre.domain.port.in.vote_wallet.*;
+import com.register.wowlibre.domain.port.out.machine.*;
+import com.register.wowlibre.infrastructure.entities.*;
+import org.springframework.stereotype.*;
 
-import java.time.LocalDateTime;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
+import java.time.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 @Service
 public class MachineService implements MachinePort {
@@ -31,27 +28,33 @@ public class MachineService implements MachinePort {
     private final SaveMachine saveMachine;
     private final IntegratorPort integratorPort;
     private final I18nService i18nService;
+    private final VoteWalletPort voteWalletPort;
 
-    public MachineService(AccountValidationPort accountValidationPort, ObtainMachine obtainMachine, SaveMachine saveMachine,
-                          IntegratorPort integratorPort, I18nService i18nService) {
+    public MachineService(AccountValidationPort accountValidationPort, ObtainMachine obtainMachine,
+            SaveMachine saveMachine,
+            IntegratorPort integratorPort, I18nService i18nService, VoteWalletPort voteWalletPort) {
         this.accountValidationPort = accountValidationPort;
         this.obtainMachine = obtainMachine;
         this.saveMachine = saveMachine;
         this.integratorPort = integratorPort;
         this.i18nService = i18nService;
+        this.voteWalletPort = voteWalletPort;
     }
 
     @Override
     public MachineDto evaluate(Long userId, Long accountId, Long characterId, Long realmId, Locale locale,
-                               String transactionId) {
+            String transactionId) {
 
         AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, realmId,
                 transactionId);
 
         final RealmEntity realm = verificationDto.realm();
 
-        int[] weights = {21, 1, 5, 3, 70};
-        String[] outcomes = {"Item", "Level", "Mount", "Gold", "None"};
+        // Probabilidades de la máquina (total: 100)
+        // Item: 10%, Level: 1%, Mount: 2%, Gold: 1%, None: 86%
+        // Probabilidad de ganar: 14% | Probabilidad de perder: 86%
+        int[] weights = { 10, 1, 2, 1, 86 };
+        String[] outcomes = { "Item", "Level", "Mount", "Gold", "None" };
 
         Optional<MachineEntity> machine = obtainMachine.findByUserIdAndRealmId(userId,
                 verificationDto.realm().getId());
@@ -78,9 +81,7 @@ public class MachineService implements MachinePort {
             totalWeight += weight;
         }
 
-
         int randomNumber = ThreadLocalRandom.current().nextInt(totalWeight);
-
 
         String result = "";
         int cumulativeWeight = 0;
@@ -91,7 +92,6 @@ public class MachineService implements MachinePort {
                 break;
             }
         }
-
 
         MachineType machineType = MachineType.getName(result);
 
@@ -134,7 +134,79 @@ public class MachineService implements MachinePort {
             saveMachine.save(machineModel, transactionId);
         }
 
-        return machine.map(machineEntity ->
-                new MachineDetailDto(machineEntity.getPoints())).orElse(new MachineDetailDto(0));
+        return machine.map(machineEntity -> new MachineDetailDto(machineEntity.getPoints()))
+                .orElse(new MachineDetailDto(0));
+    }
+
+    @Override
+    public void changePoints(Long userId, Long accountId, Long characterId, Long realmId, Long points, String type,
+            String transactionId) {
+
+        AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, realmId,
+                transactionId);
+
+        final RealmEntity realm = verificationDto.realm();
+
+        ChangePoints changePoints = ChangePoints.valueOf(type);
+
+        // Obtener o crear MachineEntity
+        Optional<MachineEntity> machineDeduct = obtainMachine.findByUserIdAndRealmId(userId, realmId);
+
+        MachineEntity machineModelDeduct;
+
+        if (machineDeduct.isEmpty()) {
+            throw new InternalException("Machine points record not found for user.", transactionId);
+        }
+
+        switch (changePoints) {
+
+            case GOLD -> {
+
+                integratorPort.changeCoins(realm.getHost(), realm.getJwt(), userId, accountId, characterId,
+                        points, transactionId);
+
+                machineModelDeduct = machineDeduct.get();
+                machineModelDeduct.setPoints((int) (machineModelDeduct.getPoints() + points));
+                saveMachine.save(machineModelDeduct, transactionId);
+            }
+            case VOTING -> {
+
+                List<VoteWalletEntity> voteWallets = voteWalletPort.findByUserId(userId, transactionId);
+
+                // Calcular el total de votes disponibles
+                int totalVotesAvailable = voteWallets.stream()
+                        .filter(wallet -> wallet.getVoteBalance() != null && wallet.getVoteBalance() > 0)
+                        .mapToInt(VoteWalletEntity::getVoteBalance)
+                        .sum();
+
+                // Validar que tenga suficientes votes para convertir
+                if (totalVotesAvailable < points) {
+                    throw new InternalException("You do not have enough votes to convert. Available: "
+                            + totalVotesAvailable + ", Required: " + points, transactionId);
+                }
+
+                // Convertir votes a puntos de máquina
+                long remainingPointsToConvert = points;
+                for (VoteWalletEntity voteWallet : voteWallets) {
+                    if (remainingPointsToConvert <= 0) {
+                        break;
+                    }
+
+                    if (voteWallet.getVoteBalance() != null && voteWallet.getVoteBalance() > 0) {
+                        int votesToDeduct = (int) Math.min(voteWallet.getVoteBalance(), remainingPointsToConvert);
+                        voteWallet.setVoteBalance(voteWallet.getVoteBalance() - votesToDeduct);
+                        voteWallet.setUpdatedAt(LocalDateTime.now());
+                        voteWalletPort.saveVoteWallet(voteWallet, transactionId);
+                        remainingPointsToConvert -= votesToDeduct;
+                    }
+                }
+
+                machineModelDeduct = machineDeduct.get();
+                machineModelDeduct.setPoints((int) (machineModelDeduct.getPoints() + points));
+
+                saveMachine.save(machineModelDeduct, transactionId);
+            }
+        }
+
     }
 }

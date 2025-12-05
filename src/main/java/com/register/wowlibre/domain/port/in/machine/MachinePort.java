@@ -9,4 +9,7 @@ public interface MachinePort {
                         String transactionId);
 
     MachineDetailDto points(Long userId, Long accountId, Long realmId, String transactionId);
+
+    void changePoints(Long userId, Long accountId, Long characterId, Long realmId, Long points, String type,
+                      String transactionId);
 }

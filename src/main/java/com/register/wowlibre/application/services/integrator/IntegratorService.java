@@ -374,4 +374,12 @@ public class IntegratorService implements IntegratorPort {
         integratorClient.teleport(host, jwt, request, transactionId);
     }
 
+    @Override
+    public void changeCoins(String host, String jwt, Long userId, Long accountId, Long characterId, Long coins,
+                            String transactionId) {
+
+        integratorClient.deductTokens(host, jwt, new DeductTokensDto(userId, accountId, characterId, coins),
+                transactionId);
+    }
+
 }

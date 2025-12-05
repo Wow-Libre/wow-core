@@ -1,30 +1,38 @@
 package com.register.wowlibre.application.services.teleport;
 
-import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
-import com.register.wowlibre.domain.dto.client.TeleportRequest;
-import com.register.wowlibre.domain.dto.teleport.TeleportDto;
-import com.register.wowlibre.domain.enums.Faction;
-import com.register.wowlibre.domain.enums.WowFactionRace;
-import com.register.wowlibre.domain.exception.InternalException;
-import com.register.wowlibre.domain.model.TeleportModel;
-import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
-import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
-import com.register.wowlibre.domain.port.in.realm.RealmPort;
-import com.register.wowlibre.domain.port.in.teleport.TeleportPort;
-import com.register.wowlibre.domain.port.out.teleport.ObtainTeleport;
-import com.register.wowlibre.domain.port.out.teleport.SaveTeleport;
-import com.register.wowlibre.infrastructure.entities.RealmEntity;
-import com.register.wowlibre.infrastructure.entities.TeleportEntity;
-import org.springframework.stereotype.Service;
+import com.register.wowlibre.domain.dto.account_game.*;
+import com.register.wowlibre.domain.dto.client.*;
+import com.register.wowlibre.domain.dto.teleport.*;
+import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.account_validation.*;
+import com.register.wowlibre.domain.port.in.integrator.*;
+import com.register.wowlibre.domain.port.in.realm.*;
+import com.register.wowlibre.domain.port.in.teleport.*;
+import com.register.wowlibre.domain.port.out.teleport.*;
+import com.register.wowlibre.infrastructure.entities.*;
+import org.slf4j.*;
+import org.springframework.stereotype.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TeleportService implements TeleportPort {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TeleportService.class);
+
+    /**
+     * TELEPORT PORTS
+     **/
     private final ObtainTeleport obtainTeleport;
     private final SaveTeleport saveTeleport;
+    /**
+     * INTEGRATOR PORT
+     **/
     private final IntegratorPort integratorPort;
+    /**
+     * REALM PORT
+     **/
     private final RealmPort realmPort;
     /**
      * ACCOUNT VALIDATION PORT
@@ -55,11 +63,14 @@ public class TeleportService implements TeleportPort {
         Optional<RealmEntity> realm = realmPort.findById(teleportModel.getRealmId(), transactionId);
 
         if (realm.isEmpty()) {
-            throw new InternalException("Server Invalid Or Not Found", transactionId);
+            LOGGER.error("[TeleportService] [save] Transaction ID: {} - Realm Not Found Or Invalid", transactionId);
+            throw new InternalException("Realm invalid or not found. Please contact support.", transactionId);
         }
 
         obtainTeleport.findByNameAndRealmId(teleportModel.getName(), teleportModel.getRealmId())
                 .ifPresent(teleport -> {
+                    LOGGER.error("[TeleportService] [save] Transaction ID: {} - Teleport Already Exists",
+                            transactionId);
                     throw new InternalException("Teleport Already Exists", transactionId);
                 });
 
@@ -104,6 +115,7 @@ public class TeleportService implements TeleportPort {
         Optional<TeleportEntity> teleport = obtainTeleport.findByIdAndRealmId(id, realmId);
 
         if (teleport.isEmpty()) {
+            LOGGER.error("[TeleportService] [delete] Transaction ID: {} - Teleport Not Found", transactionId);
             throw new InternalException("Teleport Not Found", transactionId);
         }
 

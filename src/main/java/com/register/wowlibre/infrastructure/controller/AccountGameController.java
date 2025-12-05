@@ -1,22 +1,16 @@
 package com.register.wowlibre.infrastructure.controller;
 
-import com.register.wowlibre.domain.dto.account_game.AccountGameDetailDto;
-import com.register.wowlibre.domain.dto.account_game.AccountGameStatsDto;
-import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
-import com.register.wowlibre.domain.dto.account_game.CreateAccountGameDto;
-import com.register.wowlibre.domain.port.in.account_game.AccountGamePort;
-import com.register.wowlibre.domain.shared.GenericResponse;
-import com.register.wowlibre.domain.shared.GenericResponseBuilder;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.register.wowlibre.domain.dto.account_game.*;
+import com.register.wowlibre.domain.port.in.account_game.*;
+import com.register.wowlibre.domain.shared.*;
+import io.swagger.v3.oas.annotations.*;
+import io.swagger.v3.oas.annotations.responses.*;
+import io.swagger.v3.oas.annotations.tags.*;
+import jakarta.validation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 import static com.register.wowlibre.domain.constant.Constants.*;
 
@@ -30,7 +24,8 @@ public class AccountGameController {
         this.accountGamePort = accountGamePort;
     }
 
-    @Operation(summary = "Get user game accounts", description = "Retrieves paginated list of game accounts for the user")
+    @Operation(summary = "Get user game accounts", description = "Retrieves paginated list of game accounts for the " +
+            "user")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Accounts retrieved successfully"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
@@ -88,7 +83,8 @@ public class AccountGameController {
     }
 
 
-    @Operation(summary = "Get account details", description = "Retrieves detailed information for a specific game account")
+    @Operation(summary = "Get account details", description = "Retrieves detailed information for a specific game " +
+            "account")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Account details retrieved successfully"),
             @ApiResponse(responseCode = "204", description = "Account not found"),
@@ -127,7 +123,7 @@ public class AccountGameController {
         accountGamePort.desactive(ids, userId, transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<Void>(transactionId).created().build());
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
 
     @Operation(summary = "Get account statistics", description = "Retrieves statistics about user's game accounts")
