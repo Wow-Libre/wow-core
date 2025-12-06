@@ -75,13 +75,13 @@ public class RealmController {
     }
 
     @GetMapping("/vdp")
-    public ResponseEntity<GenericResponse<ServerVdpDto>> vdpServer(
+    public ResponseEntity<GenericResponse<ServerVdpDto>> vdp(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestParam(name = "name") String name,
+            @RequestParam(name = "id") Long id,
             @RequestParam(name = "expansion") Integer expansionId,
             @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
 
-        final ServerVdpDto server = realmPort.findByServerNameAndExpansion(name, expansionId, locale,
+        final ServerVdpDto server = realmPort.findByServerNameAndExpansion(id, expansionId, locale,
                 transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)

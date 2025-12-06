@@ -142,10 +142,10 @@ public class RealmService implements RealmPort {
     }
 
     @Override
-    public ServerVdpDto findByServerNameAndExpansion(String name, Integer expansionId, Locale locale,
+    public ServerVdpDto findByServerNameAndExpansion(Long id, Integer expansionId, Locale locale,
                                                      String transactionId) {
 
-        RealmEntity serverModel = obtainRealmPort.findByNameAndExpansionAndStatusIsTrue(name, expansionId).orElse(null);
+        RealmEntity serverModel = obtainRealmPort.findById(id, transactionId).orElse(null);
 
         if (serverModel == null) {
             throw new InternalException("", transactionId);

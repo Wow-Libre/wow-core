@@ -25,5 +25,5 @@ public interface RealmPort {
 
     Optional<RealmEntity> findByIdAndUserId(Long id, Long userId, String transactionId);
 
-    ServerVdpDto findByServerNameAndExpansion(String name, Integer expansionId, Locale locale, String transactionId);
+    ServerVdpDto findByServerNameAndExpansion(Long id, Integer expansionId, Locale locale, String transactionId);
 }

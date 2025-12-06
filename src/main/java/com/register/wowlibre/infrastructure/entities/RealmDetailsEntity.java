@@ -8,7 +8,7 @@ import java.time.*;
 
 @Data
 @Entity
-@Table(name = "server_details")
+@Table(name = "realm_details")
 public class RealmDetailsEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class RealmDetailsEntity implements Serializable {
             referencedColumnName = "id")
     @ManyToOne(
             optional = false,
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     private RealmEntity realmId;
 
     @PrePersist
