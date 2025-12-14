@@ -44,7 +44,9 @@ class RealmControllerTest {
 
         assertEquals(200, response.getStatusCode().value());
         assertNotNull(response.getBody());
+        assertNotNull(response.getBody().getData());
         assertEquals(1, response.getBody().getData().getRealms().size());
+        assertEquals(1, response.getBody().getData().getSize());
         verify(realmPort).findAll("tx");
     }
 
@@ -60,8 +62,9 @@ class RealmControllerTest {
 
     @Test
     void apiKey_found_returnsOk() {
-        RealmModel dto = RealmModel.builder().apiSecret("secret").build();
-        when(realmPort.findByApiKey("key", "tx")).thenReturn(dto);
+        RealmModel realmModel = RealmModel.builder().apiSecret("secret").build();
+        when(realmPort.findByApiKey("key", "tx")).thenReturn(realmModel);
+        
         ResponseEntity<GenericResponse<String>> response = controller.apiKey("tx", "key");
 
         assertEquals(200, response.getStatusCode().value());
@@ -72,8 +75,9 @@ class RealmControllerTest {
 
     @Test
     void apiKey_notFound_returnsNoContent() {
-        RealmModel dto = RealmModel.builder().build();
-        when(realmPort.findByApiKey("key", "tx")).thenReturn(dto);
+        RealmModel realmModel = RealmModel.builder().apiSecret(null).build();
+        when(realmPort.findByApiKey("key", "tx")).thenReturn(realmModel);
+        
         ResponseEntity<GenericResponse<String>> response = controller.apiKey("tx", "key");
 
         assertEquals(204, response.getStatusCode().value());
@@ -89,12 +93,16 @@ class RealmControllerTest {
 
         assertEquals(200, response.getStatusCode().value());
         assertNotNull(response.getBody());
+        assertNotNull(response.getBody().getData());
         assertEquals(1, response.getBody().getData().size());
         verify(realmPort).findByStatusIsTrue("tx");
     }
 
     @Test
-    void vdpServer_returnsOk() {
+    void vdp_returnsOk() {
+        Long serverId = 1L;
+        Integer expansionId = 1;
+        Locale locale = Locale.ENGLISH;
         ServerVdpDto server = ServerVdpDto.builder()
                 .realmlist("realm")
                 .name("name")
@@ -110,14 +118,14 @@ class RealmControllerTest {
                 .headerRightImg("right")
                 .youtubeUrl("youtube")
                 .build();
-        when(realmPort.findByServerNameAndExpansion("name", 1, Locale.ENGLISH, "tx")).thenReturn(server);
+        when(realmPort.findByServerNameAndExpansion(serverId, expansionId, locale, "tx")).thenReturn(server);
 
         ResponseEntity<GenericResponse<ServerVdpDto>> response =
-                controller.vdpServer("tx", "name", 1, Locale.ENGLISH);
+                controller.vdp("tx", serverId, expansionId, locale);
 
         assertEquals(200, response.getStatusCode().value());
         assertNotNull(response.getBody());
         assertEquals(server, response.getBody().getData());
-        verify(realmPort).findByServerNameAndExpansion("name", 1, Locale.ENGLISH, "tx");
+        verify(realmPort).findByServerNameAndExpansion(serverId, expansionId, locale, "tx");
     }
 }

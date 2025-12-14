@@ -131,7 +131,7 @@ class TeleportServiceTest extends BaseTest {
                 service.save(teleportDto, transactionId)
         );
 
-        assertEquals("Server Invalid Or Not Found", exception.getMessage());
+        assertEquals("Realm invalid or not found. Please contact support.", exception.getMessage());
         verify(realmPort).findById(teleportDto.getRealmId(), transactionId);
         verifyNoInteractions(obtainTeleport, saveTeleport);
     }

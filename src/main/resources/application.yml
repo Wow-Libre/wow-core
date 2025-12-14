@@ -140,7 +140,7 @@ management:
         application-key: ${DD_APP_KEY:}
         uri: ${DD_SITE:https://api.datadoghq.com}
         # Habilitado por defecto en producción - Asegúrate de tener DD_API_KEY configurada
-        enabled: ${DD_ENABLED:true}
+        enabled: ${DD_ENABLED:false}
         step: 10s
         descriptions: true
         host-tag: instance

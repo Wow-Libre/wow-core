@@ -260,17 +260,18 @@ class RealmServiceTest extends BaseTest {
 
     @Test
     void findByServerNameAndExpansion_shouldReturnServerVdpDto() {
+        Long id = 1L;
         String name = "Test Realm";
         Integer expansionId = 2;
         Locale locale = Locale.ENGLISH;
         String transactionId = "tx-realm-012";
-        RealmEntity serverModel = createRealmEntity(1L, name, true);
+        RealmEntity serverModel = createRealmEntity(id, name, true);
         RealmDetailsEntity detail1 = createRealmDetailsEntity(1L, serverModel, "key1", "value1");
         RealmResourcesEntity resource1 = createRealmResourcesEntity(1L, serverModel, ResourceType.LOGO, "logo.jpg");
         RealmEventsEntity event1 = createRealmEventsEntity(1L, serverModel, "Event 1");
         DashboardMetricsResponse dashboard = createDashboardMetricsResponse();
 
-        when(obtainRealmPort.findByNameAndExpansionAndStatusIsTrue(name, expansionId))
+        when(obtainRealmPort.findById(id, transactionId))
                 .thenReturn(Optional.of(serverModel));
         when(obtainServerDetailsPort.findByServerId(serverModel, transactionId))
                 .thenReturn(List.of(detail1));
@@ -284,14 +285,14 @@ class RealmServiceTest extends BaseTest {
         when(i18nService.tr("card-total-users", locale)).thenReturn("Total Users");
         when(i18nService.tr("card-total-guild", locale)).thenReturn("Total Guilds");
 
-        ServerVdpDto result = service.findByServerNameAndExpansion(name, expansionId, locale, transactionId);
+        ServerVdpDto result = service.findByServerNameAndExpansion(id, expansionId, locale, transactionId);
 
         assertNotNull(result);
         assertEquals(name, result.name);
         assertEquals("logo.jpg", result.logo);
         assertEquals(3, result.cards.size());
         assertEquals(1, result.events.size());
-        verify(obtainRealmPort).findByNameAndExpansionAndStatusIsTrue(name, expansionId);
+        verify(obtainRealmPort).findById(id, transactionId);
         verify(obtainServerDetailsPort).findByServerId(serverModel, transactionId);
         verify(serverResourcesPort).findByServerId(serverModel, transactionId);
         verify(integratorPort).dashboard(serverModel.getHost(), serverModel.getJwt(), transactionId);
@@ -300,20 +301,20 @@ class RealmServiceTest extends BaseTest {
 
     @Test
     void findByServerNameAndExpansion_shouldThrowExceptionWhenRealmNotFound() {
-        String name = "NonExistent Realm";
+        Long id = 999L;
         Integer expansionId = 2;
         Locale locale = Locale.ENGLISH;
         String transactionId = "tx-realm-013";
 
-        when(obtainRealmPort.findByNameAndExpansionAndStatusIsTrue(name, expansionId))
+        when(obtainRealmPort.findById(id, transactionId))
                 .thenReturn(Optional.empty());
 
         InternalException exception = assertThrows(InternalException.class, () ->
-                service.findByServerNameAndExpansion(name, expansionId, locale, transactionId)
+                service.findByServerNameAndExpansion(id, expansionId, locale, transactionId)
         );
 
         assertNotNull(exception);
-        verify(obtainRealmPort).findByNameAndExpansionAndStatusIsTrue(name, expansionId);
+        verify(obtainRealmPort).findById(id, transactionId);
         verifyNoInteractions(obtainServerDetailsPort, serverResourcesPort, integratorPort, serverEventsPort);
     }
 

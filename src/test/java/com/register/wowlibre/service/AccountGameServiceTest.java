@@ -10,6 +10,7 @@ import com.register.wowlibre.domain.exception.InternalException;
 import com.register.wowlibre.domain.exception.UnauthorizedException;
 import com.register.wowlibre.domain.model.RealmModel;
 import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
+import com.register.wowlibre.domain.port.in.machine.MachinePort;
 import com.register.wowlibre.domain.port.in.realm.RealmPort;
 import com.register.wowlibre.domain.port.in.user.UserPort;
 import com.register.wowlibre.domain.port.out.account_game.ObtainAccountGamePort;
@@ -44,6 +45,8 @@ class AccountGameServiceTest extends BaseTest {
     private UserPort userPort;
     @Mock
     private IntegratorPort integratorPort;
+    @Mock
+    private MachinePort machinePort;
 
     private AccountGameService service;
 
@@ -51,7 +54,7 @@ class AccountGameServiceTest extends BaseTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         service = new AccountGameService(saveAccountGamePort, obtainAccountGamePort, realmPort, userPort,
-                integratorPort);
+                integratorPort, machinePort);
     }
 
     @Test
@@ -120,7 +123,7 @@ class AccountGameServiceTest extends BaseTest {
         when(obtainAccountGamePort.findByUserIdAndRealmId(userId, realmModel.id, transactionId)).thenReturn(existingAccounts);
 
         assertThrows(InternalException.class, () ->
-                service.create(userId, serverName, expansionId, username, password, "gameMail", transactionId)
+                service.create(userId, serverName, expansionId, username, "gameMail", password, transactionId)
         );
     }
 
@@ -146,7 +149,7 @@ class AccountGameServiceTest extends BaseTest {
                 .thenReturn(999L);
 
         assertThrows(InternalException.class, () ->
-                service.create(userId, serverName, expansionId, username, password, gameMail, transactionId)
+                service.create(userId, serverName, expansionId, username, gameMail, password, transactionId)
         );
     }
 
@@ -190,7 +193,12 @@ class AccountGameServiceTest extends BaseTest {
         userEntity.setId(userId);
         userEntity.setEmail("test@mail.com");
 
-        RealmModel realmModel = RealmModel.builder().ip("localhost").build();
+        RealmModel realmModel = RealmModel.builder()
+                .id(100L)
+                .ip("localhost")
+                .apiSecret("secret")
+                .expansion(2)
+                .build();
 
         when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(userEntity));
         when(realmPort.findByNameAndVersionAndStatusIsTrue(serverName, expansionId, transactionId)).thenReturn(realmModel);
@@ -201,6 +209,7 @@ class AccountGameServiceTest extends BaseTest {
         assertDoesNotThrow(() -> service.create(userId, serverName, expansionId, username, "", password,
                 transactionId));
         verify(saveAccountGamePort).save(any(AccountGameEntity.class), eq(transactionId));
+        verify(machinePort).points(userId, 999L, realmModel.id, transactionId);
     }
 
     @Test
@@ -218,7 +227,6 @@ class AccountGameServiceTest extends BaseTest {
     void testAccounts_byPage_success() {
         long userId = 1L;
         String transactionId = "tx";
-        when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(new UserEntity()));
         when(obtainAccountGamePort.accounts(userId)).thenReturn(1L);
         when(obtainAccountGamePort.findByUserIdAndStatusIsTrue(userId, 0, 10, transactionId))
                 .thenReturn(List.of(buildAccountGameEntity()));
@@ -227,6 +235,8 @@ class AccountGameServiceTest extends BaseTest {
 
         assertNotNull(result);
         assertEquals(1, result.getAccounts().size());
+        assertEquals(1L, result.getSize());
+        verify(obtainAccountGamePort).findByUserIdAndStatusIsTrue(userId, 0, 10, transactionId);
     }
 
 
@@ -345,10 +355,6 @@ class AccountGameServiceTest extends BaseTest {
         String realmName = null;
         String transactionId = "tx-001";
 
-        UserEntity user = new UserEntity();
-        user.setId(userId);
-
-        when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(user));
         when(obtainAccountGamePort.accounts(userId)).thenReturn(0L);
 
         AccountsGameDto result = service.accounts(userId, page, size, searchUsername, realmName, transactionId);
@@ -356,6 +362,8 @@ class AccountGameServiceTest extends BaseTest {
         assertNotNull(result);
         assertEquals(0, result.getAccounts().size());
         assertEquals(0, result.getSize());
+        // Verifica que se llama con size limitado a 30, no con 50
+        verify(obtainAccountGamePort).accounts(userId);
     }
 
 
@@ -371,27 +379,19 @@ class AccountGameServiceTest extends BaseTest {
         UserEntity user = new UserEntity();
         user.setId(userId);
 
-
         when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(user));
         when(obtainAccountGamePort.accounts(userId)).thenReturn(1L);
         when(obtainAccountGamePort.findByUserIdAndRealmNameAndUsernameStatusIsTrue(userId, page, size, realmName,
                 searchUsername, transactionId))
                 .thenReturn(List.of(buildAccountGameEntity()));
-
-        when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(user));
-        when(obtainAccountGamePort.accounts(userId)).thenReturn(1L);
-        when(obtainAccountGamePort.findByUserIdAndRealmNameAndUsernameStatusIsTrue(userId, page, size, realmName,
-                searchUsername, transactionId))
-                .thenReturn(List.of(buildAccountGameEntity()));
-
-        // Aquí puedes usar un `spy` para verificar si se llama mapToModel correctamente o simular directamente su
-        // salida
 
         AccountsGameDto result = service.accounts(userId, page, size, searchUsername, realmName, transactionId);
 
         assertNotNull(result);
         assertEquals(1, result.getAccounts().size());
         assertEquals(1L, result.getSize());
+        verify(obtainAccountGamePort).findByUserIdAndRealmNameAndUsernameStatusIsTrue(userId, page, size, realmName,
+                searchUsername, transactionId);
     }
 
     @Test
