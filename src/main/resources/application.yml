@@ -41,7 +41,7 @@ spring:
     host: ${CORE_GOOGLE_HOST:smtp.gmail.com}
     port: ${CORE_GOOGLE_PORT:587}
     username: ${CORE_GOOGLE_USERNAME:mschitiva68@gmail.com}
-    password: ${CORE_GOOGLE_PASSWORD:mfbv fjfc eond lzhc}
+    password: ${CORE_GOOGLE_PASSWORD:mfbv oifc eond xxhcd}
     properties:
       mail:
         smtp:
