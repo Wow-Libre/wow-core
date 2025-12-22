@@ -31,12 +31,23 @@ public class TransactionController {
     @PostMapping("/purchase")
     public ResponseEntity<GenericResponse<Void>> sendItems(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_SIGNATURE) final String signature,
             @RequestBody @Valid CreateTransactionItemsDto request) {
+        try {
+            String requestBodyJson = objectMapper.writeValueAsString(request);
 
-        transactionPort.purchase(request.getServerId(), request.getUserId(), request.getAccountId(),
-                request.getReference(),
-                request.getItems(), request.getAmount(), transactionId);
+            if (!signatureService.validateSignature(requestBodyJson, signature)) {
+                return ResponseEntity.internalServerError()
+                        .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+            }
 
+            transactionPort.purchase(request.getServerId(), request.getUserId(), request.getAccountId(),
+                    request.getReference(),
+                    request.getItems(), request.getAmount(), transactionId);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+        }
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }

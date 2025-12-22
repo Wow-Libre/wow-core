@@ -1,29 +1,19 @@
 package com.register.wowlibre.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.register.wowlibre.domain.dto.ClaimPromoDto;
-import com.register.wowlibre.domain.dto.CreateTransactionItemsDto;
-import com.register.wowlibre.domain.dto.PromotionsDto;
-import com.register.wowlibre.domain.dto.SubscriptionBenefitsDto;
-import com.register.wowlibre.domain.port.in.transaction.TransactionPort;
-import com.register.wowlibre.domain.shared.GenericResponse;
-import com.register.wowlibre.infrastructure.controller.TransactionController;
-import com.register.wowlibre.infrastructure.util.SignatureService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.databind.*;
+import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.port.in.transaction.*;
+import com.register.wowlibre.domain.shared.*;
+import com.register.wowlibre.infrastructure.controller.*;
+import com.register.wowlibre.infrastructure.util.*;
+import org.junit.jupiter.api.*;
+import org.mockito.*;
+import org.springframework.http.*;
 
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class TransactionControllerTest {
 
@@ -53,7 +43,7 @@ class TransactionControllerTest {
         request.setAccountId(101L);
         request.setReference("REF-123");
 
-        ResponseEntity<GenericResponse<Void>> response = controller.sendItems(transactionId, request);
+        ResponseEntity<GenericResponse<Void>> response = controller.sendItems(transactionId, "", request);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
         assertNotNull(response.getBody());
@@ -72,7 +62,8 @@ class TransactionControllerTest {
         when(objectMapper.writeValueAsString(request)).thenReturn(requestBodyJson);
         when(signatureService.validateSignature(requestBodyJson, signature)).thenReturn(true);
 
-        ResponseEntity<GenericResponse<Void>> response = controller.sendSubscriptionBenefits(transactionId, signature, request);
+        ResponseEntity<GenericResponse<Void>> response = controller.sendSubscriptionBenefits(transactionId, signature
+                , request);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
         assertNotNull(response.getBody());
@@ -94,7 +85,8 @@ class TransactionControllerTest {
         when(objectMapper.writeValueAsString(request)).thenReturn(requestBodyJson);
         when(signatureService.validateSignature(requestBodyJson, signature)).thenReturn(false);
 
-        ResponseEntity<GenericResponse<Void>> response = controller.sendSubscriptionBenefits(transactionId, signature, request);
+        ResponseEntity<GenericResponse<Void>> response = controller.sendSubscriptionBenefits(transactionId, signature
+                , request);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatusCode().value());
         assertNotNull(response.getBody());
@@ -138,7 +130,8 @@ class TransactionControllerTest {
         request.setCharacterId(201L);
         request.setPromotionId(1L);
 
-        ResponseEntity<GenericResponse<Void>> response = controller.claimPromotions(transactionId, locale, userId, request);
+        ResponseEntity<GenericResponse<Void>> response = controller.claimPromotions(transactionId, locale, userId,
+                request);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
         assertNotNull(response.getBody());
