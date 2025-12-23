@@ -118,6 +118,8 @@ server:
   address: 0.0.0.0
   port: ${CORE_SERVER_PORT:8091}
 application:
+  signature:
+    secret-key: ${APP_SIGNATURE_SECRET_KEY:wowLibreSecret}
   host:
     domain: ${HOST_DOMAIN}
   security:

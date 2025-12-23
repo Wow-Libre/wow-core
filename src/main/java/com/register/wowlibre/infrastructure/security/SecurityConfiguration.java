@@ -1,35 +1,28 @@
 package com.register.wowlibre.infrastructure.security;
 
-import com.register.wowlibre.domain.constant.InternalApiEndpoints;
-import com.register.wowlibre.domain.constant.SwaggerEndpoints;
-import com.register.wowlibre.domain.port.in.jwt.JwtPort;
-import com.register.wowlibre.domain.security.UserDetailsServiceCustom;
+import com.register.wowlibre.domain.constant.*;
+import com.register.wowlibre.domain.port.in.jwt.*;
+import com.register.wowlibre.domain.security.*;
+import com.register.wowlibre.infrastructure.filter.*;
 import com.register.wowlibre.infrastructure.filter.AuthenticationFilter;
-import com.register.wowlibre.infrastructure.filter.JwtAuthenticationFilter;
-import com.register.wowlibre.infrastructure.util.Rol;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import com.register.wowlibre.infrastructure.util.*;
+import org.springframework.context.annotation.*;
+import org.springframework.http.*;
+import org.springframework.security.authentication.*;
+import org.springframework.security.config.annotation.authentication.builders.*;
+import org.springframework.security.config.annotation.web.builders.*;
+import org.springframework.security.config.annotation.web.configuration.*;
+import org.springframework.security.config.annotation.web.configurers.*;
+import org.springframework.security.crypto.bcrypt.*;
+import org.springframework.security.crypto.password.*;
+import org.springframework.security.web.*;
+import org.springframework.security.web.authentication.*;
+import org.springframework.web.cors.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-import static com.register.wowlibre.domain.constant.Constants.HEADER_TRANSACTION_ID;
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import static com.register.wowlibre.domain.constant.Constants.*;
+import static org.springframework.security.config.http.SessionCreationPolicy.*;
 
 @EnableWebSecurity
 @Configuration
@@ -68,7 +61,7 @@ public class SecurityConfiguration {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
-                "http://127.0.0.1:3000"));
+                "http://127.0.0.1:3000", "https://www.wowlibre.com"));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
