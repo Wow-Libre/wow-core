@@ -45,6 +45,8 @@ public class GoogleClient {
                     VerifyCaptchaResponse.class
             );
 
+            LOGGER.error("[GoogleClient] [verifyRecaptcha] Response received. HTTP Status: {}, Headers: {}, Body: {}",
+                    response.getStatusCode(), response.getHeaders(), response.getBody());
             if (response.getStatusCode().is2xxSuccessful()) {
                 return Objects.requireNonNull(response.getBody());
             }
