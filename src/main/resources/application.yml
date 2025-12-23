@@ -134,17 +134,4 @@ management:
   metrics:
     export:
       datadog:
-        enabled: ${DD_ENABLED:false}
-        # API Key - En producción, se recomienda usar variable de entorno DD_API_KEY
-        # Valor por defecto: 434a9c5c-1158-4f4c-a615-7f0727a6b966
-        api-key: 434a9c5c-1158-4f4c-a615-7f0727a6b966
-        application-key: ${DD_APP_KEY:}
-        uri: ${DD_SITE:https://api.datadoghq.com}
-        # Habilitado por defecto en producción - Asegúrate de tener DD_API_KEY configurada
-        step: 10s
-        descriptions: true
-        host-tag: instance
-        tags:
-          - env:${DD_ENV:prod}
-          - service:wow-libre-core
-          - version:0.0.1
+        enabled: false
