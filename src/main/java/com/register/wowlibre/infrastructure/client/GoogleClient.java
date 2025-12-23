@@ -11,8 +11,6 @@ import org.springframework.web.util.*;
 
 import java.util.*;
 
-import static com.register.wowlibre.domain.constant.Constants.*;
-
 @Component
 public class GoogleClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleClient.class);
@@ -27,7 +25,6 @@ public class GoogleClient {
     public VerifyCaptchaResponse verifyRecaptcha(VerifyCaptchaRequest request, String transactionId) {
         HttpHeaders headers = new HttpHeaders();
 
-        headers.set(HEADER_TRANSACTION_ID, transactionId);
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("secret", request.getSecret());
         params.add("response", request.getResponse());

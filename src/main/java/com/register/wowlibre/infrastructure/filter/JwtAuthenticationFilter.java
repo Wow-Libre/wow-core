@@ -1,7 +1,6 @@
 package com.register.wowlibre.infrastructure.filter;
 
 import com.fasterxml.jackson.databind.*;
-import com.register.wowlibre.domain.constant.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.port.in.jwt.*;
 import com.register.wowlibre.domain.shared.*;
@@ -49,7 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String clientIp = request.getRemoteAddr();
 
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String transactionId = request.getHeader(Constants.HEADER_TRANSACTION_ID);
+        final String transactionId = UUID.randomUUID().toString();
+
         ThreadContext.put(CONSTANT_UNIQUE_ID, transactionId);
 
         LOGGER.info("Request URL: [{}], Transaction ID: [{}], JWT Provided: [{}]", request.getRequestURI(),
@@ -71,7 +71,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             requestWrapper.setHeader(HEADER_EMAIL, email);
             requestWrapper.setHeader(HEADER_USER_ID, String.valueOf(userId));
             requestWrapper.setHeader(HEADER_IP_ADDRESS, clientIp);
-
+            requestWrapper.setHeader(HEADER_TRANSACTION_ID, transactionId);
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 if (jwtPort.isTokenValid(jwt)) {
