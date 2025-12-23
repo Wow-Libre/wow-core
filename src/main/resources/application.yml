@@ -131,7 +131,3 @@ management:
     web:
       exposure:
         include: health,metrics,prometheus
-  metrics:
-    export:
-      datadog:
-        enabled: false
