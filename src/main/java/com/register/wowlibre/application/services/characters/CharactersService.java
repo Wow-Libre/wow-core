@@ -216,7 +216,7 @@ public class CharactersService implements CharactersPort {
     }
 
     @Override
-    public Boolean updateStatsCharacter(Long userId, UpdateStatsRequest request, String transactionId) {
+    public Boolean updateStatsCharacter(Long userId, UpdateStatsDto request, String transactionId) {
         Optional<AccountGameEntity> accountGame = obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(
                 userId, request.getAccountId(), transactionId);
 
@@ -226,8 +226,8 @@ public class CharactersService implements CharactersPort {
 
         Long realmId = accountGame.get().getRealmId().getId();
 
-        AccountVerificationDto verifyData = accountValidationPort.verifyAccount(
-                request.getUserId(), request.getAccountId(), realmId, transactionId);
+        AccountVerificationDto verifyData = accountValidationPort.verifyAccount(userId, request.getAccountId(),
+                realmId, transactionId);
 
         final RealmEntity serverModel = verifyData.realm();
 
@@ -235,7 +235,8 @@ public class CharactersService implements CharactersPort {
             throw new InternalException("The realm is currently not verified", transactionId);
         }
 
-        return integratorService.updateStats(serverModel.getHost(), serverModel.getJwt(), request, transactionId);
+        return integratorService.updateStats(serverModel.getHost(), serverModel.getJwt(), userId, request,
+                transactionId);
     }
 
     @Override

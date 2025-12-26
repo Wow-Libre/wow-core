@@ -1,4 +1,4 @@
-package com.register.wowlibre.domain.dto.client;
+package com.register.wowlibre.domain.dto;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.*;
@@ -6,13 +6,11 @@ import lombok.*;
 
 @Data
 @AllArgsConstructor
-public class UpdateStatsRequest {
+public class UpdateStatsDto {
     @NotNull
     private String type;
     @NotNull
     private String reference;
-    @JsonProperty("user_id")
-    private Long userId;
     @NotNull
     @JsonProperty("account_id")
     private Long accountId;
