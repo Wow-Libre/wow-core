@@ -230,9 +230,10 @@ public class CharactersController {
     @PutMapping("/stats")
     public ResponseEntity<GenericResponse<Boolean>> updateStats(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
             @RequestBody @Valid UpdateStatsRequest request) {
 
-        boolean isSendPremio = charactersPort.updateStatsCharacter(request, transactionId);
+        boolean isSendPremio = charactersPort.updateStatsCharacter(userId, request, transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(isSendPremio, transactionId)

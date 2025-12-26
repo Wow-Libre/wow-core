@@ -1,28 +1,21 @@
 package com.register.wowlibre.application.services.characters;
 
-import com.register.wowlibre.domain.dto.CharacterProfessionsDto;
-import com.register.wowlibre.domain.dto.CharacterSocialDto;
-import com.register.wowlibre.domain.dto.CharactersDto;
-import com.register.wowlibre.domain.dto.MailsDto;
-import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
-import com.register.wowlibre.domain.dto.client.CharacterDetailDto;
-import com.register.wowlibre.domain.dto.client.CharacterInventoryResponse;
-import com.register.wowlibre.domain.dto.client.UpdateStatsRequest;
-import com.register.wowlibre.domain.enums.RealmServices;
-import com.register.wowlibre.domain.exception.InternalException;
-import com.register.wowlibre.domain.model.RealmServicesModel;
-import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
-import com.register.wowlibre.domain.port.in.characters.CharactersPort;
-import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
-import com.register.wowlibre.domain.port.in.realm_services.RealmServicesPort;
-import com.register.wowlibre.domain.port.out.account_game.ObtainAccountGamePort;
-import com.register.wowlibre.infrastructure.entities.AccountGameEntity;
-import com.register.wowlibre.infrastructure.entities.RealmEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.account_game.*;
+import com.register.wowlibre.domain.dto.client.*;
+import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.account_validation.*;
+import com.register.wowlibre.domain.port.in.characters.*;
+import com.register.wowlibre.domain.port.in.integrator.*;
+import com.register.wowlibre.domain.port.in.realm_services.*;
+import com.register.wowlibre.domain.port.out.account_game.*;
+import com.register.wowlibre.infrastructure.entities.*;
+import org.springframework.security.crypto.password.*;
+import org.springframework.stereotype.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CharactersService implements CharactersPort {
@@ -223,9 +216,9 @@ public class CharactersService implements CharactersPort {
     }
 
     @Override
-    public Boolean updateStatsCharacter(UpdateStatsRequest request, String transactionId) {
+    public Boolean updateStatsCharacter(Long userId, UpdateStatsRequest request, String transactionId) {
         Optional<AccountGameEntity> accountGame = obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(
-                request.getUserId(), request.getAccountId(), transactionId);
+                userId, request.getAccountId(), transactionId);
 
         if (accountGame.isEmpty()) {
             throw new InternalException("Account game not found or inactive", transactionId);

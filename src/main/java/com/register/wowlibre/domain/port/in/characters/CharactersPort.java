@@ -38,7 +38,7 @@ public interface CharactersPort {
     void transferInventoryItem(Long userId, Long accountId, Long serverId, Long characterId, Long friendId,
                                Integer count, Long itemId, String transactionId);
 
-    Boolean updateStatsCharacter(UpdateStatsRequest request, String transactionId);
+    Boolean updateStatsCharacter(Long userId, UpdateStatsRequest request, String transactionId);
 
     CharacterDetailDto getCharacter(Long userId, Long characterId, Long accountId, String transactionId);
 }
