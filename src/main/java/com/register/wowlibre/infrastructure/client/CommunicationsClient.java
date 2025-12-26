@@ -1,17 +1,25 @@
 package com.register.wowlibre.infrastructure.client;
 
-import com.register.wowlibre.domain.dto.client.*;
-import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.shared.*;
-import org.slf4j.*;
-import org.springframework.core.*;
-import org.springframework.http.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.client.*;
+import com.register.wowlibre.domain.dto.client.SendMailCommunicationRequest;
+import com.register.wowlibre.domain.dto.client.SendMailTemplateRequest;
+import com.register.wowlibre.domain.exception.InternalException;
+import com.register.wowlibre.domain.shared.GenericResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.Objects;
 
-import static com.register.wowlibre.domain.constant.Constants.*;
+import static com.register.wowlibre.domain.constant.Constants.HEADER_CLIENT;
+import static com.register.wowlibre.domain.constant.Constants.HEADER_TRANSACTION_ID;
 
 @Component
 public class CommunicationsClient {
@@ -23,11 +31,19 @@ public class CommunicationsClient {
         this.restTemplate = restTemplate;
     }
 
-    public void sendMailBasic(String host, String client, SendMailCommunicationRequest request, String transactionId) {
+    private HttpHeaders buildHeaders(String transactionId, String client) {
         HttpHeaders headers = new HttpHeaders();
-        headers.set(HEADER_TRANSACTION_ID, transactionId);
-        headers.set(HEADER_CLIENT, client);
+        if (transactionId != null) {
+            headers.set(HEADER_TRANSACTION_ID, transactionId);
+        }
+        if (client != null) {
+            headers.set(HEADER_CLIENT, client);
+        }
+        return headers;
+    }
 
+    public void sendMailBasic(String host, String client, SendMailCommunicationRequest request, String transactionId) {
+        HttpHeaders headers = buildHeaders(transactionId, client);
         HttpEntity<SendMailCommunicationRequest> entity = new HttpEntity<>(request, headers);
 
         try {
