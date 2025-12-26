@@ -5,7 +5,9 @@ import com.register.wowlibre.domain.dto.CharacterSocialDto;
 import com.register.wowlibre.domain.dto.CharactersDto;
 import com.register.wowlibre.domain.dto.MailsDto;
 import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
+import com.register.wowlibre.domain.dto.client.CharacterDetailDto;
 import com.register.wowlibre.domain.dto.client.CharacterInventoryResponse;
+import com.register.wowlibre.domain.dto.client.UpdateStatsRequest;
 import com.register.wowlibre.domain.enums.RealmServices;
 import com.register.wowlibre.domain.exception.InternalException;
 import com.register.wowlibre.domain.model.RealmServicesModel;
@@ -13,12 +15,14 @@ import com.register.wowlibre.domain.port.in.account_validation.AccountValidation
 import com.register.wowlibre.domain.port.in.characters.CharactersPort;
 import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
 import com.register.wowlibre.domain.port.in.realm_services.RealmServicesPort;
+import com.register.wowlibre.domain.port.out.account_game.ObtainAccountGamePort;
 import com.register.wowlibre.infrastructure.entities.AccountGameEntity;
 import com.register.wowlibre.infrastructure.entities.RealmEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CharactersService implements CharactersPort {
@@ -29,13 +33,16 @@ public class CharactersService implements CharactersPort {
     private final AccountValidationPort accountValidationPort;
     private final PasswordEncoder passwordEncoder;
     private final RealmServicesPort realmServicesPort;
+    private final ObtainAccountGamePort obtainAccountGamePort;
 
     public CharactersService(IntegratorPort integratorService, AccountValidationPort accountValidationPort,
-                             PasswordEncoder passwordEncoder, RealmServicesPort realmServicesPort) {
+                             PasswordEncoder passwordEncoder, RealmServicesPort realmServicesPort,
+                             ObtainAccountGamePort obtainAccountGamePort) {
         this.integratorService = integratorService;
         this.accountValidationPort = accountValidationPort;
         this.passwordEncoder = passwordEncoder;
         this.realmServicesPort = realmServicesPort;
+        this.obtainAccountGamePort = obtainAccountGamePort;
     }
 
 
@@ -213,6 +220,53 @@ public class CharactersService implements CharactersPort {
 
         integratorService.transferInventoryItem(serverModel.getHost(), serverModel.getJwt(), accountId, characterId,
                 friendId, count, itemId, transactionId);
+    }
+
+    @Override
+    public Boolean updateStatsCharacter(UpdateStatsRequest request, String transactionId) {
+        Optional<AccountGameEntity> accountGame = obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(
+                request.getUserId(), request.getAccountId(), transactionId);
+
+        if (accountGame.isEmpty()) {
+            throw new InternalException("Account game not found or inactive", transactionId);
+        }
+
+        Long realmId = accountGame.get().getRealmId().getId();
+
+        AccountVerificationDto verifyData = accountValidationPort.verifyAccount(
+                request.getUserId(), request.getAccountId(), realmId, transactionId);
+
+        final RealmEntity serverModel = verifyData.realm();
+
+        if (!serverModel.isStatus()) {
+            throw new InternalException("The realm is currently not verified", transactionId);
+        }
+
+        return integratorService.updateStats(serverModel.getHost(), serverModel.getJwt(), request, transactionId);
+    }
+
+    @Override
+    public CharacterDetailDto getCharacter(Long userId, Long characterId, Long accountId, String transactionId) {
+        Optional<AccountGameEntity> accountGame = obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(
+                userId, accountId, transactionId);
+
+        if (accountGame.isEmpty()) {
+            throw new InternalException("Account game not found or inactive", transactionId);
+        }
+
+        Long realmId = accountGame.get().getRealmId().getId();
+
+        AccountVerificationDto verifyData = accountValidationPort.verifyAccount(
+                userId, accountId, realmId, transactionId);
+
+        final RealmEntity serverModel = verifyData.realm();
+
+        if (!serverModel.isStatus()) {
+            throw new InternalException("The realm is currently not verified", transactionId);
+        }
+
+        return integratorService.getCharacter(serverModel.getHost(), serverModel.getJwt(), characterId, accountId,
+                transactionId);
     }
 
 

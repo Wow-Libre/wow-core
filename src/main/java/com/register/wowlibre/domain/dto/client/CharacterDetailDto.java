@@ -23,9 +23,12 @@ public class CharacterDetailDto  implements Serializable {
     private Integer gender;
     private Integer level;
     private Integer xp;
-    private Long money;
+    private Double money;
     @JsonProperty("logout_time")
     private Integer logoutTime;
     @JsonProperty("total_time")
     private Integer totalTime;
+    private Integer dream;
+    private Integer hunger;
+    private Integer thirst;
 }

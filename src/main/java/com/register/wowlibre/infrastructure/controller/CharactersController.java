@@ -226,4 +226,33 @@ public class CharactersController {
                 .body(new GenericResponseBuilder<Void>(transactionId)
                         .ok().build());
     }
+
+    @PutMapping("/stats")
+    public ResponseEntity<GenericResponse<Boolean>> updateStats(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestBody @Valid UpdateStatsRequest request) {
+
+        boolean isSendPremio = charactersPort.updateStatsCharacter(request, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(isSendPremio, transactionId)
+                        .ok().build());
+    }
+
+    @GetMapping("/{character_id}")
+    public ResponseEntity<GenericResponse<CharacterDetailDto>> character(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam(name = PARAM_ACCOUNT_ID) final Long accountId,
+            @PathVariable(name = "character_id") final Long characterId) {
+
+        CharacterDetailDto character = charactersPort.getCharacter(userId, characterId, accountId, transactionId);
+
+        if (character != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(new GenericResponseBuilder<CharacterDetailDto>(transactionId)
+                    .ok(character).build());
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

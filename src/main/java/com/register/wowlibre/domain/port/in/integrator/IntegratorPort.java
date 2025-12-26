@@ -103,4 +103,8 @@ public interface IntegratorPort {
 
     void changeCoins(String host, String jwt, Long userId, Long accountId, Long characterId, Long coins,
                      String transactionId);
+
+    Boolean updateStats(String host, String jwt, UpdateStatsRequest request, String transactionId);
+
+    CharacterDetailDto getCharacter(String host, String jwt, Long characterId, Long accountId, String transactionId);
 }

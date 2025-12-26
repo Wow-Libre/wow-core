@@ -11,6 +11,11 @@ public interface ObtainAccountGamePort {
                                                                                   Long serverId,
                                                                                   String transactionId);
 
+    Optional<AccountGameEntity> findByUserIdAndAccountIdAndStatusIsTrue(Long userId, Long accountId,
+                                                                        String transactionId);
+
+    Optional<AccountGameEntity> findByAccountIdAndStatusIsTrue(Long accountId, String transactionId);
+
     Long accounts(Long userId);
 
     List<AccountGameEntity> findByUserIdAndRealmNameAndUsernameStatusIsTrue(Long userId, int page, int size,

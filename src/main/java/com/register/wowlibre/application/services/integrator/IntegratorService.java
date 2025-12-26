@@ -382,4 +382,31 @@ public class IntegratorService implements IntegratorPort {
                 transactionId);
     }
 
+    @Override
+    public Boolean updateStats(String host, String jwt, UpdateStatsRequest request, String transactionId) {
+        Boolean response = integratorClient.updateStats(host, jwt, request, transactionId);
+
+        if (response == null) {
+            LOGGER.error("[IntegratorService] [updateStats] It was not possible to update character stats. " +
+                    "Host: {} transactionId {}", host, transactionId);
+            throw new InternalException("It was not possible to update character stats.", transactionId);
+        }
+
+        return response;
+    }
+
+    @Override
+    public CharacterDetailDto getCharacter(String host, String jwt, Long characterId, Long accountId,
+                                           String transactionId) {
+        CharacterDetailDto response = integratorClient.getCharacter(host, jwt, characterId, accountId, transactionId);
+
+        if (response == null) {
+            LOGGER.error("[IntegratorService] [getCharacter] It was not possible to get character details. " +
+                    "Host: {} characterId: {} accountId: {} transactionId {}", host, characterId, accountId, transactionId);
+            throw new InternalException("It was not possible to get character details.", transactionId);
+        }
+
+        return response;
+    }
+
 }
