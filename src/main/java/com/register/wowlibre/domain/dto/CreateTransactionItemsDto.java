@@ -18,6 +18,4 @@ public class CreateTransactionItemsDto {
     @NotNull
     private List<ItemQuantityModel> items;
     private Double amount;
-    @NotNull
-    private String signature;
 }
