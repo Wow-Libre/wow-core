@@ -9,7 +9,7 @@ import java.util.*;
 @Data
 public class CreateTransactionItemsDto {
     @NotNull
-    private Long serverId;
+    private Long realmId;
     @NotNull
     private Long userId;
     @NotNull

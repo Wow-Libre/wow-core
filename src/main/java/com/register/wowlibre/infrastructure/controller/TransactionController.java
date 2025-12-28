@@ -41,7 +41,7 @@ public class TransactionController {
                         .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
             }
 
-            transactionPort.purchase(request.getServerId(), request.getUserId(), request.getAccountId(),
+            transactionPort.purchase(request.getRealmId(), request.getUserId(), request.getAccountId(),
                     request.getReference(),
                     request.getItems(), request.getAmount(), transactionId);
         } catch (Exception e) {

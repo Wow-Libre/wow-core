@@ -38,7 +38,7 @@ class TransactionControllerTest {
     void shouldPurchaseItems() {
         String transactionId = "tx-tx-001";
         CreateTransactionItemsDto request = new CreateTransactionItemsDto();
-        request.setServerId(1L);
+        request.setRealmId(1L);
         request.setUserId(1L);
         request.setAccountId(101L);
         request.setReference("REF-123");
@@ -47,7 +47,7 @@ class TransactionControllerTest {
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
         assertNotNull(response.getBody());
-        verify(transactionPort).purchase(request.getServerId(), request.getUserId(), request.getAccountId(),
+        verify(transactionPort).purchase(request.getRealmId(), request.getUserId(), request.getAccountId(),
                 request.getReference(), request.getItems(), request.getAmount(), transactionId);
     }
 
