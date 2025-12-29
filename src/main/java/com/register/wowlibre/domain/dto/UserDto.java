@@ -1,13 +1,14 @@
 package com.register.wowlibre.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.fasterxml.jackson.annotation.*;
+import io.swagger.v3.oas.annotations.media.*;
 import jakarta.validation.constraints.*;
-import lombok.Data;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.validation.constraints.Email;
+import lombok.*;
+import org.hibernate.validator.constraints.*;
+import org.springframework.format.annotation.*;
 
-import java.time.LocalDate;
+import java.time.*;
 
 @Data
 @Schema(description = "User account creation data")
@@ -36,7 +37,6 @@ public class UserDto {
     private String lastName;
 
     @JsonProperty("cell_phone")
-    @Schema(description = "User's cell phone number", example = "+1234567890", required = false)
     private String cellPhone;
 
     @NotNull
@@ -52,8 +52,8 @@ public class UserDto {
 
     @NotNull
     @Length(min = 1, max = 4)
-    @Schema(description = "User's preferred language", example = "en", allowableValues = { "en", "es",
-            "pt" }, minLength = 1, maxLength = 4)
+    @Schema(description = "User's preferred language", example = "en", allowableValues = {"en", "es",
+            "pt"}, minLength = 1, maxLength = 4)
     private String language;
 
     @NotNull

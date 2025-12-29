@@ -25,7 +25,7 @@ CREATE TABLE platform.user
     date_of_birth DATE        NOT NULL,
     first_name    varchar(30) NOT NULL,
     last_name     varchar(30) NOT NULL,
-    cell_phone    varchar(20) NOT NULL,
+    cell_phone    varchar(20),
     password      text        not null,
     status        boolean,
     verified      boolean,
