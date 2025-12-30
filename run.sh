@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# 🚀 Wow Libre Core - Script de Ejecución
+# 🚀 Wow Libre Core - Script de Ejecución Simplificado
 # Facilita el inicio de la aplicación Spring Boot
 
 set -e
@@ -60,67 +60,178 @@ check_maven() {
     print_success "Maven wrapper encontrado"
 }
 
-# Verificar archivo .env
-check_env() {
-    if [ ! -f ".env" ]; then
-        echo ""
-        echo -e "${RED}╔════════════════════════════════════════════════════════════════╗${NC}"
-        echo -e "${RED}║                    ⚠️  ADVERTENCIA IMPORTANTE ⚠️                  ║${NC}"
-        echo -e "${RED}╠════════════════════════════════════════════════════════════════╣${NC}"
-        echo -e "${RED}║${NC}  ${YELLOW}Archivo .env NO encontrado${NC}                                    ${RED}║${NC}"
-        echo -e "${RED}║${NC}                                                              ${RED}║${NC}"
-        echo -e "${RED}║${NC}  ${YELLOW}⚠️  La aplicación usará valores por DEFECTO${NC}                    ${RED}║${NC}"
-        echo -e "${RED}║${NC}  ${YELLOW}⚠️  Esto puede causar errores de conexión a BD${NC}                 ${RED}║${NC}"
-        echo -e "${RED}║${NC}  ${YELLOW}⚠️  y otros problemas de configuración${NC}                         ${RED}║${NC}"
-        echo -e "${RED}║${NC}                                                              ${RED}║${NC}"
-        echo -e "${RED}║${NC}  ${YELLOW}Recomendación:${NC}                                                ${RED}║${NC}"
-        echo -e "${RED}║${NC}  1. Crea un archivo .env basado en .env.example            ${RED}║${NC}"
-        echo -e "${RED}║${NC}  2. Configura tus credenciales de base de datos            ${RED}║${NC}"
-        echo -e "${RED}║${NC}  3. Configura las demás variables de entorno              ${RED}║${NC}"
-        echo -e "${RED}╚════════════════════════════════════════════════════════════════╝${NC}"
-        echo ""
+# Crear archivo .env interactivamente
+create_env() {
+    print_info "Configurando archivo .env..."
+    echo ""
+    
+    # Valores por defecto
+    DB_CORE_URL_DEFAULT="jdbc:mysql://localhost:3306/platform"
+    DB_CORE_USERNAME_DEFAULT="root"
+    DB_CORE_PASSWORD_DEFAULT=""
+    CORE_SERVER_PORT_DEFAULT="8091"
+    HOST_DOMAIN_DEFAULT="http://localhost:3000"
+    CORE_JWT_SECRET_KEY_DEFAULT="6E4D574873506B4A72434B6A614B39786F736B7855666B4D456A6E466F785572"
+    CORE_GOOGLE_USERNAME_DEFAULT=""
+    CORE_GOOGLE_PASSWORD_DEFAULT=""
+    CORE_GOOGLE_HOST_DEFAULT="smtp.gmail.com"
+    CORE_GOOGLE_PORT_DEFAULT="587"
+    GOOGLE_API_SECRET_DEFAULT="6Lcd3iArAAAAAMBZ30BN1hry_nhXsfnoHQWIfejg"
+    APP_SIGNATURE_SECRET_KEY_DEFAULT="wowLibreSecret"
+    
+    # Función helper para leer input con valor por defecto
+    read_with_default() {
+        local prompt="$1"
+        local default="$2"
+        local secret="$3"
+        local value
         
-        if [ -f ".env.example" ]; then
-            print_info "Se encontró .env.example. ¿Deseas copiarlo a .env? (S/n): "
-            read -p "" -n 1 -r
-            echo
-            if [[ ! $REPLY =~ ^[Nn]$ ]]; then
-                print_info "Copiando .env.example a .env..."
-                cp .env.example .env
-                echo ""
-                print_warning "⚠️  IMPORTANTE: Edita el archivo .env con tus credenciales antes de continuar."
-                echo ""
-                read -p "¿Deseas continuar de todas formas? (s/N): " -n 1 -r
-                echo
-                if [[ ! $REPLY =~ ^[Ss]$ ]]; then
-                    print_info "Ejecución cancelada. Configura el archivo .env y vuelve a intentar."
-                    exit 1
-                fi
-            else
-                print_warning "No se copió .env.example. La aplicación usará valores por defecto."
-                echo ""
-                read -p "¿Deseas continuar de todas formas? (s/N): " -n 1 -r
-                echo
-                if [[ ! $REPLY =~ ^[Ss]$ ]]; then
-                    print_info "Ejecución cancelada."
-                    exit 1
-                fi
-            fi
+        if [ "$secret" = "true" ]; then
+            read -sp "$prompt [$default]: " value
+            echo ""
         else
-            print_warning "Archivo .env.example no encontrado."
-            echo ""
-            print_warning "La aplicación se ejecutará con valores por defecto."
-            echo ""
-            read -p "¿Deseas continuar de todas formas? (s/N): " -n 1 -r
-            echo
-            if [[ ! $REPLY =~ ^[Ss]$ ]]; then
-                print_info "Ejecución cancelada. Crea un archivo .env con tus variables de entorno."
-                exit 1
-            fi
+            read -p "$prompt [$default]: " value
         fi
-        echo ""
-    else
+        
+        echo "${value:-$default}"
+    }
+    
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    echo -e "${YELLOW}  Configuración de Base de Datos${NC}"
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    DB_CORE_URL=$(read_with_default "URL de Base de Datos" "$DB_CORE_URL_DEFAULT")
+    DB_CORE_USERNAME=$(read_with_default "Usuario de Base de Datos" "$DB_CORE_USERNAME_DEFAULT")
+    DB_CORE_PASSWORD=$(read_with_default "Contraseña de Base de Datos" "" "true")
+    
+    echo ""
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    echo -e "${YELLOW}  Configuración del Servidor${NC}"
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    CORE_SERVER_PORT=$(read_with_default "Puerto del Servidor" "$CORE_SERVER_PORT_DEFAULT")
+    HOST_DOMAIN=$(read_with_default "Dominio/Host" "$HOST_DOMAIN_DEFAULT")
+    
+    echo ""
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    echo -e "${YELLOW}  Configuración de Seguridad${NC}"
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    CORE_JWT_SECRET_KEY=$(read_with_default "JWT Secret Key" "$CORE_JWT_SECRET_KEY_DEFAULT")
+    APP_SIGNATURE_SECRET_KEY=$(read_with_default "App Signature Secret Key" "$APP_SIGNATURE_SECRET_KEY_DEFAULT")
+    
+    echo ""
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    echo -e "${YELLOW}  Configuración de Email (Gmail)${NC}"
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    CORE_GOOGLE_USERNAME=$(read_with_default "Email de Gmail" "$CORE_GOOGLE_USERNAME_DEFAULT")
+    CORE_GOOGLE_PASSWORD=$(read_with_default "App Password de Gmail" "" "true")
+    CORE_GOOGLE_HOST=$(read_with_default "Host SMTP" "$CORE_GOOGLE_HOST_DEFAULT")
+    CORE_GOOGLE_PORT=$(read_with_default "Puerto SMTP" "$CORE_GOOGLE_PORT_DEFAULT")
+    
+    echo ""
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    echo -e "${YELLOW}  Configuración de Google reCAPTCHA${NC}"
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    GOOGLE_API_SECRET=$(read_with_default "Google reCAPTCHA Secret" "$GOOGLE_API_SECRET_DEFAULT")
+    
+    echo ""
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    echo -e "${YELLOW}  Variables Opcionales${NC}"
+    echo -e "${YELLOW}═══════════════════════════════════════════════════════════════${NC}"
+    DD_SITE=$(read_with_default "Datadog Site (opcional)" "https://api.datadoghq.com")
+    NEW_RELIC_LICENSE_KEY=$(read_with_default "New Relic License Key (opcional)" "")
+    
+    # Crear archivo .env
+    cat > .env << EOF
+# Base de Datos
+DB_CORE_URL=$DB_CORE_URL
+DB_CORE_USERNAME=$DB_CORE_USERNAME
+DB_CORE_PASSWORD=$DB_CORE_PASSWORD
+
+# Servidor
+CORE_SERVER_PORT=$CORE_SERVER_PORT
+HOST_DOMAIN=$HOST_DOMAIN
+
+# JWT y Seguridad
+CORE_JWT_SECRET_KEY=$CORE_JWT_SECRET_KEY
+APP_SIGNATURE_SECRET_KEY=$APP_SIGNATURE_SECRET_KEY
+
+# Email (Gmail)
+CORE_GOOGLE_USERNAME=$CORE_GOOGLE_USERNAME
+CORE_GOOGLE_PASSWORD=$CORE_GOOGLE_PASSWORD
+CORE_GOOGLE_HOST=$CORE_GOOGLE_HOST
+CORE_GOOGLE_PORT=$CORE_GOOGLE_PORT
+
+# Google reCAPTCHA
+GOOGLE_API_SECRET=$GOOGLE_API_SECRET
+
+# Opcionales
+DD_SITE=$DD_SITE
+NEW_RELIC_LICENSE_KEY=$NEW_RELIC_LICENSE_KEY
+EOF
+    
+    print_success "Archivo .env creado exitosamente"
+    echo ""
+}
+
+# Verificar variables críticas en el sistema
+check_env_vars() {
+    local missing_vars=()
+    local critical_vars=("DB_CORE_URL" "DB_CORE_USERNAME" "DB_CORE_PASSWORD")
+    local has_critical=true
+    
+    for var in "${critical_vars[@]}"; do
+        if [ -z "${!var}" ]; then
+            missing_vars+=("$var")
+            has_critical=false
+        fi
+    done
+    
+    if [ "$has_critical" = false ]; then
+        return 1
+    fi
+    return 0
+}
+
+# Verificar y crear .env si no existe
+ensure_env() {
+    # Si existe .env, cargarlo
+    if [ -f ".env" ]; then
         print_success "Archivo .env encontrado"
+        return 0
+    fi
+    
+    # Verificar si las variables críticas están en el sistema
+    if check_env_vars; then
+        print_success "Variables de entorno del sistema detectadas"
+        print_info "Spring Boot usará las variables de entorno del sistema"
+        return 0
+    fi
+    
+    # Si no hay .env ni variables del sistema, sugerir crear .env
+    print_warning "Archivo .env no encontrado y variables críticas no definidas en el sistema"
+    echo ""
+    print_info "Opciones:"
+    echo "  1. Crear archivo .env (recomendado para desarrollo)"
+    echo "  2. Definir variables de entorno en el sistema"
+    echo "  3. Continuar de todas formas (usará valores por defecto de application.yml)"
+    echo ""
+    read -p "¿Deseas crear el archivo .env ahora? (S/n/c): " -n 1 -r
+    echo ""
+    
+    if [[ $REPLY =~ ^[Cc]$ ]]; then
+        print_warning "Continuando con valores por defecto..."
+        return 0
+    elif [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        create_env
+    else
+        print_warning "No se creó .env. Asegúrate de tener las variables definidas en el sistema."
+        print_info "Variables requeridas: DB_CORE_URL, DB_CORE_USERNAME, DB_CORE_PASSWORD"
+        echo ""
+        read -p "¿Continuar de todas formas? (s/N): " -n 1 -r
+        echo ""
+        if [[ ! $REPLY =~ ^[Ss]$ ]]; then
+            print_info "Ejecución cancelada."
+            exit 1
+        fi
     fi
 }
 
@@ -128,75 +239,40 @@ check_env() {
 load_env() {
     if [ -f ".env" ]; then
         print_info "Cargando variables de entorno desde .env..."
-        export $(cat .env | grep -v '^#' | xargs)
-    fi
-}
-
-# Compilar la aplicación
-build_app() {
-    local skip_tests=$1
-    print_info "Compilando la aplicación..."
-    
-    if [ "$skip_tests" = true ]; then
-        ./mvnw clean package -DskipTests
+        # Cargar .env de forma segura línea por línea
+        while IFS= read -r line || [ -n "$line" ]; do
+            # Ignorar líneas vacías y comentarios
+            [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+            
+            # Ignorar líneas que no son asignaciones válidas (KEY=VALUE)
+            [[ ! "$line" =~ ^[[:space:]]*[A-Za-z_][A-Za-z0-9_]*= ]] && continue
+            
+            # Separar clave y valor en el primer =
+            local key="${line%%=*}"
+            key=$(echo "$key" | xargs)  # Trim espacios
+            
+            local value="${line#*=}"
+            # Trim espacios al inicio del valor
+            value="${value#"${value%%[![:space:]]*}"}"
+            
+            # Remover comillas externas si existen (solo si envuelven todo el valor)
+            if [[ "$value" =~ ^\"(.*)\"$ ]] || [[ "$value" =~ ^\'(.*)\'$ ]]; then
+                value="${BASH_REMATCH[1]}"
+            fi
+            
+            # Exportar de forma segura usando declare -x (más seguro que eval)
+            declare -x "$key"="$value" 2>/dev/null || export "$key"="$value" 2>/dev/null || true
+        done < .env
     else
-        ./mvnw clean package
-    fi
-    
-    if [ $? -eq 0 ]; then
-        print_success "Compilación exitosa"
-    else
-        print_error "Error en la compilación"
-        exit 1
+        print_info "Usando variables de entorno del sistema"
     fi
 }
 
 # Ejecutar la aplicación
 run_app() {
-    local profile=$1
-    local jar_file="target/wowlibre-0.0.1-SNAPSHOT.jar"
-    
-    if [ ! -f "$jar_file" ]; then
-        print_warning "JAR no encontrado. Compilando..."
-        build_app true
-    fi
-    
-    print_info "Iniciando la aplicación..."
-    
-    if [ -n "$profile" ]; then
-        print_info "Perfil activo: $profile"
-        java -jar -Dspring.profiles.active="$profile" "$jar_file"
-    else
-        java -jar "$jar_file"
-    fi
-}
-
-# Ejecutar con Maven (desarrollo)
-run_dev() {
     local background=$1
-    print_info "Ejecutando en modo desarrollo con Maven..."
+    print_info "Iniciando la aplicación..."
     load_env
-    
-    # Verificar si necesita compilar
-    local jar_file="target/wowlibre-0.0.1-SNAPSHOT.jar"
-    if [ ! -f "$jar_file" ]; then
-        print_warning "JAR no encontrado. Compilando primero..."
-        build_app true
-    else
-        # Verificar si el código fuente es más reciente que el JAR
-        local source_newer=false
-        if [ -d "src" ]; then
-            local latest_source=$(find src -type f -name "*.java" -newer "$jar_file" 2>/dev/null | head -1)
-            if [ -n "$latest_source" ]; then
-                source_newer=true
-            fi
-        fi
-        
-        if [ "$source_newer" = true ]; then
-            print_info "Código fuente modificado. Recompilando..."
-            build_app true
-        fi
-    fi
     
     if [ "$background" = true ]; then
         print_info "Iniciando aplicación en segundo plano..."
@@ -222,34 +298,25 @@ run_dev() {
 # Detener la aplicación
 stop_app() {
     local pid_file=".app.pid"
+    local pid=""
     
-    if [ ! -f "$pid_file" ]; then
-        print_warning "No se encontró archivo de PID. Buscando proceso..."
-        local pid=$(pgrep -f "spring-boot:run" || pgrep -f "wowlibre-0.0.1-SNAPSHOT.jar" || echo "")
+    if [ -f "$pid_file" ]; then
+        pid=$(cat "$pid_file")
+    fi
+    
+    if [ -z "$pid" ] || ! ps -p $pid > /dev/null 2>&1; then
+        print_warning "Buscando proceso de la aplicación..."
+        pid=$(pgrep -f "spring-boot:run" || pgrep -f "wowlibre-0.0.1-SNAPSHOT.jar" || echo "")
         if [ -z "$pid" ]; then
             print_warning "No se encontró proceso de la aplicación corriendo."
+            rm -f "$pid_file"
             return 1
         fi
-    else
-        local pid=$(cat "$pid_file")
-    fi
-    
-    if [ -z "$pid" ]; then
-        print_warning "No se encontró PID de la aplicación."
-        rm -f "$pid_file"
-        return 1
-    fi
-    
-    if ! ps -p $pid > /dev/null 2>&1; then
-        print_warning "El proceso $pid no está corriendo."
-        rm -f "$pid_file"
-        return 1
     fi
     
     print_info "Deteniendo aplicación (PID: $pid)..."
     kill $pid 2>/dev/null || true
     
-    # Esperar un poco y verificar
     sleep 2
     if ps -p $pid > /dev/null 2>&1; then
         print_warning "El proceso no se detuvo. Forzando terminación..."
@@ -270,22 +337,21 @@ stop_app() {
 # Ver estado de la aplicación
 status_app() {
     local pid_file=".app.pid"
+    local pid=""
     
     if [ -f "$pid_file" ]; then
-        local pid=$(cat "$pid_file")
+        pid=$(cat "$pid_file")
         if ps -p $pid > /dev/null 2>&1; then
             print_success "✅ Aplicación corriendo (PID: $pid)"
             print_info "Para ver logs: tail -f logs/app.log"
             print_info "Para detener: ./run.sh stop"
             return 0
         else
-            print_warning "El PID $pid no está activo. Limpiando archivo..."
             rm -f "$pid_file"
         fi
     fi
     
-    # Buscar proceso manualmente
-    local pid=$(pgrep -f "spring-boot:run" || pgrep -f "wowlibre-0.0.1-SNAPSHOT.jar" || echo "")
+    pid=$(pgrep -f "spring-boot:run" || pgrep -f "wowlibre-0.0.1-SNAPSHOT.jar" || echo "")
     if [ -n "$pid" ]; then
         print_success "✅ Aplicación corriendo (PID: $pid)"
         print_info "Para detener: ./run.sh stop"
@@ -298,41 +364,34 @@ status_app() {
 
 # Mostrar ayuda
 show_help() {
-    echo "🚀 Wow Libre Core - Script de Ejecución"
+    echo "🚀 Wow Libre Core - Script de Ejecución Simplificado"
     echo ""
     echo "Uso: ./run.sh [OPCIÓN]"
     echo ""
     echo "Opciones:"
-    echo "  dev          Ejecuta en modo desarrollo (foreground)"
-    echo "  start        Ejecuta en modo desarrollo (background)"
-    echo "  stop         Detiene la aplicación en segundo plano"
+    echo "  setup        Crea/configura el archivo .env interactivamente"
+    echo "  start        Ejecuta la aplicación en segundo plano"
+    echo "  stop         Detiene la aplicación"
     echo "  status       Muestra el estado de la aplicación"
-    echo "  build        Solo compila la aplicación"
-    echo "  run [perfil] Ejecuta el JAR compilado (opcional: perfil Spring)"
-    echo "  check        Verifica dependencias y configuración"
     echo "  help         Muestra esta ayuda"
     echo ""
+    echo "Variables de Entorno:"
+    echo "  El script puede usar variables de dos formas:"
+    echo "  1. Archivo .env en la raíz del proyecto (recomendado para desarrollo)"
+    echo "  2. Variables de entorno del sistema (útil para producción/Docker)"
+    echo ""
+    echo "  Si tienes las variables definidas en el sistema, no necesitas .env"
+    echo ""
     echo "Ejemplos:"
-    echo "  ./run.sh dev              # Modo desarrollo (foreground)"
-    echo "  ./run.sh start            # Modo desarrollo (background)"
-    echo "  ./run.sh stop             # Detener aplicación"
-    echo "  ./run.sh status           # Ver estado"
-    echo "  ./run.sh run              # Ejecuta JAR"
-    echo "  ./run.sh run prod         # Ejecuta JAR con perfil prod"
-    echo "  ./run.sh build            # Solo compilar"
-    echo "  ./run.sh check            # Verificar configuración"
+    echo "  ./run.sh setup        # Configurar .env"
+    echo "  ./run.sh start        # Iniciar aplicación (background)"
+    echo "  ./run.sh              # Iniciar aplicación (foreground)"
+    echo "  ./run.sh stop         # Detener aplicación"
+    echo "  ./run.sh status       # Ver estado"
     echo ""
-}
-
-# Verificar todo
-check_all() {
-    print_info "Verificando dependencias y configuración..."
+    echo "Variables críticas requeridas:"
+    echo "  DB_CORE_URL, DB_CORE_USERNAME, DB_CORE_PASSWORD"
     echo ""
-    check_java
-    check_maven
-    check_env
-    echo ""
-    print_success "Todas las verificaciones completadas"
 }
 
 # Main
@@ -340,20 +399,15 @@ main() {
     # Crear directorio de logs si no existe
     mkdir -p logs
     
-    case "${1:-dev}" in
-        dev)
-            check_java
-            check_maven
-            check_env
-            load_env
-            run_dev false
+    case "${1:-}" in
+        setup)
+            create_env
             ;;
         start)
             check_java
             check_maven
-            check_env
-            load_env
-            run_dev true
+            ensure_env
+            run_app true
             ;;
         stop)
             stop_app
@@ -361,25 +415,15 @@ main() {
         status)
             status_app
             ;;
-        build)
-            check_java
-            check_maven
-            build_app false
-            ;;
-        build-fast)
-            check_java
-            check_maven
-            build_app true
-            ;;
-        run)
-            check_java
-            run_app "$2"
-            ;;
-        check)
-            check_all
-            ;;
         help|--help|-h)
             show_help
+            ;;
+        "")
+            # Sin argumentos: ejecutar en foreground
+            check_java
+            check_maven
+            ensure_env
+            run_app false
             ;;
         *)
             print_error "Opción desconocida: $1"
