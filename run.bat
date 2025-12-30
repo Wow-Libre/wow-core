@@ -316,15 +316,58 @@ exit /b 0
 set BACKGROUND=%1
 echo ℹ️  Iniciando la aplicación...
 
+REM Crear script temporal con variables exportadas para pasarlas al proceso hijo
+set ENV_SCRIPT=%TEMP%\wowlibre_env_%RANDOM%.bat
+if exist ".env" (
+    echo @echo off > "%ENV_SCRIPT%"
+    echo setlocal enabledelayedexpansion >> "%ENV_SCRIPT%"
+    
+    REM Leer .env y escribir variables al script temporal
+    for /f "usebackq eol=# tokens=1,* delims==" %%a in (".env") do (
+        if not "%%a"=="" (
+            if not "%%b"=="" (
+                set "line_key=%%a"
+                set "line_value=%%b"
+                
+                REM Trim espacios de la clave
+                for /f "tokens=*" %%k in ("!line_key!") do set "line_key=%%k"
+                
+                REM Remover comillas del valor
+                if "!line_value:~0,1!"=="\"" (
+                    set "line_value=!line_value:~1!"
+                    if "!line_value:~-1!"=="\"" set "line_value=!line_value:~0,-1!"
+                )
+                if "!line_value:~0,1!"=="'" (
+                    set "line_value=!line_value:~1!"
+                    if "!line_value:~-1!"=="'" set "line_value=!line_value:~0,-1!"
+                )
+                
+                REM Escribir la variable al script
+                echo set "!line_key!=!line_value!" >> "%ENV_SCRIPT%"
+            )
+        )
+    )
+    echo call mvnw.cmd spring-boot:run >> "%ENV_SCRIPT%"
+)
+
 if "%BACKGROUND%"=="true" (
     echo ℹ️  Iniciando aplicación en segundo plano...
-    start /B mvnw.cmd spring-boot:run > logs\app.log 2>&1
+    if exist "%ENV_SCRIPT%" (
+        start /B "" cmd /c "%ENV_SCRIPT%" > logs\app.log 2>&1
+    ) else (
+        start /B "" mvnw.cmd spring-boot:run > logs\app.log 2>&1
+    )
     timeout /t 2 /nobreak >nul
     echo ✅ Aplicación iniciada en segundo plano
     echo ℹ️  Logs: type logs\app.log
     echo ℹ️  Para detener: run.bat stop
 ) else (
-    call mvnw.cmd spring-boot:run
+    if exist "%ENV_SCRIPT%" (
+        call "%ENV_SCRIPT%"
+        del "%ENV_SCRIPT%" >nul 2>&1
+    ) else (
+        call mvnw.cmd spring-boot:run
+    )
 )
 exit /b 0
 

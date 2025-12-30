@@ -274,11 +274,38 @@ run_app() {
     print_info "Iniciando la aplicación..."
     load_env
     
+    # Crear script temporal con variables exportadas para pasarlas al proceso hijo
+    local env_script=$(mktemp)
+    if [ -f ".env" ]; then
+        # Exportar todas las variables del .env
+        while IFS= read -r line || [ -n "$line" ]; do
+            [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+            [[ ! "$line" =~ ^[[:space:]]*[A-Za-z_][A-Za-z0-9_]*= ]] && continue
+            
+            local key="${line%%=*}"
+            key=$(echo "$key" | xargs)
+            local value="${line#*=}"
+            value="${value#"${value%%[![:space:]]*}"}"
+            
+            if [[ "$value" =~ ^\"(.*)\"$ ]] || [[ "$value" =~ ^\'(.*)\'$ ]]; then
+                value="${BASH_REMATCH[1]}"
+            fi
+            
+            echo "export $key=\"$value\"" >> "$env_script"
+        done < .env
+    fi
+    
     if [ "$background" = true ]; then
         print_info "Iniciando aplicación en segundo plano..."
-        nohup ./mvnw spring-boot:run > logs/app.log 2>&1 &
+        # Ejecutar con las variables exportadas
+        if [ -f "$env_script" ] && [ -s "$env_script" ]; then
+            nohup bash -c "source $env_script && ./mvnw spring-boot:run" > logs/app.log 2>&1 &
+        else
+            nohup ./mvnw spring-boot:run > logs/app.log 2>&1 &
+        fi
         local pid=$!
         echo $pid > .app.pid
+        rm -f "$env_script"
         print_success "Aplicación iniciada en segundo plano (PID: $pid)"
         print_info "Logs: tail -f logs/app.log"
         print_info "Para detener: ./run.sh stop"
@@ -291,7 +318,12 @@ run_app() {
             print_error "❌ La aplicación se detuvo. Revisa los logs: cat logs/app.log"
         fi
     else
-        ./mvnw spring-boot:run
+        if [ -f "$env_script" ] && [ -s "$env_script" ]; then
+            bash -c "source $env_script && ./mvnw spring-boot:run"
+            rm -f "$env_script"
+        else
+            ./mvnw spring-boot:run
+        fi
     fi
 }
 
