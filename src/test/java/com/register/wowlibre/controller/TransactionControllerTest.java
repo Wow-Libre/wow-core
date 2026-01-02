@@ -35,18 +35,25 @@ class TransactionControllerTest {
     }
 
     @Test
-    void shouldPurchaseItems() {
+    void shouldPurchaseItems() throws Exception {
         String transactionId = "tx-tx-001";
+        String signature = "valid-signature";
         CreateTransactionItemsDto request = new CreateTransactionItemsDto();
         request.setRealmId(1L);
         request.setUserId(1L);
         request.setAccountId(101L);
         request.setReference("REF-123");
+        String requestBodyJson = "{\"realm_id\":1,\"user_id\":1,\"account_id\":101,\"reference\":\"REF-123\"}";
 
-        ResponseEntity<GenericResponse<Void>> response = controller.sendItems(transactionId, "", request);
+        when(objectMapper.writeValueAsString(request)).thenReturn(requestBodyJson);
+        when(signatureService.validateSignature(requestBodyJson, signature)).thenReturn(true);
+
+        ResponseEntity<GenericResponse<Void>> response = controller.sendItems(transactionId, signature, request);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
         assertNotNull(response.getBody());
+        verify(objectMapper).writeValueAsString(request);
+        verify(signatureService).validateSignature(requestBodyJson, signature);
         verify(transactionPort).purchase(request.getRealmId(), request.getUserId(), request.getAccountId(),
                 request.getReference(), request.getItems(), request.getAmount(), transactionId);
     }
