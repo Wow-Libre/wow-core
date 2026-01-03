@@ -97,7 +97,7 @@ public class UserService implements UserPort {
     }
 
     @Override
-    public JwtDto create(CreateUserDto createUserDto, String ip, Locale locale, String transactionId) {
+    public JwtDto create(CreateUserDto createUserDto, String ip, String transactionId) {
 
         if (!googlePort.verifyCaptcha(configurations.getGoogleSecret(), createUserDto.getToken(), ip,
                 transactionId)) {

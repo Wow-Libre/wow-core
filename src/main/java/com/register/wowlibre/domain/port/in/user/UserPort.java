@@ -8,7 +8,7 @@ import com.register.wowlibre.infrastructure.entities.*;
 import java.util.*;
 
 public interface UserPort {
-    JwtDto create(CreateUserDto accountWebDto, String ip, Locale locale, String transactionId);
+    JwtDto create(CreateUserDto accountWebDto, String ip, String transactionId);
 
     UserModel findByEmail(String email, String transactionId);
 

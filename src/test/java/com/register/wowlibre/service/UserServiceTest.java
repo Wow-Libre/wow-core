@@ -350,7 +350,7 @@ class UserServiceTest extends BaseTest {
         when(jwtPort.generateRefreshToken(any())).thenReturn("refresh-token");
 
         // Act
-        JwtDto result = userService.create(createUserDto, "127.0.0.1", Locale.ENGLISH, transactionId);
+        JwtDto result = userService.create(createUserDto, "127.0.0.1", transactionId);
 
         // Assert
         assertNotNull(result);
@@ -389,7 +389,7 @@ class UserServiceTest extends BaseTest {
 
         // Act & Assert
         assertThrows(FoundException.class, () ->
-                userService.create(createUserDto, "127.0.0.1", Locale.ENGLISH, transactionId));
+                userService.create(createUserDto, "127.0.0.1", transactionId));
     }
 
     @Test
@@ -404,7 +404,7 @@ class UserServiceTest extends BaseTest {
 
         // Act & Assert
         assertThrows(InternalException.class, () ->
-                userService.create(createUserDto, "127.0.0.1", Locale.ENGLISH, transactionId));
+                userService.create(createUserDto, "127.0.0.1", transactionId));
     }
 
     @Test
@@ -423,7 +423,7 @@ class UserServiceTest extends BaseTest {
 
         // Act & Assert
         assertThrows(InternalException.class, () ->
-                userService.create(createUserDto, "127.0.0.1", Locale.ENGLISH, transactionId));
+                userService.create(createUserDto, "127.0.0.1", transactionId));
     }
 
     @Test

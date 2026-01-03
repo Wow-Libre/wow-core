@@ -61,11 +61,11 @@ class UserControllerTest extends BaseTest {
         JwtDto jwtDto = new JwtDto(1L, "token", "", new Date(), "", "ES", false, false);
 
         when(httpServletRequest.getRemoteAddr()).thenReturn("127.0.0.1");
-        when(userPort.create(eq(createUserDto), anyString(), eq(LOCALE), eq(TRANSACTION_ID)))
+        when(userPort.create(eq(createUserDto), anyString(), eq(TRANSACTION_ID)))
                 .thenReturn(jwtDto);
 
         ResponseEntity<GenericResponse<JwtDto>> response = userController.create(
-                TRANSACTION_ID, LOCALE, createUserDto, httpServletRequest);
+                TRANSACTION_ID, createUserDto, httpServletRequest);
 
         assertEquals(201, response.getStatusCode().value());
         assertNotNull(Objects.requireNonNull(response.getBody()).getData());

@@ -39,11 +39,10 @@ public class UserController {
     @PostMapping(path = "/create")
     public ResponseEntity<GenericResponse<JwtDto>> create(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
             @RequestBody @Valid CreateUserDto createUser,
             HttpServletRequest request) {
 
-        final JwtDto jwtDto = userPort.create(createUser, request.getRemoteAddr(), locale, transactionId);
+        final JwtDto jwtDto = userPort.create(createUser, request.getRemoteAddr(), transactionId);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new GenericResponseBuilder<>(jwtDto, transactionId).created().build());
