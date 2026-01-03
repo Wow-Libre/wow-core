@@ -32,6 +32,8 @@
     <tomcat.version>10.1.45</tomcat.version>
     <!-- Parche de seguridad CVE-2025-41248: Actualizar Spring Security a 6.5.4+ para mitigar vulnerabilidad de annotation detection -->
     <spring-security.version>6.5.4</spring-security.version>
+    <!-- Parche de seguridad CVE-2025-41248: Actualizar Spring Framework (spring-core) a 6.2.11+ para mitigar vulnerabilidad de annotation detection -->
+    <spring.version>6.2.11</spring.version>
   </properties>
   <dependencies>
 
@@ -65,6 +67,13 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
+    </dependency>
+
+    <!-- Parche de seguridad CVE-2025-41248: Actualizar spring-core a 6.2.11+ para mitigar vulnerabilidad -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>6.2.11</version>
     </dependency>
 
     <dependency>
