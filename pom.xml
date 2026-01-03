@@ -28,6 +28,8 @@
   </scm>
   <properties>
     <java.version>21</java.version>
+    <!-- Parche de seguridad CVE-2025-55752: Actualizar Tomcat a 10.1.45+ para mitigar vulnerabilidad de Relative Path Traversal -->
+    <tomcat.version>10.1.45</tomcat.version>
   </properties>
   <dependencies>
 
