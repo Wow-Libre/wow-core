@@ -50,8 +50,7 @@ public class GoogleClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[GoogleClient] [verifyRecaptcha] Client/Server Error: {}. The request failed with a client " +
-                            "or realm error. " +
-                            "HTTP Status: {}, Response Body: {}",
+                            "or realm error. HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("The captcha could not be validated.", transactionId);
         } catch (Exception e) {

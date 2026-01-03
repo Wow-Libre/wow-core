@@ -1,6 +1,7 @@
 package com.register.wowlibre.infrastructure.controller;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.user.*;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.security.*;
 import com.register.wowlibre.domain.shared.*;
@@ -39,7 +40,7 @@ public class UserController {
     public ResponseEntity<GenericResponse<JwtDto>> create(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
-            @RequestBody @Valid UserDto createUser,
+            @RequestBody @Valid CreateUserDto createUser,
             HttpServletRequest request) {
 
         final JwtDto jwtDto = userPort.create(createUser, request.getRemoteAddr(), locale, transactionId);

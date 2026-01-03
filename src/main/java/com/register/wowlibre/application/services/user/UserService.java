@@ -1,7 +1,7 @@
 package com.register.wowlibre.application.services.user;
 
 import com.register.wowlibre.application.services.*;
-import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.user.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.google.*;
@@ -79,17 +79,17 @@ public class UserService implements UserPort {
         this.configurations = configurations;
     }
 
-    private static UserEntity create(UserDto userDto, RolEntity rolModel) {
+    private static UserEntity create(CreateUserDto createUserDto, String password, RolEntity rolModel) {
         UserEntity userRegister = new UserEntity();
         userRegister.setAvatarUrl(PICTURE_DEFAULT_PROFILE_WEB);
-        userRegister.setEmail(userDto.getEmail());
-        userRegister.setCountry(userDto.getCountry());
-        userRegister.setFirstName(userDto.getFirstName());
-        userRegister.setCellPhone(userDto.getCellPhone());
-        userRegister.setLanguage(userDto.getLanguage());
-        userRegister.setPassword(userDto.getPassword());
-        userRegister.setLastName(userDto.getLastName());
-        userRegister.setDateOfBirth(userDto.getDateOfBirth());
+        userRegister.setEmail(createUserDto.getEmail());
+        userRegister.setCountry(createUserDto.getCountry());
+        userRegister.setFirstName(createUserDto.getFirstName());
+        userRegister.setCellPhone(createUserDto.getCellPhone());
+        userRegister.setLanguage(createUserDto.getLanguage());
+        userRegister.setPassword(password);
+        userRegister.setLastName(createUserDto.getLastName());
+        userRegister.setDateOfBirth(createUserDto.getDateOfBirth());
         userRegister.setStatus(true);
         userRegister.setVerified(false);
         userRegister.setRolId(rolModel);
@@ -97,18 +97,16 @@ public class UserService implements UserPort {
     }
 
     @Override
-    public JwtDto create(UserDto userDto, String ip, Locale locale, String transactionId) {
+    public JwtDto create(CreateUserDto createUserDto, String ip, Locale locale, String transactionId) {
 
-        if (!googlePort.verifyCaptcha(configurations.getGoogleSecret(), userDto.getToken(), ip,
+        if (!googlePort.verifyCaptcha(configurations.getGoogleSecret(), createUserDto.getToken(), ip,
                 transactionId)) {
             LOGGER.error("[UserService] [create] An error occurred while verifying the captcha. -  " +
-                    "[Id: {}]", transactionId);
+                    "[TransactionId: {}]", transactionId);
             throw new InternalException("The captcha is invalid", transactionId);
         }
 
-        final boolean isAdmin = false;
-        final boolean requiredValidationMail = true;
-        final String email = userDto.getEmail();
+        final String email = createUserDto.getEmail();
 
         if (findByEmail(email, transactionId) != null) {
             LOGGER.error("[UserService] [create]  There is already a registered customer with this information. " +
@@ -124,12 +122,13 @@ public class UserService implements UserPort {
             throw new InternalException("An unexpected error has occurred", transactionId);
         }
 
-        final String passwordEncode = passwordEncoder.encode(userDto.getPassword());
-        userDto.setPassword(passwordEncode);
+        final String passwordEncode = passwordEncoder.encode(createUserDto.getPassword());
 
-        UserEntity userRegister = create(userDto, rolModel);
+        UserEntity userRegister = create(createUserDto, passwordEncode, rolModel);
 
         final UserEntity user = saveUserPort.save(userRegister, transactionId);
+        final boolean isAdmin = false;
+        final boolean requiredValidationMail = true;
 
         CustomUserDetails customUserDetails = new CustomUserDetails(
                 List.of(rolModel),
@@ -141,7 +140,7 @@ public class UserService implements UserPort {
                 user.getStatus(),
                 user.getId(),
                 user.getAvatarUrl(),
-                userDto.getLanguage(),
+                createUserDto.getLanguage(),
                 isAdmin
         );
 
@@ -177,7 +176,7 @@ public class UserService implements UserPort {
     @Override
     public void validateEmailCodeForAccount(Long userId, String code, String transactionId) {
 
-        Optional<UserEntity> userFound = findByUserId(userId, transactionId);
+        final Optional<UserEntity> userFound = findByUserId(userId, transactionId);
 
         if (userFound.isEmpty() || !userFound.get().getStatus()) {
             LOGGER.error("[UserService] [create] The email cannot be validated because the user is in an invalid " +
@@ -187,6 +186,7 @@ public class UserService implements UserPort {
         }
 
         if (userFound.get().getVerified()) {
+            LOGGER.info("User email already verified. [Id: {}]", transactionId);
             return;
         }
 
@@ -242,7 +242,7 @@ public class UserService implements UserPort {
             throw new InternalException("The security code is invalid", transactionId);
         }
 
-        Optional<UserEntity> account = findByEmailEntity(email, transactionId);
+        final Optional<UserEntity> account = findByEmailEntity(email, transactionId);
 
         if (account.isEmpty()) {
             LOGGER.error("[UserService] [resetPasswordWithRecoveryCode] The account could not be retrieved when " +
@@ -252,8 +252,7 @@ public class UserService implements UserPort {
         }
 
         UserEntity user = account.get();
-        String password = randomString.nextString();
-
+        final String password = randomString.nextString();
         final String body = i18nService.tr("message-new-password-body", new Object[]{password}, locale);
         final String subject = i18nService.tr("message-new-password-subject", locale);
 
@@ -267,11 +266,11 @@ public class UserService implements UserPort {
 
     @Override
     public void sendMailValidation(String mail, String transactionId) {
-        Optional<UserEntity> account = findByEmailEntity(mail, transactionId);
+        final Optional<UserEntity> account = findByEmailEntity(mail, transactionId);
 
         if (account.isEmpty()) {
             LOGGER.error("[UserService] [sendMailValidation] The account could not be retrieved when " +
-                    "searching for the customer's email or it is in an inactive status. [ID] {}", transactionId);
+                    "searching for the customer's email or it is in an inactive status. [Id] {}", transactionId);
             throw new InternalException("Please contact support", transactionId);
         }
 
@@ -291,7 +290,7 @@ public class UserService implements UserPort {
     @Override
     public void changePassword(Long userId, String password, String newPassword, String transactionId) {
 
-        Optional<UserEntity> userFound = findByUserId(userId, transactionId);
+        final Optional<UserEntity> userFound = findByUserId(userId, transactionId);
 
         if (userFound.isEmpty() || !userFound.get().getStatus()) {
             LOGGER.error("[UserService] [changePassword] The email cannot be validated because the user is in an " +

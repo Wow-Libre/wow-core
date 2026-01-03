@@ -2,6 +2,7 @@ package com.register.wowlibre.domain.dto.account_game;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.hibernate.validator.constraints.*;
 
@@ -16,6 +17,7 @@ public class CreateAccountGameDto {
     @Length(min = 3, max = 30)
     private String password;
     @NotNull
+    @NotEmpty
     private String realmName;
     @NotNull
     private Integer expansion;
