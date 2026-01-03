@@ -199,6 +199,7 @@ public class UserService implements UserPort {
             userModel.setVerified(true);
             saveUserPort.save(userModel, transactionId);
         } else {
+            LOGGER.error("[UserService] [validateEmailCodeForAccount] The codes are invalid");
             throw new InternalException("The codes are invalid", transactionId);
         }
     }
@@ -210,8 +211,7 @@ public class UserService implements UserPort {
 
         if (account.isEmpty() || !account.get().getStatus()) {
             LOGGER.error("[UserService] [generateRecoveryCode] The account does not exist or is disabled from " +
-                    "generating a recovery code. " +
-                    "[ID]: {}", transactionId);
+                    "generating a recovery code. [TransactionId]: {}", transactionId);
             throw new InternalException("The email entered does not exist", transactionId);
         }
 
@@ -232,13 +232,14 @@ public class UserService implements UserPort {
         final String codeObtain = securityValidationPort.findByOtpRecoverPassword(email, transactionId);
 
         if (codeObtain == null) {
-            LOGGER.error("[UserService] [resetPasswordWithRecoveryCode] The code has expired  [ID] {}", transactionId);
+            LOGGER.error("[UserService] [resetPasswordWithRecoveryCode] The code has expired  [TransactionId] {}",
+                    transactionId);
             throw new InternalException("The code has expired", transactionId);
         }
 
         if (!codeObtain.toUpperCase().equals(code)) {
-            LOGGER.error("[UserService] [resetPasswordWithRecoveryCode] The security code is invalid  [ID] {}",
-                    transactionId);
+            LOGGER.error("[UserService] [resetPasswordWithRecoveryCode] The security code is invalid  "
+                    + "[TransactionId] {}", transactionId);
             throw new InternalException("The security code is invalid", transactionId);
         }
 
@@ -246,7 +247,8 @@ public class UserService implements UserPort {
 
         if (account.isEmpty()) {
             LOGGER.error("[UserService] [resetPasswordWithRecoveryCode] The account could not be retrieved when " +
-                    "searching for the customer's email or it is in an inactive status. [ID] {}", transactionId);
+                            "searching for the customer's email or it is in an inactive status. [TransactionId] {}",
+                    transactionId);
             throw new InternalException("It was not possible to assign a new password, please contact support",
                     transactionId);
         }
@@ -270,7 +272,8 @@ public class UserService implements UserPort {
 
         if (account.isEmpty()) {
             LOGGER.error("[UserService] [sendMailValidation] The account could not be retrieved when " +
-                    "searching for the customer's email or it is in an inactive status. [Id] {}", transactionId);
+                            "searching for the customer's email or it is in an inactive status. [TransactionId] {}",
+                    transactionId);
             throw new InternalException("Please contact support", transactionId);
         }
 
@@ -294,7 +297,7 @@ public class UserService implements UserPort {
 
         if (userFound.isEmpty() || !userFound.get().getStatus()) {
             LOGGER.error("[UserService] [changePassword] The email cannot be validated because the user is in an " +
-                    "invalid state. [Id: {}]", transactionId);
+                    "invalid state. [TransactionId: {}]", transactionId);
             throw new InternalException("It was not possible to change the password because the account cannot be " +
                     "found", transactionId);
         }
@@ -302,6 +305,7 @@ public class UserService implements UserPort {
         UserEntity user = userFound.get();
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
+            LOGGER.error("[UserService] [changePassword] The password is invalid [TransactionId {}]", transactionId);
             throw new InternalException("The current password entered is invalid", transactionId);
         }
 
