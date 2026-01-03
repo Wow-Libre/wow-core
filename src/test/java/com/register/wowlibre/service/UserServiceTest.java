@@ -2,7 +2,7 @@ package com.register.wowlibre.service;
 
 import com.register.wowlibre.application.services.*;
 import com.register.wowlibre.application.services.user.*;
-import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.user.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.google.*;
@@ -317,16 +317,16 @@ class UserServiceTest extends BaseTest {
         String password = "password123";
         String encodedPassword = "encodedPassword";
 
-        UserDto userDto = new UserDto();
-        userDto.setEmail(email);
-        userDto.setPassword(password);
-        userDto.setFirstName("John");
-        userDto.setLastName("Doe");
-        userDto.setCountry("USA");
-        userDto.setCellPhone("1234567890");
-        userDto.setLanguage("en");
-        userDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
-        userDto.setToken("validToken");
+        CreateUserDto createUserDto = new CreateUserDto();
+        createUserDto.setEmail(email);
+        createUserDto.setPassword(password);
+        createUserDto.setFirstName("John");
+        createUserDto.setLastName("Doe");
+        createUserDto.setCountry("USA");
+        createUserDto.setCellPhone("1234567890");
+        createUserDto.setLanguage("en");
+        createUserDto.setDateOfBirth(LocalDate.of(1990, 1, 1));
+        createUserDto.setToken("validToken");
 
         RolEntity rolModel = new RolEntity();
         rolModel.setId(1L);
@@ -350,7 +350,7 @@ class UserServiceTest extends BaseTest {
         when(jwtPort.generateRefreshToken(any())).thenReturn("refresh-token");
 
         // Act
-        JwtDto result = userService.create(userDto, "127.0.0.1", Locale.ENGLISH, transactionId);
+        JwtDto result = userService.create(createUserDto, "127.0.0.1", transactionId);
 
         // Assert
         assertNotNull(result);
@@ -368,9 +368,9 @@ class UserServiceTest extends BaseTest {
         String email = "test@example.com";
         String transactionId = "tx123";
 
-        UserDto userDto = new UserDto();
-        userDto.setEmail(email);
-        userDto.setToken("token");
+        CreateUserDto createUserDto = new CreateUserDto();
+        createUserDto.setEmail(email);
+        createUserDto.setToken("token");
         UserEntity userFound = new UserEntity();
         userFound.setEmail("emailUserFound@gmail.com");
         userFound.setPassword("password");
@@ -389,14 +389,14 @@ class UserServiceTest extends BaseTest {
 
         // Act & Assert
         assertThrows(FoundException.class, () ->
-                userService.create(userDto, "127.0.0.1", Locale.ENGLISH, transactionId));
+                userService.create(createUserDto, "127.0.0.1", transactionId));
     }
 
     @Test
     void create_shouldThrowInternalException_whenCaptchaFails() {
         // Arrange
-        UserDto userDto = new UserDto();
-        userDto.setToken("invalidToken");
+        CreateUserDto createUserDto = new CreateUserDto();
+        createUserDto.setToken("invalidToken");
         String transactionId = "txFail";
 
         when(configurations.getGoogleSecret()).thenReturn("secret");
@@ -404,15 +404,15 @@ class UserServiceTest extends BaseTest {
 
         // Act & Assert
         assertThrows(InternalException.class, () ->
-                userService.create(userDto, "127.0.0.1", Locale.ENGLISH, transactionId));
+                userService.create(createUserDto, "127.0.0.1", transactionId));
     }
 
     @Test
     void create_shouldThrowInternalException_whenRoleIsNull() {
         // Arrange
-        UserDto userDto = new UserDto();
-        userDto.setEmail("new@example.com");
-        userDto.setToken("token");
+        CreateUserDto createUserDto = new CreateUserDto();
+        createUserDto.setEmail("new@example.com");
+        createUserDto.setToken("token");
 
         String transactionId = "txRole";
 
@@ -423,7 +423,7 @@ class UserServiceTest extends BaseTest {
 
         // Act & Assert
         assertThrows(InternalException.class, () ->
-                userService.create(userDto, "127.0.0.1", Locale.ENGLISH, transactionId));
+                userService.create(createUserDto, "127.0.0.1", transactionId));
     }
 
     @Test

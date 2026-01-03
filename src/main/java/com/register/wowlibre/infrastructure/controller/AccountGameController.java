@@ -120,7 +120,7 @@ public class AccountGameController {
             @RequestHeader(name = HEADER_USER_ID) final Long userId,
             @RequestBody List<Long> ids) {
 
-        accountGamePort.desactive(ids, userId, transactionId);
+        accountGamePort.deactivate(ids, userId, transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<Void>(transactionId).ok().build());

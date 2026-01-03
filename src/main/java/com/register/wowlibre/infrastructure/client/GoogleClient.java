@@ -29,10 +29,8 @@ public class GoogleClient {
         params.add("secret", request.getSecret());
         params.add("response", request.getResponse());
 
-
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
-
-        String url = UriComponentsBuilder
+        final String url = UriComponentsBuilder
                 .fromUriString(HOST_GOOGLE_VERIFY_CAPTCHA).toUriString();
         try {
             ResponseEntity<VerifyCaptchaResponse> response = restTemplate.exchange(
@@ -42,16 +40,13 @@ public class GoogleClient {
                     VerifyCaptchaResponse.class
             );
 
-            LOGGER.error("[GoogleClient] [verifyRecaptcha] Response received. HTTP Status: {}, Headers: {}, Body: {}",
-                    response.getStatusCode(), response.getHeaders(), response.getBody());
             if (response.getStatusCode().is2xxSuccessful()) {
                 return Objects.requireNonNull(response.getBody());
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[GoogleClient] [verifyRecaptcha] Client/Server Error: {}. The request failed with a client " +
-                            "or realm error. " +
-                            "HTTP Status: {}, Response Body: {}",
+                            "or realm error. HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("The captcha could not be validated.", transactionId);
         } catch (Exception e) {
