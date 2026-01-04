@@ -102,37 +102,37 @@ public class VotingPlatformsService implements VotingPlatformsPort {
                 .sum();
     }
 
-    private VotingPlatformsModel mapToModel(Long userId, VotingPlatformsEntity entity, String transactionId) {
+    private VotingPlatformsModel mapToModel(Long userId, VotingPlatformsEntity platformsEntity, String transactionId) {
 
         if (userId == null) {
             return new VotingPlatformsModel(
-                    entity.getId(),
-                    entity.getImgUrl(),
-                    entity.getName(),
+                    platformsEntity.getId(),
+                    platformsEntity.getImgUrl(),
+                    platformsEntity.getName(),
                     null
             );
         }
 
-        Optional<VoteWalletEntity> walletPlatform = voteWalletPort.findByUserIdAndPlatformId(userId, entity.getId());
+        Optional<VoteWalletEntity> walletPlatform = voteWalletPort.findByUserIdAndPlatformId(userId,
+                platformsEntity.getId());
         String postbackUrl = null;
-        String referenceCode;
+        String referenceCode = randomString.nextString();
 
         if (walletPlatform.isEmpty()) {
-            referenceCode = randomString.nextString();
-            voteWalletPort.create(userId, entity, referenceCode, transactionId);
+            voteWalletPort.create(userId, platformsEntity, referenceCode, transactionId);
         } else {
             referenceCode = walletPlatform.get().getReferenceCode();
         }
 
-        if (entity.getPostbackUrl() != null && referenceCode != null) {
-            String replacement = referenceCode + "-" + entity.getId();
-            postbackUrl = entity.getPostbackUrl().replace("changeme", replacement);
+        if (platformsEntity.getPostbackUrl() != null && referenceCode != null) {
+            String replacement = referenceCode + "-" + platformsEntity.getId();
+            postbackUrl = platformsEntity.getPostbackUrl().replace("changeme", replacement);
         }
 
         return new VotingPlatformsModel(
-                entity.getId(),
-                entity.getImgUrl(),
-                entity.getName(),
+                platformsEntity.getId(),
+                platformsEntity.getImgUrl(),
+                platformsEntity.getName(),
                 postbackUrl
         );
     }
