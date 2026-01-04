@@ -87,6 +87,14 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         }
 
         VoteWalletEntity walletVote = voteWalletPort.findByReferenceCode(code, transactionId);
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime lastVoteAt = walletVote.getUpdatedAt();
+
+        if (lastVoteAt != null && lastVoteAt.plusHours(5).isAfter(now)) {
+            throw new InternalException("You must wait 5 hours between votes.", transactionId);
+        }
+
         walletVote.setTotalVotes(walletVote.getVoteBalance() + 1);
         walletVote.setUpdatedAt(LocalDateTime.now());
         walletVote.setVoteBalance(walletVote.getVoteBalance() + 1);
@@ -102,37 +110,37 @@ public class VotingPlatformsService implements VotingPlatformsPort {
                 .sum();
     }
 
-    private VotingPlatformsModel mapToModel(Long userId, VotingPlatformsEntity platformsEntity, String transactionId) {
+    private VotingPlatformsModel mapToModel(Long userId, VotingPlatformsEntity entity, String transactionId) {
 
         if (userId == null) {
             return new VotingPlatformsModel(
-                    platformsEntity.getId(),
-                    platformsEntity.getImgUrl(),
-                    platformsEntity.getName(),
+                    entity.getId(),
+                    entity.getImgUrl(),
+                    entity.getName(),
                     null
             );
         }
 
-        Optional<VoteWalletEntity> walletPlatform = voteWalletPort.findByUserIdAndPlatformId(userId,
-                platformsEntity.getId());
+        Optional<VoteWalletEntity> walletPlatform = voteWalletPort.findByUserIdAndPlatformId(userId, entity.getId());
         String postbackUrl = null;
-        String referenceCode = randomString.nextString();
+        String referenceCode;
 
         if (walletPlatform.isEmpty()) {
-            voteWalletPort.create(userId, platformsEntity, referenceCode, transactionId);
+            referenceCode = randomString.nextString();
+            voteWalletPort.create(userId, entity, referenceCode, transactionId);
         } else {
             referenceCode = walletPlatform.get().getReferenceCode();
         }
 
-        if (platformsEntity.getPostbackUrl() != null && referenceCode != null) {
-            String replacement = referenceCode + "-" + platformsEntity.getId();
-            postbackUrl = platformsEntity.getPostbackUrl().replace("changeme", replacement);
+        if (entity.getPostbackUrl() != null && referenceCode != null) {
+            String replacement = referenceCode + "-" + entity.getId();
+            postbackUrl = entity.getPostbackUrl().replace("changeme", replacement);
         }
 
         return new VotingPlatformsModel(
-                platformsEntity.getId(),
-                platformsEntity.getImgUrl(),
-                platformsEntity.getName(),
+                entity.getId(),
+                entity.getImgUrl(),
+                entity.getName(),
                 postbackUrl
         );
     }
