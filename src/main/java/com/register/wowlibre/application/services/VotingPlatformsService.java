@@ -65,9 +65,9 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         Optional<VotingPlatformsEntity> optional = obtainVotingPlatforms.findById(id);
 
         if (optional.isEmpty()) {
-            LOGGER.error("[VotingPlatformsService] [updateVotingPlatform] Voting platform with id  does not exist. " +
+            LOGGER.error("[VotingPlatformsService] [updateVotingPlatform] Voting platform with id does not exist. " +
                     "id: {}", transactionId);
-            throw new InternalException("Voting platform with id " + id + " does not exist.", transactionId);
+            throw new InternalException("Voting platform with id does not exist.", transactionId);
         }
 
         VotingPlatformsEntity entity = optional.get();
@@ -83,8 +83,8 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         Optional<VotingPlatformsEntity> optional = obtainVotingPlatforms.findById(id);
 
         if (optional.isEmpty()) {
-            LOGGER.error("[VotingPlatformsService] [deleteVotingPlatform] voting platform with id {} does not exist. " +
-                    "id: {}", id, transactionId);
+            LOGGER.error("[VotingPlatformsService] [deleteVotingPlatform] voting platform with does not exist. " +
+                    "id: {}", transactionId);
             throw new InternalException("Voting platform with id " + id + " does not exist.", transactionId);
         }
         VotingPlatformsEntity entity = optional.get();
