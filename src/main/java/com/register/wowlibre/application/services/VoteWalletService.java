@@ -5,14 +5,22 @@ import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.in.vote_wallet.*;
 import com.register.wowlibre.domain.port.out.vote_wallet.*;
 import com.register.wowlibre.infrastructure.entities.*;
+import org.slf4j.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
 @Service
 public class VoteWalletService implements VoteWalletPort {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VoteWalletService.class);
+    /**
+     * Ports
+     */
     private final ObtainVoteWallet obtainVoteWallet;
     private final SaveVoteWallet saveVoteWallet;
+    /**
+     * User Port
+     */
     private final UserPort userPort;
 
     public VoteWalletService(ObtainVoteWallet obtainVoteWallet, SaveVoteWallet saveVoteWallet, UserPort userPort) {
@@ -37,6 +45,7 @@ public class VoteWalletService implements VoteWalletPort {
         Optional<UserEntity> user = userPort.findByUserId(userId, transactionId);
 
         if (user.isEmpty() || !user.get().getStatus()) {
+            LOGGER.error("[VoteWalletService] [create] User not found for id: {} ", transactionId);
             throw new InternalException("User is not exist or inactive", transactionId);
         }
 
