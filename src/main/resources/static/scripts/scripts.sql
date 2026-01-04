@@ -351,6 +351,7 @@ CREATE TABLE platform.vote_wallet (
     platform_id BIGINT NOT NULL,
     vote_balance INT NOT NULL,
     total_votes INT NOT NULL,
+    ip_address VARCHAR(80),
     reference_code TEXT NOT NULL,
     created_at DATETIME,
     updated_at DATETIME,

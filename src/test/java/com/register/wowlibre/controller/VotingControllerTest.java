@@ -1,6 +1,6 @@
 package com.register.wowlibre.controller;
 
-import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.voting.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.voting_platforms.*;
 import com.register.wowlibre.domain.shared.*;
@@ -96,7 +96,7 @@ class VotingControllerTest {
                 controller.postback("tx", "param", "ip");
 
         assertEquals(200, response.getStatusCode().value());
-        verify(votingPlatformsPort).postbackVotingPlatform("param", "tx");
+        verify(votingPlatformsPort).postbackVotingPlatform("param", "127.0.0.1", "tx");
     }
 
     @Test

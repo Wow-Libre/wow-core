@@ -15,10 +15,18 @@ import java.util.*;
 
 @Service
 public class VotingPlatformsService implements VotingPlatformsPort {
-
+    /**
+     * Ports
+     */
     private final ObtainVotingPlatforms obtainVotingPlatforms;
     private final SaveVotingPlatForms saveVotingPlatformPort;
+    /**
+     * Vote Wallet Port
+     */
     private final VoteWalletPort voteWalletPort;
+    /**
+     * Utilities
+     */
     private final RandomString randomString;
 
     public VotingPlatformsService(ObtainVotingPlatforms obtainVotingPlatforms,
@@ -32,8 +40,8 @@ public class VotingPlatformsService implements VotingPlatformsPort {
 
     @Override
     public List<VotingPlatformsModel> findAllActiveVotingPlatforms(Long userId, String transactionId) {
-        return obtainVotingPlatforms.findAllActiveVotingPlatforms().stream().map(data -> mapToModel(userId, data,
-                transactionId)).toList();
+        return obtainVotingPlatforms.findAllActiveVotingPlatforms().stream().map(data ->
+                mapToModel(userId, data, transactionId)).toList();
     }
 
     @Override
@@ -79,7 +87,7 @@ public class VotingPlatformsService implements VotingPlatformsPort {
     }
 
     @Override
-    public void postbackVotingPlatform(String referenceCode, String transactionId) {
+    public void postbackVotingPlatform(String referenceCode, String ipAddress, String transactionId) {
         String code = referenceCode.split("-", 2)[0];
 
         if (code == null || code.isBlank()) {
@@ -98,6 +106,7 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         walletVote.setTotalVotes(walletVote.getVoteBalance() + 1);
         walletVote.setUpdatedAt(LocalDateTime.now());
         walletVote.setVoteBalance(walletVote.getVoteBalance() + 1);
+        walletVote.setIpAddress(ipAddress);
         voteWalletPort.saveVoteWallet(walletVote, transactionId);
     }
 
