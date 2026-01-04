@@ -65,8 +65,8 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         Optional<VotingPlatformsEntity> optional = obtainVotingPlatforms.findById(id);
 
         if (optional.isEmpty()) {
-            LOGGER.error("[VotingPlatformsService] [updateVotingPlatform] Voting platform with id {} does not exist. " +
-                    "TransactionId: {}", id, transactionId);
+            LOGGER.error("[VotingPlatformsService] [updateVotingPlatform] Voting platform with id  does not exist. " +
+                    "id: {}", transactionId);
             throw new InternalException("Voting platform with id " + id + " does not exist.", transactionId);
         }
 
@@ -84,7 +84,7 @@ public class VotingPlatformsService implements VotingPlatformsPort {
 
         if (optional.isEmpty()) {
             LOGGER.error("[VotingPlatformsService] [deleteVotingPlatform] voting platform with id {} does not exist. " +
-                    "TransactionId: {}", id, transactionId);
+                    "id: {}", id, transactionId);
             throw new InternalException("Voting platform with id " + id + " does not exist.", transactionId);
         }
         VotingPlatformsEntity entity = optional.get();
@@ -99,7 +99,7 @@ public class VotingPlatformsService implements VotingPlatformsPort {
 
         if (code == null || code.isBlank()) {
             LOGGER.error("[VotingPlatformsService] [postbackVotingPlatform] Invalid WebHook code: {}. " +
-                    "TransactionId: {}", referenceCode, transactionId);
+                    "id: {}", referenceCode, transactionId);
             throw new InternalException("Invalid WebHook ", transactionId);
         }
 
