@@ -66,7 +66,7 @@ public class VotingPlatformsService implements VotingPlatformsPort {
 
         if (optional.isEmpty()) {
             LOGGER.error("[VotingPlatformsService] [updateVotingPlatform] Voting platform with id does not exist. " +
-                    "id: {}", transactionId);
+                    "Transaction-Id: {}", transactionId);
             throw new InternalException("Voting platform with id does not exist.", transactionId);
         }
 
