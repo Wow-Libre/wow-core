@@ -7,6 +7,7 @@ import com.register.wowlibre.domain.port.in.voting_platforms.*;
 import com.register.wowlibre.domain.port.out.voting_platforms.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -15,6 +16,8 @@ import java.util.*;
 
 @Service
 public class VotingPlatformsService implements VotingPlatformsPort {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VotingPlatformsService.class);
+
     /**
      * Ports
      */
@@ -62,6 +65,8 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         Optional<VotingPlatformsEntity> optional = obtainVotingPlatforms.findById(id);
 
         if (optional.isEmpty()) {
+            LOGGER.error("[VotingPlatformsService] [updateVotingPlatform] Voting platform with id {} does not exist. " +
+                    "TransactionId: {}", id, transactionId);
             throw new InternalException("Voting platform with id " + id + " does not exist.", transactionId);
         }
 
@@ -78,6 +83,8 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         Optional<VotingPlatformsEntity> optional = obtainVotingPlatforms.findById(id);
 
         if (optional.isEmpty()) {
+            LOGGER.error("[VotingPlatformsService] [deleteVotingPlatform] voting platform with id {} does not exist. " +
+                    "TransactionId: {}", id, transactionId);
             throw new InternalException("Voting platform with id " + id + " does not exist.", transactionId);
         }
         VotingPlatformsEntity entity = optional.get();
@@ -91,6 +98,8 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         String code = referenceCode.split("-", 2)[0];
 
         if (code == null || code.isBlank()) {
+            LOGGER.error("[VotingPlatformsService] [postbackVotingPlatform] Invalid WebHook code: {}. " +
+                    "TransactionId: {}", referenceCode, transactionId);
             throw new InternalException("Invalid WebHook ", transactionId);
         }
 
@@ -100,6 +109,8 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         LocalDateTime lastVoteAt = walletVote.getUpdatedAt();
 
         if (lastVoteAt != null && lastVoteAt.plusHours(5).isAfter(now)) {
+            LOGGER.error("[VotingPlatformsService] [postbackVotingPlatform] User with id {} must wait 5 hours " +
+                    "between votes. TransactionId: {}", walletVote.getUserId().getId(), transactionId);
             throw new InternalException("You must wait 5 hours between votes.", transactionId);
         }
 
