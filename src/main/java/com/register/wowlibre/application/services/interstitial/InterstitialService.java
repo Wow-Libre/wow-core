@@ -1,19 +1,29 @@
 package com.register.wowlibre.application.services.interstitial;
 
-import com.register.wowlibre.domain.dto.interstitial.*;
-import com.register.wowlibre.domain.port.in.interstitial.*;
-import com.register.wowlibre.domain.port.out.interstitial.*;
-import com.register.wowlibre.domain.port.out.interstitial_user.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.domain.dto.interstitial.InterstitialDto;
+import com.register.wowlibre.domain.port.in.interstitial.InterstitialPort;
+import com.register.wowlibre.domain.port.out.interstitial.ObtainInterstitial;
+import com.register.wowlibre.domain.port.out.interstitial.SaveInterstitial;
+import com.register.wowlibre.domain.port.out.interstitial_user.ObtainInterstitialUser;
+import com.register.wowlibre.domain.port.out.interstitial_user.SaveInterstitialUser;
+import com.register.wowlibre.infrastructure.entities.InterstitialEntity;
+import com.register.wowlibre.infrastructure.entities.InterstitialUserEntity;
+import org.springframework.stereotype.Service;
 
-import java.time.*;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InterstitialService implements InterstitialPort {
+    /**
+     * Interstitial obtainer.
+     */
     private final ObtainInterstitial obtainInterstitial;
     private final SaveInterstitial saveInterstitial;
+    /**
+     * Interstitial user saver.
+     */
     private final SaveInterstitialUser saveInterstitialUser;
     private final ObtainInterstitialUser obtainInterstitialUser;
 
@@ -63,7 +73,12 @@ public class InterstitialService implements InterstitialPort {
 
     @Override
     public void deleteInterstitial(Long interstitialId, String transactionId) {
+        saveInterstitial.delete(interstitialId, transactionId);
+    }
 
+    @Override
+    public void updateInterstitial(Long interstitialId, String urlImg, String redirectUrl, String transactionId) {
+        saveInterstitial.updateInterstitial(interstitialId, urlImg, redirectUrl, transactionId);
     }
 
     private InterstitialDto toDto(InterstitialEntity entity) {

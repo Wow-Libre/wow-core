@@ -99,17 +99,20 @@ public class SecurityConfiguration {
                                     "/api/news",
                                     "/api/news/{newsId}/sections",
                                     "/api/banners",
-                                    "/api/voting/create")
+                                    "/api/voting/create",
+                                    "/api/interstitial")
                             .hasAuthority(Rol.ADMIN.getName())
                             .requestMatchers(HttpMethod.PUT,
                                     "/api/news/{id}",
-                                    "/api/voting/{id}")
+                                    "/api/voting/{id}",
+                                    "/api/interstitial")
                             .hasAuthority(Rol.ADMIN.getName())
                             .requestMatchers(HttpMethod.DELETE,
                                     "/api/news/{id}",
                                     "/api/news/{newsId}/sections/{sectionId}",
                                     "/api/banners/*",
-                                    "/api/voting/{id}")
+                                    "/api/voting/{id}",
+                                    "/api/interstitial/delete/{id}")
                             .hasAuthority(Rol.ADMIN.getName())
                             .anyRequest()
                             .authenticated();
