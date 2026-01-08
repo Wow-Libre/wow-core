@@ -1,10 +1,13 @@
 package com.register.wowlibre.infrastructure.repositories.interstitial_user;
 
-import com.register.wowlibre.domain.port.out.interstitial_user.*;
-import com.register.wowlibre.infrastructure.entities.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.domain.port.out.interstitial_user.ObtainInterstitialUser;
+import com.register.wowlibre.domain.port.out.interstitial_user.SaveInterstitialUser;
+import com.register.wowlibre.infrastructure.entities.InterstitialEntity;
+import com.register.wowlibre.infrastructure.entities.InterstitialUserEntity;
+import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public class JpaInterstitialUserAdapter implements SaveInterstitialUser, ObtainInterstitialUser {
@@ -16,11 +19,7 @@ public class JpaInterstitialUserAdapter implements SaveInterstitialUser, ObtainI
 
 
     @Override
-    public void saveInterstitialUser(Long userId, InterstitialEntity interstitial, String transactionId) {
-        InterstitialUserEntity interstitialUserEntity = new InterstitialUserEntity();
-        interstitialUserEntity.setUserId(userId);
-        interstitialUserEntity.setInterstitialId(interstitial);
-        interstitialUserEntity.setViews(0L);
+    public void saveInterstitialUser(InterstitialUserEntity interstitialUserEntity, String transactionId) {
         interstitialUserJpaRepository.save(interstitialUserEntity);
     }
 

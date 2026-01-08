@@ -53,13 +53,21 @@ public class InterstitialService implements InterstitialPort {
                     .findFirst();
 
             if (userView.isEmpty()) {
-                saveInterstitialUser.saveInterstitialUser(userId, interstitial, transactionId);
+                InterstitialUserEntity interstitialUserEntity = new InterstitialUserEntity();
+                interstitialUserEntity.setUserId(userId);
+                interstitialUserEntity.setInterstitialId(interstitial);
+                interstitialUserEntity.setViewedAt(now);
+                interstitialUserEntity.setViews(1L);
+                saveInterstitialUser.saveInterstitialUser(interstitialUserEntity, transactionId);
                 return toDto(interstitial);
             }
 
             LocalDateTime lastViewed = userView.get().getViewedAt();
-            if (lastViewed.plusHours(12).isBefore(now)) {
-                saveInterstitialUser.saveInterstitialUser(userId, interstitial, transactionId);
+            if (lastViewed.plusHours(5).isBefore(now)) {
+                InterstitialUserEntity interstitialUserEntity = userView.get();
+                interstitialUserEntity.setViewedAt(now);
+                interstitialUserEntity.setViews(interstitialUserEntity.getViews() + 1L);
+                saveInterstitialUser.saveInterstitialUser(interstitialUserEntity, transactionId);
                 return toDto(interstitial);
             }
         }

@@ -25,9 +25,7 @@ public class InterstitialController {
     @GetMapping
     public ResponseEntity<GenericResponse<InterstitialDto>> interstitial(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_USER_ID) final Long userId,
-            @RequestParam(name = PARAM_ACCOUNT_ID) final Long accountId,
-            @RequestParam(name = PARAM_SERVER_ID) final Long realmId) {
+            @RequestHeader(name = HEADER_USER_ID) final Long userId) {
 
         InterstitialDto response = interstitialPort.findAllActiveInterstitial(userId, transactionId);
 
