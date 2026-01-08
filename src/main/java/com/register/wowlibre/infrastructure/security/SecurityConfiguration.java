@@ -62,7 +62,9 @@ public class SecurityConfiguration {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
                 "http://127.0.0.1:3000", "https://www.wowlibre.com",
-                "https://api.wowlibre.com"));
+                "https://api.wowlibre.com",
+                "https://wows.esports.com.py","https://wow.esports.com.py",
+                "https://api.esports.com.py"));
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
