@@ -2,11 +2,9 @@ package com.register.wowlibre.infrastructure.repositories.interstitial_user;
 
 import com.register.wowlibre.domain.port.out.interstitial_user.ObtainInterstitialUser;
 import com.register.wowlibre.domain.port.out.interstitial_user.SaveInterstitialUser;
-import com.register.wowlibre.infrastructure.entities.InterstitialEntity;
 import com.register.wowlibre.infrastructure.entities.InterstitialUserEntity;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
