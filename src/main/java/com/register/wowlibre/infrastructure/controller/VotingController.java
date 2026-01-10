@@ -1,6 +1,6 @@
 package com.register.wowlibre.infrastructure.controller;
 
-import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.voting.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.voting_platforms.*;
 import com.register.wowlibre.domain.shared.*;
@@ -88,8 +88,9 @@ public class VotingController {
     public ResponseEntity<GenericResponse<Void>> postback(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestParam("p_resp") String parameter,
-            @RequestParam("ip") String ipUsuario) {
-        votingPlatformsPort.postbackVotingPlatform(parameter, transactionId);
+            @RequestParam("ip") String ipAddress) {
+
+        votingPlatformsPort.postbackVotingPlatform(parameter, ipAddress, transactionId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

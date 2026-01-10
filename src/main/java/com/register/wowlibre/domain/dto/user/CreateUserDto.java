@@ -1,4 +1,4 @@
-package com.register.wowlibre.domain.dto;
+package com.register.wowlibre.domain.dto.user;
 
 import com.fasterxml.jackson.annotation.*;
 import io.swagger.v3.oas.annotations.media.*;
@@ -12,7 +12,7 @@ import java.time.*;
 
 @Data
 @Schema(description = "User account creation data")
-public class UserDto {
+public class CreateUserDto {
     @NotNull
     @Length(min = 2, max = 30)
     @Schema(description = "User's country code", example = "US", minLength = 2, maxLength = 30)

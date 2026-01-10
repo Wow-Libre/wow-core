@@ -20,8 +20,8 @@ import java.util.*;
 
 @Service
 public class AccountGameService implements AccountGamePort {
+    public static final int MAXIMUM_NUMBER_OF_ACCOUNTS_ALLOWED = 20;
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountGameService.class);
-
     /**
      * Account Game PORT
      **/
@@ -57,7 +57,7 @@ public class AccountGameService implements AccountGamePort {
                        String gameMail, String password,
                        String transactionId) {
 
-        Optional<UserEntity> userModel = userPort.findByUserId(userId, transactionId);
+        final Optional<UserEntity> userModel = userPort.findByUserId(userId, transactionId);
 
         if (userModel.isEmpty()) {
             LOGGER.error("[AccountGameService] [create] User not found - userId: {}, transactionId: {}", userId,
@@ -65,9 +65,9 @@ public class AccountGameService implements AccountGamePort {
             throw new UnauthorizedException("The client is not available or does not exist", transactionId);
         }
 
-        UserEntity user = userModel.get();
-
-        RealmModel realmModel = realmPort.findByNameAndVersionAndStatusIsTrue(realmName, expansionId, transactionId);
+        final UserEntity user = userModel.get();
+        final RealmModel realmModel = realmPort.findByNameAndVersionAndStatusIsTrue(realmName, expansionId,
+                transactionId);
 
         if (realmModel == null) {
             LOGGER.error("[AccountGameService] [create] Realm not found or unavailable - realmName: {}, expansionId: " +
@@ -77,9 +77,10 @@ public class AccountGameService implements AccountGamePort {
                     "available", transactionId);
         }
 
-        int existingAccountsCount = obtainAccountGamePort.findByUserIdAndRealmId(userId, realmModel.id,
+        final int existingAccountsCount = obtainAccountGamePort.findByUserIdAndRealmId(userId, realmModel.id,
                 transactionId).size();
-        if (existingAccountsCount >= 20) {
+
+        if (existingAccountsCount >= MAXIMUM_NUMBER_OF_ACCOUNTS_ALLOWED) {
             LOGGER.error("[AccountGameService] [create] Maximum accounts limit reached - userId: {}, realmId: {}, " +
                             "existingAccounts: {}, transactionId: {}", userId, realmModel.id, existingAccountsCount,
                     transactionId);
@@ -88,7 +89,7 @@ public class AccountGameService implements AccountGamePort {
 
         final String gameEMail = gameMail != null && !gameMail.isBlank() ? gameMail : user.getEmail();
 
-        Long accountId = integratorPort.createAccount(realmModel.ip, realmModel.apiSecret, realmModel.expansion,
+        final Long accountId = integratorPort.createAccount(realmModel.ip, realmModel.apiSecret, realmModel.expansion,
                 username, password, gameEMail, user.getId(), transactionId);
 
         AccountGameEntity accountGameEntity = new AccountGameEntity();
@@ -106,25 +107,33 @@ public class AccountGameService implements AccountGamePort {
     @Override
     public AccountsGameDto accounts(Long userId, int page, int size, String searchUsername, String realmName,
                                     String transactionId) {
-        if (size > 30) {
-            size = 30;
+
+        final int pageSize = Math.min(size, 30);
+        final Long totalAccounts = obtainAccountGamePort.accounts(userId);
+
+        if (totalAccounts == 0) {
+            return new AccountsGameDto(List.of(), 0L);
         }
 
-        Long sizeAccounts = obtainAccountGamePort.accounts(userId);
-        List<AccountGameModel> accountsGame = new ArrayList<>();
+        final boolean hasFilters =
+                (searchUsername != null && !searchUsername.isBlank()) ||
+                        (realmName != null && !realmName.isBlank());
 
-        if (sizeAccounts > 0) {
-            if (searchUsername != null || realmName != null) {
-                accountsGame = obtainAccountGamePort.findByUserIdAndRealmNameAndUsernameStatusIsTrue(userId, page,
-                        size, realmName, searchUsername, transactionId).stream().map(this::mapToModel).toList();
-            } else {
-                accountsGame = obtainAccountGamePort.findByUserIdAndStatusIsTrue(userId,
-                        page, size, transactionId).stream().map(this::mapToModel).toList();
-            }
-        }
+        final List<AccountGameModel> accountsGame = hasFilters
+                ? obtainAccountGamePort
+                .findByUserIdAndRealmNameAndUsernameStatusIsTrue(
+                        userId, page, pageSize, realmName, searchUsername, transactionId)
+                .stream()
+                .map(this::mapToModel)
+                .toList()
+                : obtainAccountGamePort
+                .findByUserIdAndStatusIsTrue(
+                        userId, page, pageSize, transactionId)
+                .stream()
+                .map(this::mapToModel)
+                .toList();
 
-
-        return new AccountsGameDto(accountsGame, sizeAccounts);
+        return new AccountsGameDto(accountsGame, totalAccounts);
     }
 
 
@@ -141,19 +150,18 @@ public class AccountGameService implements AccountGamePort {
     @Override
     public AccountGameDetailDto account(Long userId, Long accountId, Long realmId, String transactionId) {
 
-        Optional<RealmEntity> realm = realmPort.findById(realmId, transactionId);
+        final Optional<RealmEntity> realm = realmPort.findById(realmId, transactionId);
 
         if (realm.isEmpty() || !realm.get().isStatus()) {
-            LOGGER.error("[AccountGameService] [account] Realm not found or inactive - realmId: {}, userId: {}, " +
-                            "accountId: {}, transactionId: {}",
-                    realmId, userId, accountId, transactionId);
+            LOGGER.error("[AccountGameService] [account] Realm not found or inactive - realmId: {}, userId: {}, "
+                    + "accountId: {}, transactionId: {}", realmId, userId, accountId, transactionId);
             throw new InternalException("The realm where your character is currently located is not available",
                     transactionId);
         }
 
         final RealmEntity realmDetail = realm.get();
 
-        Optional<AccountGameEntity> accountGame =
+        final Optional<AccountGameEntity> accountGame =
                 obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, accountId, realmId,
                         transactionId);
 
@@ -165,7 +173,7 @@ public class AccountGameService implements AccountGamePort {
                     "support", transactionId);
         }
 
-        AccountDetailResponse account = integratorPort.account(realmDetail.getHost(), realmDetail.getJwt(),
+        final AccountDetailResponse account = integratorPort.account(realmDetail.getHost(), realmDetail.getJwt(),
                 accountId, transactionId);
 
 
@@ -188,19 +196,18 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
-    public void desactive(List<Long> id, Long userId, String transactionId) {
+    public void deactivate(List<Long> id, Long userId, String transactionId) {
         id.forEach(account -> {
                     Optional<AccountGameEntity> accountGame =
                             obtainAccountGamePort.findByIdAndUserId(account, userId, transactionId);
                     if (accountGame.isEmpty()) {
-                        LOGGER.error("[AccountGameService] [desactive] Account not found or does not belong to user -" +
-                                        " accountId: {}, userId: {}, transactionId: {}",
-                                account, userId, transactionId);
+                        LOGGER.error("[AccountGameService] [desactive] Account not found or does not belong to user -"
+                                + " accountId: {}, userId: {}, transactionId: {}", account, userId, transactionId);
                         throw new InternalException("Invalid desactive user", transactionId);
                     }
-                    AccountGameEntity accountDesactive = accountGame.get();
-                    accountDesactive.setStatus(false);
-                    saveAccountGamePort.save(accountDesactive, transactionId);
+                    AccountGameEntity deactivate = accountGame.get();
+                    deactivate.setStatus(false);
+                    saveAccountGamePort.save(deactivate, transactionId);
                 }
         );
     }
@@ -214,9 +221,9 @@ public class AccountGameService implements AccountGamePort {
 
 
     private AccountGameModel mapToModel(AccountGameEntity accountGameEntity) {
-        boolean status = accountGameEntity.isStatus() && accountGameEntity.getRealmId().isStatus();
-        Integer expansionId = accountGameEntity.getRealmId().getExpansionId();
-        Expansion expansion = Expansion.getById(expansionId);
+        final boolean status = accountGameEntity.isStatus() && accountGameEntity.getRealmId().isStatus();
+        final Integer expansionId = accountGameEntity.getRealmId().getExpansionId();
+        final Expansion expansion = Expansion.getById(expansionId);
         return new AccountGameModel(accountGameEntity.getId(), accountGameEntity.getUsername(),
                 accountGameEntity.getAccountId(), accountGameEntity.getGameEmail(),
                 accountGameEntity.getRealmId().getName(), accountGameEntity.getRealmId().getId(),

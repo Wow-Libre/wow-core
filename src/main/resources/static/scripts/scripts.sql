@@ -351,10 +351,31 @@ CREATE TABLE platform.vote_wallet (
     platform_id BIGINT NOT NULL,
     vote_balance INT NOT NULL,
     total_votes INT NOT NULL,
+    ip_address VARCHAR(80),
     reference_code TEXT NOT NULL,
     created_at DATETIME,
     updated_at DATETIME,
     CONSTRAINT fk_vote_wallet_user_id FOREIGN KEY (user_id) REFERENCES platform.user(id),
     CONSTRAINT fk_vote_wallet_platform_id FOREIGN KEY (platform_id) REFERENCES platform.voting_platforms(id),
     CONSTRAINT uq_vote_wallet_user_platform UNIQUE (user_id, platform_id)
+);
+
+CREATE TABLE platform.interstitial (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    url_img TEXT NOT NULL,
+    redirect_url TEXT NOT NULL,
+    status BOOLEAN NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE platform.interstitial_user (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    views BIGINT,
+    interstitial_id BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    viewed_at TIMESTAMP NOT NULL,
+    CONSTRAINT fk_interstitial_user_user_id FOREIGN KEY (user_id) REFERENCES platform.user(id),
+    CONSTRAINT fk_interstitial_user_interstitial_id FOREIGN KEY (interstitial_id) REFERENCES platform.interstitial(id)
 );

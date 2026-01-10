@@ -14,7 +14,7 @@ public interface VotingPlatformsPort {
 
     void deleteVotingPlatform(Long id, String transactionId);
 
-    void postbackVotingPlatform(String referenceCode, String transactionId);
+    void postbackVotingPlatform(String referenceCode, String ipAddress, String transactionId);
 
     Integer votes(Long userId, String transactionId);
 }

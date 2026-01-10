@@ -28,6 +28,7 @@ public class InternalApiEndpoints {
     private static final String[] REALM_ENDPOINTS = {
             "/api/realm/advertising/language",
             "/api/realm",
+            "/api/realm/key",
             "/api/realm/vdp"
     };
 
@@ -54,6 +55,11 @@ public class InternalApiEndpoints {
             "/api/banners",
             "/actuator/**"
     };
+    // Voting endpoints
+    private static final String[] VOTING_ENDPOINTS = {
+            "/api/voting/postback",
+            "/api/voting"
+    };
 
     /**
      * Combines all internal API endpoints into a single array.
@@ -65,6 +71,7 @@ public class InternalApiEndpoints {
         List<String> allEndpoints = new ArrayList<>();
 
         allEndpoints.addAll(List.of(ACCOUNT_ENDPOINTS));
+        allEndpoints.addAll(List.of(VOTING_ENDPOINTS));
         allEndpoints.addAll(List.of(RESOURCES_ENDPOINTS));
         allEndpoints.addAll(List.of(REALM_ENDPOINTS));
         allEndpoints.addAll(List.of(GUILDS_ENDPOINTS));

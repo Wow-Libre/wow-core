@@ -46,10 +46,7 @@ public class SecurityConfiguration {
     private String[] combinePublicEndpoints() {
         List<String> endpoints = new ArrayList<>();
         // System endpoints
-        endpoints.add("/api/realm/key");
         endpoints.add("/actuator/health");
-        endpoints.add("/api/voting/postback");
-        endpoints.add("/api/voting");
         // Internal API
         endpoints.addAll(List.of(InternalApiEndpoints.getAllInternalApiEndpoints()));
         // Swagger
@@ -94,24 +91,33 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> {
                     String[] publicEndpoints = combinePublicEndpoints();
                     request.requestMatchers(publicEndpoints).permitAll()
-                            .requestMatchers("/api/realm/**", "/api/resources/create/faq",
-                                    "/api/resources/delete/faq", "/api/transaction" +
-                                            "/subscription-benefits",
+                            .requestMatchers("/api/realm/**",
+                                    "/api/resources/create/faq",
+                                    "/api/resources/delete/faq",
+                                    "/api/transaction/subscription-benefits",
                                     "/api/provider/**")
                             .hasAuthority(Rol.ADMIN.getName())
-                            .requestMatchers(HttpMethod.POST, "/api/news",
-                                    "/api/news/{newsId}/sections", "/api" +
-                                            "/banners",
-                                    "/api/voting/create")
+                            .requestMatchers(HttpMethod.POST,
+                                    "/api/news",
+                                    "/api/news/{newsId}/sections",
+                                    "/api/banners",
+                                    "/api/voting/create",
+                                    "/api/interstitial")
                             .hasAuthority(Rol.ADMIN.getName())
-                            .requestMatchers(HttpMethod.PUT, "/api/news/{id}", "/api/voting/{id}")
+                            .requestMatchers(HttpMethod.PUT,
+                                    "/api/news/{id}",
+                                    "/api/voting/{id}",
+                                    "/api/interstitial")
                             .hasAuthority(Rol.ADMIN.getName())
-                            .requestMatchers(HttpMethod.DELETE, "/api/news/{id}",
-                                    "/api/news/{newsId}/sections" +
-                                            "/{sectionId}",
-                                    "/api/banners/*", "/api/voting/{id}")
+                            .requestMatchers(HttpMethod.DELETE,
+                                    "/api/news/{id}",
+                                    "/api/news/{newsId}/sections/{sectionId}",
+                                    "/api/banners/*",
+                                    "/api/voting/{id}",
+                                    "/api/interstitial/delete/{id}")
                             .hasAuthority(Rol.ADMIN.getName())
-                            .anyRequest().authenticated();
+                            .anyRequest()
+                            .authenticated();
                 })
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationManager(authenticationManager(http)).addFilterBefore(

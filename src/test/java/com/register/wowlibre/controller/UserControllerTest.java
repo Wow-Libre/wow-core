@@ -1,6 +1,7 @@
 package com.register.wowlibre.controller;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.user.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.security.*;
@@ -19,17 +20,14 @@ import static org.mockito.Mockito.*;
 
 class UserControllerTest extends BaseTest {
 
-    @InjectMocks
-    private UserController userController;
-
-    @Mock
-    private UserPort userPort;
-
-    @Mock
-    private HttpServletRequest httpServletRequest;
-
     private static final String TRANSACTION_ID = "12345";
     private static final Locale LOCALE = Locale.US;
+    @InjectMocks
+    private UserController userController;
+    @Mock
+    private UserPort userPort;
+    @Mock
+    private HttpServletRequest httpServletRequest;
 
     @BeforeEach
     void setUp() {
@@ -59,15 +57,15 @@ class UserControllerTest extends BaseTest {
 
     @Test
     void create_shouldReturnCreatedResponse() {
-        UserDto userDto = new UserDto();
+        CreateUserDto createUserDto = new CreateUserDto();
         JwtDto jwtDto = new JwtDto(1L, "token", "", new Date(), "", "ES", false, false);
 
         when(httpServletRequest.getRemoteAddr()).thenReturn("127.0.0.1");
-        when(userPort.create(eq(userDto), anyString(), eq(LOCALE), eq(TRANSACTION_ID)))
+        when(userPort.create(eq(createUserDto), anyString(), eq(TRANSACTION_ID)))
                 .thenReturn(jwtDto);
 
         ResponseEntity<GenericResponse<JwtDto>> response = userController.create(
-                TRANSACTION_ID, LOCALE, userDto, httpServletRequest);
+                TRANSACTION_ID, createUserDto, httpServletRequest);
 
         assertEquals(201, response.getStatusCode().value());
         assertNotNull(Objects.requireNonNull(response.getBody()).getData());

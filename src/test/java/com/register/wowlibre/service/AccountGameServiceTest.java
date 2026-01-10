@@ -1,34 +1,23 @@
 package com.register.wowlibre.service;
 
-import com.register.wowlibre.application.services.account_game.AccountGameService;
-import com.register.wowlibre.domain.dto.account_game.AccountGameDetailDto;
-import com.register.wowlibre.domain.dto.account_game.AccountGameStatsDto;
-import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
-import com.register.wowlibre.domain.dto.client.AccountDetailResponse;
-import com.register.wowlibre.domain.enums.Expansion;
-import com.register.wowlibre.domain.exception.InternalException;
-import com.register.wowlibre.domain.exception.UnauthorizedException;
-import com.register.wowlibre.domain.model.RealmModel;
-import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
-import com.register.wowlibre.domain.port.in.machine.MachinePort;
-import com.register.wowlibre.domain.port.in.realm.RealmPort;
-import com.register.wowlibre.domain.port.in.user.UserPort;
-import com.register.wowlibre.domain.port.out.account_game.ObtainAccountGamePort;
-import com.register.wowlibre.domain.port.out.account_game.SaveAccountGamePort;
-import com.register.wowlibre.infrastructure.entities.AccountGameEntity;
-import com.register.wowlibre.infrastructure.entities.RealmEntity;
-import com.register.wowlibre.infrastructure.entities.UserEntity;
-import com.register.wowlibre.model.BaseTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import com.register.wowlibre.application.services.account_game.*;
+import com.register.wowlibre.domain.dto.account_game.*;
+import com.register.wowlibre.domain.dto.client.*;
+import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.integrator.*;
+import com.register.wowlibre.domain.port.in.machine.*;
+import com.register.wowlibre.domain.port.in.realm.*;
+import com.register.wowlibre.domain.port.in.user.*;
+import com.register.wowlibre.domain.port.out.account_game.*;
+import com.register.wowlibre.infrastructure.entities.*;
+import com.register.wowlibre.model.*;
+import org.junit.jupiter.api.*;
+import org.mockito.*;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.*;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -431,7 +420,7 @@ class AccountGameServiceTest extends BaseTest {
     }
 
     @Test
-    void testDesactive_success_deactivatesAccounts() {
+    void testDeactivate_success_deactivatesAccounts() {
         long userId = 1L;
         String transactionId = "tx-desactive-001";
         List<Long> accountIds = List.of(100L, 200L, 300L);
@@ -458,7 +447,7 @@ class AccountGameServiceTest extends BaseTest {
         when(obtainAccountGamePort.findByIdAndUserId(300L, userId, transactionId))
                 .thenReturn(Optional.of(account3));
 
-        assertDoesNotThrow(() -> service.desactive(accountIds, userId, transactionId));
+        assertDoesNotThrow(() -> service.deactivate(accountIds, userId, transactionId));
 
         verify(obtainAccountGamePort).findByIdAndUserId(100L, userId, transactionId);
         verify(obtainAccountGamePort).findByIdAndUserId(200L, userId, transactionId);
@@ -467,7 +456,7 @@ class AccountGameServiceTest extends BaseTest {
     }
 
     @Test
-    void testDesactive_accountNotFound_throwsException() {
+    void testDeactivate_accountNotFound_throwsException() {
         long userId = 1L;
         String transactionId = "tx-desactive-002";
         List<Long> accountIds = List.of(100L);
@@ -476,7 +465,7 @@ class AccountGameServiceTest extends BaseTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(InternalException.class, () ->
-                service.desactive(accountIds, userId, transactionId)
+                service.deactivate(accountIds, userId, transactionId)
         );
 
         verify(obtainAccountGamePort).findByIdAndUserId(100L, userId, transactionId);
@@ -484,7 +473,7 @@ class AccountGameServiceTest extends BaseTest {
     }
 
     @Test
-    void testDesactive_partialFailure_throwsExceptionOnFirstNotFound() {
+    void testDeactivate_partialFailure_throwsExceptionOnFirstNotFound() {
         long userId = 1L;
         String transactionId = "tx-desactive-003";
         List<Long> accountIds = List.of(100L, 200L);
@@ -499,7 +488,7 @@ class AccountGameServiceTest extends BaseTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(InternalException.class, () ->
-                service.desactive(accountIds, userId, transactionId)
+                service.deactivate(accountIds, userId, transactionId)
         );
 
         verify(obtainAccountGamePort).findByIdAndUserId(100L, userId, transactionId);
@@ -508,12 +497,12 @@ class AccountGameServiceTest extends BaseTest {
     }
 
     @Test
-    void testDesactive_emptyList_doesNothing() {
+    void testDeactivate_emptyList_doesNothing() {
         long userId = 1L;
         String transactionId = "tx-desactive-004";
         List<Long> accountIds = Collections.emptyList();
 
-        assertDoesNotThrow(() -> service.desactive(accountIds, userId, transactionId));
+        assertDoesNotThrow(() -> service.deactivate(accountIds, userId, transactionId));
 
         verify(obtainAccountGamePort, never()).findByIdAndUserId(anyLong(), anyLong(), anyString());
         verify(saveAccountGamePort, never()).save(any(AccountGameEntity.class), anyString());

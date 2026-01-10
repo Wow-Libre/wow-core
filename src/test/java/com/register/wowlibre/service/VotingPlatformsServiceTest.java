@@ -89,7 +89,7 @@ public class VotingPlatformsServiceTest {
 
     @Test
     void postbackVotingPlatform_invalidCode_throwsException() {
-        assertThrows(InternalException.class, () -> service.postbackVotingPlatform("-1200", "tx"));
+        assertThrows(InternalException.class, () -> service.postbackVotingPlatform("-1200", "127.0.0.1", "tx"));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class VotingPlatformsServiceTest {
         wallet.setTotalVotes(2);
         when(voteWalletPort.findByReferenceCode("ref", "tx")).thenReturn(wallet);
 
-        service.postbackVotingPlatform("ref-11", "tx");
+        service.postbackVotingPlatform("ref-11", "127.0.0.1", "tx");
 
         assertEquals(3, wallet.getVoteBalance());
         assertEquals(3, wallet.getTotalVotes());
