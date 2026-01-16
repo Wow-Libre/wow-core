@@ -23,5 +23,5 @@ jobs:
         with:
           push: true
           tags: |
-            wowlibre96/NOMBRE_IMAGEN:latest
-            wowlibre96/NOMBRE_IMAGEN:${{ github.sha }}
+            wowlibre96/wow-libre-core:latest
+            wowlibre96/wow-libre-core:${{ github.sha }}
