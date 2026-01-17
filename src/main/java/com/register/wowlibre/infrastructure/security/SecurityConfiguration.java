@@ -3,6 +3,7 @@ package com.register.wowlibre.infrastructure.security;
 import com.register.wowlibre.domain.constant.*;
 import com.register.wowlibre.domain.port.in.jwt.*;
 import com.register.wowlibre.domain.security.*;
+import com.register.wowlibre.infrastructure.config.*;
 import com.register.wowlibre.infrastructure.filter.*;
 import com.register.wowlibre.infrastructure.filter.AuthenticationFilter;
 import com.register.wowlibre.infrastructure.util.*;
@@ -31,13 +32,15 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsServiceCustom userDetailsServiceCustom;
     private final JwtPort jwtPort;
+    private final CorsProperties corsProperties;
 
     public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
                                  UserDetailsServiceCustom userDetailsServiceCustom,
-                                 JwtPort jwtPort) {
+                                 JwtPort jwtPort, CorsProperties corsProperties) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.userDetailsServiceCustom = userDetailsServiceCustom;
         this.jwtPort = jwtPort;
+        this.corsProperties = corsProperties;
     }
 
     /**
@@ -57,11 +60,7 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
-                "http://127.0.0.1:3000", "https://www.wowlibre.com",
-                "https://api.wowlibre.com",
-                "https://wows.esports.com.py","https://wow.esports.com.py",
-                "https://api.esports.com.py"));
+        corsConfiguration.setAllowedOrigins(corsProperties.getAllowedOrigins());
         corsConfiguration.setAllowedMethods(Arrays.asList(
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),

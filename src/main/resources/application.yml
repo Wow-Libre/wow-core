@@ -35,7 +35,7 @@ spring:
       pool-name: HikariPoolCore
     url: ${DB_CORE_URL:jdbc:mysql://localhost:3306/platform}
     username: ${DB_CORE_USERNAME:root}
-    password: ${DB_CORE_PASSWORD:sebastian}
+    password: ${DB_CORE_PASSWORD:Wowlibre96@@}
     driver-class-name: com.mysql.cj.jdbc.Driver
   mail:
     host: ${CORE_GOOGLE_HOST:smtp.gmail.com}
@@ -81,6 +81,9 @@ management:
   metrics:
     tags:
       application: "wow-core"
+app:
+  cors:
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://127.0.0.1:3000,https://www.wowlibre.com,https://api.wowlibre.com,https://wows.esports.com.py,https://wow.esports.com.py,https://api.esports.com.py}
 ---
 spring:
   config:
@@ -133,3 +136,6 @@ management:
     web:
       exposure:
         include: health,metrics,prometheus
+app:
+  cors:
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://127.0.0.1:3000,https://www.wowlibre.com,https://api.wowlibre.com}
