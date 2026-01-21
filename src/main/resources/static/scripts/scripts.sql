@@ -379,3 +379,36 @@ CREATE TABLE platform.interstitial_user (
     CONSTRAINT fk_interstitial_user_user_id FOREIGN KEY (user_id) REFERENCES platform.user(id),
     CONSTRAINT fk_interstitial_user_interstitial_id FOREIGN KEY (interstitial_id) REFERENCES platform.interstitial(id)
 );
+
+CREATE TABLE platform.wallets (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    points BIGINT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_wallets_user_id
+    FOREIGN KEY (user_id) REFERENCES platform.user(id)
+);
+
+
+CREATE TABLE platform.plans
+(
+    id              BIGINT AUTO_INCREMENT NOT NULL,
+    name            VARCHAR(50) NOT NULL,
+    price           DOUBLE NOT NULL,
+    price_title     varchar(30) NOT NULL,
+    description     text,
+    discount        INTEGER     NOT NULL,
+    status          BOOLEAN     NOT NULL,
+    currency        VARCHAR(4)  NOT NULL,
+    frequency_type  VARCHAR(30),
+    frequency_value INTEGER,
+    free_trial_days INTEGER,
+    created_at      TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6),
+    updated_at      TIMESTAMP(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    tax             VARCHAR(50) NOT NULL,
+    return_tax      VARCHAR(50) NOT NULL,
+    features JSON NULL,
+    language        VARCHAR(20),
+    PRIMARY KEY (id)
+);

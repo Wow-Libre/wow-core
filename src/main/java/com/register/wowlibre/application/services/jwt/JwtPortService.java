@@ -3,8 +3,8 @@ package com.register.wowlibre.application.services.jwt;
 import com.register.wowlibre.domain.port.in.jwt.*;
 import com.register.wowlibre.domain.shared.*;
 import com.register.wowlibre.infrastructure.config.*;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.*;
 import io.jsonwebtoken.security.*;
 import lombok.extern.slf4j.*;
@@ -53,7 +53,6 @@ public class JwtPortService implements JwtPort {
         extraClaims.put(CONSTANT_ROL, userDetails.getAuthorities());
         extraClaims.put(HEADER_USER_ID, userDetails.getUserId());
         extraClaims.put(HEADER_EMAIL, userDetails.getUsername());
-
         extraClaims.put(HEADER_LANGUAGE, userDetails.getLanguage());
 
         return generateToken(extraClaims, userDetails);
