@@ -5,7 +5,7 @@ import lombok.*;
 
 @Data
 @Entity
-@Table(name = "payu_credentials")
+@Table(name = "payu_credentials", schema = "platform")
 public class PayuCredentialsEntity {
     @Id
     private Long gatewayId;

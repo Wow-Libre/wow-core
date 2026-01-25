@@ -25,6 +25,12 @@ public class GenericResponseBuilder<D> {
         return this;
     }
 
+    public GenericResponseBuilder<D> notFound() {
+        this.genericResponse.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+        this.genericResponse.setCode(HttpStatus.NOT_FOUND.value());
+        return this;
+    }
+
     public GenericResponseBuilder<D> created() {
         this.genericResponse.setMessage(HttpStatus.CREATED.getReasonPhrase());
         this.genericResponse.setCode(HttpStatus.CREATED.value());

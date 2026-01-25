@@ -8,7 +8,7 @@ import java.time.*;
 
 @Data
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions", schema = "platform")
 public class TransactionEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +23,18 @@ public class TransactionEntity implements Serializable {
     private String status;
     @JoinColumn(
             name = "subscription_id",
-            referencedColumnName = "id")
+            referencedColumnName = "id",
+            nullable = false)
     @ManyToOne(
+            optional = false,
             fetch = FetchType.EAGER)
     private SubscriptionEntity subscriptionId;
     @JoinColumn(
             name = "product_id",
-            referencedColumnName = "id")
+            referencedColumnName = "id",
+            nullable = false)
     @ManyToOne(
+            optional = false,
             fetch = FetchType.EAGER)
     private ProductEntity productId;
     @Column(name = "reference_number")

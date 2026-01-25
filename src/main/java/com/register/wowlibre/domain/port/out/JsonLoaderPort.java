@@ -1,5 +1,6 @@
 package com.register.wowlibre.domain.port.out;
 
+import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.model.resources.BenefitModel;
 import com.register.wowlibre.domain.model.resources.CountryModel;
 import com.register.wowlibre.domain.model.resources.PlanModel;
@@ -16,5 +17,7 @@ public interface JsonLoaderPort {
     List<BenefitModel> getJsonBenefitsGuild(String language, String transactionId);
 
     WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId);
+
+    PillHomeModel getResourcePillHome(String language, String transactionId);
 
 }

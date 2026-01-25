@@ -5,7 +5,7 @@ import lombok.*;
 
 @Data
 @Entity
-@Table(name = "stripe_credentials")
+@Table(name = "stripe_credentials", schema = "platform")
 public class StripeCredentialsEntity {
     @Id
     private Long gatewayId;

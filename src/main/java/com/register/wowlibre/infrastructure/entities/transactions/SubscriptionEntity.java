@@ -7,7 +7,7 @@ import java.time.*;
 
 @Data
 @Entity
-@Table(name = "subscription")
+@Table(name = "subscriptions", schema = "platform")
 public class SubscriptionEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +20,25 @@ public class SubscriptionEntity {
     @ManyToOne(
             optional = false,
             fetch = FetchType.EAGER)
-    private PlanEntity planId;
+    private PlansEntity planId;
     @Column(name = "reference_number")
     private String referenceNumber;
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
     @Column(name = "next_invoice_date")
-    private LocalDateTime nextInvoiceDate;
+    private LocalDate nextInvoiceDate;
     private String status;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

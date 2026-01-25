@@ -70,11 +70,9 @@ public class ResourcesService implements ResourcesPort {
         return jsonLoaderPort.getJsonBenefitsGuild(language, transactionId);
     }
 
-
     @Override
     public WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId) {
         return jsonLoaderPort.getWidgetSubscription(language, transactionId);
     }
-
 
 }

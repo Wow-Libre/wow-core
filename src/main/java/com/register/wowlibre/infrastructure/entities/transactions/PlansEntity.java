@@ -7,7 +7,7 @@ import java.time.*;
 
 @Data
 @Entity
-@Table(name = "plan", schema = "transactions")
+@Table(name = "plans", schema = "platform")
 public class PlansEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

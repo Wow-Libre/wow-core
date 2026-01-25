@@ -3,11 +3,11 @@ package com.register.wowlibre.infrastructure.entities.transactions;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.*;
+import java.time.*;
 
 @Data
 @Entity
-@Table(name = "subscription_benefit")
+@Table(name = "subscription_benefits", schema = "platform")
 public class SubscriptionBenefitEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +18,14 @@ public class SubscriptionBenefitEntity {
     @Column(name = "benefit_id")
     private Long benefitId;
     @Column(name = "created_at")
-    private Date createdAt;
+    private LocalDate createdAt;
     @Column(name = "realm_id")
     private Long realmId;
 
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDate.now();
+        }
+    }
 }

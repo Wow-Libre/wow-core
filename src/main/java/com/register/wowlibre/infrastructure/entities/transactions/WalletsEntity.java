@@ -8,7 +8,7 @@ import java.time.*;
 
 @Data
 @Entity
-@Table(name = "wallets")
+@Table(name = "wallets", schema = "platform")
 public class WalletsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class WalletsEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @PrePersist

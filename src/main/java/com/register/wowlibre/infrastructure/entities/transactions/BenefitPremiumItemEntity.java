@@ -5,7 +5,7 @@ import lombok.*;
 
 @Data
 @Entity
-@Table(name = "benefit_premium_item")
+@Table(name = "benefit_premium_items", schema = "platform")
 public class BenefitPremiumItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

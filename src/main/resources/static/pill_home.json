@@ -1,0 +1,14 @@
+{
+  "es": {
+    "inactive": "https://static.wixstatic.com/media/5dd8a0_eab3514bc903449f8c1113a2191bf3bf~mv2.webp",
+    "active": "https://static.wixstatic.com/media/5dd8a0_96ec84eb24e640ea95f6879eac344f9e~mv2.webp"
+  },
+  "en": {
+    "inactive": "https://static.wixstatic.com/media/5dd8a0_fcd63d3232df4f629e389f8b4bd794d0~mv2.webp",
+    "active": "https://static.wixstatic.com/media/5dd8a0_dbee0ec376dd47ffb286165e9d0a8ebc~mv2.webp"
+  },
+  "pt": {
+    "inactive": "https://static.wixstatic.com/media/5dd8a0_99d64f5a2f1242a2bb101c441a890dfb~mv2.webp",
+    "active": "https://static.wixstatic.com/media/5dd8a0_e3635ad28f0e45b5a67d9aa6477760f3~mv2.png"
+  }
+}

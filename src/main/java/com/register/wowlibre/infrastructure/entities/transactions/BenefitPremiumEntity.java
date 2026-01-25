@@ -8,7 +8,7 @@ import java.util.*;
 
 @Data
 @Entity
-@Table(name = "benefit_premiums")
+@Table(name = "benefit_premiums", schema = "platform")
 public class BenefitPremiumEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

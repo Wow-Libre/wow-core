@@ -1,6 +1,6 @@
 package com.register.wowlibre.infrastructure.entities.transactions;
 
-import com.wow.libre.domain.enums.*;
+import com.register.wowlibre.domain.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,7 +8,7 @@ import java.time.*;
 
 @Data
 @Entity
-@Table(name = "payment_gateways")
+@Table(name = "payment_gateways", schema = "platform")
 public class PaymentGatewaysEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

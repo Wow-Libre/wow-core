@@ -1,0 +1,48 @@
+package com.register.wowlibre.infrastructure.repositories.transactions;
+
+import com.register.wowlibre.domain.port.out.transactions.ObtainTransaction;
+import com.register.wowlibre.domain.port.out.transactions.SaveTransaction;
+import com.register.wowlibre.infrastructure.entities.transactions.TransactionEntity;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public class JpaTransactionAdapter implements ObtainTransaction, SaveTransaction {
+    private final TransactionRepository transactionRepository;
+
+    public JpaTransactionAdapter(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
+    }
+
+    @Override
+    public Optional<TransactionEntity> findByReferenceNumber(String referenceNumber, String transactionId) {
+        return transactionRepository.findByReferenceNumber(referenceNumber);
+    }
+
+    @Override
+    public List<TransactionEntity> findByUserId(Long userId, String transactionId) {
+        return transactionRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<TransactionEntity> findByUserIdAndStatus(Long userId, String status, String transactionId) {
+        return transactionRepository.findByUserIdAndStatus(userId, status);
+    }
+
+    @Override
+    public List<TransactionEntity> findByStatus(String status, String transactionId) {
+        return transactionRepository.findByStatus(status);
+    }
+
+    @Override
+    public Optional<TransactionEntity> findById(Long id, String transactionId) {
+        return transactionRepository.findById(id);
+    }
+
+    @Override
+    public TransactionEntity save(TransactionEntity transactionEntity) {
+        return transactionRepository.save(transactionEntity);
+    }
+}
