@@ -1,9 +1,10 @@
-package com.register.wowlibre.infrastructure.controller;
+package com.register.wowlibre.infrastructure.controller.transaction;
 
 import com.fasterxml.jackson.databind.*;
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.port.in.transaction.*;
 import com.register.wowlibre.domain.shared.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
 import com.register.wowlibre.infrastructure.util.*;
 import jakarta.validation.*;
 import org.springframework.http.*;
@@ -88,35 +89,19 @@ public class TransactionController {
         }
     }
 
-    @GetMapping("/promotions")
-    public ResponseEntity<GenericResponse<PromotionsDto>> promotions(
+    @GetMapping("/{referenceNumber}")
+    public ResponseEntity<GenericResponse<TransactionEntity>> getTransactionByReference(
+            @PathVariable final String referenceNumber,
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
-            @RequestHeader(name = HEADER_USER_ID) final Long userId,
-            @RequestParam(name = PARAM_ACCOUNT_ID) final Long accountId,
-            @RequestParam(name = PARAM_SERVER_ID) final Long serverId,
-            @RequestParam(name = PARAM_CHARACTER_ID) final Long characterId,
-            @RequestParam(name = "class_id") final Long classId) {
+            @RequestHeader(name = HEADER_USER_ID) final Long userId) {
 
-        PromotionsDto promotionsDto = transactionPort.getPromotions(serverId, userId, accountId,
-                characterId, classId, locale.getLanguage(), transactionId);
+        Optional<TransactionEntity> transaction = transactionPort.findByReferenceNumberAndUserId(
+                referenceNumber, userId, transactionId);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(promotionsDto, transactionId).ok().build());
-    }
+        return transaction.map(transactionEntity -> ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(transactionEntity, transactionId)
+                        .ok().build())).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .build());
 
-    @PostMapping("/claim-promotions")
-    public ResponseEntity<GenericResponse<Void>> claimPromotions(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
-            @RequestHeader(name = HEADER_USER_ID) final Long userId,
-            @RequestBody @Valid ClaimPromoDto request) {
-
-        transactionPort.claimPromotion(request.getServerId(), userId,
-                request.getAccountId(),
-                request.getCharacterId(), request.getPromotionId(), locale.getLanguage(), transactionId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
 }

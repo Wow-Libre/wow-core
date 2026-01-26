@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.*;
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.port.in.transaction.*;
 import com.register.wowlibre.domain.shared.*;
-import com.register.wowlibre.infrastructure.controller.*;
+import com.register.wowlibre.infrastructure.controller.transaction.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;

@@ -22,4 +22,9 @@ public interface TransactionRepository extends CrudRepository<TransactionEntity,
     @Query("SELECT COUNT(a) FROM TransactionEntity a WHERE a.userId = :userId")
     long countByUserId(@Param("userId") Long userId);
 
+    Optional<TransactionEntity> findByReferenceNumberAndUserId(String referenceNumber, Long userId);
+
+    @Query("SELECT a FROM TransactionEntity a WHERE (a.status = :status) AND a.send = " +
+            "false")
+    List<TransactionEntity> findByStatusAndSendIsFalse(@Param("status") String status);
 }

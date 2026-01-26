@@ -50,6 +50,7 @@ public class SecurityConfiguration {
         List<String> endpoints = new ArrayList<>();
         // System endpoints
         endpoints.add("/actuator/health");
+        endpoints.add("/api/payment/notification");
         // Internal API
         endpoints.addAll(List.of(InternalApiEndpoints.getAllInternalApiEndpoints()));
         // Swagger

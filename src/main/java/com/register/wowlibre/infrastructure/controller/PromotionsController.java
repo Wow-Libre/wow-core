@@ -60,4 +60,36 @@ public class PromotionsController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<GenericResponse<PromotionsDto>> promotions(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam(name = PARAM_ACCOUNT_ID) final Long accountId,
+            @RequestParam(name = PARAM_SERVER_ID) final Long serverId,
+            @RequestParam(name = PARAM_CHARACTER_ID) final Long characterId,
+            @RequestParam(name = "class_id") final Long classId) {
+
+        PromotionsDto promotionsDto = promotionPort.getPromotions(serverId, userId, accountId,
+                characterId, classId, locale.getLanguage(), transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(promotionsDto, transactionId).ok().build());
+    }
+
+    @PostMapping("/claim-promotions")
+    public ResponseEntity<GenericResponse<Void>> claimPromotions(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestBody @Valid ClaimPromoDto request) {
+
+        promotionPort.claimPromotion(request.getServerId(), userId,
+                request.getAccountId(),
+                request.getCharacterId(), request.getPromotionId(), locale.getLanguage(), transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
 }

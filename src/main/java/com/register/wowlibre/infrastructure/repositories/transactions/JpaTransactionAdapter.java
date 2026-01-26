@@ -1,5 +1,6 @@
 package com.register.wowlibre.infrastructure.repositories.transactions;
 
+import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.port.out.transactions.*;
 import com.register.wowlibre.infrastructure.entities.transactions.*;
 import org.springframework.data.domain.*;
@@ -43,6 +44,17 @@ public class JpaTransactionAdapter implements ObtainTransaction, SaveTransaction
     @Override
     public Optional<TransactionEntity> findById(Long id, String transactionId) {
         return transactionRepository.findById(id);
+    }
+
+    @Override
+    public Optional<TransactionEntity> findByReferenceNumberAndUserId(String reference, Long userId,
+                                                                      String transactionId) {
+        return transactionRepository.findByReferenceNumberAndUserId(reference, userId);
+    }
+
+    @Override
+    public List<TransactionEntity> findByStatusIsPaidAndSendIsFalse(String transactionId) {
+        return transactionRepository.findByStatusAndSendIsFalse(TransactionStatus.PAID.getType());
     }
 
     @Override

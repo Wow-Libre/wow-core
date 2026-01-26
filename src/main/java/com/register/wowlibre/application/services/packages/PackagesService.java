@@ -1,10 +1,12 @@
 package com.register.wowlibre.application.services.packages;
 
-import com.register.wowlibre.domain.port.in.packages.PackagesPort;
-import com.register.wowlibre.domain.port.out.packages.ObtainPackages;
-import com.register.wowlibre.domain.port.out.packages.SavePackages;
-import com.register.wowlibre.infrastructure.entities.transactions.PackagesEntity;
-import org.springframework.stereotype.Service;
+import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.packages.*;
+import com.register.wowlibre.domain.port.out.packages.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
+import org.springframework.stereotype.*;
+
+import java.util.*;
 
 @Service
 public class PackagesService implements PackagesPort {
@@ -20,5 +22,11 @@ public class PackagesService implements PackagesPort {
     @Override
     public void save(PackagesEntity packagesEntity, String transactionId) {
         savePackages.save(packagesEntity, transactionId);
+    }
+
+    @Override
+    public List<ItemQuantityModel> findByProductId(ProductEntity product, String transactionId) {
+        return obtainPackages.findByProductId(product, transactionId).stream()
+                .map(packages -> new ItemQuantityModel(packages.getCodeCore(), 1)).toList();
     }
 }

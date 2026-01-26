@@ -16,4 +16,9 @@ public interface ObtainTransaction {
     List<TransactionEntity> findByStatus(String status, String transactionId);
 
     Optional<TransactionEntity> findById(Long id, String transactionId);
+
+    Optional<TransactionEntity> findByReferenceNumberAndUserId(String reference, Long userId, String transactionId);
+
+    List<TransactionEntity> findByStatusIsPaidAndSendIsFalse(String transactionId);
+
 }

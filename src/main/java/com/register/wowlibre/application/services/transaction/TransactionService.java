@@ -7,15 +7,19 @@ import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.account_validation.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
-import com.register.wowlibre.domain.port.in.promotion.*;
+import com.register.wowlibre.domain.port.in.payment_gateway.*;
+import com.register.wowlibre.domain.port.in.products.*;
 import com.register.wowlibre.domain.port.in.transaction.*;
-import com.register.wowlibre.domain.port.in.user_promotion.*;
+import com.register.wowlibre.domain.port.out.plans.*;
 import com.register.wowlibre.domain.port.out.transactions.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.entities.transactions.*;
+import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 
 @Service
@@ -27,19 +31,26 @@ public class TransactionService implements TransactionPort {
      * ACCOUNT VALIDATION PORT
      **/
     private final AccountValidationPort accountValidationPort;
-    private final UserPromotionPort userPromotionPort;
-    private final PromotionPort promotionPort;
     private final ObtainTransaction obtainTransaction;
-
+    private final SaveTransaction saveTransaction;
+    private final ProductPort productPort;
+    private final RandomString randomString;
+    private final ObtainPlan obtainPlan;
+    private final PaymentGatewayPort paymentGatewayPort;
 
     public TransactionService(IntegratorPort integratorPort, AccountValidationPort accountValidationPort,
-                              UserPromotionPort userPromotionPort, PromotionPort promotionPort,
-                              ObtainTransaction obtainTransaction) {
+                              ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
+                              ProductPort productPort, @Qualifier("subscription-reference") RandomString randomString
+            , ObtainPlan obtainPlan,
+                              PaymentGatewayPort paymentGatewayPort) {
         this.integratorPort = integratorPort;
         this.accountValidationPort = accountValidationPort;
-        this.userPromotionPort = userPromotionPort;
-        this.promotionPort = promotionPort;
         this.obtainTransaction = obtainTransaction;
+        this.saveTransaction = saveTransaction;
+        this.productPort = productPort;
+        this.randomString = randomString;
+        this.obtainPlan = obtainPlan;
+        this.paymentGatewayPort = paymentGatewayPort;
     }
 
 
@@ -53,7 +64,6 @@ public class TransactionService implements TransactionPort {
         RealmEntity server = accountVerificationDto.realm();
 
         if (server == null) {
-            LOGGER.error("Server is not available");
             throw new InternalException("Server is not available", transactionId);
         }
 
@@ -81,72 +91,6 @@ public class TransactionService implements TransactionPort {
 
     }
 
-    @Override
-    public PromotionsDto getPromotions(Long serverId, Long userId, Long accountId, Long characterId, Long classId,
-                                       String language,
-                                       String transactionId) {
-
-        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
-                transactionId);
-
-        RealmEntity server = accountVerificationDto.realm();
-
-        if (server == null) {
-            LOGGER.error("Server is not available");
-            throw new InternalException("Server is not available", transactionId);
-        }
-
-        List<PromotionModel> promotions =
-                promotionPort.findByPromotionServerIdAndClassIdAndLanguage(serverId, classId, language,
-                                transactionId).stream()
-                        .filter(promos -> Objects.equals(promos.getRealmId(), serverId)).toList();
-
-        if (promotions.isEmpty()) {
-            return new PromotionsDto(new ArrayList<>(), 0);
-        }
-
-        return new PromotionsDto(promotions.stream()
-                .filter(promoValidation ->
-                        userPromotionPort.findByUserIdAndAccountIdAndPromotionIdAndCharacterId(
-                                userId, accountId, promoValidation.getId(), characterId, transactionId).isEmpty())
-                .map(PromotionDto::new).toList(), promotions.size());
-    }
-
-    @Override
-    public void claimPromotion(Long serverId, Long userId, Long accountId, Long characterId, Long promotionId,
-                               String language, String transactionId) {
-
-        if (userPromotionPort.findByUserIdAndAccountIdAndPromotionIdAndCharacterId(
-                userId, accountId, promotionId, characterId, transactionId).isPresent()) {
-            throw new InternalException("You have already consumed the promotion", transactionId);
-        }
-
-        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
-                transactionId);
-
-        RealmEntity server = accountVerificationDto.realm();
-
-        if (server == null) {
-            LOGGER.error("Server is not available");
-            throw new InternalException("Server is not available", transactionId);
-        }
-
-        PromotionModel promo =
-                promotionPort.findByPromotionServerIdAndLanguage(promotionId, serverId, language, transactionId);
-
-        List<ItemQuantityModel> items = new ArrayList<>();
-
-        if (promo.getSendItem() && !promo.getItems().isEmpty()) {
-            items = promo.getItems().stream().map(benefit -> new ItemQuantityModel(benefit.code,
-                    benefit.quantity)).toList();
-        }
-
-        integratorPort.sendPromo(server.getHost(), server.getJwt(), userId, accountId, characterId, items,
-                promo.getType(), promo.getAmount(), promo.getMinLvl(), promo.getMaxLvl(), promo.getLevel(),
-                transactionId);
-
-        userPromotionPort.save(userId, accountId, promotionId, characterId, server.getId(), transactionId);
-    }
 
     @Override
     public TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId) {
@@ -167,5 +111,152 @@ public class TransactionService implements TransactionPort {
         data.setSize(obtainTransaction.findByUserId(userId, transactionId));
 
         return data;
+    }
+
+    @Override
+    public void save(TransactionEntity transaction, String transactionId) {
+        saveTransaction.save(transaction);
+    }
+
+    @Override
+    public Optional<TransactionEntity> findByReferenceNumber(String referenceNumber, String transactionId) {
+        return obtainTransaction.findByReferenceNumber(referenceNumber, transactionId);
+    }
+
+    @Override
+    public Optional<TransactionEntity> findByReferenceNumberAndUserId(String referenceNumber, Long userId,
+                                                                      String transactionId) {
+        Optional<TransactionEntity> transaction = obtainTransaction.findByReferenceNumberAndUserId(referenceNumber,
+                userId, transactionId);
+
+        if (transaction.isEmpty()) {
+            return Optional.empty();
+        }
+
+        TransactionEntity foundTransaction = transaction.get();
+
+        boolean statusPaid = foundTransaction.getStatus().equalsIgnoreCase(TransactionStatus.PAID.getType())
+                || foundTransaction.getStatus().equalsIgnoreCase(TransactionStatus.DELIVERED.getType());
+
+        if (statusPaid) {
+            return Optional.of(foundTransaction);
+        }
+
+        PaymentType paymentMethodType = PaymentType.valueOf(foundTransaction.getPaymentMethod());
+
+        PaymentStatus paymentStatus = paymentGatewayPort.findByStatus(paymentMethodType,
+                foundTransaction.getReferenceNumber(), foundTransaction.getReferencePayment(),
+                transactionId);
+
+        // Mapear el PaymentStatus a TransactionStatus
+        switch (paymentStatus) {
+            case APPROVED:
+                if (!foundTransaction.getStatus().equalsIgnoreCase(TransactionStatus.PAID.getType())) {
+                    foundTransaction.setStatus(TransactionStatus.PAID.getType());
+                    LOGGER.info("✅ Pago aprobado para transacción: {}", foundTransaction.getReferenceNumber());
+                }
+                break;
+            case PENDING:
+                foundTransaction.setStatus(TransactionStatus.PENDING.getType());
+                LOGGER.info("⏳ Pago pendiente para transacción: {}", foundTransaction.getReferenceNumber());
+                break;
+            case REJECTED:
+                foundTransaction.setStatus(TransactionStatus.REJECTED.getType());
+                LOGGER.warn("❌ Pago rechazado para transacción: {}", foundTransaction.getReferenceNumber());
+                break;
+            default:
+                foundTransaction.setStatus(TransactionStatus.REJECTED.getType());
+                LOGGER.warn("⚠️ Status de pago desconocido: {} para transacción: {}",
+                        paymentStatus, foundTransaction.getReferenceNumber());
+                break;
+        }
+
+        // Guardar la transacción actualizada
+        saveTransaction.save(foundTransaction);
+
+        return Optional.of(foundTransaction);
+    }
+
+    @Override
+    public PaymentApplicableModel isRealPaymentApplicable(TransactionModel transaction, String transactionId) {
+        final String orderId = randomString.nextString();
+
+        if (transaction.isSubscription()) {
+            String productReference = transaction.getProductReference();
+
+            Optional<PlansEntity> planDetailDto = obtainPlan.findById(Long.valueOf(productReference), transactionId);
+
+            if (planDetailDto.isEmpty()) {
+                LOGGER.error("There is no active plan.  transactionId: {}", transaction);
+                throw new InternalException("There is no active plan.", transactionId);
+            }
+
+            PlansEntity plan = planDetailDto.get();
+            double discountPercentage = plan.getDiscount() / 100.0;
+            double discountedPrice = plan.getPrice() * (1 - discountPercentage);
+            final String currency = plan.getCurrency();
+            final String description = String.format("Subscription %s", plan.getName());
+
+            TransactionEntity transactionEntity = new TransactionEntity();
+            transactionEntity.setUserId(transaction.getUserId());
+            transactionEntity.setAccountId(transaction.getAccountId());
+            transactionEntity.setRealmId(transaction.getRealmId());
+            transactionEntity.setPrice(discountedPrice);
+            transactionEntity.setStatus(TransactionStatus.CREATED.getType());
+            transactionEntity.setProductId(null);
+            transactionEntity.setSubscriptionId(null);
+            transactionEntity.setReferenceNumber(orderId);
+            transactionEntity.setCreditPoints(false);
+            transactionEntity.setSend(false);
+            transactionEntity.setCreationDate(LocalDateTime.now());
+            transactionEntity.setCurrency(currency);
+            transactionEntity.setPlanId(plan.getId());
+            transactionEntity.setSubscription(true);
+            transactionEntity.setPaymentMethod(transaction.getPaymentType().getType());
+            saveTransaction.save(transactionEntity);
+
+            return new PaymentApplicableModel(discountedPrice > 0, discountedPrice, currency, orderId, description,
+                    plan.getTax(),
+                    plan.getReturnTax(), plan.getName(), transactionEntity);
+        }
+
+        String productReference = transaction.getProductReference();
+
+        ProductEntity productDto = productPort.getProduct(productReference, transactionId);
+
+        if (productDto == null) {
+            LOGGER.error("Product not found productReferenceNumber: {} transactionId: {}", productReference,
+                    transaction);
+            throw new InternalException("The product is not available for donation", transactionId);
+        }
+
+        final String description = productDto.getName();
+        final boolean hasCreditPoints = productDto.isUseCreditPoints();
+        Double price = productDto.getPrice();
+        Integer discountPercentage = productDto.getDiscount();
+        double discountAmount = ((double) discountPercentage / 100) * price;
+        final Double finalPrice = price - discountAmount;
+        final String currency = hasCreditPoints ? "POINTS" : "USD";
+        final boolean isFree = finalPrice <= 0;
+
+        final boolean isPaymentRedirectToCheckout = !isFree && !hasCreditPoints;
+
+        TransactionEntity transactionEntity = new TransactionEntity();
+        transactionEntity.setAccountId(transaction.getAccountId());
+        transactionEntity.setRealmId(productDto.getRealmId());
+        transactionEntity.setAccountId(transaction.getAccountId());
+        transactionEntity.setStatus(TransactionStatus.CREATED.getType());
+        transactionEntity.setProductId(productDto);
+        transactionEntity.setCreationDate(LocalDateTime.now());
+        transactionEntity.setReferenceNumber(orderId);
+        transactionEntity.setPrice(finalPrice);
+        transactionEntity.setSend(false);
+        transactionEntity.setCurrency(currency);
+        transactionEntity.setUserId(transaction.getUserId());
+        transactionEntity.setPaymentMethod(transaction.getPaymentType().getType());
+        saveTransaction.save(transactionEntity);
+
+        return new PaymentApplicableModel(isPaymentRedirectToCheckout, finalPrice, currency, orderId, description,
+                productDto.getTax(), productDto.getReturnTax(), productDto.getName(), transactionEntity);
     }
 }
