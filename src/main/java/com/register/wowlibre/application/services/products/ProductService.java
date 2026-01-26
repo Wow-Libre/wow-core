@@ -1,26 +1,20 @@
 package com.register.wowlibre.application.services.products;
 
 import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.domain.exception.InternalException;
-import com.register.wowlibre.domain.model.ProductDetailModel;
-import com.register.wowlibre.domain.model.ProductModel;
-import com.register.wowlibre.domain.port.in.packages.PackagesPort;
-import com.register.wowlibre.domain.port.in.product_category.ProductCategoryPort;
-import com.register.wowlibre.domain.port.in.product_details.ProductDetailsPort;
-import com.register.wowlibre.domain.port.in.products.ProductPort;
-import com.register.wowlibre.domain.port.out.products.ObtainProduct;
-import com.register.wowlibre.domain.port.out.products.SaveProduct;
-import com.register.wowlibre.infrastructure.entities.transactions.PackagesEntity;
-import com.register.wowlibre.infrastructure.entities.transactions.ProductCategoryEntity;
-import com.register.wowlibre.infrastructure.entities.transactions.ProductEntity;
-import com.register.wowlibre.infrastructure.util.RandomString;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.packages.*;
+import com.register.wowlibre.domain.port.in.product_category.*;
+import com.register.wowlibre.domain.port.in.product_details.*;
+import com.register.wowlibre.domain.port.in.products.*;
+import com.register.wowlibre.domain.port.out.products.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
+import com.register.wowlibre.infrastructure.util.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 @Service
 public class ProductService implements ProductPort {
@@ -54,7 +48,7 @@ public class ProductService implements ProductPort {
                         Collectors.collectingAndThen(
                                 Collectors.toList(),
                                 productList -> {
-                                    ProductEntity firstProduct = productList.get(0);
+                                    ProductEntity firstProduct = productList.getFirst();
                                     return List.of(new ProductCategoryModel(
                                             firstProduct.getProductCategoryId().getId(),
                                             firstProduct.getProductCategoryId().getName(),

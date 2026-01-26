@@ -530,12 +530,12 @@ CREATE TABLE platform.subscription_benefits
 
 
 CREATE TABLE platform.payment_gateways (
-                                           id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                                           name VARCHAR(100) NOT NULL,
-                                           type ENUM('STRIPE', 'PAYU') NOT NULL,
-                                           is_active BOOLEAN DEFAULT TRUE,
-                                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                           CONSTRAINT unique_type UNIQUE (type)
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        type ENUM('STRIPE', 'PAYU') NOT NULL,
+        is_active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT unique_type UNIQUE (type)
 );
 
 CREATE TABLE platform.payu_credentials (

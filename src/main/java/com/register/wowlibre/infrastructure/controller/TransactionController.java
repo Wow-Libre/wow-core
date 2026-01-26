@@ -14,7 +14,7 @@ import java.util.*;
 import static com.register.wowlibre.domain.constant.Constants.*;
 
 @RestController
-@RequestMapping("/api/transaction")
+@RequestMapping("/api/transactions")
 public class TransactionController {
 
     private final TransactionPort transactionPort;
@@ -26,6 +26,19 @@ public class TransactionController {
         this.transactionPort = transactionPort;
         this.signatureService = signatureService;
         this.objectMapper = objectMapper;
+    }
+
+    @GetMapping
+    public ResponseEntity<GenericResponse<TransactionsDto>> transactions(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam final Integer size,
+            @RequestParam final Integer page) {
+
+        TransactionsDto transactions = transactionPort.transactionsByUserId(userId, page, size, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(transactions, transactionId).created().build());
     }
 
     @PostMapping("/purchase")
@@ -66,9 +79,6 @@ public class TransactionController {
                         .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
             }
 
-            transactionPort.sendSubscriptionBenefits(request.getRealmId(), request.getUserId(), request.getAccountId(),
-                    request.getCharacterId(),
-                    request.getItems(), request.getBenefitType(), request.getAmount(), transactionId);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new GenericResponseBuilder<Void>(transactionId).ok().build());

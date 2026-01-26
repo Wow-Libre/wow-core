@@ -1,13 +1,11 @@
 package com.register.wowlibre.infrastructure.repositories.payment_gateways;
 
-import com.register.wowlibre.domain.enums.PaymentType;
-import com.register.wowlibre.domain.port.out.payment_gateways.ObtainPaymentGateways;
-import com.register.wowlibre.domain.port.out.payment_gateways.SavePaymentGateways;
-import com.register.wowlibre.infrastructure.entities.transactions.PaymentGatewaysEntity;
-import org.springframework.stereotype.Repository;
+import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.domain.port.out.payment_gateways.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
+import org.springframework.stereotype.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class JpaPaymentGatewaysAdapter implements ObtainPaymentGateways, SavePaymentGateways {
@@ -18,27 +16,29 @@ public class JpaPaymentGatewaysAdapter implements ObtainPaymentGateways, SavePay
     }
 
     @Override
-    public Optional<PaymentGatewaysEntity> findByType(PaymentType type, String transactionId) {
-        return paymentGatewaysRepository.findByType(type);
+    public Optional<PaymentGatewaysEntity> findByPaymentType(PaymentType paymentType, String transactionId) {
+        return paymentGatewaysRepository.findByTypeAndIsActiveIsTrue(paymentType);
     }
 
     @Override
-    public Optional<PaymentGatewaysEntity> findByTypeAndIsActiveTrue(PaymentType type, String transactionId) {
-        return paymentGatewaysRepository.findByTypeAndIsActiveTrue(type);
+    public List<PaymentGatewaysEntity> findByIsActiveIsTrue(String transactionId) {
+        return paymentGatewaysRepository.findByIsActiveIsTrue();
     }
 
     @Override
-    public List<PaymentGatewaysEntity> findByIsActiveTrue(String transactionId) {
-        return paymentGatewaysRepository.findByIsActiveTrue();
+    public Optional<PaymentGatewaysEntity> findByPaymentTypeId(Long paymentTypeId, String transactionId) {
+        return paymentGatewaysRepository.findById(paymentTypeId);
+    }
+
+
+    @Override
+    public void save(PaymentGatewaysEntity paymentGateways, String transactionId) {
+        paymentGatewaysRepository.save(paymentGateways);
     }
 
     @Override
-    public Optional<PaymentGatewaysEntity> findById(Long id, String transactionId) {
-        return paymentGatewaysRepository.findById(id);
-    }
+    public void delete(PaymentGatewaysEntity paymentGateways, String transactionId) {
+        paymentGatewaysRepository.delete(paymentGateways);
 
-    @Override
-    public PaymentGatewaysEntity save(PaymentGatewaysEntity paymentGatewaysEntity) {
-        return paymentGatewaysRepository.save(paymentGatewaysEntity);
     }
 }

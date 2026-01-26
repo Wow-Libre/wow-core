@@ -1,12 +1,11 @@
 package com.register.wowlibre.infrastructure.repositories.transactions;
 
-import com.register.wowlibre.domain.port.out.transactions.ObtainTransaction;
-import com.register.wowlibre.domain.port.out.transactions.SaveTransaction;
-import com.register.wowlibre.infrastructure.entities.transactions.TransactionEntity;
-import org.springframework.stereotype.Repository;
+import com.register.wowlibre.domain.port.out.transactions.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
+import org.springframework.data.domain.*;
+import org.springframework.stereotype.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class JpaTransactionAdapter implements ObtainTransaction, SaveTransaction {
@@ -22,8 +21,13 @@ public class JpaTransactionAdapter implements ObtainTransaction, SaveTransaction
     }
 
     @Override
-    public List<TransactionEntity> findByUserId(Long userId, String transactionId) {
-        return transactionRepository.findByUserId(userId);
+    public List<TransactionEntity> findByUserId(Long userId, int page, int size, String transactionId) {
+        return transactionRepository.findByUserIdOrderByCreationDateDesc(userId, PageRequest.of(page, size)).stream().toList();
+    }
+
+    @Override
+    public Long findByUserId(Long userId, String transactionId) {
+        return transactionRepository.countByUserId(userId);
     }
 
     @Override

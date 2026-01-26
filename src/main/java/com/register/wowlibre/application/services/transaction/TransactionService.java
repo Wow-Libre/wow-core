@@ -2,15 +2,17 @@ package com.register.wowlibre.application.services.transaction;
 
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.dto.account_game.*;
+import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.port.in.account_game.*;
-import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
+import com.register.wowlibre.domain.port.in.account_validation.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.promotion.*;
 import com.register.wowlibre.domain.port.in.transaction.*;
 import com.register.wowlibre.domain.port.in.user_promotion.*;
+import com.register.wowlibre.domain.port.out.transactions.*;
 import com.register.wowlibre.infrastructure.entities.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
 import org.slf4j.*;
 import org.springframework.stereotype.*;
 
@@ -26,16 +28,18 @@ public class TransactionService implements TransactionPort {
      **/
     private final AccountValidationPort accountValidationPort;
     private final UserPromotionPort userPromotionPort;
-
     private final PromotionPort promotionPort;
+    private final ObtainTransaction obtainTransaction;
 
 
     public TransactionService(IntegratorPort integratorPort, AccountValidationPort accountValidationPort,
-                              UserPromotionPort userPromotionPort, PromotionPort promotionPort) {
+                              UserPromotionPort userPromotionPort, PromotionPort promotionPort,
+                              ObtainTransaction obtainTransaction) {
         this.integratorPort = integratorPort;
         this.accountValidationPort = accountValidationPort;
         this.userPromotionPort = userPromotionPort;
         this.promotionPort = promotionPort;
+        this.obtainTransaction = obtainTransaction;
     }
 
 
@@ -142,5 +146,26 @@ public class TransactionService implements TransactionPort {
                 transactionId);
 
         userPromotionPort.save(userId, accountId, promotionId, characterId, server.getId(), transactionId);
+    }
+
+    @Override
+    public TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId) {
+        TransactionsDto data = new TransactionsDto();
+        List<Transaction> transactions = obtainTransaction.findByUserId(userId, page, size, transactionId)
+                .stream()
+                .map(transaction -> new Transaction(transaction.getId(), transaction.getPrice(),
+                        transaction.getCurrency(), transaction.getStatus(),
+                        TransactionStatus.getType(transaction.getStatus()).getStatus(),
+                        transaction.getCreationDate(), transaction.getReferenceNumber(),
+                        Optional.ofNullable(transaction.getProductId())
+                                .map(ProductEntity::getName).orElse("VIP"),
+                        Optional.ofNullable(transaction.getProductId())
+                                .map(ProductEntity::getImageUrl).orElse("https://static.wixstatic" +
+                                        ".com/media/5dd8a0_cbcd4683525e448c8502b031dfce2527~mv2.webp")))
+                .toList();
+        data.setTransactions(transactions);
+        data.setSize(obtainTransaction.findByUserId(userId, transactionId));
+
+        return data;
     }
 }

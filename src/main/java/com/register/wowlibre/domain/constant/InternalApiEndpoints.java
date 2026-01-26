@@ -60,6 +60,16 @@ public class InternalApiEndpoints {
             "/api/voting/postback",
             "/api/voting"
     };
+    // Products Endpoints
+    private static final String[] PRODUCTS_ENDPOINTS = {
+            "/api/products",
+            "/api/products/discount",
+            "/api/products/offer",
+            "/api/products/{reference}"
+    };
+    private static final String[] PLAN_ENDPOINTS = {
+            "/api/plan",
+    };
 
     /**
      * Combines all internal API endpoints into a single array.
@@ -78,6 +88,8 @@ public class InternalApiEndpoints {
         allEndpoints.addAll(List.of(NEWS_ENDPOINTS));
         allEndpoints.addAll(List.of(TRANSACTION_ENDPOINTS));
         allEndpoints.addAll(List.of(BANNERS_ENDPOINTS));
+        allEndpoints.addAll(List.of(PRODUCTS_ENDPOINTS));
+        allEndpoints.addAll(List.of(PLAN_ENDPOINTS));
 
         return allEndpoints.toArray(new String[0]);
     }

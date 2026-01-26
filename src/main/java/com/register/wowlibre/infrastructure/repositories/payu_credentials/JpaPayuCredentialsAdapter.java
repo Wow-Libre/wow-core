@@ -1,27 +1,31 @@
 package com.register.wowlibre.infrastructure.repositories.payu_credentials;
 
-import com.register.wowlibre.domain.port.out.payu_credentials.ObtainPayuCredentials;
-import com.register.wowlibre.domain.port.out.payu_credentials.SavePayuCredentials;
-import com.register.wowlibre.infrastructure.entities.transactions.PayuCredentialsEntity;
-import org.springframework.stereotype.Repository;
+import com.register.wowlibre.domain.port.out.payu_credentials.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
+import org.springframework.stereotype.*;
 
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class JpaPayuCredentialsAdapter implements ObtainPayuCredentials, SavePayuCredentials {
-    private final PayuCredentialsRepository payuCredentialsRepository;
+    private final PayuCredentialsRepository payUCredentialsRepository;
 
-    public JpaPayuCredentialsAdapter(PayuCredentialsRepository payuCredentialsRepository) {
-        this.payuCredentialsRepository = payuCredentialsRepository;
+    public JpaPayuCredentialsAdapter(PayuCredentialsRepository payUCredentialsRepository) {
+        this.payUCredentialsRepository = payUCredentialsRepository;
     }
 
     @Override
-    public Optional<PayuCredentialsEntity> findByGatewayId(Long gatewayId, String transactionId) {
-        return payuCredentialsRepository.findByGatewayId(gatewayId);
+    public Optional<PayuCredentialsEntity> findByPayUCredentials(Long gatewayId, String transactionId) {
+        return payUCredentialsRepository.findByGatewayId(gatewayId);
     }
 
     @Override
-    public PayuCredentialsEntity save(PayuCredentialsEntity payuCredentialsEntity) {
-        return payuCredentialsRepository.save(payuCredentialsEntity);
+    public void save(PayuCredentialsEntity payuCredentialsEntity, String transactionId) {
+        payUCredentialsRepository.save(payuCredentialsEntity);
+    }
+
+    @Override
+    public void delete(PayuCredentialsEntity payuCredentials, String transactionId) {
+        payUCredentialsRepository.delete(payuCredentials);
     }
 }

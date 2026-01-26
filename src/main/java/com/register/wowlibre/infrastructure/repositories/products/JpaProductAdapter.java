@@ -1,12 +1,10 @@
 package com.register.wowlibre.infrastructure.repositories.products;
 
-import com.register.wowlibre.domain.port.out.products.ObtainProduct;
-import com.register.wowlibre.domain.port.out.products.SaveProduct;
-import com.register.wowlibre.infrastructure.entities.transactions.ProductEntity;
-import org.springframework.stereotype.Repository;
+import com.register.wowlibre.domain.port.out.products.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
+import org.springframework.stereotype.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class JpaProductAdapter implements ObtainProduct, SaveProduct {
@@ -18,17 +16,17 @@ public class JpaProductAdapter implements ObtainProduct, SaveProduct {
 
     @Override
     public List<ProductEntity> findByStatusIsTrueAndLanguage(String language, String transactionId) {
-        return productRepository.findByRealmIdAndStatusAndLanguage(null, true, language);
+        return productRepository.findByStatusIsTrueAndLanguage(language);
     }
 
     @Override
     public List<ProductEntity> findByStatusIsTrueAndDiscount(String language, String transactionId) {
-        return productRepository.findByStatusAndLanguageAndDiscountGreaterThan(true, language, 0);
+        return productRepository.findByStatusIsTrueAndDiscount(language);
     }
 
     @Override
-    public Optional<ProductEntity> findByReferenceNumber(String referenceCode, String transactionId) {
-        return productRepository.findByReferenceNumber(referenceCode);
+    public Optional<ProductEntity> findByReferenceNumber(String referenceNumber, String transactionId) {
+        return productRepository.findByReferenceNumberAndStatusIsTrue(referenceNumber);
     }
 
     @Override
@@ -38,7 +36,7 @@ public class JpaProductAdapter implements ObtainProduct, SaveProduct {
 
     @Override
     public List<ProductEntity> findAllByStatusIsTrue(String transactionId) {
-        return productRepository.findByStatus(true);
+        return productRepository.findByStatusIsTrue();
     }
 
     @Override

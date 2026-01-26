@@ -1,7 +1,9 @@
 package com.register.wowlibre.domain.port.out.stripe_credentials;
 
-import com.register.wowlibre.infrastructure.entities.transactions.StripeCredentialsEntity;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
 
 public interface SaveStripeCredentials {
-    StripeCredentialsEntity save(StripeCredentialsEntity stripeCredentialsEntity);
+    void save(StripeCredentialsEntity stripeCredentials, String transactionId);
+
+    void delete(StripeCredentialsEntity stripeCredentials, String transactionId);
 }

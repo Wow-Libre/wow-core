@@ -11,4 +11,6 @@ public class Configurations {
     private String hostDomain;
     @Value("${google.api-key}")
     private String googleSecret;
+    @Value("${application.clients.payu}")
+    private String pathPayU;
 }

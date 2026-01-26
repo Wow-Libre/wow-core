@@ -1,15 +1,25 @@
 package com.register.wowlibre.domain.port.in.payment_gateways;
 
-import com.register.wowlibre.domain.enums.PaymentType;
-import com.register.wowlibre.infrastructure.entities.transactions.PaymentGatewaysEntity;
-import com.register.wowlibre.infrastructure.entities.transactions.StripeCredentialsEntity;
-import com.register.wowlibre.infrastructure.entities.transactions.PayuCredentialsEntity;
+import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.domain.model.*;
 
-import java.util.Optional;
+import java.math.*;
+import java.util.*;
 
 public interface PaymentGatewaysPort {
-    Optional<PaymentGatewaysEntity> findByType(PaymentType type, String transactionId);
-    Optional<PaymentGatewaysEntity> findByTypeAndIsActiveTrue(PaymentType type, String transactionId);
-    Optional<StripeCredentialsEntity> findStripeCredentialsByGatewayId(Long gatewayId, String transactionId);
-    Optional<PayuCredentialsEntity> findPayuCredentialsByGatewayId(Long gatewayId, String transactionId);
+    PaymentGatewayModel generateUrlPayment(PaymentType paymentType, String currency, BigDecimal amount,
+                                           Integer quantity, String productName, String referenceCode,
+                                           String transactionId);
+
+    void createPayment(String paymentType, String name, Map<String, String> credentials, String transactionId);
+
+    List<PaymentMethodsDto> paymentMethods(String transactionId);
+
+    void deletePayment(Long paymentTypeId, String transactionId);
+
+    PaymentStatus paymentStatus(PaymentTransaction paymentTransaction, PaymentType paymentType,
+                                String transactionId);
+
+    PaymentStatus findByStatus(PaymentType paymentType, String referenceCode, String id, String transactionId);
 }

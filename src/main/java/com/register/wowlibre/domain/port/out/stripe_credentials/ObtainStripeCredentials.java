@@ -1,9 +1,9 @@
 package com.register.wowlibre.domain.port.out.stripe_credentials;
 
-import com.register.wowlibre.infrastructure.entities.transactions.StripeCredentialsEntity;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
 
-import java.util.Optional;
+import java.util.*;
 
 public interface ObtainStripeCredentials {
-    Optional<StripeCredentialsEntity> findByGatewayId(Long gatewayId, String transactionId);
+    Optional<StripeCredentialsEntity> findByPayUCredentials(Long gatewayId, String transactionId);
 }

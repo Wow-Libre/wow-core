@@ -1,14 +1,15 @@
 package com.register.wowlibre.domain.port.out.payment_gateways;
 
-import com.register.wowlibre.domain.enums.PaymentType;
-import com.register.wowlibre.infrastructure.entities.transactions.PaymentGatewaysEntity;
+import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public interface ObtainPaymentGateways {
-    Optional<PaymentGatewaysEntity> findByType(PaymentType type, String transactionId);
-    Optional<PaymentGatewaysEntity> findByTypeAndIsActiveTrue(PaymentType type, String transactionId);
-    List<PaymentGatewaysEntity> findByIsActiveTrue(String transactionId);
-    Optional<PaymentGatewaysEntity> findById(Long id, String transactionId);
+    Optional<PaymentGatewaysEntity> findByPaymentType(PaymentType paymentType, String transactionId);
+
+    List<PaymentGatewaysEntity> findByIsActiveIsTrue(String transactionId);
+
+    Optional<PaymentGatewaysEntity> findByPaymentTypeId(Long paymentTypeId, String transactionId);
+
 }

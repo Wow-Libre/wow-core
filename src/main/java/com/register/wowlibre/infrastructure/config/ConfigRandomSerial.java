@@ -31,4 +31,19 @@ public class ConfigRandomSerial {
         return new RandomString(20, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
+    @Bean("product-reference")
+    public RandomString productRandomString() {
+        return new RandomString(30, "abcdefghijklmnopqrstuvwxyz0123456789");
+    }
+
+    @Bean("subscription-reference")
+    public RandomString subscriptionRandomString() {
+        return new RandomString(40, "abcdefghijklmnopqrstuvwxyz0123456789");
+    }
+
+    @Bean("random-string")
+    public RandomString randomString() {
+        return new RandomString(20, "abcdefghijklmnopqrstuvwxyz0123456789");
+    }
+
 }

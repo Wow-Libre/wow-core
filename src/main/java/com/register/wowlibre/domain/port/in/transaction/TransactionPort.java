@@ -19,4 +19,7 @@ public interface TransactionPort {
 
     void claimPromotion(Long serverId, Long userId, Long accountId, Long characterId, Long promotionId, String language,
                         String transactionId);
+
+    TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId);
+
 }

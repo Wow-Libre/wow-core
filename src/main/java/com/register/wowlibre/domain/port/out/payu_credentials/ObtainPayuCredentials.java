@@ -1,9 +1,9 @@
 package com.register.wowlibre.domain.port.out.payu_credentials;
 
-import com.register.wowlibre.infrastructure.entities.transactions.PayuCredentialsEntity;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
 
-import java.util.Optional;
+import java.util.*;
 
 public interface ObtainPayuCredentials {
-    Optional<PayuCredentialsEntity> findByGatewayId(Long gatewayId, String transactionId);
+    Optional<PayuCredentialsEntity> findByPayUCredentials(Long gatewayId, String transactionId);
 }
