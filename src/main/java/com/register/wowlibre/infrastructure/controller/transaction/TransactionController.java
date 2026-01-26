@@ -1,12 +1,9 @@
 package com.register.wowlibre.infrastructure.controller.transaction;
 
-import com.fasterxml.jackson.databind.*;
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.port.in.transaction.*;
 import com.register.wowlibre.domain.shared.*;
 import com.register.wowlibre.infrastructure.entities.transactions.*;
-import com.register.wowlibre.infrastructure.util.*;
-import jakarta.validation.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,14 +16,9 @@ import static com.register.wowlibre.domain.constant.Constants.*;
 public class TransactionController {
 
     private final TransactionPort transactionPort;
-    private final SignatureService signatureService;
-    private final ObjectMapper objectMapper;
 
-    public TransactionController(TransactionPort transactionPort, SignatureService signatureService,
-                                 ObjectMapper objectMapper) {
+    public TransactionController(TransactionPort transactionPort) {
         this.transactionPort = transactionPort;
-        this.signatureService = signatureService;
-        this.objectMapper = objectMapper;
     }
 
     @GetMapping
@@ -42,52 +34,6 @@ public class TransactionController {
                 .body(new GenericResponseBuilder<>(transactions, transactionId).created().build());
     }
 
-    @PostMapping("/purchase")
-    public ResponseEntity<GenericResponse<Void>> sendItems(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_SIGNATURE) final String signature,
-            @RequestBody @Valid CreateTransactionItemsDto request) {
-        try {
-            String requestBodyJson = objectMapper.writeValueAsString(request);
-
-            if (!signatureService.validateSignature(requestBodyJson, signature)) {
-                return ResponseEntity.internalServerError()
-                        .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
-            }
-
-            transactionPort.purchase(request.getRealmId(), request.getUserId(), request.getAccountId(),
-                    request.getReference(),
-                    request.getItems(), request.getAmount(), transactionId);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
-    }
-
-    @PostMapping("/subscription-benefits")
-    public ResponseEntity<GenericResponse<Void>> sendSubscriptionBenefits(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_SIGNATURE) final String signature,
-            @RequestBody @Valid SubscriptionBenefitsDto request) {
-
-        try {
-            String requestBodyJson = objectMapper.writeValueAsString(request);
-
-            if (!signatureService.validateSignature(requestBodyJson, signature)) {
-                return ResponseEntity.internalServerError()
-                        .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
-            }
-
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
-        }
-    }
 
     @GetMapping("/{referenceNumber}")
     public ResponseEntity<GenericResponse<TransactionEntity>> getTransactionByReference(
