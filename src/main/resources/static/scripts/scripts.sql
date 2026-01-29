@@ -169,28 +169,6 @@ create table platform.credit_loans (
                                        primary key (id)
 );
 
-create table platform.benefit_guild (
-                                        id BIGINT auto_increment NOT null,
-                                        realm_id BIGINT NOT null,
-                                        guild_name VARCHAR(70) NOT null,
-                                        guild_id BIGINT NOT null,
-                                        benefit_id BIGINT NOT null,
-                                        status BOOLEAN NOT null,
-                                        constraint uq_benefit_guild_realm_guild_benefit unique (realm_id, guild_id, benefit_id),
-                                        constraint fk_benefit_guild_realm_id foreign key (realm_id) references platform.realm (id),
-                                        primary key (id)
-);
-
-create table platform.character_benefit_guild (
-                                                  id BIGINT AUTO_INCREMENT NOT null,
-                                                  account_id BIGINT NOT null,
-                                                  character_id BIGINT NOT null,
-                                                  benefit_guild_id BIGINT NOT null,
-                                                  benefit_send BOOLEAN,
-                                                  constraint uq_character_benefit_guild unique (character_id, account_id, benefit_guild_id),
-                                                  constraint fk_character_benefit_guild_id foreign key (benefit_guild_id) references platform.benefit_guild (id),
-                                                  primary key (id)
-);
 
 create table platform.promotion (
                                     id BIGINT AUTO_INCREMENT primary key,
@@ -536,7 +514,7 @@ create table platform.stripe_credentials (
                                              constraint fk_stripe_credentials_gateway foreign key (gateway_id) references payment_gateways (id) on delete cascade
 );
 
-create table platform.`benefit_premiums` (
+CREATE TABLE platform.`benefit_premiums` (
                                              `id` BIGINT NOT null AUTO_INCREMENT,
                                              `img` VARCHAR(255) DEFAULT null,
                                              `name` VARCHAR(255) NOT null,
@@ -553,11 +531,50 @@ create table platform.`benefit_premiums` (
                                              primary key (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
-create table platform.`benefit_premium_items` (
-                                                  `id` BIGINT NOT null AUTO_INCREMENT,
-                                                  `benefit_premium_id` BIGINT NOT null,
-                                                  `code` VARCHAR(255) NOT null,
-                                                  `quantity` INT NOT null,
-                                                  primary key (`id`),
-                                                  constraint `fk_benefit_premium_item_benefit_premiums` foreign key (`benefit_premium_id`) references `benefit_premiums` (`id`) on delete cascade on update cascade
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+CREATE TABLE platform.benefit_premium_items (
+       id BIGINT  AUTO_INCREMENT NOT NULL PRIMARY KEY
+       benefit_premium_id BIGINT NOT NULL,
+       code VARCHAR(255) NOT NULL,
+       quantity INT NOT NULL,
+       constraint fk_benefit_premium_item_benefit_premiums foreign key (benefit_premium_id) references benefit_premiums (id) on delete cascade on update cascade
+);
+
+
+/* EN: Table to manage guild benefits catalog and assignments to guilds and characters
+   ES: Tabla para gestionar el catálogo de beneficios del gremio y las asignaciones a gremios y personajes
+   PR: Tabela para gerenciar o catálogo de benefícios da guilda e as alocações para guildas e personagens.
+*/
+CREATE TABLE platform.guild_benefits_catalog(
+        id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+        title varchar (80) NOT NULL,
+        subtitle varchar (80) NOT NULL,
+        description varchar (120) NOT NULL,
+        image_url text NOT NULL,
+        core_code varchar (20) NOT NULL,
+        quantity integer NOT NULL,
+        is_active BOOLEAN DEFAULT true,
+        external_url text NOT NULL
+);
+
+
+CREATE TABLE platform.guild_benefits (
+         id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+         realm_id BIGINT NOT NULL,
+         guild_id BIGINT NOT NULL,
+         guild_benefit_catalog_id BIGINT NOT NULL,
+         CONSTRAINT uq_benefit_guild_realm_guild_benefit UNIQUE (realm_id, guild_id, guild_benefit_catalog_id),
+         CONSTRAINT fk_benefit_guild_realm_id FOREIGN KEY (realm_id) REFERENCES platform.realm (id),
+         CONSTRAINT fk_benefit_guild_guild_benefit_catalog_id FOREIGN KEY (guild_benefit_catalog_id) REFERENCES platform.guild_benefits_catalog (id)
+);
+
+CREATE TABLE platform.character_benefit_guild (
+        id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+        account_id BIGINT NOT NULL,
+        character_id BIGINT NOT NULL,
+        guild_benefits_id BIGINT NOT NULL,
+        benefit_send BOOLEAN,
+        CONSTRAINT uq_character_benefit_guild UNIQUE (character_id, account_id, guild_benefits_id),
+        CONSTRAINT fk_character_guild_benefits_id FOREIGN KEY (guild_benefits_id) REFERENCES platform.guild_benefits (id)
+);
+
+

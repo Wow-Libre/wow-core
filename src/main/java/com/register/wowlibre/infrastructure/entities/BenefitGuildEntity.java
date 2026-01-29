@@ -17,11 +17,16 @@ public class BenefitGuildEntity {
             optional = false,
             fetch = FetchType.LAZY)
     private RealmEntity realmId;
-    @Column(name = "guild_name")
-    private String guildName;
     @Column(name = "guild_id")
     private Long guildId;
     @Column(name = "benefit_id")
     private Long benefitId;
+    @JoinColumn(
+            name = "guild_benefit_catalog_id",
+            referencedColumnName = "id")
+    @ManyToOne(
+            optional = false,
+            fetch = FetchType.EAGER)
+    private GuildBenefitCatalogEntity guildBenefitCatalogId;
     private Boolean status;
 }
