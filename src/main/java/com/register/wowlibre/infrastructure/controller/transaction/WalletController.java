@@ -21,11 +21,11 @@ public class WalletController {
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_USER_ID) final Long userId) {
 
-        final Long points = walletPort.getPoints(userId, transactionId);
+        final Long walletPoints = walletPort.getPoints(userId, transactionId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(points, transactionId).ok().build());
+                .body(new GenericResponseBuilder<>(walletPoints, transactionId).ok().build());
     }
 
 }

@@ -1,35 +1,18 @@
 package com.register.wowlibre.service;
 
-import com.register.wowlibre.application.services.news.NewsService;
-import com.register.wowlibre.domain.UpdateNewsDto;
-import com.register.wowlibre.domain.dto.CreateNewsDto;
-import com.register.wowlibre.domain.dto.CreateNewsSectionDto;
-import com.register.wowlibre.domain.dto.NewsSectionsDto;
-import com.register.wowlibre.domain.dto.NewsSummaryDto;
-import com.register.wowlibre.domain.exception.InternalException;
-import com.register.wowlibre.domain.port.out.news.DeleteNews;
-import com.register.wowlibre.domain.port.out.news.ObtainNews;
-import com.register.wowlibre.domain.port.out.news.SaveNews;
-import com.register.wowlibre.domain.port.out.news_sections.DeleteNewsSections;
-import com.register.wowlibre.domain.port.out.news_sections.ObtainNewsSections;
-import com.register.wowlibre.domain.port.out.news_sections.SaveNewsSections;
-import com.register.wowlibre.infrastructure.entities.NewsEntity;
-import com.register.wowlibre.infrastructure.entities.NewsSectionsEntity;
-import com.register.wowlibre.model.BaseTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import com.register.wowlibre.application.services.news.*;
+import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.port.out.news.*;
+import com.register.wowlibre.domain.port.out.news_sections.*;
+import com.register.wowlibre.infrastructure.entities.*;
+import com.register.wowlibre.model.*;
+import org.junit.jupiter.api.*;
+import org.mockito.*;
+import org.springframework.data.domain.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.time.*;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -294,7 +277,8 @@ class NewsServiceTest extends BaseTest {
                 service.deleteNewsSection(newsId, sectionId, transactionId)
         );
 
-        assertEquals("News section not found with id: " + sectionId + " for news id: " + newsId, exception.getMessage());
+        assertEquals("News section not found with id: " + sectionId + " for news id: " + newsId,
+                exception.getMessage());
         verify(obtainNews).findById(newsId);
         verify(obtainNewsSections).findByIdAndNewsEntity(sectionId, newsEntity);
         verifyNoInteractions(deleteNewsSections);
@@ -313,7 +297,7 @@ class NewsServiceTest extends BaseTest {
     }
 
     private NewsSectionsEntity createNewsSectionEntity(Long id, NewsEntity newsEntity, String title,
-                                                        String content, Integer order) {
+                                                       String content, Integer order) {
         NewsSectionsEntity entity = new NewsSectionsEntity();
         entity.setId(id);
         entity.setNewsId(newsEntity);

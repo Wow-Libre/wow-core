@@ -36,11 +36,12 @@ public class TransactionBanks {
 
     @Scheduled(cron = "1 0/1 * * * *")
     public void sendCreditLoans() {
-        String transactionId = "[TransactionBanks] [SendCreditLoans]";
+        final String transactionId = UUID.randomUUID().toString();
         List<CreditLoansEntity> credits = obtainCreditLoans.creditPendingSend(transactionId);
 
         credits.forEach(credit -> {
-            LOGGER.info("[TransactionBanks] [SendCreditLoans] Sending credit applications CreditId {}", credit.getId());
+            LOGGER.info("[TransactionBanks] [SendCreditLoans] Sending credit applications CreditId {} TransactionId {}",
+                    credit.getId(), transactionId);
 
             Optional<RealmEntity> realm = realmPort.findById(credit.getRealmId(), transactionId);
             if (realm.isPresent()) {

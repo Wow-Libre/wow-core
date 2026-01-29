@@ -3,6 +3,7 @@ package com.register.wowlibre.application.services.transaction;
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.dto.account_game.*;
 import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.domain.enums.Currency;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.account_validation.*;
@@ -24,8 +25,9 @@ import java.util.*;
 
 @Service
 public class TransactionService implements TransactionPort {
+    private static final String PRODUCT_IMG_DEFAULT = "https://static.wixstatic" +
+            ".com/media/5dd8a0_cbcd4683525e448c8502b031dfce2527~mv2.webp";
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
-
     private final IntegratorPort integratorPort;
     /**
      * ACCOUNT VALIDATION PORT
@@ -53,45 +55,6 @@ public class TransactionService implements TransactionPort {
         this.paymentGatewayPort = paymentGatewayPort;
     }
 
-
-    @Override
-    public void purchase(Long serverId, Long userId, Long accountId, String reference, List<ItemQuantityModel> items,
-                         Double amount, String transactionId) {
-
-        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
-                transactionId);
-
-        RealmEntity server = accountVerificationDto.realm();
-
-        if (server == null) {
-            throw new InternalException("Server is not available", transactionId);
-        }
-
-        integratorPort.purchase(server.getHost(), server.getJwt(), userId, accountId, reference, items, amount,
-                transactionId);
-    }
-
-    @Override
-    public void sendSubscriptionBenefits(Long serverId, Long userId, Long accountId, Long characterId,
-                                         List<ItemQuantityModel> items, String benefitType, Double amount,
-                                         String transactionId) {
-
-        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
-                transactionId);
-
-        RealmEntity server = accountVerificationDto.realm();
-
-        if (server == null) {
-            LOGGER.error("Server is not available");
-            throw new InternalException("Server is not available", transactionId);
-        }
-
-        integratorPort.sendBenefitsPremium(server.getHost(), server.getJwt(), userId, accountId, characterId, items,
-                benefitType, amount, transactionId);
-
-    }
-
-
     @Override
     public TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId) {
         TransactionsDto data = new TransactionsDto();
@@ -101,11 +64,8 @@ public class TransactionService implements TransactionPort {
                         transaction.getCurrency(), transaction.getStatus(),
                         TransactionStatus.getType(transaction.getStatus()).getStatus(),
                         transaction.getCreationDate(), transaction.getReferenceNumber(),
-                        Optional.ofNullable(transaction.getProductId())
-                                .map(ProductEntity::getName).orElse("VIP"),
-                        Optional.ofNullable(transaction.getProductId())
-                                .map(ProductEntity::getImageUrl).orElse("https://static.wixstatic" +
-                                        ".com/media/5dd8a0_cbcd4683525e448c8502b031dfce2527~mv2.webp")))
+                        productName(transaction),
+                        urlProduct(transaction)))
                 .toList();
         data.setTransactions(transactions);
         data.setSize(obtainTransaction.findByUserId(userId, transactionId));
@@ -113,14 +73,24 @@ public class TransactionService implements TransactionPort {
         return data;
     }
 
-    @Override
-    public void save(TransactionEntity transaction, String transactionId) {
-        saveTransaction.save(transaction);
+    private String productName(TransactionEntity transaction) {
+
+        if (transaction.getProductId() != null) {
+            return transaction.getProductId().getName();
+        }
+
+        if (transaction.getSubscriptionId() != null && transaction.isSubscription()) {
+            return Optional.ofNullable(transaction.getSubscriptionId().getPlanId().getName()).orElse("Azeroth Pass");
+        }
+
+        return "Azeroth Pass";
     }
 
-    @Override
-    public Optional<TransactionEntity> findByReferenceNumber(String referenceNumber, String transactionId) {
-        return obtainTransaction.findByReferenceNumber(referenceNumber, transactionId);
+    private String urlProduct(TransactionEntity transaction) {
+        if (transaction.getProductId() != null) {
+            return transaction.getProductId().getImageUrl();
+        }
+        return PRODUCT_IMG_DEFAULT;
     }
 
     @Override
@@ -171,11 +141,60 @@ public class TransactionService implements TransactionPort {
                 break;
         }
 
-        // Guardar la transacción actualizada
         saveTransaction.save(foundTransaction);
-
         return Optional.of(foundTransaction);
     }
+
+    @Override
+    public void purchase(Long serverId, Long userId, Long accountId, String reference, List<ItemQuantityModel> items,
+                         Double amount, String transactionId) {
+
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
+                transactionId);
+
+        RealmEntity realm = accountVerificationDto.realm();
+
+        if (realm == null) {
+            LOGGER.error("[TransactionService] [purchase] A realm has not been configured or the realm is disabled. " +
+                    "transactionId: {}", transactionId);
+            throw new InternalException("Realm is not available", transactionId);
+        }
+
+        integratorPort.purchase(realm.getHost(), realm.getJwt(), userId, accountId, reference, items, amount,
+                transactionId);
+    }
+
+    @Override
+    public void sendSubscriptionBenefits(Long serverId, Long userId, Long accountId, Long characterId,
+                                         List<ItemQuantityModel> items, String benefitType, Double amount,
+                                         String transactionId) {
+
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
+                transactionId);
+
+        RealmEntity realm = accountVerificationDto.realm();
+
+        if (realm == null) {
+            LOGGER.error("[TransactionService] [sendSubscriptionBenefits] A realm has not been configured or the " +
+                    "realm is disabled. transactionId: {}", transactionId);
+            throw new InternalException("Server is not available", transactionId);
+        }
+
+        integratorPort.sendBenefitsPremium(realm.getHost(), realm.getJwt(), userId, accountId, characterId, items,
+                benefitType, amount, transactionId);
+    }
+
+
+    @Override
+    public void save(TransactionEntity transaction, String transactionId) {
+        saveTransaction.save(transaction);
+    }
+
+    @Override
+    public Optional<TransactionEntity> findByReferenceNumber(String referenceNumber, String transactionId) {
+        return obtainTransaction.findByReferenceNumber(referenceNumber, transactionId);
+    }
+
 
     @Override
     public PaymentApplicableModel isRealPaymentApplicable(TransactionModel transaction, String transactionId) {
@@ -187,7 +206,8 @@ public class TransactionService implements TransactionPort {
             Optional<PlansEntity> planDetailDto = obtainPlan.findById(Long.valueOf(productReference), transactionId);
 
             if (planDetailDto.isEmpty()) {
-                LOGGER.error("There is no active plan.  transactionId: {}", transaction);
+                LOGGER.error("[TransactionService] [isRealPaymentApplicable] There is no active plan.  transactionId:" +
+                        " {}", transaction);
                 throw new InternalException("There is no active plan.", transactionId);
             }
 
@@ -225,8 +245,8 @@ public class TransactionService implements TransactionPort {
         ProductEntity productDto = productPort.getProduct(productReference, transactionId);
 
         if (productDto == null) {
-            LOGGER.error("Product not found productReferenceNumber: {} transactionId: {}", productReference,
-                    transaction);
+            LOGGER.error("[TransactionService] [isRealPaymentApplicable] Product not found productReferenceNumber: {}"
+                    + " transactionId: {}", productReference, transaction);
             throw new InternalException("The product is not available for donation", transactionId);
         }
 
@@ -236,7 +256,7 @@ public class TransactionService implements TransactionPort {
         Integer discountPercentage = productDto.getDiscount();
         double discountAmount = ((double) discountPercentage / 100) * price;
         final Double finalPrice = price - discountAmount;
-        final String currency = hasCreditPoints ? "POINTS" : "USD";
+        final String currency = hasCreditPoints ? Currency.POINTS.name() : Currency.USD.name();
         final boolean isFree = finalPrice <= 0;
 
         final boolean isPaymentRedirectToCheckout = !isFree && !hasCreditPoints;

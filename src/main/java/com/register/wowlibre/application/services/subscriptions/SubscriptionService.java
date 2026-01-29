@@ -186,4 +186,38 @@ public class SubscriptionService implements SubscriptionPort {
         saveSubscription.save(subscription, "");
     }
 
+    @Override
+    public SubscriptionEntity updateNextInvoice(Long userId, Long planId, String transactionId) {
+
+        Optional<SubscriptionEntity> subscriptionEntity = obtainSubscription.findByUserIdAndStatus(userId,
+                SubscriptionStatus.ACTIVE.getType());
+
+        if (subscriptionEntity.isEmpty()) {
+            LOGGER.error("[SubscriptionService] [updateNextInvoice] No active subscription found: UserId {} " +
+                    "TransactionId {}", userId, transactionId);
+            throw new InternalException("The customer does not have an active subscription and cannot be assigned a "
+                    + "higher nextInvoice", transactionId);
+        }
+
+        SubscriptionEntity subscription = subscriptionEntity.get();
+        final Optional<PlansEntity> plan = obtainPlan.findById(planId, transactionId);
+
+        if (plan.isEmpty()) {
+            LOGGER.error("[SubscriptionService] [updateNextInvoice] Plan not found: planId {} UserId {} " +
+                    "TransactionId {}", planId, userId, transactionId);
+            throw new InternalException("The plan to link the subscription could not be found.", transactionId);
+        }
+
+        PlansEntity planEntity = plan.get();
+        LocalDate nextInvoiceDate;
+        if (planEntity.getFrequencyType().equalsIgnoreCase("YEARLY")) {
+            nextInvoiceDate = subscription.getNextInvoiceDate().plusYears(planEntity.getFrequencyValue());
+        } else {
+            nextInvoiceDate = subscription.getNextInvoiceDate().plusMonths(planEntity.getFrequencyValue());
+        }
+        subscription.setNextInvoiceDate(nextInvoiceDate);
+        saveSubscription.save(subscription, transactionId);
+        return subscription;
+    }
+
 }

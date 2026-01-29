@@ -1,7 +1,7 @@
 package com.register.wowlibre.domain.port.in.subscriptions;
 
 import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.infrastructure.entities.transactions.SubscriptionEntity;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
 
 import java.util.*;
 
@@ -21,4 +21,6 @@ public interface SubscriptionPort {
     List<SubscriptionEntity> findByExpirateSubscription();
 
     void save(SubscriptionEntity subscription);
+
+    SubscriptionEntity updateNextInvoice(Long userId, Long planId, String transactionId);
 }

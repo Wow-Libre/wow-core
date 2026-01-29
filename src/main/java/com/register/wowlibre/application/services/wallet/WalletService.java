@@ -6,14 +6,23 @@ import com.register.wowlibre.domain.port.in.wallet.*;
 import com.register.wowlibre.domain.port.out.wallet.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.entities.transactions.*;
+import org.slf4j.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
 
 @Service
 public class WalletService implements WalletPort {
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(WalletService.class);
+    /**
+     * PORTS
+     **/
     private final ObtainWallet obtainWallet;
     private final SaveWallet saveWallet;
+    /**
+     * USER PORT
+     */
     private final UserPort userPort;
 
     public WalletService(ObtainWallet obtainWallet, SaveWallet saveWallet, UserPort userPort) {
@@ -33,6 +42,7 @@ public class WalletService implements WalletPort {
         Optional<UserEntity> userFound = userPort.findByUserId(userId, transactionId);
 
         if (userFound.isEmpty()) {
+            LOGGER.error("[WalletService] [addPoints] User not found for transactionId: {}", transactionId);
             throw new InternalException("User not found", transactionId);
         }
 
@@ -49,5 +59,6 @@ public class WalletService implements WalletPort {
         }
 
         saveWallet.save(walletEntity);
+        LOGGER.info("[WalletService] [addPoints] Points added successfully for transactionId: {}", transactionId);
     }
 }

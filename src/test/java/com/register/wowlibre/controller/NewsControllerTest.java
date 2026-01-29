@@ -1,27 +1,18 @@
 package com.register.wowlibre.controller;
 
-import com.register.wowlibre.domain.dto.NewsSectionsDto;
-import com.register.wowlibre.domain.dto.NewsSummaryDto;
-import com.register.wowlibre.domain.dto.CreateNewsDto;
-import com.register.wowlibre.domain.UpdateNewsDto;
-import com.register.wowlibre.domain.dto.CreateNewsSectionDto;
-import com.register.wowlibre.domain.port.in.news.NewsPort;
-import com.register.wowlibre.domain.shared.GenericResponse;
-import com.register.wowlibre.infrastructure.controller.NewsController;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.port.in.news.*;
+import com.register.wowlibre.domain.shared.*;
+import com.register.wowlibre.infrastructure.controller.*;
+import org.junit.jupiter.api.*;
+import org.mockito.*;
+import org.springframework.http.*;
 
-import java.util.List;
+import java.util.*;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class NewsControllerTest {
 
@@ -112,7 +103,8 @@ class NewsControllerTest {
         long newsId = 1L;
         CreateNewsSectionDto createNewsSectionDto = new CreateNewsSectionDto();
 
-        ResponseEntity<GenericResponse<Void>> response = controller.createNewsSection(transactionId, newsId, createNewsSectionDto);
+        ResponseEntity<GenericResponse<Void>> response = controller.createNewsSection(transactionId, newsId,
+                createNewsSectionDto);
 
         assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
         assertThat(response.getBody()).isNotNull();

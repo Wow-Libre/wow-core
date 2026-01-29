@@ -40,7 +40,7 @@ public class TransactionSchedule {
     @Transactional
     @Scheduled(cron = "1/50 * * * * *")
     public void sendPurchases() {
-        final String transactionId = "Internal-SendPurchases";
+        final String transactionId = UUID.randomUUID().toString();
         List<TransactionEntity> transactionEntities = obtainTransaction.findByStatusIsPaidAndSendIsFalse(transactionId);
 
         for (TransactionEntity transaction : transactionEntities) {
@@ -51,12 +51,16 @@ public class TransactionSchedule {
                     boolean activeSubscription = subscriptionPort.isActiveSubscription(transaction.getUserId(),
                             transactionId);
 
-                    if (!activeSubscription) {
-                        subscriptionPort.createSubscription(transaction.getUserId(), transaction.getPlanId(),
+                    final SubscriptionEntity subscription;
+                    if (activeSubscription) {
+                        subscription = subscriptionPort.updateNextInvoice(transaction.getUserId(),
+                                transaction.getPlanId(),
                                 transactionId);
-                        transaction.setStatus(TransactionStatus.DELIVERED.getType());
-                        transaction.setSend(true);
+                    } else {
+                        subscription = subscriptionPort.createSubscription(transaction.getUserId(),
+                                transaction.getPlanId(), transactionId);
                     }
+                    transaction.setSubscriptionId(subscription);
 
                 } else {
                     List<ItemQuantityModel> items = packagesPort.findByProductId(transaction.getProductId(),
@@ -64,7 +68,6 @@ public class TransactionSchedule {
 
                     double amount = transaction.isCreditPoints() ? transaction.getProductId().getCreditPointsValue()
                             : 0d;
-
 
                     ProductEntity product = transaction.getProductId();
 
@@ -83,9 +86,9 @@ public class TransactionSchedule {
                                 transactionId);
                     }
 
-                    transaction.setSend(true);
-                    transaction.setStatus(TransactionStatus.DELIVERED.getType());
                 }
+                transaction.setStatus(TransactionStatus.DELIVERED.getType());
+                transaction.setSend(true);
                 saveTransaction.save(transaction);
             } catch (Exception e) {
                 LOGGER.error("Error Transaction Sends {}", e.getLocalizedMessage());

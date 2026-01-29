@@ -1,4 +1,4 @@
-package com.register.wowlibre.domain;
+package com.register.wowlibre.domain.dto;
 
 import jakarta.validation.constraints.*;
 
