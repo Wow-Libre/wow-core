@@ -41,8 +41,22 @@ public class GuildBenefitsCatalogService implements GuildBenefitsCatalogPort {
     }
 
     @Override
-    public void update(Long benefitId, UpdateGuildBenefitsCatalog updateGuildBenefitsCatalog, String transactionId) {
-        obtainGuildBenefitsCatalogPort.findById(benefitId);
+    public void update(UpdateGuildBenefitsCatalog updateGuildBenefitsCatalog, String transactionId) {
+        Optional<GuildBenefitCatalogEntity> guildBenefitCatalog =
+                obtainGuildBenefitsCatalogPort.findById(updateGuildBenefitsCatalog.getBenefitId());
+
+        if (guildBenefitCatalog.isEmpty()) {
+            throw new InternalException("Benefit Catalog Not Found", transactionId);
+        }
+        GuildBenefitCatalogEntity entityToUpdate = guildBenefitCatalog.get();
+        entityToUpdate.setTitle(updateGuildBenefitsCatalog.getTitle());
+        entityToUpdate.setSubTitle(updateGuildBenefitsCatalog.getSubTitle());
+        entityToUpdate.setDescription(updateGuildBenefitsCatalog.getDescription());
+        entityToUpdate.setImageUrl(updateGuildBenefitsCatalog.getImageUrl());
+        entityToUpdate.setCoreCode(updateGuildBenefitsCatalog.getCoreCode());
+        entityToUpdate.setQuantity(updateGuildBenefitsCatalog.getQuantity());
+        entityToUpdate.setExternalUrl(updateGuildBenefitsCatalog.getExternalUrl());
+        saveGuildBenefitsCatalogPort.save(entityToUpdate);
     }
 
     @Override

@@ -1,21 +1,17 @@
 package com.register.wowlibre.infrastructure.controller;
 
-import com.register.wowlibre.domain.dto.faqs.CreateFaqDto;
-import com.register.wowlibre.domain.enums.FaqType;
+import com.register.wowlibre.domain.dto.faqs.*;
+import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.model.resources.*;
-import com.register.wowlibre.domain.port.in.ResourcesPort;
-import com.register.wowlibre.domain.shared.GenericResponse;
-import com.register.wowlibre.domain.shared.GenericResponseBuilder;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.register.wowlibre.domain.port.in.*;
+import com.register.wowlibre.domain.shared.*;
+import jakarta.validation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
-import static com.register.wowlibre.domain.constant.Constants.HEADER_ACCEPT_LANGUAGE;
-import static com.register.wowlibre.domain.constant.Constants.HEADER_TRANSACTION_ID;
+import static com.register.wowlibre.domain.constant.Constants.*;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -84,16 +80,6 @@ public class ResourcesController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(countryModelList, transactionId).ok().build());
-    }
-
-    @GetMapping("/benefits-guild")
-    public ResponseEntity<GenericResponse<List<BenefitModel>>> benefitsGuild(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestHeader(name = HEADER_ACCEPT_LANGUAGE) Locale locale) {
-        final List<BenefitModel> benefitsGuild = resourcesPort.getBenefitsGuild(locale.getLanguage(), transactionId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(benefitsGuild, transactionId).ok().build());
     }
 
     @GetMapping("/widget-home")

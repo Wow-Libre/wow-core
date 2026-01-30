@@ -1,18 +1,17 @@
 package com.register.wowlibre.application.services.resources;
 
 
-import com.register.wowlibre.domain.dto.faqs.CreateFaqDto;
-import com.register.wowlibre.domain.enums.FaqType;
-import com.register.wowlibre.domain.exception.InternalException;
+import com.register.wowlibre.domain.dto.faqs.*;
+import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.resources.*;
-import com.register.wowlibre.domain.port.in.ResourcesPort;
-import com.register.wowlibre.domain.port.out.JsonLoaderPort;
-import com.register.wowlibre.domain.port.out.faqs.ObtainFaqs;
-import com.register.wowlibre.domain.port.out.faqs.SaveFaqs;
-import com.register.wowlibre.infrastructure.entities.FaqsEntity;
-import org.springframework.stereotype.Service;
+import com.register.wowlibre.domain.port.in.*;
+import com.register.wowlibre.domain.port.out.*;
+import com.register.wowlibre.domain.port.out.faqs.*;
+import com.register.wowlibre.infrastructure.entities.*;
+import org.springframework.stereotype.*;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ResourcesService implements ResourcesPort {
@@ -63,11 +62,6 @@ public class ResourcesService implements ResourcesPort {
     @Override
     public List<PlanModel> getPlansBank(String language, String transactionId) {
         return jsonLoaderPort.getJsonPlans(language, transactionId);
-    }
-
-    @Override
-    public List<BenefitModel> getBenefitsGuild(String language, String transactionId) {
-        return jsonLoaderPort.getJsonBenefitsGuild(language, transactionId);
     }
 
     @Override

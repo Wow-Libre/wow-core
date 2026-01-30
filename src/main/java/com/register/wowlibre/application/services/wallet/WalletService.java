@@ -51,7 +51,7 @@ public class WalletService implements WalletPort {
         WalletsEntity walletEntity;
         if (wallet.isPresent()) {
             walletEntity = wallet.get();
-            walletEntity.setPoints(points);
+            walletEntity.setPoints(wallet.get().getPoints() + points);
         } else {
             walletEntity = new WalletsEntity();
             walletEntity.setUserId(userFound.get());

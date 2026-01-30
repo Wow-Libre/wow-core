@@ -1,6 +1,5 @@
 package com.register.wowlibre.application.services.benefit_guild;
 
-import com.register.wowlibre.domain.model.resources.*;
 import com.register.wowlibre.domain.port.in.benefit_guild.*;
 import com.register.wowlibre.domain.port.out.benefit_guild.*;
 import com.register.wowlibre.infrastructure.entities.*;
@@ -38,11 +37,6 @@ public class BenefitGuildService implements BenefitGuildPort {
                                                                                          String transactionId) {
         return obtainBenefitGuild.findRemainingBenefitsForGuildAndServerIdAndCharacter(realmId, guildId, characterId
                 , accountId, transactionId);
-    }
-
-    @Override
-    public List<BenefitModel> getBenefitsGuild(String language, String transactionId) {
-        return List.of();
     }
 
 

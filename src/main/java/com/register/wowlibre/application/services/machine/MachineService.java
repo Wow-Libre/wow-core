@@ -209,4 +209,15 @@ public class MachineService implements MachinePort {
         }
 
     }
+
+    @Override
+    public void addPointsSubscription(Long userId, Long points, String transactionId) {
+        List<VoteWalletEntity> voteWallets = voteWalletPort.findByUserId(userId, transactionId);
+        for (VoteWalletEntity voteWallet : voteWallets) {
+            int current = voteWallet.getVoteBalance() != null ? voteWallet.getVoteBalance() : 0;
+            voteWallet.setVoteBalance(current + points.intValue());
+            voteWallet.setUpdatedAt(LocalDateTime.now());
+            voteWalletPort.saveVoteWallet(voteWallet, transactionId);
+        }
+    }
 }

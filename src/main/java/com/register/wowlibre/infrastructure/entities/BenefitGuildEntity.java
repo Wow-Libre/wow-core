@@ -5,7 +5,7 @@ import lombok.*;
 
 @Data
 @Entity
-@Table(name = "benefit_guild")
+@Table(name = "guild_benefits")
 public class BenefitGuildEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +19,6 @@ public class BenefitGuildEntity {
     private RealmEntity realmId;
     @Column(name = "guild_id")
     private Long guildId;
-    @Column(name = "benefit_id")
-    private Long benefitId;
     @JoinColumn(
             name = "guild_benefit_catalog_id",
             referencedColumnName = "id")
@@ -28,5 +26,4 @@ public class BenefitGuildEntity {
             optional = false,
             fetch = FetchType.EAGER)
     private GuildBenefitCatalogEntity guildBenefitCatalogId;
-    private Boolean status;
 }

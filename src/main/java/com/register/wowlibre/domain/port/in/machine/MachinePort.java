@@ -12,4 +12,6 @@ public interface MachinePort {
 
     void changePoints(Long userId, Long accountId, Long characterId, Long realmId, Long points, String type,
                       String transactionId);
+
+    void addPointsSubscription(Long userId, Long points, String transactionId);
 }

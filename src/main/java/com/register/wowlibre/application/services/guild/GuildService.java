@@ -1,51 +1,45 @@
 package com.register.wowlibre.application.services.guild;
 
-import com.register.wowlibre.domain.dto.account_game.AccountVerificationDto;
-import com.register.wowlibre.domain.dto.client.GuildDetailMemberResponse;
-import com.register.wowlibre.domain.dto.guilds.GuildDto;
-import com.register.wowlibre.domain.dto.guilds.GuildMemberDetailDto;
-import com.register.wowlibre.domain.dto.guilds.GuildsDto;
-import com.register.wowlibre.domain.exception.InternalException;
-import com.register.wowlibre.domain.mapper.RealmMapper;
-import com.register.wowlibre.domain.model.ItemQuantityModel;
-import com.register.wowlibre.domain.model.RealmModel;
-import com.register.wowlibre.domain.model.resources.BenefitModel;
-import com.register.wowlibre.domain.port.in.ResourcesPort;
-import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
-import com.register.wowlibre.domain.port.in.benefit_guild.BenefitGuildPort;
-import com.register.wowlibre.domain.port.in.character_benefit_guild.CharacterBenefitGuildPort;
-import com.register.wowlibre.domain.port.in.guild.GuildPort;
-import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
-import com.register.wowlibre.domain.port.in.realm.RealmPort;
-import com.register.wowlibre.infrastructure.entities.BenefitGuildEntity;
-import com.register.wowlibre.infrastructure.entities.RealmEntity;
-import org.springframework.stereotype.Service;
+import com.register.wowlibre.domain.dto.account_game.*;
+import com.register.wowlibre.domain.dto.client.*;
+import com.register.wowlibre.domain.dto.guild_benefits_catalog.*;
+import com.register.wowlibre.domain.dto.guilds.*;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.mapper.*;
+import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.account_validation.*;
+import com.register.wowlibre.domain.port.in.benefit_guild.*;
+import com.register.wowlibre.domain.port.in.character_benefit_guild.*;
+import com.register.wowlibre.domain.port.in.guild.*;
+import com.register.wowlibre.domain.port.in.guild_benefits_catalog.*;
+import com.register.wowlibre.domain.port.in.integrator.*;
+import com.register.wowlibre.domain.port.in.realm.*;
+import com.register.wowlibre.infrastructure.entities.*;
+import org.springframework.stereotype.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GuildService implements GuildPort {
 
     private final IntegratorPort integratorPort;
     private final RealmPort realmPort;
-    private final ResourcesPort resourcesPort;
     private final BenefitGuildPort benefitGuildPort;
     private final CharacterBenefitGuildPort characterBenefitGuildPort;
+    private final GuildBenefitsCatalogPort guildBenefitsCatalogPort;
     /**
      * ACCOUNT VALIDATION PORT
      **/
     private final AccountValidationPort accountValidationPort;
 
-    public GuildService(IntegratorPort integratorPort, RealmPort realmPort, ResourcesPort resourcesPort,
+    public GuildService(IntegratorPort integratorPort, RealmPort realmPort,
                         BenefitGuildPort benefitGuildPort, CharacterBenefitGuildPort characterBenefitGuildPort,
+                        GuildBenefitsCatalogPort guildBenefitsCatalogPort,
                         AccountValidationPort accountValidationPort) {
         this.integratorPort = integratorPort;
         this.realmPort = realmPort;
-        this.resourcesPort = resourcesPort;
         this.benefitGuildPort = benefitGuildPort;
+        this.guildBenefitsCatalogPort = guildBenefitsCatalogPort;
         this.accountValidationPort = accountValidationPort;
         this.characterBenefitGuildPort = characterBenefitGuildPort;
     }
@@ -92,14 +86,15 @@ public class GuildService implements GuildPort {
                 realmDetail.getJwt(), guildId,
                 transactionId);
 
-        List<BenefitModel> beneficios = resourcesPort.getBenefitsGuild(locale.getLanguage(), transactionId);
+        List<GuildBenefitsCatalogDto> benefits = guildBenefitsCatalogPort.getAllBenefits(locale.getLanguage(),
+                transactionId);
 
         List<BenefitGuildEntity> beneficiosObtenidos = benefitGuildPort.benefits(realmDetail.getId(), guildId,
                 transactionId);
 
-        List<BenefitModel> beneficiosFiltrados = beneficios.stream()
+        List<GuildBenefitsCatalogDto> beneficiosFiltrados = benefits.stream()
                 .filter(beneficio -> beneficiosObtenidos.stream()
-                        .anyMatch(beneficioObtenido -> beneficioObtenido.getBenefitId().equals(beneficio.id)))
+                        .anyMatch(beneficioObtenido -> beneficioObtenido.getGuildBenefitCatalogId().getId().equals(beneficio.id)))
                 .toList();
 
         guildDto.setBenefits(beneficiosFiltrados);
@@ -193,9 +188,10 @@ public class GuildService implements GuildPort {
                     transactionId);
         }
 
-        List<BenefitModel> beneficios = resourcesPort.getBenefitsGuild(language, transactionId);
+        List<GuildBenefitsCatalogDto> benefits = guildBenefitsCatalogPort.getAllBenefits(language,
+                transactionId);
 
-        if (beneficios.isEmpty()) {
+        if (benefits.isEmpty()) {
             throw new InternalException("There are no benefits available to purchase", transactionId);
         }
 
@@ -207,14 +203,13 @@ public class GuildService implements GuildPort {
             throw new InternalException("There are no benefits available to purchase", transactionId);
         }
 
-        List<ItemQuantityModel> filteredBenefits = beneficios.stream()
+        List<ItemQuantityModel> filteredBenefits = benefits.stream()
                 .filter(benefit ->
                         benefitsGuild.stream()
                                 .anyMatch(benefitGuild ->
-                                        benefitGuild.getBenefitId().equals(benefit.id)
-                                )
+                                        benefitGuild.getGuildBenefitCatalogId().getId().equals(benefit.id))
                 )
-                .map(benefit -> new ItemQuantityModel(benefit.itemId, 1))
+                .map(benefit -> new ItemQuantityModel(benefit.coreCode, 1))
                 .toList();
 
 

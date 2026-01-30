@@ -553,7 +553,8 @@ CREATE TABLE platform.guild_benefits_catalog(
         core_code varchar (20) NOT NULL,
         quantity integer NOT NULL,
         is_active BOOLEAN DEFAULT true,
-        external_url text NOT NULL
+        external_url text NOT NULL,
+        language VARCHAR(10) NOT NULL
 );
 
 

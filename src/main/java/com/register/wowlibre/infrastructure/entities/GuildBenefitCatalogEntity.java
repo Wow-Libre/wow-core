@@ -11,6 +11,7 @@ public class GuildBenefitCatalogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(name = "subtitle")
     private String subTitle;
     private String description;
     @Column(name = "image_url")

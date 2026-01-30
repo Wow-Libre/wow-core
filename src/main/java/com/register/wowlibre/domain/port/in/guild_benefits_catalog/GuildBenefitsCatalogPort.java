@@ -7,7 +7,7 @@ import java.util.*;
 public interface GuildBenefitsCatalogPort {
     void create(CreateGuildBenefitsCatalog createGuildBenefitsCatalog, String transactionId);
 
-    void update(Long benefitId, UpdateGuildBenefitsCatalog updateGuildBenefitsCatalog, String transactionId);
+    void update(UpdateGuildBenefitsCatalog updateGuildBenefitsCatalog, String transactionId);
 
     void delete(Long benefitId, String transactionId);
 

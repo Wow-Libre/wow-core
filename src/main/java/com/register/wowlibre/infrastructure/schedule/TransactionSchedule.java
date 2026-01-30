@@ -2,6 +2,7 @@ package com.register.wowlibre.infrastructure.schedule;
 
 import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.machine.*;
 import com.register.wowlibre.domain.port.in.packages.*;
 import com.register.wowlibre.domain.port.in.subscriptions.*;
 import com.register.wowlibre.domain.port.in.wallet.*;
@@ -25,16 +26,18 @@ public class TransactionSchedule {
     private final PackagesPort packagesPort;
     private final SubscriptionPort subscriptionPort;
     private final WalletPort walletPort;
+    private final MachinePort machinePort;
 
     public TransactionSchedule(ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
                                WowLibrePort wowLibrePort, PackagesPort packagesPort, SubscriptionPort subscriptionPort,
-                               WalletPort walletPort) {
+                               WalletPort walletPort, MachinePort machinePort) {
         this.obtainTransaction = obtainTransaction;
         this.saveTransaction = saveTransaction;
         this.wowLibrePort = wowLibrePort;
         this.packagesPort = packagesPort;
         this.subscriptionPort = subscriptionPort;
         this.walletPort = walletPort;
+        this.machinePort = machinePort;
     }
 
     @Transactional
@@ -61,7 +64,7 @@ public class TransactionSchedule {
                                 transaction.getPlanId(), transactionId);
                     }
                     transaction.setSubscriptionId(subscription);
-
+                    machinePort.addPointsSubscription(subscription.getUserId(), 100L, transactionId);
                 } else {
                     List<ItemQuantityModel> items = packagesPort.findByProductId(transaction.getProductId(),
                             transactionId);
