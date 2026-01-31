@@ -14,4 +14,12 @@ public interface MachinePort {
                       String transactionId);
 
     void addPointsSubscription(Long userId, Long points, String transactionId);
+
+    /**
+     * Añade puntos de ruleta desde el minijuego de Telegram.
+     * Usa el reino elegido por el usuario en la sesión del bot.
+     *
+     * @return true si se añadieron puntos; false si no se pudo (reino inexistente, etc.).
+     */
+    boolean addRuletaPointsFromTelegram(Long userId, Long realmId, int points, String transactionId);
 }

@@ -21,6 +21,11 @@ public class JpaMachineAdapter implements ObtainMachine, SaveMachine {
     }
 
     @Override
+    public List<MachineEntity> findByUserId(Long userId) {
+        return machineRepository.findByUserId(userId);
+    }
+
+    @Override
     public void save(MachineEntity machine, String transactionId) {
         machineRepository.save(machine);
     }

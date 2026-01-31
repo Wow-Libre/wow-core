@@ -9,6 +9,7 @@ import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.port.in.account_validation.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.machine.*;
+import com.register.wowlibre.domain.port.in.realm.*;
 import com.register.wowlibre.domain.port.in.vote_wallet.*;
 import com.register.wowlibre.domain.port.out.machine.*;
 import com.register.wowlibre.infrastructure.entities.*;
@@ -29,16 +30,19 @@ public class MachineService implements MachinePort {
     private final IntegratorPort integratorPort;
     private final I18nService i18nService;
     private final VoteWalletPort voteWalletPort;
+    private final RealmPort realmPort;
 
     public MachineService(AccountValidationPort accountValidationPort, ObtainMachine obtainMachine,
             SaveMachine saveMachine,
-            IntegratorPort integratorPort, I18nService i18nService, VoteWalletPort voteWalletPort) {
+            IntegratorPort integratorPort, I18nService i18nService, VoteWalletPort voteWalletPort,
+            RealmPort realmPort) {
         this.accountValidationPort = accountValidationPort;
         this.obtainMachine = obtainMachine;
         this.saveMachine = saveMachine;
         this.integratorPort = integratorPort;
         this.i18nService = i18nService;
         this.voteWalletPort = voteWalletPort;
+        this.realmPort = realmPort;
     }
 
     @Override
@@ -219,5 +223,31 @@ public class MachineService implements MachinePort {
             voteWallet.setUpdatedAt(LocalDateTime.now());
             voteWalletPort.saveVoteWallet(voteWallet, transactionId);
         }
+    }
+
+    @Override
+    public boolean addRuletaPointsFromTelegram(Long userId, Long realmId, int points, String transactionId) {
+        if (userId == null || realmId == null) {
+            return false;
+        }
+        Optional<MachineEntity> machineOpt = obtainMachine.findByUserIdAndRealmId(userId, realmId);
+        MachineEntity machine;
+        if (machineOpt.isEmpty()) {
+            RealmEntity realm = realmPort.findById(realmId, transactionId).orElse(null);
+            if (realm == null) {
+                return false;
+            }
+            machine = new MachineEntity();
+            machine.setUserId(userId);
+            machine.setRealmId(realm);
+            machine.setPoints(points);
+            machine.setLastWin(null);
+            saveMachine.save(machine, transactionId);
+        } else {
+            machine = machineOpt.get();
+            machine.setPoints((machine.getPoints() != null ? machine.getPoints() : 0) + points);
+            saveMachine.save(machine, transactionId);
+        }
+        return true;
     }
 }
