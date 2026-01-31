@@ -154,8 +154,10 @@ app:
     allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://127.0.0.1:3000,https://www.wowlibre.com,https://api.wowlibre.com}
 telegram:
   bot:
-    token: ${TELEGRAM_BOT_TOKEN}
-    username: ${TELEGRAM_BOT_USERNAME}
+    # Sin esto, en prod el bot intenta arrancar si hay TELEGRAM_BOT_TOKEN y da 404 si el token no es válido
+    enabled: ${TELEGRAM_BOT_ENABLED:false}
+    token: ${TELEGRAM_BOT_TOKEN:}
+    username: ${TELEGRAM_BOT_USERNAME:}
     rate-limit:
       max-per-window: ${TELEGRAM_RATE_LIMIT_MAX:20}
       window-seconds: ${TELEGRAM_RATE_LIMIT_WINDOW_SEC:60}

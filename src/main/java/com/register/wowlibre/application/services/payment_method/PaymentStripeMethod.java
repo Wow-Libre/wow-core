@@ -1,22 +1,27 @@
 package com.register.wowlibre.application.services.payment_method;
 
-import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.domain.enums.*;
-import com.register.wowlibre.domain.exception.*;
-import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.port.out.stripe_credentials.*;
-import com.register.wowlibre.infrastructure.entities.transactions.*;
-import com.stripe.*;
-import com.stripe.exception.*;
-import com.stripe.model.*;
-import com.stripe.model.checkout.*;
-import com.stripe.net.*;
-import com.stripe.param.checkout.*;
-import org.slf4j.*;
-import org.springframework.stereotype.*;
+import com.register.wowlibre.domain.dto.PaymentTransaction;
+import com.register.wowlibre.domain.enums.PaymentStatus;
+import com.register.wowlibre.domain.exception.InternalException;
+import com.register.wowlibre.domain.model.PaymentGatewayModel;
+import com.register.wowlibre.domain.port.out.stripe_credentials.ObtainStripeCredentials;
+import com.register.wowlibre.domain.port.out.stripe_credentials.SaveStripeCredentials;
+import com.register.wowlibre.infrastructure.entities.transactions.PaymentGatewaysEntity;
+import com.register.wowlibre.infrastructure.entities.transactions.StripeCredentialsEntity;
+import com.stripe.Stripe;
+import com.stripe.exception.SignatureVerificationException;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import com.stripe.model.checkout.Session;
+import com.stripe.net.Webhook;
+import com.stripe.param.checkout.SessionCreateParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-import java.math.*;
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class PaymentStripeMethod extends PaymentMethod {
@@ -40,13 +45,12 @@ public class PaymentStripeMethod extends PaymentMethod {
                 transactionId);
 
         if (stripeCredential.isEmpty()) {
+            LOGGER.error("Stripe Credentials Invalid for gateway id: {}", idMethodGateway);
             throw new InternalException("PayUGateway Credentials Invalid", transactionId);
         }
 
         try {
             StripeCredentialsEntity stripe = stripeCredential.get();
-            Stripe.apiKey = stripe.getApiSecret();
-
             SessionCreateParams params = SessionCreateParams.builder()
                     .setMode(SessionCreateParams.Mode.PAYMENT)
                     .setSuccessUrl(stripe.getSuccessUrl())
@@ -54,21 +58,18 @@ public class PaymentStripeMethod extends PaymentMethod {
                     .setClientReferenceId(referenceCode)
                     .setPaymentIntentData(
                             SessionCreateParams.PaymentIntentData.builder()
-                                    .putMetadata("referenceCode", referenceCode) // 👈 Aquí va tu ID interno
+                                    .putMetadata("referenceCode", referenceCode)
                                     .build())
-                    .addLineItem(
-                            SessionCreateParams.LineItem.builder()
-                                    .setQuantity(quantity.longValue())
-                                    .setPriceData(
-                                            SessionCreateParams.LineItem.PriceData.builder()
-                                                    .setCurrency(currency)
-                                                    .setUnitAmount(amount.multiply(BigDecimal.valueOf(100)).longValue())
-                                                    .setProductData(
-                                                            SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                                    .setName(productName)
-                                                                    .build())
-                                                    .build())
+                    .addLineItem(SessionCreateParams.LineItem.builder()
+                            .setQuantity(quantity.longValue())
+                            .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
+                                    .setCurrency(currency)
+                                    .setUnitAmount(amount.multiply(BigDecimal.valueOf(100)).longValue())
+                                    .setProductData(SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                            .setName(productName)
+                                            .build())
                                     .build())
+                            .build())
                     .build();
             Session session = Session.create(params);
             return PaymentGatewayModel.builder()
@@ -76,7 +77,8 @@ public class PaymentStripeMethod extends PaymentMethod {
                     .redirect(session.getUrl())
                     .build();
         } catch (StripeException e) {
-            throw new RuntimeException(e);
+            LOGGER.error("[PaymentStripeMethod] [payment] Error creating Stripe session: {}", e.getMessage());
+            throw new InternalException(e.getMessage(), transactionId);
         }
     }
 
@@ -123,7 +125,7 @@ public class PaymentStripeMethod extends PaymentMethod {
             Webhook.constructEvent(payload, sigHeader, secret);
             return true;
         } catch (SignatureVerificationException e) {
-            LOGGER.error("❌ Firma inválida del webhook: {}", e.getMessage());
+            LOGGER.error("[PaymentStripeMethod] [payment] Firma inválida del webhook: {}", e.getMessage());
             return false;
         }
     }
@@ -178,7 +180,7 @@ public class PaymentStripeMethod extends PaymentMethod {
             };
 
         } catch (StripeException e) {
-            LOGGER.error("❌ Error al obtener el status del pago: {}", e.getMessage());
+            LOGGER.error("[PaymentStripeMethod] [payment] Error al obtener el status del pago: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }

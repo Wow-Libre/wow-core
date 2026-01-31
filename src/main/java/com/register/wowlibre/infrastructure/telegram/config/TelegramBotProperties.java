@@ -9,6 +9,8 @@ public class TelegramBotProperties {
 
     private String token = "";
     private String username = "";
+    /** Si false, el bot no se registra (evita 404 en prod si el token no es válido). Por defecto true. */
+    private boolean enabled = true;
     private RateLimit rateLimit = new RateLimit();
 
     public String getToken() {
@@ -27,6 +29,14 @@ public class TelegramBotProperties {
         this.username = username != null ? username : "";
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public RateLimit getRateLimit() {
         return rateLimit;
     }
@@ -41,9 +51,7 @@ public class TelegramBotProperties {
 
     /** Límite de mensajes por ventana de tiempo por chat (anti-spam). */
     public static class RateLimit {
-        /** Máximo de mensajes permitidos en la ventana (0 = usar valor por defecto en código). */
         private int maxPerWindow = 0;
-        /** Duración de la ventana en segundos (0 = usar valor por defecto en código). */
         private int windowSeconds = 0;
 
         public int getMaxPerWindow() {

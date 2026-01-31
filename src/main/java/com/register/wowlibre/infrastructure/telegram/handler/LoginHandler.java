@@ -82,9 +82,6 @@ public class LoginHandler implements TelegramCommandHandler {
             session.clearConversationOnly();
             session.setUserId(jwt.id);
             sendText(client, chatId, MSG_LOGIN_SUCCESS);
-        } catch (BadCredentialsException e) {
-            session.clear();
-            sendText(client, chatId, MSG_LOGIN_ERROR);
         } catch (Exception e) {
             session.clear();
             sendText(client, chatId, MSG_LOGIN_ERROR);

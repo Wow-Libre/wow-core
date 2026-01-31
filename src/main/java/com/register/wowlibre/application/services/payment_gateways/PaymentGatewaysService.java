@@ -20,7 +20,7 @@ import static com.register.wowlibre.domain.enums.PaymentType.*;
 
 @Service
 public class PaymentGatewaysService implements PaymentGatewaysPort {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentGatewayService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentGatewaysService.class);
 
     private final ObtainPaymentGateways obtainPaymentGateway;
     private final SavePaymentGateways savePaymentGateway;
