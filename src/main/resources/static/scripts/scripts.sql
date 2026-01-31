@@ -348,15 +348,18 @@ create table platform.interstitial_user (
                                             constraint fk_interstitial_user_interstitial_id foreign key (interstitial_id) references platform.interstitial (id)
 );
 
-create table platform.wallets (
-                                  id BIGINT AUTO_INCREMENT primary key,
-                                  user_id BIGINT NOT null,
-                                  points BIGINT NOT null,
+CREATE TABLE platform.wallets (
+                                  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                                  user_id BIGINT NOT NULL,
+                                  points BIGINT NOT NULL,
                                   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                                  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-                                  constraint fk_wallets_user_id constraint uq_wallets_user_id unique (user_id),
-                                  foreign key (user_id) references platform.user (id)
+                                  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+                                  CONSTRAINT uq_wallets_user_id UNIQUE (user_id),
+                                  CONSTRAINT fk_wallets_user_id
+                                      FOREIGN KEY (user_id) REFERENCES platform.user (id)
 );
+
 
 create table platform.plans (
                                 id BIGINT AUTO_INCREMENT NOT null,
@@ -532,11 +535,15 @@ CREATE TABLE platform.`benefit_premiums` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE platform.benefit_premium_items (
-       id BIGINT  AUTO_INCREMENT NOT NULL PRIMARY KEY
-       benefit_premium_id BIGINT NOT NULL,
-       code VARCHAR(255) NOT NULL,
-       quantity INT NOT NULL,
-       constraint fk_benefit_premium_item_benefit_premiums foreign key (benefit_premium_id) references benefit_premiums (id) on delete cascade on update cascade
+                                                id BIGINT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+                                                benefit_premium_id BIGINT NOT NULL,
+                                                code VARCHAR(255) NOT NULL,
+                                                quantity INT NOT NULL,
+                                                CONSTRAINT fk_benefit_premium_item_benefit_premiums
+                                                    FOREIGN KEY (benefit_premium_id)
+                                                        REFERENCES benefit_premiums (id)
+                                                        ON DELETE CASCADE
+                                                        ON UPDATE CASCADE
 );
 
 
