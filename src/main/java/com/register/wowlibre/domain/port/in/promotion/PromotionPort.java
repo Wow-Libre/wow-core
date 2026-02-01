@@ -7,10 +7,10 @@ import java.util.*;
 
 public interface PromotionPort {
     List<PromotionModel> findByPromotionServerIdAndClassIdAndLanguage(Long realmId, Long classId, String language,
-            String transactionId);
+                                                                      String transactionId);
 
     PromotionModel findByPromotionServerIdAndLanguage(Long id, Long realmId, String language,
-            String transactionId);
+                                                      String transactionId);
 
     List<PromotionModel> findByPromotionServerId(Long realmId, String transactionId);
 
@@ -19,4 +19,11 @@ public interface PromotionPort {
     List<PromotionModel> findActiveByRealmId(Long realmId, String language, String transactionId);
 
     void deleteLogical(Long promotionId, String transactionId);
+
+    PromotionsDto getPromotions(Long serverId, Long userId, Long accountId, Long characterId, Long classId,
+                                String language,
+                                String transactionId);
+
+    void claimPromotion(Long serverId, Long userId, Long accountId, Long characterId, Long promotionId, String language,
+                        String transactionId);
 }

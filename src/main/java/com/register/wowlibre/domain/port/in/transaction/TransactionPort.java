@@ -2,10 +2,16 @@ package com.register.wowlibre.domain.port.in.transaction;
 
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
 
 import java.util.*;
 
 public interface TransactionPort {
+    TransactionsDto transactionsByUserId(Long userId, Integer page, Integer size, String transactionId);
+
+    Optional<TransactionEntity> findByReferenceNumberAndUserId(String referenceNumber, Long userId,
+                                                               String transactionId);
+
     void purchase(Long serverId, Long userId, Long accountId, String reference, List<ItemQuantityModel> items,
                   Double amount, String transactionId);
 
@@ -13,10 +19,11 @@ public interface TransactionPort {
                                   List<ItemQuantityModel> items, String benefitType, Double amount,
                                   String transactionId);
 
-    PromotionsDto getPromotions(Long serverId, Long userId, Long accountId, Long characterId, Long classId,
-                                String language,
-                                String transactionId);
+    void save(TransactionEntity transaction, String transactionId);
 
-    void claimPromotion(Long serverId, Long userId, Long accountId, Long characterId, Long promotionId, String language,
-                        String transactionId);
+    Optional<TransactionEntity> findByReferenceNumber(String referenceNumber, String transactionId);
+
+
+    PaymentApplicableModel isRealPaymentApplicable(TransactionModel transaction, String transactionId);
+
 }

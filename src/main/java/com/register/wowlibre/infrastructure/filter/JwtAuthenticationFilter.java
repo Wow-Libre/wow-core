@@ -102,7 +102,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.getOutputStream().write(new ObjectMapper().writeValueAsBytes(responseBody));
         } catch (MalformedJwtException e) {
-            responseBody.setMessage("El token JWT es inválido o está mal formado");
+            responseBody.setMessage("The JWT token is invalid or malformed");
             responseBody.setCode(400);
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);

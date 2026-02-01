@@ -4,6 +4,9 @@ import com.register.wowlibre.application.services.promotion.PromotionService;
 import com.register.wowlibre.domain.dto.CreatePromotionDto;
 import com.register.wowlibre.domain.exception.InternalException;
 import com.register.wowlibre.domain.model.PromotionModel;
+import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
+import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
+import com.register.wowlibre.domain.port.in.user_promotion.UserPromotionPort;
 import com.register.wowlibre.domain.port.out.promotion.ObtainPromotion;
 import com.register.wowlibre.domain.port.out.promotion.SavePromotion;
 import com.register.wowlibre.domain.port.out.promotion_item.DeletePromotionItem;
@@ -40,6 +43,12 @@ class PromotionServiceTest extends BaseTest {
     private DeletePromotionItem deletePromotionItem;
     @Mock
     private RandomString randomString;
+    @Mock
+    private UserPromotionPort userPromotionPort;
+    @Mock
+    private IntegratorPort integratorPort;
+    @Mock
+    private AccountValidationPort accountValidationPort;
 
     private PromotionService service;
 
@@ -47,7 +56,8 @@ class PromotionServiceTest extends BaseTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         service = new PromotionService(obtainPromotion, obtainPromotionItem, savePromotion,
-                savePromotionItem, deletePromotionItem, randomString);
+                savePromotionItem, deletePromotionItem, randomString,
+                userPromotionPort, integratorPort, accountValidationPort);
     }
 
     @Test
@@ -121,9 +131,8 @@ class PromotionServiceTest extends BaseTest {
 
         when(obtainPromotion.findById(id, transactionId)).thenReturn(Optional.empty());
 
-        InternalException exception = assertThrows(InternalException.class, () ->
-                service.findByPromotionServerIdAndLanguage(id, realmId, language, transactionId)
-        );
+        InternalException exception = assertThrows(InternalException.class,
+                () -> service.findByPromotionServerIdAndLanguage(id, realmId, language, transactionId));
 
         assertEquals("The promotion is not found or is not available", exception.getMessage());
         verify(obtainPromotion).findById(id, transactionId);
@@ -262,9 +271,8 @@ class PromotionServiceTest extends BaseTest {
 
         when(obtainPromotion.findById(promotionId, transactionId)).thenReturn(Optional.empty());
 
-        InternalException exception = assertThrows(InternalException.class, () ->
-                service.deleteLogical(promotionId, transactionId)
-        );
+        InternalException exception = assertThrows(InternalException.class,
+                () -> service.deleteLogical(promotionId, transactionId));
 
         assertEquals("The promotion is not found", exception.getMessage());
         verify(obtainPromotion).findById(promotionId, transactionId);
@@ -291,7 +299,8 @@ class PromotionServiceTest extends BaseTest {
         return entity;
     }
 
-    private PromotionItemEntity createPromotionItemEntity(Long id, PromotionEntity promotion, String code, Integer quantity) {
+    private PromotionItemEntity createPromotionItemEntity(Long id, PromotionEntity promotion, String code,
+            Integer quantity) {
         PromotionItemEntity entity = new PromotionItemEntity();
         entity.setId(id);
         entity.setPromotionId(promotion);
@@ -300,4 +309,3 @@ class PromotionServiceTest extends BaseTest {
         return entity;
     }
 }
-

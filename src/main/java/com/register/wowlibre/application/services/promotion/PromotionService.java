@@ -1,9 +1,13 @@
 package com.register.wowlibre.application.services.promotion;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.account_game.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.account_validation.*;
+import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.promotion.*;
+import com.register.wowlibre.domain.port.in.user_promotion.*;
 import com.register.wowlibre.domain.port.out.promotion.*;
 import com.register.wowlibre.domain.port.out.promotion_item.*;
 import com.register.wowlibre.infrastructure.entities.*;
@@ -21,17 +25,25 @@ public class PromotionService implements PromotionPort {
     private final SavePromotionItem savePromotionItem;
     private final DeletePromotionItem deletePromotionItem;
     private final RandomString randomString;
+    private final UserPromotionPort userPromotionPort;
+    private final IntegratorPort integratorPort;
+    private final AccountValidationPort accountValidationPort;
 
     public PromotionService(ObtainPromotion obtainPromotion, ObtainPromotionItem obtainPromotionItem,
                             SavePromotion savePromotion, SavePromotionItem savePromotionItem,
                             DeletePromotionItem deletePromotionItem,
-                            @Qualifier("reference-serial-bank") RandomString randomString) {
+                            @Qualifier("referenceSerialBank") RandomString randomString,
+                            UserPromotionPort userPromotionPort, IntegratorPort integratorPort,
+                            AccountValidationPort accountValidationPort) {
         this.obtainPromotion = obtainPromotion;
         this.obtainPromotionItem = obtainPromotionItem;
         this.savePromotion = savePromotion;
         this.savePromotionItem = savePromotionItem;
         this.deletePromotionItem = deletePromotionItem;
         this.randomString = randomString;
+        this.userPromotionPort = userPromotionPort;
+        this.integratorPort = integratorPort;
+        this.accountValidationPort = accountValidationPort;
     }
 
     @Override
@@ -206,5 +218,71 @@ public class PromotionService implements PromotionPort {
         // Realizar delete lógico de la promoción
         promotionEntity.setStatus(false);
         savePromotion.save(promotionEntity);
+    }
+
+
+    @Override
+    public PromotionsDto getPromotions(Long serverId, Long userId, Long accountId, Long characterId, Long classId,
+                                       String language,
+                                       String transactionId) {
+
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
+                transactionId);
+
+        RealmEntity server = accountVerificationDto.realm();
+
+        if (server == null) {
+            throw new InternalException("Server is not available", transactionId);
+        }
+
+        List<PromotionModel> promotions =
+                findByPromotionServerIdAndClassIdAndLanguage(serverId, classId, language,
+                        transactionId).stream()
+                        .filter(promos -> Objects.equals(promos.getRealmId(), serverId)).toList();
+
+        if (promotions.isEmpty()) {
+            return new PromotionsDto(new ArrayList<>(), 0);
+        }
+
+        return new PromotionsDto(promotions.stream()
+                .filter(promoValidation ->
+                        userPromotionPort.findByUserIdAndAccountIdAndPromotionIdAndCharacterId(
+                                userId, accountId, promoValidation.getId(), characterId, transactionId).isEmpty())
+                .map(PromotionDto::new).toList(), promotions.size());
+    }
+
+    @Override
+    public void claimPromotion(Long serverId, Long userId, Long accountId, Long characterId, Long promotionId,
+                               String language, String transactionId) {
+
+        if (userPromotionPort.findByUserIdAndAccountIdAndPromotionIdAndCharacterId(
+                userId, accountId, promotionId, characterId, transactionId).isPresent()) {
+            throw new InternalException("You have already consumed the promotion", transactionId);
+        }
+
+        AccountVerificationDto accountVerificationDto = accountValidationPort.verifyAccount(userId, accountId, serverId,
+                transactionId);
+
+        RealmEntity server = accountVerificationDto.realm();
+
+        if (server == null) {
+            throw new InternalException("Server is not available", transactionId);
+        }
+
+        PromotionModel promo =
+                findByPromotionServerIdAndLanguage(promotionId, serverId, language, transactionId);
+
+        List<ItemQuantityModel> items = new ArrayList<>();
+
+        if (promo.getSendItem() && !promo.getItems().isEmpty()) {
+            items = promo.getItems().stream().map(benefit -> new ItemQuantityModel(benefit.code,
+                    benefit.quantity)).toList();
+        }
+
+        integratorPort.sendPromo(server.getHost(), server.getJwt(), userId, accountId, characterId, items,
+                promo.getType(), promo.getAmount(), promo.getMinLvl(), promo.getMaxLvl(), promo.getLevel(),
+                transactionId);
+
+        userPromotionPort.save(userId, accountId, promotionId, characterId, server.getId(), transactionId);
     }
 }

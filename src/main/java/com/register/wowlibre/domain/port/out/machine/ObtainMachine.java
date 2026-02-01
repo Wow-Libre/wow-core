@@ -6,4 +6,6 @@ import java.util.*;
 
 public interface ObtainMachine {
     Optional<MachineEntity> findByUserIdAndRealmId(Long userId, Long realmId);
+
+    List<MachineEntity> findByUserId(Long userId);
 }

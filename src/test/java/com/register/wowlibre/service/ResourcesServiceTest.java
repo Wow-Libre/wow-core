@@ -102,17 +102,6 @@ class ResourcesServiceTest {
         assertEquals("Plan A", result.get(0).name());
     }
 
-    @Test
-    void testGetBenefitsGuild() {
-        List<BenefitModel> benefits = List.of(new BenefitModel(1L, "Title", "Sub", "Desc", "logo.png", "itemId", 2,
-                true, "link.com"));
-        when(jsonLoaderPort.getJsonBenefitsGuild("en", "tx123")).thenReturn(benefits);
-
-        List<BenefitModel> result = resourcesService.getBenefitsGuild("en", "tx123");
-
-        assertEquals(1, result.size());
-        assertTrue(result.get(0).status);
-    }
 
     @Test
     void testGetWidgetSubscription() {

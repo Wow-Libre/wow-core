@@ -1,23 +1,17 @@
 package com.register.wowlibre.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.register.wowlibre.domain.model.resources.BenefitModel;
-import com.register.wowlibre.domain.model.resources.CountryModel;
-import com.register.wowlibre.domain.model.resources.PlanModel;
-import com.register.wowlibre.domain.model.resources.WidgetHomeSubscriptionModel;
-import com.register.wowlibre.infrastructure.repositories.JsonLoader;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.core.io.Resource;
+import com.fasterxml.jackson.core.type.*;
+import com.fasterxml.jackson.databind.*;
+import com.register.wowlibre.domain.model.resources.*;
+import com.register.wowlibre.infrastructure.repositories.*;
+import org.junit.jupiter.api.*;
+import org.springframework.core.io.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class JsonLoaderTest {
@@ -37,8 +31,7 @@ class JsonLoaderTest {
         List<CountryModel> countries = List.of(new CountryModel("us", "USA", "en", "wow.com"));
         Map<String, List<PlanModel>> plans = Map.of("en", List.of(new PlanModel(1L, "Plan1", "desc", "10", "monthly",
                 List.of(), "Buy", 0, 1, 100.0)));
-        Map<String, List<BenefitModel>> benefits = Map.of("en", List.of(new BenefitModel(1L, "Title", "Sub", "desc",
-                "logo", "item", 1, true, "link")));
+
         Map<String, List<WidgetHomeSubscriptionModel>> widgets = Map.of("en",
                 List.of(new WidgetHomeSubscriptionModel()));
 
@@ -49,14 +42,11 @@ class JsonLoaderTest {
         when(widgetHomeSubscription.getInputStream()).thenReturn(dummyStream());
         when(plansAcquisition.getInputStream()).thenReturn(dummyStream());
 
-        // Mock deserialización en orden correcto
         when(objectMapper.readValue(any(InputStream.class), any(TypeReference.class)))
-                .thenReturn(countries) // jsonCountryModel
-                .thenReturn(plans) // jsonPlanModel
-                .thenReturn(benefits) // jsonBenefits
-                .thenReturn(widgets); // jsonWidgetSubscription
+                .thenReturn(countries)
+                .thenReturn(plans)
+                .thenReturn(widgets);
 
-        // Instanciar y cargar los datos con reflexión
         jsonLoader = new JsonLoader(objectMapper, jsonFile, bankPlans, benefitsGuild, widgetHomeSubscription);
 
         Method loadJsonFile = JsonLoader.class.getDeclaredMethod("loadJsonFile");
@@ -82,11 +72,5 @@ class JsonLoaderTest {
         assertEquals("Plan1", result.getFirst().name());
     }
 
-    @Test
-    void testGetJsonBenefitsGuild() {
-        List<BenefitModel> result = jsonLoader.getJsonBenefitsGuild("en", "tx123");
-        assertEquals(1, result.size());
-        assertEquals("Title", result.getFirst().title);
-    }
 
 }

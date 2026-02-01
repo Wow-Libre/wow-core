@@ -50,6 +50,8 @@ public class SecurityConfiguration {
         List<String> endpoints = new ArrayList<>();
         // System endpoints
         endpoints.add("/actuator/health");
+        endpoints.add("/api/payment/notification");
+        endpoints.add("/api/benefits-guild/all");
         // Internal API
         endpoints.addAll(List.of(InternalApiEndpoints.getAllInternalApiEndpoints()));
         // Swagger
@@ -101,19 +103,22 @@ public class SecurityConfiguration {
                                     "/api/news/{newsId}/sections",
                                     "/api/banners",
                                     "/api/voting/create",
-                                    "/api/interstitial")
+                                    "/api/interstitial",
+                                    "/api/benefits-guild")
                             .hasAuthority(Rol.ADMIN.getName())
                             .requestMatchers(HttpMethod.PUT,
                                     "/api/news/{id}",
                                     "/api/voting/{id}",
-                                    "/api/interstitial")
+                                    "/api/interstitial",
+                                    "/api/benefits-guild")
                             .hasAuthority(Rol.ADMIN.getName())
                             .requestMatchers(HttpMethod.DELETE,
                                     "/api/news/{id}",
                                     "/api/news/{newsId}/sections/{sectionId}",
                                     "/api/banners/*",
                                     "/api/voting/{id}",
-                                    "/api/interstitial/delete/{id}")
+                                    "/api/interstitial/delete/{id}",
+                                    "/api/benefits-guild")
                             .hasAuthority(Rol.ADMIN.getName())
                             .anyRequest()
                             .authenticated();

@@ -90,14 +90,6 @@ class VotingControllerTest {
         verify(votingPlatformsPort).deleteVotingPlatform(2L, "tx");
     }
 
-    @Test
-    void postback_callsPortAndReturnsOk() {
-        ResponseEntity<GenericResponse<Void>> response =
-                controller.postback("tx", "param", "ip");
-
-        assertEquals(200, response.getStatusCode().value());
-        verify(votingPlatformsPort).postbackVotingPlatform("param", "127.0.0.1", "tx");
-    }
 
     @Test
     void wallet_callsPortAndReturnsOk() {

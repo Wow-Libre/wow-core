@@ -1,22 +1,18 @@
 package com.register.wowlibre.application.services;
 
-import com.register.wowlibre.domain.exception.InternalException;
-import com.register.wowlibre.domain.model.VotingPlatformsModel;
-import com.register.wowlibre.domain.port.in.vote_wallet.VoteWalletPort;
-import com.register.wowlibre.domain.port.in.voting_platforms.VotingPlatformsPort;
-import com.register.wowlibre.domain.port.out.voting_platforms.ObtainVotingPlatforms;
-import com.register.wowlibre.domain.port.out.voting_platforms.SaveVotingPlatForms;
-import com.register.wowlibre.infrastructure.entities.VoteWalletEntity;
-import com.register.wowlibre.infrastructure.entities.VotingPlatformsEntity;
-import com.register.wowlibre.infrastructure.util.RandomString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.vote_wallet.*;
+import com.register.wowlibre.domain.port.in.voting_platforms.*;
+import com.register.wowlibre.domain.port.out.voting_platforms.*;
+import com.register.wowlibre.infrastructure.entities.*;
+import com.register.wowlibre.infrastructure.util.*;
+import org.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.stereotype.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.time.*;
+import java.util.*;
 
 @Service
 public class VotingPlatformsService implements VotingPlatformsPort {
@@ -38,7 +34,7 @@ public class VotingPlatformsService implements VotingPlatformsPort {
 
     public VotingPlatformsService(ObtainVotingPlatforms obtainVotingPlatforms,
                                   SaveVotingPlatForms saveVotingPlatformPort, VoteWalletPort voteWalletPort,
-                                  @Qualifier("reset-password-string") RandomString randomString) {
+                                  @Qualifier("resetPasswordString") RandomString randomString) {
         this.obtainVotingPlatforms = obtainVotingPlatforms;
         this.saveVotingPlatformPort = saveVotingPlatformPort;
         this.voteWalletPort = voteWalletPort;
@@ -102,7 +98,8 @@ public class VotingPlatformsService implements VotingPlatformsPort {
         String code = referenceCode.split("-", 2)[0];
 
         if (code == null || code.isBlank()) {
-            LOGGER.error("[VotingPlatformsService] [postbackVotingPlatform] Invalid WebHook code id: {}", transactionId);
+            LOGGER.error("[VotingPlatformsService] [postbackVotingPlatform] Invalid WebHook code id: {}",
+                    transactionId);
             throw new InternalException("Invalid WebHook ", transactionId);
         }
 

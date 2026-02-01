@@ -16,4 +16,6 @@ public class RealmDto {
     private String webSite;
     private String expName;
     private String apiKey;
+    /** Dirección realmlist para conectar el cliente WoW (ej: set realmlist logon.ejemplo.com) */
+    private String realmlist;
 }

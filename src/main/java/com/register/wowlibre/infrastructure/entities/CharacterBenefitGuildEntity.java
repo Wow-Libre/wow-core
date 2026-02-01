@@ -10,12 +10,12 @@ public class CharacterBenefitGuildEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "character_id")
-    private Long characterId;
     @Column(name = "account_id")
     private Long accountId;
+    @Column(name = "character_id")
+    private Long characterId;
     @JoinColumn(
-            name = "benefit_guild_id",
+            name = "guild_benefits_id",
             referencedColumnName = "id")
     @ManyToOne(
             optional = false,

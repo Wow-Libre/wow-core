@@ -19,23 +19,23 @@ public class BenefitGuildService implements BenefitGuildPort {
 
 
     @Override
-    public void create(Long serverId, Long guildId, String guildName, Long[] benefits, boolean status,
+    public void create(Long realmId, Long guildId, String guildName, Long[] benefits, boolean status,
                        String transactionId) {
         BenefitGuildEntity associatedBenefit = new BenefitGuildEntity();
 
     }
 
     @Override
-    public List<BenefitGuildEntity> benefits(Long serverId, Long guildId, String transactionId) {
-        return obtainBenefitGuild.findByServerIdAndGuildIdAndStatusIsTrue(serverId, guildId, transactionId);
+    public List<BenefitGuildEntity> benefits(Long realmId, Long guildId, String transactionId) {
+        return obtainBenefitGuild.findByServerIdAndGuildIdAndStatusIsTrue(realmId, guildId, transactionId);
     }
 
     @Override
-    public List<BenefitGuildEntity> findRemainingBenefitsForGuildAndServerIdAndCharacter(Long serverId, Long guildId,
+    public List<BenefitGuildEntity> findRemainingBenefitsForGuildAndServerIdAndCharacter(Long realmId, Long guildId,
                                                                                          Long characterId,
                                                                                          Long accountId,
                                                                                          String transactionId) {
-        return obtainBenefitGuild.findRemainingBenefitsForGuildAndServerIdAndCharacter(serverId, guildId, characterId
+        return obtainBenefitGuild.findRemainingBenefitsForGuildAndServerIdAndCharacter(realmId, guildId, characterId
                 , accountId, transactionId);
     }
 

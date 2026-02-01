@@ -18,10 +18,6 @@ public interface ResourcesPort {
 
     List<PlanModel> getPlansBank(String language, String transactionId);
 
-    List<BenefitModel> getBenefitsGuild(String language, String transactionId);
-
-
     WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId);
-
 
 }

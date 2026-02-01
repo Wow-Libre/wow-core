@@ -64,7 +64,7 @@ public class UserService implements UserPort {
     public UserService(ObtainUserPort obtainUserPort, SaveUserPort saveUserPort, PasswordEncoder passwordEncoder,
                        JwtPort jwtPort, RolPort rolPort, MailPort mailPort,
                        SecurityValidationPort securityValidationPort,
-                       I18nService i18nService, @Qualifier("reset-password-string") RandomString randomString,
+                       I18nService i18nService, @Qualifier("resetPasswordString") RandomString randomString,
                        GooglePort googlePort, Configurations configurations) {
         this.obtainUserPort = obtainUserPort;
         this.saveUserPort = saveUserPort;

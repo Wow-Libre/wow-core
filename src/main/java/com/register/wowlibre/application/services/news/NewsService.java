@@ -1,6 +1,5 @@
 package com.register.wowlibre.application.services.news;
 
-import com.register.wowlibre.domain.*;
 import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.port.in.news.*;

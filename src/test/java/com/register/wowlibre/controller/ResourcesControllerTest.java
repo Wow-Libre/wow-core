@@ -93,19 +93,6 @@ class ResourcesControllerTest {
         assertEquals(plans, response.getBody().getData());
     }
 
-    @Test
-    void testGetBenefitsGuild() {
-        List<BenefitModel> benefits = List.of(new BenefitModel(1L, "Benefit A", "Description A", "es", "https" +
-                "://example.com/benefit.png", "item1", 1, true, "link.com"));
-        when(resourcesPort.getBenefitsGuild("es", "tx111")).thenReturn(benefits);
-
-        ResponseEntity<GenericResponse<List<BenefitModel>>> response =
-                controller.benefitsGuild("tx111", Locale.forLanguageTag("es"));
-
-        assertTrue(response.getStatusCode().is2xxSuccessful());
-        assertNotNull(response.getBody());
-        assertEquals(benefits, response.getBody().getData());
-    }
 
     @Test
     void testWidgetSubscription() {

@@ -1,22 +1,17 @@
 package com.register.wowlibre.infrastructure.repositories;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.register.wowlibre.domain.model.resources.BenefitModel;
-import com.register.wowlibre.domain.model.resources.CountryModel;
-import com.register.wowlibre.domain.model.resources.PlanModel;
-import com.register.wowlibre.domain.model.resources.WidgetHomeSubscriptionModel;
-import com.register.wowlibre.domain.port.out.JsonLoaderPort;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
+import com.fasterxml.jackson.core.type.*;
+import com.fasterxml.jackson.databind.*;
+import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.model.resources.*;
+import com.register.wowlibre.domain.port.out.*;
+import jakarta.annotation.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.*;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.*;
+import java.util.*;
 
 @Component
 public class JsonLoader implements JsonLoaderPort {
@@ -24,25 +19,25 @@ public class JsonLoader implements JsonLoaderPort {
 
     private final Resource jsonFile;
     private final Resource bankPlans;
-    private final Resource benefitsGuild;
     private final Resource widgetHomeSubscription;
+    private final Resource pillHome;
 
     private List<CountryModel> jsonCountryModel;
     private Map<String, List<PlanModel>> jsonPlanModel;
-    private Map<String, List<BenefitModel>> jsonBenefits;
     private Map<String, List<WidgetHomeSubscriptionModel>> jsonWidgetSubscription;
+    private Map<String, PillHomeModel> jsonPillHomeModel;
 
     public JsonLoader(ObjectMapper objectMapper,
                       @Value("classpath:/static/countryAvailable.json") Resource jsonFile,
                       @Value("classpath:/static/bank_plans.json") Resource bankPlans,
-                      @Value("classpath:/static/benefit_guild.json") Resource benefitsGuild,
-                      @Value("classpath:/static/subscription_benefit.json") Resource widgetHomeSubscription
+                      @Value("classpath:/static/subscription_benefit.json") Resource widgetHomeSubscription,
+                      @Value("classpath:/static/pill_home.json") Resource pillHome
     ) {
         this.objectMapper = objectMapper;
         this.jsonFile = jsonFile;
         this.bankPlans = bankPlans;
-        this.benefitsGuild = benefitsGuild;
         this.widgetHomeSubscription = widgetHomeSubscription;
+        this.pillHome = pillHome;
     }
 
     @PostConstruct
@@ -52,9 +47,9 @@ public class JsonLoader implements JsonLoaderPort {
             });
             jsonPlanModel = readValue(bankPlans.getInputStream(), new TypeReference<>() {
             });
-            jsonBenefits = readValue(benefitsGuild.getInputStream(), new TypeReference<>() {
-            });
             jsonWidgetSubscription = readValue(widgetHomeSubscription.getInputStream(), new TypeReference<>() {
+            });
+            jsonPillHomeModel = readValue(pillHome.getInputStream(), new TypeReference<>() {
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -77,11 +72,6 @@ public class JsonLoader implements JsonLoaderPort {
         return Optional.of(jsonPlanModel.get(language)).orElse(jsonPlanModel.get("es"));
     }
 
-    @Override
-    public List<BenefitModel> getJsonBenefitsGuild(String language, String transactionId) {
-        return Optional.of(jsonBenefits.get(language)).orElse(jsonBenefits.get("es"));
-    }
-
 
     @Override
     public WidgetHomeSubscriptionModel getWidgetSubscription(String language, String transactionId) {
@@ -89,5 +79,9 @@ public class JsonLoader implements JsonLoaderPort {
                 .findFirst()).orElse(jsonWidgetSubscription.get("es").stream().findFirst()).orElse(null);
     }
 
+    @Override
+    public PillHomeModel getResourcePillHome(String language, String transactionId) {
+        return Optional.of(jsonPillHomeModel.get(language)).orElse(jsonPillHomeModel.get("es"));
+    }
 
 }

@@ -1,8 +1,8 @@
 package com.register.wowlibre.domain.dto.guilds;
 
 import com.register.wowlibre.domain.dto.client.*;
+import com.register.wowlibre.domain.dto.guild_benefits_catalog.*;
 import com.register.wowlibre.domain.model.*;
-import com.register.wowlibre.domain.model.resources.*;
 import lombok.*;
 
 import java.util.*;
@@ -29,7 +29,7 @@ public class GuildDto {
     private Long serverId;
     private boolean isLeader;
     private String discord;
-    private List<BenefitModel> benefits;
+    private List<GuildBenefitsCatalogDto> benefits;
 
     public GuildDto(GuildResponse response, String serverName, Long serverId) {
         this.id = response.getId();
