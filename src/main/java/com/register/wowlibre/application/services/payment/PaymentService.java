@@ -6,7 +6,7 @@ import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.payment.*;
-import com.register.wowlibre.domain.port.in.payment_gateway.*;
+import com.register.wowlibre.domain.port.in.payment_gateways.*;
 import com.register.wowlibre.domain.port.in.subscriptions.*;
 import com.register.wowlibre.domain.port.in.transaction.*;
 import com.register.wowlibre.domain.port.in.wallet.*;
@@ -24,11 +24,11 @@ public class PaymentService implements PaymentPort {
     private final TransactionPort transactionPort;
     private final SubscriptionPort subscriptionPort;
     private final WalletPort walletPort;
-    private final PaymentGatewayPort paymentGatewayPort;
+    private final PaymentGatewaysPort paymentGatewayPort;
 
     public PaymentService(TransactionPort transactionPort,
                           SubscriptionPort subscriptionPort, WalletPort walletPort,
-                          PaymentGatewayPort paymentGatewayPort) {
+                          PaymentGatewaysPort paymentGatewayPort) {
         this.transactionPort = transactionPort;
         this.subscriptionPort = subscriptionPort;
         this.walletPort = walletPort;

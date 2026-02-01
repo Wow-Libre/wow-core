@@ -8,7 +8,7 @@ import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.account_validation.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
-import com.register.wowlibre.domain.port.in.payment_gateway.*;
+import com.register.wowlibre.domain.port.in.payment_gateways.*;
 import com.register.wowlibre.domain.port.in.products.*;
 import com.register.wowlibre.domain.port.in.transaction.*;
 import com.register.wowlibre.domain.port.out.plans.*;
@@ -38,13 +38,12 @@ public class TransactionService implements TransactionPort {
     private final ProductPort productPort;
     private final RandomString randomString;
     private final ObtainPlan obtainPlan;
-    private final PaymentGatewayPort paymentGatewayPort;
+    private final PaymentGatewaysPort paymentGatewayPort;
 
     public TransactionService(IntegratorPort integratorPort, AccountValidationPort accountValidationPort,
                               ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
                               ProductPort productPort, @Qualifier("subscriptionReference") RandomString randomString
-            , ObtainPlan obtainPlan,
-                              PaymentGatewayPort paymentGatewayPort) {
+            , ObtainPlan obtainPlan, PaymentGatewaysPort paymentGatewayPort) {
         this.integratorPort = integratorPort;
         this.accountValidationPort = accountValidationPort;
         this.obtainTransaction = obtainTransaction;
