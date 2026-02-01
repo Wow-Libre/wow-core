@@ -23,7 +23,7 @@ public class RealmsSchedule {
     private final RandomString randomString;
 
     public RealmsSchedule(ObtainRealmPort obtainRealmPort, AuthIntegratorPort authIntegratorPort,
-                          SaveRealmPort saveRealmPort, @Qualifier("reset-password-string") RandomString randomString) {
+                          SaveRealmPort saveRealmPort, @Qualifier("resetPasswordString") RandomString randomString) {
         this.obtainRealmPort = obtainRealmPort;
         this.authIntegratorPort = authIntegratorPort;
         this.saveRealmPort = saveRealmPort;

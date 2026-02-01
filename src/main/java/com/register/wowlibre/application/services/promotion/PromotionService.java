@@ -32,7 +32,7 @@ public class PromotionService implements PromotionPort {
     public PromotionService(ObtainPromotion obtainPromotion, ObtainPromotionItem obtainPromotionItem,
                             SavePromotion savePromotion, SavePromotionItem savePromotionItem,
                             DeletePromotionItem deletePromotionItem,
-                            @Qualifier("reference-serial-bank") RandomString randomString,
+                            @Qualifier("referenceSerialBank") RandomString randomString,
                             UserPromotionPort userPromotionPort, IntegratorPort integratorPort,
                             AccountValidationPort accountValidationPort) {
         this.obtainPromotion = obtainPromotion;

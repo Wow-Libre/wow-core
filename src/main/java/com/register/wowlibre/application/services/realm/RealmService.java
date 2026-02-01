@@ -45,7 +45,7 @@ public class RealmService implements RealmPort {
     private final I18nService i18nService;
 
     public RealmService(ObtainRealmPort obtainRealmPort, SaveRealmPort saveRealmPort,
-                        @Qualifier("reset-password-string") RandomString randomString, PasswordEncoder passwordEncoder,
+                        @Qualifier("resetPasswordString") RandomString randomString, PasswordEncoder passwordEncoder,
                         ObtainServerDetailsPort obtainServerDetailsPort,
                         IntegratorPort integratorPort, ServerEventsPort serverEventsPort,
                         ServerResourcesPort serverResourcesPort, I18nService i18nService) {

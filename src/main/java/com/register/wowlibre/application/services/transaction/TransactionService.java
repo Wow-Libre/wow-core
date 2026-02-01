@@ -42,7 +42,7 @@ public class TransactionService implements TransactionPort {
 
     public TransactionService(IntegratorPort integratorPort, AccountValidationPort accountValidationPort,
                               ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
-                              ProductPort productPort, @Qualifier("subscription-reference") RandomString randomString
+                              ProductPort productPort, @Qualifier("subscriptionReference") RandomString randomString
             , ObtainPlan obtainPlan,
                               PaymentGatewayPort paymentGatewayPort) {
         this.integratorPort = integratorPort;

@@ -27,7 +27,7 @@ public class ProductService implements ProductPort {
     private final PackagesPort packagesPort;
 
     public ProductService(ObtainProduct products, SaveProduct saveProducts, ProductDetailsPort productDetailsPort,
-                          @Qualifier("product-reference") RandomString randomString,
+                          @Qualifier("productReference") RandomString randomString,
                           ProductCategoryPort productCategoryPort, PackagesPort packagesPort) {
         this.products = products;
         this.saveProducts = saveProducts;
@@ -55,8 +55,7 @@ public class ProductService implements ProductPort {
                                             firstProduct.getProductCategoryId().getDescription(),
                                             firstProduct.getProductCategoryId().getDisclaimer(),
                                             productList.stream()
-                                                    .map(this::mapToModel)
-                                                    .collect(Collectors.toList())
+                                                    .map(this::mapToModel).toList()
                                     ));
                                 }
                         )

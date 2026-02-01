@@ -6,44 +6,36 @@ import org.springframework.stereotype.*;
 
 @Component
 public class ConfigRandomSerial {
-    @Bean("reset-password-string")
+    @Bean("resetPasswordString")
     public RandomString configRandomString() {
         return new RandomString(15, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
-    @Bean("reference-serial-bank")
+    @Bean("referenceSerialBank")
     public RandomString referenceSerial() {
         return new RandomString(20, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
-    @Bean("random-code")
+    @Bean("randomCode")
     public RandomString randomCodeString() {
         return new RandomString(28, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
-    @Bean("random-send-otp")
+    @Bean("randomSendOtp")
     public RandomString configRandomOtpString() {
         return new RandomString(5, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
-    @Bean("voting-platform-serial")
-    public RandomString votingPlatformSerial() {
-        return new RandomString(20, "abcdefghijklmnopqrstuvwxyz0123456789");
-    }
 
-    @Bean("product-reference")
+    @Bean("productReference")
     public RandomString productRandomString() {
         return new RandomString(30, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
-    @Bean("subscription-reference")
+    @Bean("subscriptionReference")
     public RandomString subscriptionRandomString() {
         return new RandomString(40, "abcdefghijklmnopqrstuvwxyz0123456789");
     }
 
-    @Bean("random-string")
-    public RandomString randomString() {
-        return new RandomString(20, "abcdefghijklmnopqrstuvwxyz0123456789");
-    }
 
 }

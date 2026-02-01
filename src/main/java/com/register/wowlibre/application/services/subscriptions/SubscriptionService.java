@@ -44,7 +44,7 @@ public class SubscriptionService implements SubscriptionPort {
                                ObtainSubscriptionBenefits obtainSubscriptionBenefit,
                                SaveSubscriptionBenefits saveSubscriptionBenefit, WowLibrePort wowLibrePort,
                                SaveSubscription saveSubscription, ObtainPlan obtainPlan,
-                               @Qualifier("product-reference") RandomString randomString,
+                               @Qualifier("productReference") RandomString randomString,
                                BenefitPremiumPort benefitPremiumPort) {
         this.obtainSubscription = obtainSubscription;
         this.obtainJsonLoader = obtainJsonLoader;

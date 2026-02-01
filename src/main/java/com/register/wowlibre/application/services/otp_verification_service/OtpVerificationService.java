@@ -25,8 +25,8 @@ public class OtpVerificationService implements SecurityValidationPort {
     private final RandomString otpRandom;
 
 
-    public OtpVerificationService(@Qualifier("random-code") RandomString randomString,
-                                  @Qualifier("random-send-otp") RandomString otpRandom,
+    public OtpVerificationService(@Qualifier("randomCode") RandomString randomString,
+                                  @Qualifier("randomSendOtp") RandomString otpRandom,
                                   ObtainOtpVerification obtainOtpVerification,
                                   SaveOtpVerification saveOtpVerification) {
         this.randomString = randomString;
