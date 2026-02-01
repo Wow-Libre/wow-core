@@ -83,7 +83,7 @@ public class ProductService implements ProductPort {
     }
 
     public Double calculateFinalPrice(Double price, Integer discount) {
-        Double discountAmount = price * (Optional.of(discount).orElse(0) / 100.0);
+        double discountAmount = price * (Optional.of(discount).orElse(0) / 100.0);
         return price - discountAmount;
     }
 

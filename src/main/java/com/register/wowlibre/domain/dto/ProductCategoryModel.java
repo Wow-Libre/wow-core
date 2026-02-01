@@ -1,14 +1,8 @@
 package com.register.wowlibre.domain.dto;
 
-import lombok.*;
-
 import java.util.*;
 
-@AllArgsConstructor
-public class ProductCategoryModel {
-    public Long id;
-    public String name;
-    public String description;
-    public String disclaimer;
-    public List<ProductsDto> products;
+
+public record ProductCategoryModel(Long id, String name, String description, String disclaimer,
+                                   List<ProductsDto> products) {
 }

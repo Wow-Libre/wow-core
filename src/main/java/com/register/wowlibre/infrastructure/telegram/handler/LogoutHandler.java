@@ -1,12 +1,12 @@
 package com.register.wowlibre.infrastructure.telegram.handler;
 
-import com.register.wowlibre.infrastructure.telegram.conversation.TelegramSession;
-import com.register.wowlibre.infrastructure.telegram.conversation.TelegramSessionStore;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.generics.TelegramClient;
+import com.register.wowlibre.infrastructure.telegram.conversation.*;
+import org.slf4j.*;
+import org.springframework.core.annotation.*;
+import org.springframework.stereotype.*;
+import org.telegram.telegrambots.meta.api.methods.send.*;
+import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.generics.*;
 
 /**
  * Cierra la sesión del usuario en el bot (Desconectarse / Cerrar sesión).
@@ -14,9 +14,8 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @Component
 @Order(7)
 public class LogoutHandler implements TelegramCommandHandler {
-
     public static final String MENU_LOGOUT = "Desconectarse";
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogoutHandler.class);
     private static final String CMD_LOGOUT = "/logout";
     private static final String MSG_LOGGED_OUT = "Sesión cerrada. Puedes iniciar sesión de nuevo cuando quieras.";
     private static final String MSG_MENU = "Menú principal:";
@@ -25,6 +24,13 @@ public class LogoutHandler implements TelegramCommandHandler {
 
     public LogoutHandler(TelegramSessionStore sessionStore) {
         this.sessionStore = sessionStore;
+    }
+
+    private static void sendText(TelegramClient client, long chatId, String text) {
+        try {
+            client.execute(SendMessage.builder().chatId(chatId).text(text).build());
+        } catch (Exception ignored) {
+        }
     }
 
     @Override
@@ -52,12 +58,5 @@ public class LogoutHandler implements TelegramCommandHandler {
         } catch (Exception ignored) {
         }
         return true;
-    }
-
-    private static void sendText(TelegramClient client, long chatId, String text) {
-        try {
-            client.execute(SendMessage.builder().chatId(chatId).text(text).build());
-        } catch (Exception ignored) {
-        }
     }
 }
