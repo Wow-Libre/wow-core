@@ -19,7 +19,6 @@ import org.springframework.security.core.context.*;
 import org.springframework.security.web.authentication.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.filter.*;
-import org.springframework.web.servlet.*;
 
 import java.io.*;
 import java.util.*;
@@ -32,11 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final JwtPort jwtPort;
-    private final HandlerExceptionResolver handlerExceptionResolver;
 
-    public JwtAuthenticationFilter(JwtPort jwtPort, HandlerExceptionResolver handlerExceptionResolver) {
+    public JwtAuthenticationFilter(JwtPort jwtPort) {
         this.jwtPort = jwtPort;
-        this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
     @Override

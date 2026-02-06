@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
 
-import javax.crypto.*;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
@@ -92,14 +91,8 @@ public class RealmService implements RealmPort {
 
 
             final String gmPassword = realmCreateDto.getExternalPassword();
-            final byte[] salt = KeyDerivationUtil.generateSalt();
-
             final String adminPassword = passwordEncoder.encode(realmCreateDto.getPassword());
 
-            SecretKey derivedKey = KeyDerivationUtil.deriveKeyFromPassword(apiSecret, salt);
-
-            // Encrypt the passwords using the derived key
-            String encryptedPassUserInternal = EncryptionUtil.encrypt(gmPassword, derivedKey);
 
             RealmModel serverDto = RealmModel.builder()
                     .name(realmCreateDto.getName())
@@ -110,15 +103,15 @@ public class RealmService implements RealmPort {
                     .apiKey(apiKey)
                     .type(realmCreateDto.getType())
                     .apiSecret(apiSecret)
-                    .salt(salt)
                     .password(adminPassword)
                     .creationDate(LocalDateTime.now())
                     .retry(0)
                     .status(false)
+                    .realmListId(realmCreateDto.getRealmListId())
                     .realmlist(realmCreateDto.getRealmlist())
                     .webSite(realmCreateDto.getWebSite())
                     .gmUsername(realmCreateDto.getExternalUsername())
-                    .gmPassword(encryptedPassUserInternal)
+                    .gmPassword(gmPassword)
                     .userId(userId)
                     .build();
 

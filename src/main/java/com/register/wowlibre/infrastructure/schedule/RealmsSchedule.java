@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.scheduling.annotation.*;
 import org.springframework.stereotype.*;
 
-import javax.crypto.*;
 import java.util.*;
 
 @Component
@@ -30,7 +29,7 @@ public class RealmsSchedule {
         this.randomString = randomString;
     }
 
-    @Scheduled(cron = "1 0/1 * * * *")
+    @Scheduled(cron = "1 0/5 * * * *")
     public void LoginRealm() {
         final String transactionId = "[RealmsSchedule][LoginRealm]";
         List<RealmEntity> realms = obtainRealmPort.findByStatusIsTrue(transactionId);
@@ -47,15 +46,9 @@ public class RealmsSchedule {
 
                     if (adjustedExpirationDate.before(new Date())) {
 
-                        byte[] salt = realm.getSalt();
-                        final String apiSecret = realm.getApiSecret();
-                        final String password = realm.getExternalPassword();
-
-                        SecretKey derivedKey = KeyDerivationUtil.deriveKeyFromPassword(apiSecret, salt);
-                        String decryptPassword = EncryptionUtil.decrypt(password, derivedKey);
                         AuthClientResponse authToken = authIntegratorPort.auth(
                                 realm.getHost(), realm.getExternalUsername(),
-                                decryptPassword, transactionId
+                                realm.getExternalPassword(), transactionId
                         );
 
                         realm.setJwt(authToken.getJwt());
@@ -75,51 +68,45 @@ public class RealmsSchedule {
     @Scheduled(cron = "1 0/1 * * * *")
     public void vinculatedRealm() {
         final String transactionId = "[RealmsSchedule][vinculatedRealm]";
-        List<RealmEntity> servers = obtainRealmPort.findByStatusIsFalseAndRetry(5L, transactionId);
+        List<RealmEntity> realms = obtainRealmPort.findByStatusIsFalseAndRetry(5L, transactionId);
 
-        for (RealmEntity server : servers) {
+        for (RealmEntity realm : realms) {
             LOGGER.info("[RealmsSchedule][vinculatedRealm] Start authentication generation process {} ",
-                    server.getName());
+                    realm.getName());
 
             try {
-                byte[] salt = server.getSalt();
-                final String apiSecret = server.getApiSecret();
-                final String gmUsername = server.getGmUsername();
-                final String gmPassword = server.getGmPassword();
+                final String gmUsername = realm.getGmUsername();
+                final String gmPassword = realm.getGmPassword();
 
-                final String usernameRealm = String.format("%s-%s", server.getName(),
-                        server.getExpansionId());
+                final String usernameRealm = String.format("%s-%s", realm.getName(), realm.getExpansionId());
                 final String passwordRealm = randomString.nextString();
 
                 // CREATE USER REALM
-                authIntegratorPort.create(server.getHost(), usernameRealm, passwordRealm, salt,
-                        server.getApiKey(), server.getEmulator(), server.getExpansionId(), gmUsername, gmPassword,
+                authIntegratorPort.create(realm.getHost(), usernameRealm, passwordRealm,
+                        realm.getApiKey(), realm.getEmulator(), realm.getExpansionId(), gmUsername, gmPassword,
                         transactionId);
 
                 // LOGIN
                 AuthClientResponse authToken = authIntegratorPort.auth(
-                        server.getHost(), usernameRealm, passwordRealm, transactionId
+                        realm.getHost(), usernameRealm, passwordRealm, transactionId
                 );
 
-                SecretKey derivedKey = KeyDerivationUtil.deriveKeyFromPassword(apiSecret, salt);
-                final String encryptedPassUserInternal = EncryptionUtil.encrypt(passwordRealm, derivedKey);
-
-                server.setJwt(authToken.getJwt());
-                server.setExpirationDate(adjustExpirationDate(authToken.getExpirationDate()));
-                server.setRefreshToken(authToken.getRefreshToken());
-                server.setStatus(true);
-                server.setRetry(0);
-                server.setExternalUsername(usernameRealm);
-                server.setExternalPassword(encryptedPassUserInternal);
-                server.setGmPassword(null);
-                server.setGmUsername(null);
-                saveRealmPort.save(server, transactionId);
-                LOGGER.info("The kingdom is linked correctly {} ", server.getName());
+                realm.setJwt(authToken.getJwt());
+                realm.setExpirationDate(adjustExpirationDate(authToken.getExpirationDate()));
+                realm.setRefreshToken(authToken.getRefreshToken());
+                realm.setStatus(true);
+                realm.setRetry(0);
+                realm.setExternalUsername(usernameRealm);
+                realm.setExternalPassword(passwordRealm);
+                realm.setGmPassword(null);
+                realm.setGmUsername(null);
+                saveRealmPort.save(realm, transactionId);
+                LOGGER.info("The kingdom is linked correctly {} ", realm.getName());
             } catch (Exception e) {
                 LOGGER.error("[RealmsSchedule][vinculatedRealm] an unexpected error has occurred Error: {}",
                         e.getMessage());
-                server.setRetry(server.getRetry() == null ? 0 : server.getRetry() + 1);
-                saveRealmPort.save(server, transactionId);
+                realm.setRetry(realm.getRetry() == null ? 0 : realm.getRetry() + 1);
+                saveRealmPort.save(realm, transactionId);
             }
         }
 

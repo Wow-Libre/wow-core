@@ -35,4 +35,6 @@ public class RealmCreateDto {
     @NotNull
     @Length(min = 5, max = 30)
     private String type;
+    @NotNull
+    private Long realmListId;
 }

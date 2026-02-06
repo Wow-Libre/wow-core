@@ -8,7 +8,6 @@ import lombok.*;
 public class AuthClientCreateRequest {
     private String username;
     private String password;
-    private byte[] salt;
     @JsonProperty("api_key")
     private String apiKey;
     private String emulator;
