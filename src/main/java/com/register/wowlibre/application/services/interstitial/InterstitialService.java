@@ -75,6 +75,12 @@ public class InterstitialService implements InterstitialPort {
     }
 
     @Override
+    public List<InterstitialDto> findAllForAdmin(String transactionId) {
+        List<InterstitialEntity> all = obtainInterstitial.findAll(transactionId);
+        return all.stream().map(this::toDto).toList();
+    }
+
+    @Override
     public void createInterstitial(String urlImg, String redirectUrl, String transactionId) {
         saveInterstitial.saveInterstitial(urlImg, redirectUrl, transactionId);
     }

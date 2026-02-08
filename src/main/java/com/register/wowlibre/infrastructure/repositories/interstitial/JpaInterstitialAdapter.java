@@ -47,6 +47,11 @@ public class JpaInterstitialAdapter implements SaveInterstitial, ObtainInterstit
     }
 
     @Override
+    public List<InterstitialEntity> findAll(String transactionId) {
+        return interstitialRepository.findAll();
+    }
+
+    @Override
     public Optional<InterstitialEntity> findById(Long id, String transactionId) {
         return interstitialRepository.findById(id);
     }

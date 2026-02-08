@@ -7,5 +7,7 @@ import java.util.*;
 public interface ObtainInterstitial {
     List<InterstitialEntity> findAllActiveInterstitials(String transactionId);
 
+    List<InterstitialEntity> findAll(String transactionId);
+
     Optional<InterstitialEntity> findById(Long id, String transactionId);
 }

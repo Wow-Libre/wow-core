@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.register.wowlibre.domain.constant.Constants.*;
 
 @RestController
@@ -20,6 +22,15 @@ public class InterstitialController {
 
     public InterstitialController(InterstitialPort interstitialPort) {
         this.interstitialPort = interstitialPort;
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<GenericResponse<List<InterstitialDto>>> listAll(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
+        List<InterstitialDto> response = interstitialPort.findAllForAdmin(transactionId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(response, transactionId).ok().build());
     }
 
     @GetMapping
