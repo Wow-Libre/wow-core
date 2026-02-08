@@ -1,40 +1,30 @@
 package com.register.wowlibre.service;
 
-import com.register.wowlibre.application.services.I18nService;
-import com.register.wowlibre.application.services.realm.RealmService;
-import com.register.wowlibre.domain.dto.RealmCreateDto;
-import com.register.wowlibre.domain.dto.RealmDto;
-import com.register.wowlibre.domain.dto.ServerVdpDto;
-import com.register.wowlibre.domain.dto.client.DashboardMetricsResponse;
-import com.register.wowlibre.domain.enums.ResourceType;
-import com.register.wowlibre.domain.exception.InternalException;
-import com.register.wowlibre.domain.model.RealmModel;
-import com.register.wowlibre.domain.port.in.integrator.IntegratorPort;
-import com.register.wowlibre.domain.port.in.server_details.ObtainServerDetailsPort;
-import com.register.wowlibre.domain.port.in.server_events.ServerEventsPort;
-import com.register.wowlibre.domain.port.in.server_resources.ServerResourcesPort;
-import com.register.wowlibre.domain.port.out.realm.ObtainRealmPort;
-import com.register.wowlibre.domain.port.out.realm.SaveRealmPort;
-import com.register.wowlibre.infrastructure.entities.RealmDetailsEntity;
-import com.register.wowlibre.infrastructure.entities.RealmEntity;
-import com.register.wowlibre.infrastructure.entities.RealmEventsEntity;
-import com.register.wowlibre.infrastructure.entities.RealmResourcesEntity;
-import com.register.wowlibre.infrastructure.util.RandomString;
-import com.register.wowlibre.model.BaseTest;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.register.wowlibre.application.services.*;
+import com.register.wowlibre.application.services.realm.*;
+import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.client.*;
+import com.register.wowlibre.domain.enums.*;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.auth_integrator.*;
+import com.register.wowlibre.domain.port.in.integrator.*;
+import com.register.wowlibre.domain.port.in.server_details.*;
+import com.register.wowlibre.domain.port.in.server_events.*;
+import com.register.wowlibre.domain.port.in.server_resources.*;
+import com.register.wowlibre.domain.port.out.realm.*;
+import com.register.wowlibre.infrastructure.entities.*;
+import com.register.wowlibre.infrastructure.util.*;
+import com.register.wowlibre.model.*;
+import org.junit.jupiter.api.*;
+import org.mockito.*;
+import org.springframework.security.crypto.password.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.time.*;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class RealmServiceTest extends BaseTest {
@@ -59,12 +49,15 @@ class RealmServiceTest extends BaseTest {
     private I18nService i18nService;
 
     private RealmService service;
+    @Mock
+    private AuthIntegratorPort authIntegratorPort;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         service = new RealmService(obtainRealmPort, saveRealmPort, randomString, passwordEncoder,
-                obtainServerDetailsPort, integratorPort, serverEventsPort, serverResourcesPort, i18nService);
+                obtainServerDetailsPort, integratorPort, serverEventsPort, serverResourcesPort, i18nService,
+                authIntegratorPort);
     }
 
     @Test
@@ -173,7 +166,8 @@ class RealmServiceTest extends BaseTest {
         realmCreateDto.setExternalPassword("admin123");
         realmCreateDto.setType("PVP");
 
-        when(obtainRealmPort.findByNameAndExpansion(realmCreateDto.getName(), realmCreateDto.getExpansion(), transactionId))
+        when(obtainRealmPort.findByNameAndExpansion(realmCreateDto.getName(), realmCreateDto.getExpansion(),
+                transactionId))
                 .thenReturn(Optional.empty());
         when(randomString.nextString()).thenReturn(apiKey).thenReturn(apiSecret);
         when(passwordEncoder.encode(realmCreateDto.getPassword())).thenReturn(encodedPassword);
@@ -181,7 +175,8 @@ class RealmServiceTest extends BaseTest {
         ArgumentCaptor<RealmEntity> captor = ArgumentCaptor.forClass(RealmEntity.class);
         service.create(realmCreateDto, userId, transactionId);
 
-        verify(obtainRealmPort).findByNameAndExpansion(realmCreateDto.getName(), realmCreateDto.getExpansion(), transactionId);
+        verify(obtainRealmPort).findByNameAndExpansion(realmCreateDto.getName(), realmCreateDto.getExpansion(),
+                transactionId);
         verify(randomString, times(2)).nextString();
         verify(passwordEncoder).encode(realmCreateDto.getPassword());
         verify(saveRealmPort).save(captor.capture(), eq(transactionId));
@@ -201,7 +196,8 @@ class RealmServiceTest extends BaseTest {
         realmCreateDto.setExpansion(2);
         RealmEntity existing = createRealmEntity(1L, "Existing Realm", true);
 
-        when(obtainRealmPort.findByNameAndExpansion(realmCreateDto.getName(), realmCreateDto.getExpansion(), transactionId))
+        when(obtainRealmPort.findByNameAndExpansion(realmCreateDto.getName(), realmCreateDto.getExpansion(),
+                transactionId))
                 .thenReturn(Optional.of(existing));
 
         InternalException exception = assertThrows(InternalException.class, () ->
@@ -209,7 +205,8 @@ class RealmServiceTest extends BaseTest {
         );
 
         assertTrue(exception.getMessage().contains("It is not possible to create or configure a realm"));
-        verify(obtainRealmPort).findByNameAndExpansion(realmCreateDto.getName(), realmCreateDto.getExpansion(), transactionId);
+        verify(obtainRealmPort).findByNameAndExpansion(realmCreateDto.getName(), realmCreateDto.getExpansion(),
+                transactionId);
         verifyNoInteractions(randomString, passwordEncoder, saveRealmPort);
     }
 
@@ -393,7 +390,8 @@ class RealmServiceTest extends BaseTest {
         return entity;
     }
 
-    private RealmResourcesEntity createRealmResourcesEntity(Long id, RealmEntity realm, ResourceType resourceType, String url) {
+    private RealmResourcesEntity createRealmResourcesEntity(Long id, RealmEntity realm, ResourceType resourceType,
+                                                            String url) {
         RealmResourcesEntity entity = new RealmResourcesEntity();
         entity.setId(id);
         entity.setRealmId(realm);

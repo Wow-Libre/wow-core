@@ -25,4 +25,9 @@ public class AuthIntegratorService implements AuthIntegratorPort {
         authIntegratorClient.create(host, new AuthClientCreateRequest(username, password, realmId, emulator,
                 expansionId), transactionId);
     }
+
+    @Override
+    public void inactiveUser(String host, String jwt, String transactionId) {
+        authIntegratorClient.inactive(host, jwt, transactionId);
+    }
 }

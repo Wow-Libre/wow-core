@@ -7,4 +7,6 @@ public interface AuthIntegratorPort {
 
     void create(String host, String username, String password, Long realmId, String emulator,
                 Integer expansionId, String transactionId);
+
+    void inactiveUser(String host, String jwt, String transactionId);
 }

@@ -129,7 +129,6 @@ CREATE TABLE platform.realm
     web               VARCHAR(255),
     avatar_url        TEXT,
     disclaimer        VARCHAR(80),
-    retry             INT,
     status            BOOLEAN               NOT NULL DEFAULT true,
 
     -- =====================================================

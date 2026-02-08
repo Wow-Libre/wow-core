@@ -89,4 +89,37 @@ public class AuthIntegratorClient {
 
     }
 
+    public Void inactive(String host, String jwt, String transactionId) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+        headers.set(HEADER_TRANSACTION_ID, transactionId);
+        HttpEntity<AuthClientCreateRequest> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<GenericResponse<Void>> response = restTemplate.exchange(String.format("%s" +
+                            "/api/client",
+                    host), HttpMethod.DELETE, entity, new ParameterizedTypeReference<>() {
+            });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody()).getData();
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[AuthIntegratorClient] [inactive] Client/Server Error: {}. The request failed with a " +
+                            "client or realm error. " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException("Transaction failed due to client or realm error", transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[AuthIntegratorClient] [inactive] Unexpected Error: {}. An unexpected error occurred " +
+                            "during the transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+
+    }
+
 }

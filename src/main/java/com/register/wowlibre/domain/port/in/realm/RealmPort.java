@@ -12,6 +12,8 @@ public interface RealmPort {
 
     void create(RealmCreateDto realmCreateDto, Long userId, String transactionId);
 
+    void delete(Long realmId, Long userId, String transactionId);
+
     List<RealmDto> findByStatusIsTrue(String transactionId);
 
     RealmModel findByNameAndVersionAndStatusIsTrue(String name, Integer expansionId, String transactionId);

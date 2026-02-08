@@ -7,6 +7,7 @@ import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.mapper.*;
 import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.auth_integrator.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.realm.*;
 import com.register.wowlibre.domain.port.in.server_details.*;
@@ -42,12 +43,14 @@ public class RealmService implements RealmPort {
     private final ServerEventsPort serverEventsPort;
     private final ServerResourcesPort serverResourcesPort;
     private final I18nService i18nService;
+    private final AuthIntegratorPort authIntegratorPort;
 
     public RealmService(ObtainRealmPort obtainRealmPort, SaveRealmPort saveRealmPort,
                         @Qualifier("resetPasswordString") RandomString randomString, PasswordEncoder passwordEncoder,
                         ObtainServerDetailsPort obtainServerDetailsPort,
                         IntegratorPort integratorPort, ServerEventsPort serverEventsPort,
-                        ServerResourcesPort serverResourcesPort, I18nService i18nService) {
+                        ServerResourcesPort serverResourcesPort, I18nService i18nService,
+                        AuthIntegratorPort authIntegratorPort) {
         this.obtainRealmPort = obtainRealmPort;
         this.saveRealmPort = saveRealmPort;
         this.randomString = randomString;
@@ -57,6 +60,7 @@ public class RealmService implements RealmPort {
         this.serverEventsPort = serverEventsPort;
         this.serverResourcesPort = serverResourcesPort;
         this.i18nService = i18nService;
+        this.authIntegratorPort = authIntegratorPort;
     }
 
     @Override
@@ -82,14 +86,28 @@ public class RealmService implements RealmPort {
         try {
             final String apiKey = randomString.nextString();
             final String apiSecret = randomString.nextString();
-
             final String adminPassword = passwordEncoder.encode(realmCreateDto.getPassword());
+            final String realmName = realmCreateDto.getName();
+            final Integer expansionId = realmCreateDto.getExpansion();
+            final String host = realmCreateDto.getHost();
 
+
+            final String usernameRealm = String.format("%s-%s", realmName, expansionId);
+            final String passwordRealm = randomString.nextString();
+
+            // CREATE USER REALM
+            authIntegratorPort.create(host, usernameRealm, passwordRealm,
+                    realmCreateDto.getRealmId(), realmCreateDto.getEmulator(), expansionId, transactionId);
+
+            // LOGIN
+            AuthClientResponse authToken = authIntegratorPort.auth(
+                    host, usernameRealm, passwordRealm, transactionId
+            );
 
             RealmModel serverDto = RealmModel.builder()
-                    .name(realmCreateDto.getName())
+                    .name(realmName)
                     .emulator(realmCreateDto.getEmulator())
-                    .expansion(realmCreateDto.getExpansion())
+                    .expansion(expansionId)
                     .avatar(AVATAR_SERVER_DEFAULT)
                     .ip(realmCreateDto.getHost())
                     .apiKey(apiKey)
@@ -97,11 +115,15 @@ public class RealmService implements RealmPort {
                     .apiSecret(apiSecret)
                     .password(adminPassword)
                     .creationDate(LocalDateTime.now())
-                    .retry(0)
-                    .status(false)
+                    .jwt(authToken.getJwt())
+                    .expirationDate(adjustExpirationDate(authToken.getExpirationDate()))
+                    .refreshToken(authToken.getRefreshToken())
+                    .status(true)
                     .realmListId(realmCreateDto.getRealmId())
                     .realmlist(realmCreateDto.getRealmlist())
                     .webSite(realmCreateDto.getWebSite())
+                    .externalUsername(usernameRealm)
+                    .externalPassword(passwordRealm)
                     .userId(userId)
                     .build();
 
@@ -112,6 +134,27 @@ public class RealmService implements RealmPort {
                     " occurred, please contact support", transactionId);
         }
 
+    }
+
+    @Override
+    public void delete(Long realmId, Long userId, String transactionId) {
+        RealmEntity realm = this.findById(realmId, transactionId).orElseThrow(() -> new InternalException(
+                "Realm not found",
+                transactionId));
+
+        if (!realm.isStatus()) {
+            throw new InternalException("The realm is already inactive", transactionId);
+        }
+        realm.setStatus(false);
+        authIntegratorPort.inactiveUser(realm.getHost(), realm.getJwt(), transactionId);
+        saveRealmPort.save(realm, transactionId);
+    }
+
+    private Date adjustExpirationDate(Date expirationDate) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(expirationDate);
+        calendar.add(Calendar.DAY_OF_MONTH, -2);
+        return calendar.getTime();
     }
 
     @Override

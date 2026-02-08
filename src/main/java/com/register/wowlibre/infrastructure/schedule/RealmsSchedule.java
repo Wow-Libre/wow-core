@@ -4,9 +4,7 @@ import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.port.in.auth_integrator.*;
 import com.register.wowlibre.domain.port.out.realm.*;
 import com.register.wowlibre.infrastructure.entities.*;
-import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.scheduling.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -19,14 +17,12 @@ public class RealmsSchedule {
     private final ObtainRealmPort obtainRealmPort;
     private final SaveRealmPort saveRealmPort;
     private final AuthIntegratorPort authIntegratorPort;
-    private final RandomString randomString;
 
     public RealmsSchedule(ObtainRealmPort obtainRealmPort, AuthIntegratorPort authIntegratorPort,
-                          SaveRealmPort saveRealmPort, @Qualifier("resetPasswordString") RandomString randomString) {
+                          SaveRealmPort saveRealmPort) {
         this.obtainRealmPort = obtainRealmPort;
         this.authIntegratorPort = authIntegratorPort;
         this.saveRealmPort = saveRealmPort;
-        this.randomString = randomString;
     }
 
     @Scheduled(cron = "1 0/15 * * * *")
@@ -65,57 +61,10 @@ public class RealmsSchedule {
 
     }
 
-    @Scheduled(cron = "1 0/1 * * * *")
-    public void vinculatedRealm() {
-        final String transactionId = UUID.randomUUID().toString();
-        List<RealmEntity> realms = obtainRealmPort.findByStatusIsFalseAndRetry(5L, transactionId);
-
-        for (RealmEntity realm : realms) {
-            LOGGER.info("[RealmsSchedule][vinculatedRealm] Start authentication generation process {} ",
-                    realm.getName());
-
-            try {
-
-                final String usernameRealm = String.format("%s-%s", realm.getName(), realm.getExpansionId());
-                final String passwordRealm = randomString.nextString();
-
-                // CREATE USER REALM
-                authIntegratorPort.create(realm.getHost(), usernameRealm, passwordRealm,
-                        realm.getRealmListId(), realm.getEmulator(), realm.getExpansionId(), transactionId);
-
-                // LOGIN
-                AuthClientResponse authToken = authIntegratorPort.auth(
-                        realm.getHost(), usernameRealm, passwordRealm, transactionId
-                );
-
-                realm.setJwt(authToken.getJwt());
-                realm.setExpirationDate(adjustExpirationDate(authToken.getExpirationDate()));
-                realm.setRefreshToken(authToken.getRefreshToken());
-                realm.setStatus(true);
-                realm.setRetry(0);
-                realm.setExternalUsername(usernameRealm);
-                realm.setExternalPassword(passwordRealm);
-                saveRealmPort.save(realm, transactionId);
-                LOGGER.info("The kingdom is linked correctly {} ", realm.getName());
-            } catch (Exception e) {
-                LOGGER.error("[RealmsSchedule][vinculatedRealm] an unexpected error has occurred Error: {}",
-                        e.getMessage());
-                realm.setRetry(realm.getRetry() == null ? 0 : realm.getRetry() + 1);
-                saveRealmPort.save(realm, transactionId);
-            }
-        }
-
-    }
 
     private boolean isExpirationDateExpired(Date expirationDate) {
         return expirationDate.before(new Date());
     }
 
-    private Date adjustExpirationDate(Date expirationDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(expirationDate);
-        calendar.add(Calendar.DAY_OF_MONTH, -2);
-        return calendar.getTime();
-    }
 
 }

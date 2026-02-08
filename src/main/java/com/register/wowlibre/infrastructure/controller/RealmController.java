@@ -32,6 +32,16 @@ public class RealmController {
                 .body(new GenericResponseBuilder<Void>(transactionId).created().build());
     }
 
+    @DeleteMapping
+    public ResponseEntity<GenericResponse<Void>> inactive(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam final Long realmId) {
+        realmPort.delete(realmId, userId, transactionId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
+
     @GetMapping("/all")
     public ResponseEntity<GenericResponse<AssociatedRealm>> realms(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
