@@ -16,14 +16,13 @@ public interface RealmPort {
 
     RealmModel findByNameAndVersionAndStatusIsTrue(String name, Integer expansionId, String transactionId);
 
-    RealmModel findByApiKey(String apiKey, String transactionId);
-
     Optional<RealmEntity> findById(Long id, String transactionId);
-
 
     List<RealmEntity> findByStatusIsTrueServers(String transactionId);
 
     Optional<RealmEntity> findByIdAndUserId(Long id, Long userId, String transactionId);
 
     ServerVdpDto findByServerNameAndExpansion(Long id, Integer expansionId, Locale locale, String transactionId);
+
+    List<RealmlistDto> getRealmLists(String host, String transactionId);
 }

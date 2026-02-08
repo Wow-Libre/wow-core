@@ -64,12 +64,6 @@ public class RealmService implements RealmPort {
         return obtainRealmPort.findAll(transactionId).stream().map(this::mapToModel).toList();
     }
 
-    @Override
-    //@Cacheable(value = "realm-apikey", key = "#apiKey")
-    public RealmModel findByApiKey(String apiKey, String transactionId) {
-        return obtainRealmPort.findByApiKey(apiKey, transactionId).map(RealmMapper::toModel)
-                .orElse(null);
-    }
 
     @Override
     public Optional<RealmEntity> findById(Long id, String transactionId) {
@@ -89,8 +83,6 @@ public class RealmService implements RealmPort {
             final String apiKey = randomString.nextString();
             final String apiSecret = randomString.nextString();
 
-
-            final String gmPassword = realmCreateDto.getExternalPassword();
             final String adminPassword = passwordEncoder.encode(realmCreateDto.getPassword());
 
 
@@ -107,11 +99,9 @@ public class RealmService implements RealmPort {
                     .creationDate(LocalDateTime.now())
                     .retry(0)
                     .status(false)
-                    .realmListId(realmCreateDto.getRealmListId())
+                    .realmListId(realmCreateDto.getRealmId())
                     .realmlist(realmCreateDto.getRealmlist())
                     .webSite(realmCreateDto.getWebSite())
-                    .gmUsername(realmCreateDto.getExternalUsername())
-                    .gmPassword(gmPassword)
                     .userId(userId)
                     .build();
 
@@ -197,6 +187,11 @@ public class RealmService implements RealmPort {
                 .url(serverModel.getWeb())
                 .events(events)
                 .realmlist(serverModel.getRealmlist()).build();
+    }
+
+    @Override
+    public List<RealmlistDto> getRealmLists(String host, String transactionId) {
+        return integratorPort.getRealmLists(host, transactionId);
     }
 
     private ServerVdpDto.Card buildCardServerVdp(int id, String value, int iconId, String description) {

@@ -22,7 +22,7 @@ public interface IntegratorPort {
 
     CharacterSocialDto friends(String host, String jwt, Long characterId, String transactionId);
 
-    void changePassword(String host, String apiSecret, String jwt, Long accountId, Long userId, String password,
+    void changePassword(String host, String jwt, Long accountId, Long userId, String password,
                         Integer expansionId,
                         String transactionId);
 
@@ -107,4 +107,7 @@ public interface IntegratorPort {
     Boolean updateStats(String host, String jwt, Long userId, UpdateStatsDto request, String transactionId);
 
     CharacterDetailDto getCharacter(String host, String jwt, Long characterId, Long accountId, String transactionId);
+
+    List<RealmlistDto> getRealmLists(String host, String transactionId);
+
 }

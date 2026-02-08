@@ -1,5 +1,6 @@
 package com.register.wowlibre.infrastructure.client;
 
+import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
@@ -61,7 +62,7 @@ public class IntegratorClient {
         try {
             ResponseEntity<GenericResponse<Long>> response = restTemplate.exchange(String.format("%s/api/account"
                     + "/create", host), HttpMethod.POST, entity, new ParameterizedTypeReference<>() {
-                    });
+            });
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 return Objects.requireNonNull(response.getBody()).getData();
@@ -101,7 +102,7 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [characters] Client/Server Error: {}. The request failed with a client " +
-                    "or realm error. HTTP Status: {}, Response Body: {}",
+                            "or realm error. HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
@@ -132,13 +133,13 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [account]  Client/Server Error: {}. The request failed with a client or " +
-                    "realm error. HTTP Status: {}, Response Body: {}", e.getMessage(),
+                            "realm error. HTTP Status: {}, Response Body: {}", e.getMessage(),
                     e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [account] Unexpected Error: {}. An unexpected error occurred during the " +
-                    "transaction with ID: {}.",
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -165,7 +166,7 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [mails] Client/Server Error: {}. The request failed with a client or " +
-                    "realm error. HTTP Status: {}, Response Body: {}",
+                            "realm error. HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
@@ -179,13 +180,13 @@ public class IntegratorClient {
     }
 
     public void deleteFriend(String host, String jwt, Long characterId, Long friendId, Long accountId, Long userId,
-            String transactionId) {
+                             String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
         String url = UriComponentsBuilder.fromUriString(String.format("%s/api/social/%s/%s", host, characterId,
-                friendId))
+                        friendId))
                 .queryParam("account_id", accountId)
                 .queryParam("user_id", userId)
                 .toUriString();
@@ -201,7 +202,7 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [deleteFriend] Client/Server Error: {}. The request failed with a client" +
-                    " or realm error. HTTP Status: {}, Response Body: {}",
+                            " or realm error. HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
@@ -234,7 +235,7 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [friends]  Client/Server Error: {}. The request failed with a client or " +
-                    "realm error. HTTP Status: {}, Response Body: {}",
+                            "realm error. HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
@@ -247,13 +248,12 @@ public class IntegratorClient {
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
 
-    public void changePasswordGame(String host, String jwt, Long accountId, Long userId, String password, byte[] salt,
-            Integer expansionId, String transactionId) {
+    public void changePasswordGame(String host, String jwt, Long accountId, Long userId, String password,
+                                   Integer expansionId, String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<ChangePasswordRequest> entity = new HttpEntity<>(new ChangePasswordRequest(password, accountId,
-                userId, expansionId,
-                salt), headers);
+                userId, expansionId), headers);
 
         String url = UriComponentsBuilder.fromUriString(String.format("%s/api/account/change-password", host))
                 .toUriString();
@@ -270,9 +270,9 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [changePasswordGame] Client/Server Error: {}. The request failed with a " +
-                    "client or realm " +
-                    "error. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "client or realm " +
+                            "error. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
@@ -285,7 +285,7 @@ public class IntegratorClient {
     }
 
     public List<CharacterProfessionsResponse> professions(String host, String jwt, Long accountId, Long characterId,
-            String transactionId) {
+                                                          String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
@@ -320,7 +320,7 @@ public class IntegratorClient {
     }
 
     public void sendLevel(String host, String jwt, SendLevelRequest sendLevelRequest,
-            String transactionId) {
+                          String transactionId) {
 
         HttpHeaders headers = buildHeaders(transactionId, jwt);
         HttpEntity<SendLevelRequest> entity = new HttpEntity<>(sendLevelRequest, headers);
@@ -353,7 +353,7 @@ public class IntegratorClient {
     }
 
     public GenericResponse<Void> sendMoney(String host, String jwt, SendMoneyRequest sendMoneyRequest,
-            String transactionId) {
+                                           String transactionId) {
 
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
@@ -409,7 +409,7 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("Client/Server Error: {}. The request failed with a client or realm error. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
@@ -443,13 +443,13 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [guilds] Client/Server Error: {}. Error with realm client getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [guilds] Unexpected Error: {}. An unexpected error occurred during the " +
-                    "transaction with ID: {}.",
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -476,13 +476,13 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [guild] Client/Server Error: {}. Error with realm client getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [guild] Unexpected Error: {}. An unexpected error occurred during the " +
-                    "transaction with ID: {}.",
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -491,7 +491,7 @@ public class IntegratorClient {
     }
 
     public void attachGuild(String host, String jwt, Long guildId, Long accountId,
-            Long characterId, String transactionId) {
+                            Long characterId, String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
@@ -513,15 +513,15 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [attachGuild] Client/Server Error: {}. Error with realm client getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [attachGuild] Unexpected Error: {}. An unexpected error occurred during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -530,7 +530,7 @@ public class IntegratorClient {
     }
 
     public GuildDetailMemberResponse guildMember(String host, String jwt, Long userId, Long accountId, Long characterId,
-            String transactionId) {
+                                                 String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
@@ -552,14 +552,14 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [guildMember] Client/Server Error: {}. Error with realm client getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [guildMember] Unexpected Error: {}. An unexpected error occurred during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -568,7 +568,7 @@ public class IntegratorClient {
     }
 
     public void unInviteGuild(String host, String jwt, Long userId, Long accountId,
-            Long characterId, String transactionId) {
+                              Long characterId, String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
@@ -590,16 +590,16 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [unInviteGuild] Client/Server Error: {}. Error with realm client " +
-                    "getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [unInviteGuild] Unexpected Error: {}. An unexpected error occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -608,7 +608,7 @@ public class IntegratorClient {
     }
 
     public void sendCommand(String host, String jwt, String message, byte[] salt,
-            String transactionId) {
+                            String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
         ExecuteCommandRequest request = new ExecuteCommandRequest(message, salt);
         HttpEntity<ExecuteCommandRequest> entity = new HttpEntity<>(request, headers);
@@ -627,15 +627,15 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [sendCommand]  Client/Server Error: {}. Error with realm client " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [sendCommand] Unexpected Error: {}. An unexpected error occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -644,7 +644,7 @@ public class IntegratorClient {
     }
 
     public Double collectGold(String host, String jwt, Long userId, Double moneyToPay,
-            String transactionId) {
+                              String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
         BankCollectGoldRequest request = new BankCollectGoldRequest(userId, moneyToPay);
         HttpEntity<BankCollectGoldRequest> entity = new HttpEntity<>(request, headers);
@@ -663,16 +663,16 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [collectGold]  Client/Server Error: {}. Error with realm client " +
-                    "getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             return moneyToPay;
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [collectGold] Unexpected Error: {}. An unexpected error occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             return moneyToPay;
         }
@@ -681,7 +681,7 @@ public class IntegratorClient {
     }
 
     public void purchase(String host, String jwt, Long userId, Long accountId, String reference,
-            List<ItemQuantityModel> items, Double amount, String transactionId) {
+                         List<ItemQuantityModel> items, Double amount, String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         CreateTransactionItemsRequest request = new CreateTransactionItemsRequest(userId, accountId, reference, items,
@@ -702,18 +702,18 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [createTransactionItems]  Client/Server Error: {}. Error with realm " +
-                    "client " +
-                    "getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "client " +
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [createTransactionItems] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -722,8 +722,8 @@ public class IntegratorClient {
     }
 
     public void updateGuild(String host, String jwt, Long characterId, Long accountId,
-            boolean isPublic,
-            boolean multiFaction, String discord, String transactionId) {
+                            boolean isPublic,
+                            boolean multiFaction, String discord, String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         UpdateGuildRequest request = new UpdateGuildRequest(discord, isPublic, multiFaction, accountId, characterId);
@@ -743,18 +743,18 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [updateGuild]  Client/Server Error: {}. Error with realm " +
-                    "client " +
-                    "getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "client " +
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [updateGuild] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -763,7 +763,7 @@ public class IntegratorClient {
     }
 
     public void sendAnnouncement(String host, String jwt, AnnouncementRequest request,
-            String transactionId) {
+                                 String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<AnnouncementRequest> entity = new HttpEntity<>(request, headers);
@@ -782,18 +782,18 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [sendAnnouncement]  Client/Server Error: {}. Error with realm " +
-                    "client " +
-                    "getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "client " +
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [sendAnnouncement] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -802,7 +802,7 @@ public class IntegratorClient {
     }
 
     public void sendBenefitsPremium(String host, String jwt, SubscriptionBenefitsRequest request,
-            String transactionId) {
+                                    String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<SubscriptionBenefitsRequest> entity = new HttpEntity<>(request, headers);
@@ -821,18 +821,18 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [sendBenefitsPremium]  Client/Server Error: {}. Error with realm " +
-                    "client " +
-                    "getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "client " +
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [sendBenefitsPremium] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -841,7 +841,7 @@ public class IntegratorClient {
     }
 
     public void sendPromo(String host, String jwt, ClaimPromoRequest request,
-            String transactionId) {
+                          String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<ClaimPromoRequest> entity = new HttpEntity<>(request, headers);
@@ -860,19 +860,19 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [sendPromo]  Client/Server Error: {}. Error with realm " +
-                    "client " +
-                    "getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "client " +
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [sendPromo] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -881,7 +881,7 @@ public class IntegratorClient {
     }
 
     public void sendGuildBenefits(String host, String jwt, BenefitsGuildRequest request,
-            String transactionId) {
+                                  String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<BenefitsGuildRequest> entity = new HttpEntity<>(request, headers);
@@ -900,18 +900,18 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [sendGuildBenefits]  Client/Server Error: {}. Error with realm " +
-                    "client " +
-                    "getting " +
-                    "associated guilds. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "client " +
+                            "getting " +
+                            "associated guilds. " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [sendGuildBenefits] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -920,7 +920,7 @@ public class IntegratorClient {
     }
 
     public GenericResponse<ClaimMachineResponse> claimMachine(String host, String jwt, ClaimMachineRequest request,
-            String transactionId) {
+                                                              String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<ClaimMachineRequest> entity = new HttpEntity<>(request, headers);
@@ -939,16 +939,16 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [claimMachine]  Client/Server Error: {}. It was not possible to claim " +
-                    "the shipment of the prize to the client because he won at the slot machine " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "the shipment of the prize to the client because he won at the slot machine " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             return new GenericResponseBuilder<>(new ClaimMachineResponse(false), transactionId).build();
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [claimMachine] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             return new GenericResponseBuilder<>(new ClaimMachineResponse(false), transactionId).build();
         }
@@ -957,8 +957,8 @@ public class IntegratorClient {
     }
 
     public GenericResponse<AccountsResponse> accountsServer(String host, String jwt, int size, int page,
-            String filter,
-            String transactionId) {
+                                                            String filter,
+                                                            String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
@@ -980,17 +980,17 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [accountsServer]  Client/Server Error: {}. Could not get realm accounts" +
-                    "  " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "  " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [accountsServer] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         }
@@ -1018,16 +1018,16 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [accountsServer]  Client/Server Error: {}. Could not get realm accounts" +
-                    " HTTP Status: {}, Response Body: {}",
+                            " HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [accountsServer] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         }
@@ -1036,8 +1036,8 @@ public class IntegratorClient {
     }
 
     public void updateMail(String host, String jwt,
-            AccountUpdateMailRequest request,
-            String transactionId) {
+                           AccountUpdateMailRequest request,
+                           String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<AccountUpdateMailRequest> entity = new HttpEntity<>(request, headers);
@@ -1057,17 +1057,17 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [updateMail]  Client/Server Error: {}. Could not get realm accounts" +
-                    "  " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "  " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [updateMail] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         }
@@ -1076,15 +1076,15 @@ public class IntegratorClient {
     }
 
     public GenericResponse<List<CharacterInventoryResponse>> getCharacterInventory(String host, String jwt,
-            Long characterId,
-            Long accountId,
-            String transactionId) {
+                                                                                   Long characterId,
+                                                                                   Long accountId,
+                                                                                   String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
         String url = UriComponentsBuilder.fromUriString(String.format("%s/api/characters/%d/inventory", host,
-                characterId))
+                        characterId))
                 .queryParam(PARAM_ACCOUNT_ID, accountId)
                 .toUriString();
 
@@ -1100,16 +1100,16 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [getCharacterInventory] Error: {}. Status: {} Response Body:  {} " +
-                    "transactionId {} ",
+                            "transactionId {} ",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString(), transactionId);
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [getCharacterInventory] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         }
@@ -1118,7 +1118,7 @@ public class IntegratorClient {
     }
 
     public void transferInventoryItem(String host, String jwt, TransferInventoryRequest request,
-            String transactionId) {
+                                      String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<TransferInventoryRequest> entity = new HttpEntity<>(request, headers);
@@ -1138,18 +1138,18 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [transferInventoryItem]  Client/Server Error: {}. Could not get realm " +
-                    "accounts" +
-                    "  " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "accounts" +
+                            "  " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [transferInventoryItem] Unexpected Error: {}. An unexpected error " +
-                    "occurred " +
-                    "during " +
-                    "the " +
-                    "transaction with ID: {}.",
+                            "occurred " +
+                            "during " +
+                            "the " +
+                            "transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Transaction failed due to client or realm error", transactionId);
         }
@@ -1158,7 +1158,7 @@ public class IntegratorClient {
     }
 
     public void banAccount(String host, String jwt, AccountBanRequest request,
-            String transactionId) {
+                           String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<AccountBanRequest> entity = new HttpEntity<>(request, headers);
@@ -1190,8 +1190,8 @@ public class IntegratorClient {
     }
 
     public GenericResponse<Map<String, String>> emulatorConfiguration(String host, String jwt,
-            EmulatorConfigRequest request,
-            String transactionId) {
+                                                                      EmulatorConfigRequest request,
+                                                                      String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<EmulatorConfigRequest> entity = new HttpEntity<>(request, headers);
@@ -1210,7 +1210,7 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [emulatorConfiguration] Error: {}. Status: {} Response Body:  {} " +
-                    "transactionId {} ",
+                            "transactionId {} ",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString(), transactionId);
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
@@ -1224,7 +1224,7 @@ public class IntegratorClient {
     }
 
     public void teleport(String host, String jwt, TeleportRequest request,
-            String transactionId) {
+                         String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<TeleportRequest> entity = new HttpEntity<>(request, headers);
@@ -1243,7 +1243,7 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [Teleport] Message: {}. Status: {} Response:  {} " +
-                    "TransactionId {} ",
+                            "TransactionId {} ",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString(), transactionId);
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
@@ -1257,7 +1257,7 @@ public class IntegratorClient {
     }
 
     public void deductTokens(String host, String jwt, DeductTokensDto request,
-            String transactionId) {
+                             String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<DeductTokensDto> entity = new HttpEntity<>(request, headers);
@@ -1276,7 +1276,7 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [deductTokens] Message: {}. Status: {} Response:  {} " +
-                    "TransactionId {} ",
+                            "TransactionId {} ",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString(), transactionId);
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
@@ -1290,7 +1290,7 @@ public class IntegratorClient {
     }
 
     public CharacterDetailDto getCharacter(String host, String jwt, Long characterId, Long accountId,
-            String transactionId) {
+                                           String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
@@ -1310,14 +1310,15 @@ public class IntegratorClient {
             }
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            LOGGER.error("[IntegratorClient] [getCharacter] Client/Server Error: {}. Error getting character details. " +
-                    "HTTP Status: {}, Response Body: {}",
+            LOGGER.error("[IntegratorClient] [getCharacter] Client/Server Error: {}. Error getting character details." +
+                            " " +
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [getCharacter] Unexpected Error: {}. An unexpected error occurred " +
-                    "during the transaction with ID: {}.",
+                            "during the transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
@@ -1326,7 +1327,7 @@ public class IntegratorClient {
     }
 
     public Boolean updateStats(String host, String jwt, UpdateStatsRequest request,
-            String transactionId) {
+                               String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<UpdateStatsRequest> entity = new HttpEntity<>(request, headers);
@@ -1345,17 +1346,51 @@ public class IntegratorClient {
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             LOGGER.error("[IntegratorClient] [updateStats] Client/Server Error: {}. Error updating character stats. " +
-                    "HTTP Status: {}, Response Body: {}",
+                            "HTTP Status: {}, Response Body: {}",
                     e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
             throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("[IntegratorClient] [updateStats] Unexpected Error: {}. An unexpected error occurred " +
-                    "during the transaction with ID: {}.",
+                            "during the transaction with ID: {}.",
                     e.getMessage(), transactionId, e);
             throw new InternalException("Unexpected transaction failure", transactionId);
         }
 
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
+
+    public List<RealmlistDto> getRealmList(String host, String transactionId) {
+        HttpHeaders headers = buildHeaders(transactionId);
+
+        HttpEntity<UpdateStatsRequest> entity = new HttpEntity<>(headers);
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/realmlist", host))
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<List<RealmlistDto>>> response = restTemplate.exchange(url,
+                    HttpMethod.GET,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody()).getData();
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [getRealmList] Client/Server Error: {}. Error updating character stats. " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
+                    transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [getRealmList] Unexpected Error: {}. An unexpected error occurred " +
+                            "during the transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
+
 }

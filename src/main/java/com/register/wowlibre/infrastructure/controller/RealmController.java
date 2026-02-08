@@ -47,23 +47,6 @@ public class RealmController {
                 .body(new GenericResponseBuilder<>(new AssociatedRealm(realms, realms.size()), transactionId).ok().build());
     }
 
-    @GetMapping("/key")
-    public ResponseEntity<GenericResponse<String>> apiKey(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
-            @RequestParam(name = "api_key") String apiKey) {
-
-        final String apiSecret = realmPort.findByApiKey(apiKey, transactionId).apiSecret;
-
-        if (apiSecret == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                    .body(new GenericResponseBuilder<String>(transactionId).notContent().build());
-        }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new GenericResponseBuilder<>(apiSecret, transactionId).ok().build());
-    }
-
-
     @GetMapping
     public ResponseEntity<GenericResponse<List<RealmDto>>> servers(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
@@ -88,4 +71,15 @@ public class RealmController {
                 .body(new GenericResponseBuilder<>(server, transactionId).ok().build());
     }
 
+    @GetMapping("/realmlist/ping")
+    public ResponseEntity<GenericResponse<List<RealmlistDto>>> getRealmListPing(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestParam(name = "host") String host) {
+
+        List<RealmlistDto> realmlist = realmPort.getRealmLists(host, transactionId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<List<RealmlistDto>>(transactionId).ok(realmlist).build());
+    }
 }

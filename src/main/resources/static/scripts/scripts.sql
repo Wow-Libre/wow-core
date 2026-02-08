@@ -111,7 +111,6 @@ CREATE TABLE platform.realm
     api_key           VARCHAR(80)           NOT NULL,
     api_secret        VARCHAR(255)          NOT NULL,
     password          VARCHAR(255)          NOT NULL, -- hash
-    salt              VARBINARY(16),
 
     jwt               TEXT,
     refresh_token     TEXT,
@@ -122,8 +121,6 @@ CREATE TABLE platform.realm
     -- =====================================================
     external_username VARCHAR(50),
     external_password VARCHAR(255),
-    gm_username       VARCHAR(50),
-    gm_password       VARCHAR(255),
 
     -- =====================================================
     -- METADATOS
@@ -139,7 +136,7 @@ CREATE TABLE platform.realm
     -- AUDITORÍA
     -- =====================================================
     created_at        TIMESTAMP             NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
+    realmlist_id      BIGINT                NOT NULL,
     -- =====================================================
     -- CONSTRAINTS
     -- =====================================================

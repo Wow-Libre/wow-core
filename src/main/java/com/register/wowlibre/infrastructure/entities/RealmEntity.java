@@ -43,12 +43,8 @@ public class RealmEntity implements Serializable {
     private String externalUsername;
     @Column(name = "external_password")
     private String externalPassword;
-    @Column(name = "gm_username")
-    private String gmUsername;
-    @Column(name = "gm_password")
-    private String gmPassword;
     private Integer retry;
     private String disclaimer;
-    @Column(name = "realm_list_id")
+    @Column(name = "realmlist_id")
     private Long realmListId;
 }

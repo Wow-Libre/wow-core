@@ -29,9 +29,9 @@ public class RealmsSchedule {
         this.randomString = randomString;
     }
 
-    @Scheduled(cron = "1 0/5 * * * *")
+    @Scheduled(cron = "1 0/15 * * * *")
     public void LoginRealm() {
-        final String transactionId = "[RealmsSchedule][LoginRealm]";
+        final String transactionId = UUID.randomUUID().toString();
         List<RealmEntity> realms = obtainRealmPort.findByStatusIsTrue(transactionId);
 
         for (RealmEntity realm : realms) {
@@ -67,7 +67,7 @@ public class RealmsSchedule {
 
     @Scheduled(cron = "1 0/1 * * * *")
     public void vinculatedRealm() {
-        final String transactionId = "[RealmsSchedule][vinculatedRealm]";
+        final String transactionId = UUID.randomUUID().toString();
         List<RealmEntity> realms = obtainRealmPort.findByStatusIsFalseAndRetry(5L, transactionId);
 
         for (RealmEntity realm : realms) {
@@ -75,16 +75,13 @@ public class RealmsSchedule {
                     realm.getName());
 
             try {
-                final String gmUsername = realm.getGmUsername();
-                final String gmPassword = realm.getGmPassword();
 
                 final String usernameRealm = String.format("%s-%s", realm.getName(), realm.getExpansionId());
                 final String passwordRealm = randomString.nextString();
 
                 // CREATE USER REALM
                 authIntegratorPort.create(realm.getHost(), usernameRealm, passwordRealm,
-                        realm.getApiKey(), realm.getEmulator(), realm.getExpansionId(), gmUsername, gmPassword,
-                        transactionId);
+                        realm.getRealmListId(), realm.getEmulator(), realm.getExpansionId(), transactionId);
 
                 // LOGIN
                 AuthClientResponse authToken = authIntegratorPort.auth(
@@ -98,8 +95,6 @@ public class RealmsSchedule {
                 realm.setRetry(0);
                 realm.setExternalUsername(usernameRealm);
                 realm.setExternalPassword(passwordRealm);
-                realm.setGmPassword(null);
-                realm.setGmUsername(null);
                 saveRealmPort.save(realm, transactionId);
                 LOGGER.info("The kingdom is linked correctly {} ", realm.getName());
             } catch (Exception e) {

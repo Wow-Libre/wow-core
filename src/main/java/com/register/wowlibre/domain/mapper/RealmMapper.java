@@ -59,8 +59,6 @@ public class RealmMapper {
         realmEntity.setExternalUsername(server.externalUsername);
         realmEntity.setRealmListId(server.realmListId);
         realmEntity.setRetry(server.retry);
-        realmEntity.setGmUsername(server.gmUsername);
-        realmEntity.setGmPassword(server.gmPassword);
         return realmEntity;
     }
 

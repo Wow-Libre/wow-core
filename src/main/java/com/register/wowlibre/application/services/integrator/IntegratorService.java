@@ -119,15 +119,12 @@ public class IntegratorService implements IntegratorPort {
     }
 
     @Override
-    public void changePassword(String host, String apiSecret, String jwt, Long accountId, Long userId,
+    public void changePassword(String host, String jwt, Long accountId, Long userId,
                                String password, Integer expansionId,
                                String transactionId) {
         try {
-            byte[] salt = KeyDerivationUtil.generateSalt();
-            SecretKey derivedKey = KeyDerivationUtil.deriveKeyFromPassword(apiSecret, salt);
-            String encryptedMessage = EncryptionUtil.encrypt(password, derivedKey);
 
-            integratorClient.changePasswordGame(host, jwt, accountId, userId, encryptedMessage, salt, expansionId,
+            integratorClient.changePasswordGame(host, jwt, accountId, userId, password, expansionId,
                     transactionId);
         } catch (Exception e) {
             LOGGER.error("Failed to update game account password");
@@ -411,6 +408,11 @@ public class IntegratorService implements IntegratorPort {
         }
 
         return response;
+    }
+
+    @Override
+    public List<RealmlistDto> getRealmLists(String host, String transactionId) {
+        return integratorClient.getRealmList(host, transactionId);
     }
 
 }
