@@ -23,4 +23,6 @@ public interface SubscriptionPort {
     void save(SubscriptionEntity subscription);
 
     SubscriptionEntity updateNextInvoice(Long userId, Long planId, String transactionId);
+
+    SubscriptionAdminListDto getSubscriptionAdminList(String transactionId);
 }

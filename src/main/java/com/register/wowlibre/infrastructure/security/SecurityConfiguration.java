@@ -97,7 +97,8 @@ public class SecurityConfiguration {
                                     "/api/resources/delete/faq",
                                     "/api/transaction/subscription-benefits",
                                     "/api/provider/**",
-                                    "/api/interstitial/list")
+                                    "/api/interstitial/list",
+                                    "/api/subscription/admin/list")
                             .hasAuthority(Rol.ADMIN.getName())
                             .requestMatchers(HttpMethod.POST,
                                     "/api/news",

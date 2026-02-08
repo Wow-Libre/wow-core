@@ -34,6 +34,11 @@ public class JpaSubscriptionAdapter implements ObtainSubscription, SaveSubscript
     }
 
     @Override
+    public List<SubscriptionEntity> findAll() {
+        return (List<SubscriptionEntity>) subscriptionRepository.findAll();
+    }
+
+    @Override
     public SubscriptionEntity save(SubscriptionEntity subscription, String transactionId) {
         return subscriptionRepository.save(subscription);
     }
