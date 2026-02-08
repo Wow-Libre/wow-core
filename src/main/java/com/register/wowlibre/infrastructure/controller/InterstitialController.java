@@ -1,6 +1,7 @@
 package com.register.wowlibre.infrastructure.controller;
 
 import com.register.wowlibre.domain.dto.interstitial.CreateInterstitial;
+import com.register.wowlibre.domain.dto.interstitial.InterstitialAdminDto;
 import com.register.wowlibre.domain.dto.interstitial.InterstitialDto;
 import com.register.wowlibre.domain.dto.interstitial.UpdateInterstitial;
 import com.register.wowlibre.domain.port.in.interstitial.InterstitialPort;
@@ -25,9 +26,9 @@ public class InterstitialController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<GenericResponse<List<InterstitialDto>>> listAll(
+    public ResponseEntity<GenericResponse<List<InterstitialAdminDto>>> listAll(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
-        List<InterstitialDto> response = interstitialPort.findAllForAdmin(transactionId);
+        List<InterstitialAdminDto> response = interstitialPort.findAllForAdmin(transactionId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(response, transactionId).ok().build());

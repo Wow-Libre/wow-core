@@ -6,4 +6,9 @@ import java.util.*;
 
 public interface ObtainInterstitialUser {
     List<InterstitialUserEntity> findByUserId(Long userId, String transactionId);
+
+    /**
+     * Returns view stats per interstitial: key = interstitial id, value = [totalViews, uniqueViewers].
+     */
+    Map<Long, long[]> getViewStatsPerInterstitial(String transactionId);
 }
