@@ -9,4 +9,6 @@ public interface PackagesPort {
     void save(PackagesEntity packagesEntity, String transactionId);
 
     List<ItemQuantityModel> findByProductId(ProductEntity product, String transactionId);
+
+    void deleteByProductId(ProductEntity product, String transactionId);
 }

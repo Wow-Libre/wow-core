@@ -16,6 +16,8 @@ public interface ProductPort {
 
     void createProduct(CreateProductDto product, String transactionId);
 
+    void updateProduct(Long productId, CreateProductDto product, String transactionId);
+
     ProductsDetailsDto allProducts(String transactionId);
 
     void deleteProduct(Long productId, String transactionId);

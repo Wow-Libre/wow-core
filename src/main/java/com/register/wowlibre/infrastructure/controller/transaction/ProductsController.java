@@ -80,6 +80,18 @@ public class ProductsController {
                 .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericResponse<Void>> updateProduct(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @PathVariable("id") Long id,
+            @RequestBody @Valid CreateProductDto createProductDto) {
+
+        productPort.updateProduct(id, createProductDto, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
+
     @DeleteMapping
     public ResponseEntity<GenericResponse<Void>> deleteProduct(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,

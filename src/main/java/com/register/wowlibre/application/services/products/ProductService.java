@@ -12,6 +12,7 @@ import com.register.wowlibre.infrastructure.entities.transactions.*;
 import com.register.wowlibre.infrastructure.util.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.*;
@@ -181,6 +182,54 @@ public class ProductService implements ProductPort {
         productEntity.setStatus(true);
         saveProducts.save(productEntity, transactionId);
 
+        if (product.getPackages() != null && !product.getPackages().isEmpty()) {
+            product.getPackages().forEach(packageCode -> {
+                PackagesEntity packageEntity = new PackagesEntity();
+                packageEntity.setCodeCore(packageCode);
+                packageEntity.setProductId(productEntity);
+                packagesPort.save(packageEntity, transactionId);
+            });
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateProduct(Long productId, CreateProductDto product, String transactionId) {
+        ProductEntity productEntity = products.findById(productId, transactionId)
+                .orElseThrow(() -> new InternalException("Product Not Found", transactionId));
+
+        final String name = product.getName();
+        final String language = product.getLanguage();
+        products.findByNameAndLanguage(name, language, transactionId)
+                .filter(p -> !p.getId().equals(productId))
+                .ifPresent(existing -> {
+                    throw new InternalException("Product with name '" + name
+                            + "' already exists in language '" + language + "'", transactionId);
+                });
+
+        ProductCategoryEntity productCategory = productCategoryPort.findById(product.getProductCategoryId(), transactionId);
+        if (productCategory == null) {
+            throw new InternalException("Product Category with id '" + product.getProductCategoryId() + "' does not exist",
+                    transactionId);
+        }
+
+        productEntity.setName(name);
+        productEntity.setDisclaimer(product.getDisclaimer());
+        productEntity.setDescription(product.getDescription());
+        productEntity.setPrice(product.getPrice());
+        productEntity.setDiscount(product.getDiscount());
+        productEntity.setTax(product.getTax());
+        productEntity.setReturnTax(product.getReturnTax());
+        productEntity.setUseCreditPoints(product.getCreditPointsEnabled());
+        productEntity.setImageUrl(product.getImageUrl());
+        productEntity.setCreditPointsValue(product.getCreditPointsValue());
+        productEntity.setLanguage(language);
+        productEntity.setRealmId(product.getRealmId());
+        productEntity.setProductCategoryId(productCategory);
+        productEntity.setRealmName(product.getRealmName());
+        saveProducts.save(productEntity, transactionId);
+
+        packagesPort.deleteByProductId(productEntity, transactionId);
         if (product.getPackages() != null && !product.getPackages().isEmpty()) {
             product.getPackages().forEach(packageCode -> {
                 PackagesEntity packageEntity = new PackagesEntity();
