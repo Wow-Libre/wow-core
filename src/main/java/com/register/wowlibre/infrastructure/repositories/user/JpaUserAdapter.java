@@ -2,6 +2,7 @@ package com.register.wowlibre.infrastructure.repositories.user;
 
 import com.register.wowlibre.domain.port.out.user.*;
 import com.register.wowlibre.infrastructure.entities.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -25,9 +26,34 @@ public class JpaUserAdapter implements ObtainUserPort, SaveUserPort {
     }
 
     @Override
-    //@Cacheable(value = "findByUserIdAndStatusIsTrue", key = "#userId")
     public Optional<UserEntity> findByUserIdAndStatusIsTrue(Long userId, String transactionId) {
         return userRepository.findById(userId);
+    }
+
+    @Override
+    public Page<UserEntity> findAll(Pageable pageable, String transactionId) {
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public long count(String transactionId) {
+        return userRepository.count();
+    }
+
+    @Override
+    public Page<UserEntity> findWebUsersPaginated(String emailFilter, Pageable pageable, String transactionId) {
+        if (emailFilter != null && !emailFilter.isBlank()) {
+            return userRepository.findByEmailContainingIgnoreCase(emailFilter.trim(), pageable);
+        }
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public long countWebUsers(String emailFilter, String transactionId) {
+        if (emailFilter != null && !emailFilter.isBlank()) {
+            return userRepository.countByEmailContainingIgnoreCase(emailFilter.trim());
+        }
+        return userRepository.count();
     }
 
     @Override

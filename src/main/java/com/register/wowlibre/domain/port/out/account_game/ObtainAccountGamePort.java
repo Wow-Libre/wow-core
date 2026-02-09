@@ -24,6 +24,8 @@ public interface ObtainAccountGamePort {
 
     List<AccountGameEntity> findByUserIdAndRealmId(Long userId, Long serverId, String transactionId);
 
+    List<AccountGameEntity> findAllByUserId(Long userId, String transactionId);
+
     Optional<AccountGameEntity> findByIdAndUserId(Long id, Long userId, String transactionId);
 
     long countActiveAccountsByUserId(Long userId, String transactionId);
