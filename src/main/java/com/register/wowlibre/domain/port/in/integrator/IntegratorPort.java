@@ -9,7 +9,7 @@ import java.util.*;
 
 public interface IntegratorPort {
     Long createAccount(String host, String apiSecret, Integer expansion, String username, String password,
-                       String email, Long userId, String transactionId);
+                       String email, Long userId, String jwt, String transactionId);
 
     CharactersDto characters(String host, String jwt, Long accountId, Long userId, String transactionId);
 

@@ -8,11 +8,9 @@ import com.register.wowlibre.domain.model.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.shared.*;
 import com.register.wowlibre.infrastructure.client.*;
-import com.register.wowlibre.infrastructure.util.*;
 import org.slf4j.*;
 import org.springframework.stereotype.*;
 
-import javax.crypto.*;
 import java.util.*;
 
 @Service
@@ -28,25 +26,15 @@ public class IntegratorService implements IntegratorPort {
 
     @Override
     public Long createAccount(String host, String apiSecret, Integer expansion, String username, String password,
-                              String email, Long userId, String transactionId) {
-        byte[] salt = KeyDerivationUtil.generateSalt();
-        String encryptedMessage;
+                              String email, Long userId, String jwt, String transactionId) {
 
-        try {
-            SecretKey derivedKey = KeyDerivationUtil.deriveKeyFromPassword(apiSecret, salt);
-            encryptedMessage = EncryptionUtil.encrypt(password, derivedKey);
-        } catch (Exception e) {
-            LOGGER.error("It was not possible to create the account on the realm. userId: {} transactionId {}",
-                    userId, transactionId);
-            throw new InternalException("Could not create account for realm", transactionId);
-        }
 
         AccountGameCreateRequest accountGameCreateRequest = AccountGameCreateRequest.builder()
-                .username(username).password(encryptedMessage)
+                .username(username).password(password)
                 .email(email).userId(userId)
-                .expansionId(expansion).salt(salt).build();
+                .expansionId(expansion).build();
 
-        return integratorClient.createAccountGame(host, accountGameCreateRequest, transactionId);
+        return integratorClient.createAccountGame(host, jwt, accountGameCreateRequest, transactionId);
     }
 
 

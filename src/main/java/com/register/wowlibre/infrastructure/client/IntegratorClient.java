@@ -53,9 +53,9 @@ public class IntegratorClient {
         return headers;
     }
 
-    public long createAccountGame(String host, AccountGameCreateRequest request, String transactionId) {
+    public long createAccountGame(String host, String jwt, AccountGameCreateRequest request, String transactionId) {
 
-        HttpHeaders headers = buildHeaders(transactionId);
+        HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<AccountGameCreateRequest> entity = new HttpEntity<>(request, headers);
 

@@ -90,7 +90,7 @@ public class AccountGameService implements AccountGamePort {
         final String gameEMail = gameMail != null && !gameMail.isBlank() ? gameMail : user.getEmail();
 
         final Long accountId = integratorPort.createAccount(realmModel.ip, realmModel.apiSecret, realmModel.expansion,
-                username, password, gameEMail, user.getId(), transactionId);
+                username, password, gameEMail, user.getId(), realmModel.jwt, transactionId);
 
         AccountGameEntity accountGameEntity = new AccountGameEntity();
         accountGameEntity.setAccountId(accountId);
