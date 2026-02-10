@@ -64,7 +64,7 @@ public class TransactionSchedule {
                                 transaction.getPlanId(), transactionId);
                     }
                     transaction.setSubscriptionId(subscription);
-                    machinePort.addPointsSubscription(subscription.getUserId(), 100L, transactionId);
+                    machinePort.addPointsSubscription(subscription.getUserId(), 100, transactionId);
                 } else {
                     List<ItemQuantityModel> items = packagesPort.findByProductId(transaction.getProductId(),
                             transactionId);
