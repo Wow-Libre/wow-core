@@ -3,6 +3,7 @@ package com.register.wowlibre.service;
 import com.register.wowlibre.application.services.*;
 import com.register.wowlibre.application.services.realm.*;
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.client.AuthClientResponse;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
@@ -91,35 +92,6 @@ class RealmServiceTest extends BaseTest {
     }
 
     @Test
-    void findByApiKey_shouldReturnRealmModel() {
-        String apiKey = "api-key-123";
-        String transactionId = "tx-realm-003";
-        RealmEntity realm = createRealmEntity(1L, "Test Realm", true);
-
-        when(obtainRealmPort.findByApiKey(apiKey, transactionId)).thenReturn(Optional.of(realm));
-
-        RealmModel result = service.findByApiKey(apiKey, transactionId);
-
-        assertNotNull(result);
-        assertEquals(1L, result.id);
-        assertEquals("Test Realm", result.name);
-        verify(obtainRealmPort).findByApiKey(apiKey, transactionId);
-    }
-
-    @Test
-    void findByApiKey_shouldReturnNullWhenNotFound() {
-        String apiKey = "non-existent-key";
-        String transactionId = "tx-realm-004";
-
-        when(obtainRealmPort.findByApiKey(apiKey, transactionId)).thenReturn(Optional.empty());
-
-        RealmModel result = service.findByApiKey(apiKey, transactionId);
-
-        assertNull(result);
-        verify(obtainRealmPort).findByApiKey(apiKey, transactionId);
-    }
-
-    @Test
     void findById_shouldReturnOptionalRealmEntity() {
         long id = 1L;
         String transactionId = "tx-realm-005";
@@ -162,29 +134,31 @@ class RealmServiceTest extends BaseTest {
         realmCreateDto.setHost("http://test.com");
         realmCreateDto.setPassword("password123");
         realmCreateDto.setRealmlist("test.realmlist");
-        realmCreateDto.setExternalUsername("admin");
-        realmCreateDto.setExternalPassword("admin123");
         realmCreateDto.setType("PVP");
+        realmCreateDto.setRealmId(1L);
 
         when(obtainRealmPort.findByNameAndExpansion(realmCreateDto.getName(), realmCreateDto.getExpansion(),
                 transactionId))
                 .thenReturn(Optional.empty());
-        when(randomString.nextString()).thenReturn(apiKey).thenReturn(apiSecret);
+        when(randomString.nextString()).thenReturn(apiKey).thenReturn(apiSecret).thenReturn("passwordRealm");
         when(passwordEncoder.encode(realmCreateDto.getPassword())).thenReturn(encodedPassword);
+        doNothing().when(authIntegratorPort).create(anyString(), anyString(), anyString(), anyLong(), anyString(), anyInt(), anyString());
+        AuthClientResponse authResponse = new AuthClientResponse("jwt-token", "refresh-token", new Date());
+        when(authIntegratorPort.auth(anyString(), anyString(), anyString(), anyString())).thenReturn(authResponse);
 
         ArgumentCaptor<RealmEntity> captor = ArgumentCaptor.forClass(RealmEntity.class);
         service.create(realmCreateDto, userId, transactionId);
 
         verify(obtainRealmPort).findByNameAndExpansion(realmCreateDto.getName(), realmCreateDto.getExpansion(),
                 transactionId);
-        verify(randomString, times(2)).nextString();
+        verify(randomString, times(3)).nextString();
         verify(passwordEncoder).encode(realmCreateDto.getPassword());
         verify(saveRealmPort).save(captor.capture(), eq(transactionId));
         RealmEntity saved = captor.getValue();
         assertEquals("New Realm", saved.getName());
         assertEquals(apiKey, saved.getApiKey());
         assertEquals(apiSecret, saved.getApiSecret());
-        assertFalse(saved.isStatus());
+        assertTrue(saved.isStatus());
     }
 
     @Test
