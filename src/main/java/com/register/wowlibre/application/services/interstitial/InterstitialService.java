@@ -1,5 +1,6 @@
 package com.register.wowlibre.application.services.interstitial;
 
+import com.register.wowlibre.domain.dto.interstitial.InterstitialAdminDto;
 import com.register.wowlibre.domain.dto.interstitial.InterstitialDto;
 import com.register.wowlibre.domain.port.in.interstitial.InterstitialPort;
 import com.register.wowlibre.domain.port.out.interstitial.ObtainInterstitial;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -72,6 +74,28 @@ public class InterstitialService implements InterstitialPort {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<InterstitialAdminDto> findAllForAdmin(String transactionId) {
+        List<InterstitialEntity> all = obtainInterstitial.findAll(transactionId);
+        Map<Long, long[]> stats = obtainInterstitialUser.getViewStatsPerInterstitial(transactionId);
+        return all.stream()
+                .map(e -> toAdminDto(e, stats.getOrDefault(e.getId(), new long[] { 0L, 0L })))
+                .toList();
+    }
+
+    private InterstitialAdminDto toAdminDto(InterstitialEntity entity, long[] viewStats) {
+        long totalViews = viewStats.length > 0 ? viewStats[0] : 0L;
+        long uniqueViewers = viewStats.length > 1 ? viewStats[1] : 0L;
+        return new InterstitialAdminDto(
+                entity.getId(),
+                entity.getUrlImg(),
+                entity.getRedirectUrl(),
+                entity.isStatus(),
+                totalViews,
+                uniqueViewers
+        );
     }
 
     @Override

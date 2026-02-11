@@ -10,4 +10,6 @@ public interface ObtainSubscription {
     Optional<SubscriptionEntity> findByReferenceNumber(String reference);
 
     List<SubscriptionEntity> findByExpirateSubscription();
+
+    List<SubscriptionEntity> findAll();
 }

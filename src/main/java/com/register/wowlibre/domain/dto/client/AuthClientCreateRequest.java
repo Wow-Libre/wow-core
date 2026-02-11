@@ -8,14 +8,9 @@ import lombok.*;
 public class AuthClientCreateRequest {
     private String username;
     private String password;
-    private byte[] salt;
-    @JsonProperty("api_key")
-    private String apiKey;
+    @JsonProperty("realm_id")
+    private Long realmId;
     private String emulator;
     @JsonProperty("expansion_id")
     private Integer expansionId;
-    @JsonProperty("gm_username")
-    private String gmUsername;
-    @JsonProperty("gm_password")
-    private String gmPassword;
 }

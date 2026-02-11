@@ -17,10 +17,6 @@ public interface ObtainRealmPort {
 
     Optional<RealmEntity> findByNameAndExpansion(String name, Integer expansionId, String transactionId);
 
-    List<RealmEntity> findByStatusIsFalse(String transactionId);
-
     Optional<RealmEntity> findAndIdByUser(Long id, Long userId, String transactionId);
-
-    List<RealmEntity> findByStatusIsFalseAndRetry(Long retry, String transactionId);
 
 }

@@ -220,4 +220,30 @@ public class SubscriptionService implements SubscriptionPort {
         return subscription;
     }
 
+    @Override
+    public SubscriptionAdminListDto getSubscriptionAdminList(String transactionId) {
+        List<SubscriptionEntity> all = obtainSubscription.findAll();
+        List<SubscriptionAdminDto> dtos = all.stream()
+                .map(this::toAdminDto)
+                .toList();
+        return new SubscriptionAdminListDto(dtos.size(), dtos);
+    }
+
+    private SubscriptionAdminDto toAdminDto(SubscriptionEntity s) {
+        var plan = s.getPlanId();
+        return new SubscriptionAdminDto(
+                s.getId(),
+                s.getUserId(),
+                s.getReferenceNumber(),
+                s.getStatus(),
+                plan != null ? plan.getName() : null,
+                plan != null ? plan.getPrice() : null,
+                plan != null ? plan.getCurrency() : null,
+                plan != null ? plan.getFrequencyType() : null,
+                plan != null ? plan.getFrequencyValue() : null,
+                s.getCreatedAt(),
+                s.getNextInvoiceDate()
+        );
+    }
+
 }

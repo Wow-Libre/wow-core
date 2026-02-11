@@ -61,30 +61,6 @@ class RealmControllerTest {
     }
 
     @Test
-    void apiKey_found_returnsOk() {
-        RealmModel realmModel = RealmModel.builder().apiSecret("secret").build();
-        when(realmPort.findByApiKey("key", "tx")).thenReturn(realmModel);
-        
-        ResponseEntity<GenericResponse<String>> response = controller.apiKey("tx", "key");
-
-        assertEquals(200, response.getStatusCode().value());
-        assertNotNull(response.getBody());
-        assertEquals("secret", response.getBody().getData());
-        verify(realmPort).findByApiKey("key", "tx");
-    }
-
-    @Test
-    void apiKey_notFound_returnsNoContent() {
-        RealmModel realmModel = RealmModel.builder().apiSecret(null).build();
-        when(realmPort.findByApiKey("key", "tx")).thenReturn(realmModel);
-        
-        ResponseEntity<GenericResponse<String>> response = controller.apiKey("tx", "key");
-
-        assertEquals(204, response.getStatusCode().value());
-        verify(realmPort).findByApiKey("key", "tx");
-    }
-
-    @Test
     void servers_returnsOkWithList() {
         List<RealmDto> servers = List.of(new RealmDto());
         when(realmPort.findByStatusIsTrue("tx")).thenReturn(servers);
@@ -127,5 +103,34 @@ class RealmControllerTest {
         assertNotNull(response.getBody());
         assertEquals(server, response.getBody().getData());
         verify(realmPort).findByServerNameAndExpansion(serverId, expansionId, locale, "tx");
+    }
+
+    @Test
+    void inactive_callsPortAndReturnsOk() {
+        String tx = "tx";
+        long userId = 1L;
+        long realmId = 10L;
+
+        ResponseEntity<GenericResponse<Void>> response = controller.inactive(tx, userId, realmId);
+
+        assertEquals(200, response.getStatusCode().value());
+        verify(realmPort).delete(realmId, userId, tx);
+    }
+
+    @Test
+    void getRealmListPing_returnsOkWithList() {
+        String tx = "tx";
+        String host = "http://localhost";
+        List<RealmlistDto> realmlist = List.of(new RealmlistDto(1L, "Realm 1"));
+
+        when(realmPort.getRealmLists(host, tx)).thenReturn(realmlist);
+
+        ResponseEntity<GenericResponse<List<RealmlistDto>>> response =
+                controller.getRealmListPing(tx, host);
+
+        assertEquals(200, response.getStatusCode().value());
+        assertNotNull(response.getBody());
+        assertEquals(realmlist, response.getBody().getData());
+        verify(realmPort).getRealmLists(host, tx);
     }
 }

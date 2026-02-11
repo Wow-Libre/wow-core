@@ -12,12 +12,13 @@ import java.util.*;
 public class PackagesService implements PackagesPort {
     private final ObtainPackages obtainPackages;
     private final SavePackages savePackages;
+    private final DeletePackages deletePackages;
 
-    public PackagesService(ObtainPackages obtainPackages, SavePackages savePackages) {
+    public PackagesService(ObtainPackages obtainPackages, SavePackages savePackages, DeletePackages deletePackages) {
         this.obtainPackages = obtainPackages;
         this.savePackages = savePackages;
+        this.deletePackages = deletePackages;
     }
-
 
     @Override
     public void save(PackagesEntity packagesEntity, String transactionId) {
@@ -28,5 +29,10 @@ public class PackagesService implements PackagesPort {
     public List<ItemQuantityModel> findByProductId(ProductEntity product, String transactionId) {
         return obtainPackages.findByProductId(product, transactionId).stream()
                 .map(packages -> new ItemQuantityModel(packages.getCodeCore(), 1)).toList();
+    }
+
+    @Override
+    public void deleteByProductId(ProductEntity product, String transactionId) {
+        deletePackages.deleteByProductId(product.getId(), transactionId);
     }
 }

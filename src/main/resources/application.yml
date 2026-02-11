@@ -89,6 +89,7 @@ app:
 # Telegram Bot (long polling)
 telegram:
   bot:
+    enabled: ${TELEGRAM_BOT_ENABLED:false}
     token: ${TELEGRAM_BOT_TOKEN:7204107406:AAGnNBdKjuaw5Z7SZC7qw2Pb3pwlzWg9xUU}
     username: ${TELEGRAM_BOT_USERNAME:@WowLibre_bot}
     # Anti-spam: máximo de mensajes por chat en la ventana (evita ataques y consultas masivas)

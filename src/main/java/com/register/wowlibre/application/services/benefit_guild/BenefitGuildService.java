@@ -21,7 +21,6 @@ public class BenefitGuildService implements BenefitGuildPort {
     @Override
     public void create(Long realmId, Long guildId, String guildName, Long[] benefits, boolean status,
                        String transactionId) {
-        BenefitGuildEntity associatedBenefit = new BenefitGuildEntity();
 
     }
 

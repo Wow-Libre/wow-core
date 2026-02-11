@@ -134,7 +134,7 @@ class AccountGameServiceTest extends BaseTest {
 
         when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(userEntity));
         when(realmPort.findByNameAndVersionAndStatusIsTrue(serverName, expansionId, transactionId)).thenReturn(null);
-        when(integratorPort.createAccount(any(), any(), any(), any(), any(), any(), any(), any()))
+        when(integratorPort.createAccount(any(), any(), any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(999L);
 
         assertThrows(InternalException.class, () ->
@@ -160,7 +160,7 @@ class AccountGameServiceTest extends BaseTest {
         when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(userEntity));
         when(realmPort.findByNameAndVersionAndStatusIsTrue(serverName, expansionId, transactionId)).thenReturn(null);
         when(obtainAccountGamePort.findByUserIdAndRealmId(userId, realmModel.id, transactionId)).thenReturn(Collections.emptyList());
-        when(integratorPort.createAccount(any(), any(), any(), any(), any(), any(), any(), any()))
+        when(integratorPort.createAccount(any(), any(), any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(999L);
 
         assertThrows(InternalException.class, () ->
@@ -192,7 +192,7 @@ class AccountGameServiceTest extends BaseTest {
         when(userPort.findByUserId(userId, transactionId)).thenReturn(Optional.of(userEntity));
         when(realmPort.findByNameAndVersionAndStatusIsTrue(serverName, expansionId, transactionId)).thenReturn(realmModel);
         when(obtainAccountGamePort.findByUserIdAndRealmId(userId, realmModel.id, transactionId)).thenReturn(Collections.emptyList());
-        when(integratorPort.createAccount(any(), any(), any(), any(), any(), any(), any(), any()))
+        when(integratorPort.createAccount(any(), any(), any(), any(), any(), any(), any(), any(), any()))
                 .thenReturn(999L);
 
         assertDoesNotThrow(() -> service.create(userId, serverName, expansionId, username, "", password,

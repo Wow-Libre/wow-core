@@ -24,11 +24,8 @@ public class RealmModel {
     public String password;
     public String apiKey;
     public String realmlist;
-    public byte[] salt;
     public String externalPassword;
     public String externalUsername;
     public Long userId;
-    public Integer retry;
-    public String gmUsername;
-    public String gmPassword;
+    public Long realmListId;
 }

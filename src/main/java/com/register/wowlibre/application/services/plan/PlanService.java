@@ -1,22 +1,31 @@
 package com.register.wowlibre.application.services.plan;
 
-import com.fasterxml.jackson.core.type.*;
-import com.fasterxml.jackson.databind.*;
-import com.register.wowlibre.domain.dto.*;
-import com.register.wowlibre.domain.port.in.plan.*;
-import com.register.wowlibre.domain.port.out.plans.*;
-import org.springframework.stereotype.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.register.wowlibre.domain.dto.PlanAdminDto;
+import com.register.wowlibre.domain.dto.PlanAdminRequestDto;
+import com.register.wowlibre.domain.dto.PlanDetailDto;
+import com.register.wowlibre.domain.port.in.plan.PlanPort;
+import com.register.wowlibre.domain.port.out.plans.ManagePlan;
+import com.register.wowlibre.domain.port.out.plans.ObtainPlan;
+import com.register.wowlibre.infrastructure.entities.transactions.PlansEntity;
+import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlanService implements PlanPort {
 
     private final ObtainPlan obtainPlan;
+    private final ManagePlan managePlan;
     private final ObjectMapper objectMapper;
 
-    public PlanService(ObtainPlan obtainPlan, ObjectMapper objectMapper) {
+    public PlanService(ObtainPlan obtainPlan, ManagePlan managePlan, ObjectMapper objectMapper) {
         this.obtainPlan = obtainPlan;
+        this.managePlan = managePlan;
         this.objectMapper = objectMapper;
     }
 
@@ -55,6 +64,76 @@ public class PlanService implements PlanPort {
 
     }
 
+    @Override
+    public List<PlanAdminDto> getPlanAdminList(String transactionId) {
+        return obtainPlan.findAll(transactionId).stream()
+                .map(this::toPlanAdminDto)
+                .toList();
+    }
+
+    @Override
+    public PlanAdminDto createPlanAdmin(PlanAdminRequestDto request, String transactionId) {
+        PlansEntity entity = toEntity(request, null);
+        entity.setCreatedAt(LocalDateTime.now());
+        entity.setUpdatedAt(LocalDateTime.now());
+        PlansEntity saved = managePlan.save(entity, transactionId);
+        return toPlanAdminDto(saved);
+    }
+
+    @Override
+    public PlanAdminDto updatePlanAdmin(PlanAdminRequestDto request, String transactionId) {
+        if (request.getId() == null) {
+            throw new IllegalArgumentException("id is required for update");
+        }
+        PlansEntity existing = obtainPlan.findById(request.getId(), transactionId)
+                .orElseThrow(() -> new IllegalArgumentException("Plan not found: " + request.getId()));
+        applyRequestToEntity(request, existing);
+        existing.setUpdatedAt(LocalDateTime.now());
+        PlansEntity saved = managePlan.save(existing, transactionId);
+        return toPlanAdminDto(saved);
+    }
+
+    @Override
+    public void deletePlanAdmin(Long id, String transactionId) {
+        if (!obtainPlan.findById(id, transactionId).isPresent()) {
+            throw new IllegalArgumentException("Plan not found: " + id);
+        }
+        managePlan.deleteById(id, transactionId);
+    }
+
+    private PlanAdminDto toPlanAdminDto(PlansEntity plan) {
+        int discountPct = plan.getDiscount() != null ? plan.getDiscount() : 0;
+        double discountedPrice = plan.getPrice() != null
+                ? plan.getPrice() * (1 - discountPct / 100.0)
+                : 0.0;
+        return new PlanAdminDto(
+                plan.getId(),
+                plan.getName(),
+                plan.getPrice(),
+                plan.getCurrency(),
+                plan.getDiscount(),
+                discountedPrice,
+                plan.isStatus(),
+                plan.getFrequencyType(),
+                plan.getFrequencyValue()
+        );
+    }
+
+    private PlansEntity toEntity(PlanAdminRequestDto request, PlansEntity existing) {
+        PlansEntity entity = existing != null ? existing : new PlansEntity();
+        entity.setName(request.getName());
+        entity.setPrice(request.getPrice());
+        entity.setCurrency(request.getCurrency());
+        entity.setDiscount(request.getDiscount() != null ? request.getDiscount() : 0);
+        entity.setStatus(request.getStatus() != null ? request.getStatus() : true);
+        entity.setFrequencyType(request.getFrequencyType() != null ? request.getFrequencyType() : "MONTH");
+        entity.setFrequencyValue(request.getFrequencyValue() != null ? request.getFrequencyValue() : 1);
+        return entity;
+    }
+
+    private void applyRequestToEntity(PlanAdminRequestDto request, PlansEntity entity) {
+        toEntity(request, entity);
+    }
 
     private List<String> parseFeatures(String featuresJson) {
         if (featuresJson == null || featuresJson.trim().isEmpty()) {

@@ -44,19 +44,10 @@ public class JpaRealmAdapter implements ObtainRealmPort, SaveRealmPort {
         return realmRepository.findByNameAndExpansionId(name, expansionId);
     }
 
-    @Override
-    public List<RealmEntity> findByStatusIsFalse(String transactionId) {
-        return null;
-    }
 
     @Override
     public Optional<RealmEntity> findAndIdByUser(Long id, Long userId, String transactionId) {
         return null;
-    }
-
-    @Override
-    public List<RealmEntity> findByStatusIsFalseAndRetry(Long retry, String transactionId) {
-        return realmRepository.findByStatusIsFalseAndRetry(retry);
     }
 
     @Override

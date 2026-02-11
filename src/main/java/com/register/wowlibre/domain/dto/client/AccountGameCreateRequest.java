@@ -10,6 +10,7 @@ public class AccountGameCreateRequest {
     public String email;
     @JsonProperty("user_id")
     public Long userId;
+    @JsonProperty("expansion_id")
     public Integer expansionId;
     public byte[] salt;
 }

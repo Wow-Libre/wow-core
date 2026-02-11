@@ -20,6 +20,14 @@ public class SubscriptionsController {
         this.subscriptionPort = subscriptionPort;
     }
 
+    @GetMapping("/admin/list")
+    public ResponseEntity<GenericResponse<SubscriptionAdminListDto>> adminList(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
+        SubscriptionAdminListDto response = subscriptionPort.getSubscriptionAdminList(transactionId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(response, transactionId).ok().build());
+    }
+
     @GetMapping("/pill-home")
     public ResponseEntity<GenericResponse<PillWidgetHomeDto>> pillHomeNotAuthenticated(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,

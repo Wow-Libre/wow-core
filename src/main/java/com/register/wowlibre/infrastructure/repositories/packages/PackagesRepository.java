@@ -9,4 +9,6 @@ import java.util.List;
 public interface PackagesRepository extends CrudRepository<PackagesEntity, Long> {
     List<PackagesEntity> findByProductId_Id(Long productId);
     List<PackagesEntity> findByProductId(ProductEntity product);
+
+    void deleteByProductId_Id(Long productId);
 }

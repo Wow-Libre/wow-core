@@ -6,6 +6,8 @@ import java.util.*;
 
 public interface ObtainPlan {
 
+    List<PlansEntity> findAll(String transactionId);
+
     List<PlansEntity> findByStatusIsTrue(String transactionId);
 
     List<PlansEntity> findByStatusIsTrueAndLanguage(String language, String transactionId);

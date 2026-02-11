@@ -13,5 +13,4 @@ public class ChangePasswordRequest {
     private Long userId;
     @JsonProperty("expansion_id")
     private Integer expansionId;
-    private byte[] salt;
 }

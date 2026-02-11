@@ -113,7 +113,6 @@ public class CharactersService implements CharactersPort {
 
         Integer expansionId = server.getExpansionId();
         integratorService.changePassword(accountVerificationDto.realm().getHost(),
-                accountVerificationDto.realm().getApiSecret(),
                 accountVerificationDto.realm().getJwt(),
                 accountId, userIdAccount, newPassword, expansionId, transactionId);
     }

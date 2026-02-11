@@ -27,6 +27,7 @@ public class RealmMapper {
                 .jwt(server.getJwt())
                 .expirationDate(server.getExpirationDate())
                 .refreshToken(server.getRefreshToken())
+                .realmListId(server.getRealmListId())
                 .realmlist(server.getRealmlist())
                 .build();
     }
@@ -56,10 +57,7 @@ public class RealmMapper {
         realmEntity.setRealmlist(server.realmlist);
         realmEntity.setExternalPassword(server.externalPassword);
         realmEntity.setExternalUsername(server.externalUsername);
-        realmEntity.setSalt(server.salt);
-        realmEntity.setRetry(server.retry);
-        realmEntity.setGmUsername(server.gmUsername);
-        realmEntity.setGmPassword(server.gmPassword);
+        realmEntity.setRealmListId(server.realmListId);
         return realmEntity;
     }
 

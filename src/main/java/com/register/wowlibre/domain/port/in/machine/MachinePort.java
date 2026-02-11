@@ -13,7 +13,7 @@ public interface MachinePort {
     void changePoints(Long userId, Long accountId, Long characterId, Long realmId, Long points, String type,
                       String transactionId);
 
-    void addPointsSubscription(Long userId, Long points, String transactionId);
+    void addPointsSubscription(Long userId, Integer points, String transactionId);
 
     /**
      * Añade puntos de ruleta desde el minijuego de Telegram.

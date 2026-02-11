@@ -11,6 +11,7 @@ import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.machine.*;
 import com.register.wowlibre.domain.port.in.realm.*;
 import com.register.wowlibre.domain.port.in.vote_wallet.*;
+import com.register.wowlibre.domain.port.in.wallet.*;
 import com.register.wowlibre.domain.port.out.machine.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import org.springframework.stereotype.*;
@@ -33,9 +34,9 @@ public class MachineService implements MachinePort {
     private final RealmPort realmPort;
 
     public MachineService(AccountValidationPort accountValidationPort, ObtainMachine obtainMachine,
-            SaveMachine saveMachine,
-            IntegratorPort integratorPort, I18nService i18nService, VoteWalletPort voteWalletPort,
-            RealmPort realmPort) {
+                          SaveMachine saveMachine,
+                          IntegratorPort integratorPort, I18nService i18nService, VoteWalletPort voteWalletPort,
+                          RealmPort realmPort, WalletPort walletPort) {
         this.accountValidationPort = accountValidationPort;
         this.obtainMachine = obtainMachine;
         this.saveMachine = saveMachine;
@@ -47,7 +48,7 @@ public class MachineService implements MachinePort {
 
     @Override
     public MachineDto evaluate(Long userId, Long accountId, Long characterId, Long realmId, Locale locale,
-            String transactionId) {
+                               String transactionId) {
 
         AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, realmId,
                 transactionId);
@@ -57,8 +58,8 @@ public class MachineService implements MachinePort {
         // Probabilidades de la máquina (total: 100)
         // Item: 10%, Level: 1%, Mount: 2%, Gold: 1%, None: 86%
         // Probabilidad de ganar: 14% | Probabilidad de perder: 86%
-        int[] weights = { 10, 1, 2, 1, 86 };
-        String[] outcomes = { "Item", "Level", "Mount", "Gold", "None" };
+        int[] weights = {10, 1, 2, 1, 86};
+        String[] outcomes = {"Item", "Level", "Mount", "Gold", "None"};
 
         Optional<MachineEntity> machine = obtainMachine.findByUserIdAndRealmId(userId,
                 verificationDto.realm().getId());
@@ -144,7 +145,7 @@ public class MachineService implements MachinePort {
 
     @Override
     public void changePoints(Long userId, Long accountId, Long characterId, Long realmId, Long points, String type,
-            String transactionId) {
+                             String transactionId) {
 
         AccountVerificationDto verificationDto = accountValidationPort.verifyAccount(userId, accountId, realmId,
                 transactionId);
@@ -211,17 +212,15 @@ public class MachineService implements MachinePort {
                 saveMachine.save(machineModelDeduct, transactionId);
             }
         }
-
     }
 
     @Override
-    public void addPointsSubscription(Long userId, Long points, String transactionId) {
-        List<VoteWalletEntity> voteWallets = voteWalletPort.findByUserId(userId, transactionId);
-        for (VoteWalletEntity voteWallet : voteWallets) {
-            int current = voteWallet.getVoteBalance() != null ? voteWallet.getVoteBalance() : 0;
-            voteWallet.setVoteBalance(current + points.intValue());
-            voteWallet.setUpdatedAt(LocalDateTime.now());
-            voteWalletPort.saveVoteWallet(voteWallet, transactionId);
+    public void addPointsSubscription(Long userId, Integer points, String transactionId) {
+        List<MachineEntity> machine = obtainMachine.findByUserId(userId);
+
+        for (MachineEntity machineEntity : machine) {
+            machineEntity.setPoints((machineEntity.getPoints() != null ? machineEntity.getPoints() : 0) + points);
+            saveMachine.save(machineEntity, transactionId);
         }
     }
 
