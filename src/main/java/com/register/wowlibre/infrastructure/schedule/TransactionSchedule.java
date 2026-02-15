@@ -8,7 +8,9 @@ import com.register.wowlibre.domain.port.in.packages.*;
 import com.register.wowlibre.domain.port.in.subscriptions.*;
 import com.register.wowlibre.domain.port.in.wallet.*;
 import com.register.wowlibre.domain.port.in.wowlibre.*;
+import com.register.wowlibre.domain.port.out.account_game.*;
 import com.register.wowlibre.domain.port.out.transactions.*;
+import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.entities.transactions.*;
 import jakarta.transaction.*;
 import org.slf4j.*;
@@ -21,6 +23,8 @@ import java.util.*;
 public class TransactionSchedule {
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionSchedule.class);
 
+    private static final int MAX_ACCOUNTS_PER_USER = 500;
+
     private final ObtainTransaction obtainTransaction;
     private final SaveTransaction saveTransaction;
     private final WowLibrePort wowLibrePort;
@@ -29,10 +33,12 @@ public class TransactionSchedule {
     private final WalletPort walletPort;
     private final MachinePort machinePort;
     private final IntegratorPort integratorPort;
+    private final ObtainAccountGamePort obtainAccountGamePort;
 
     public TransactionSchedule(ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
                                WowLibrePort wowLibrePort, PackagesPort packagesPort, SubscriptionPort subscriptionPort,
-                               WalletPort walletPort, MachinePort machinePort, IntegratorPort integratorPort) {
+                               WalletPort walletPort, MachinePort machinePort, IntegratorPort integratorPort,
+                               ObtainAccountGamePort obtainAccountGamePort) {
         this.obtainTransaction = obtainTransaction;
         this.saveTransaction = saveTransaction;
         this.wowLibrePort = wowLibrePort;
@@ -41,6 +47,7 @@ public class TransactionSchedule {
         this.walletPort = walletPort;
         this.machinePort = machinePort;
         this.integratorPort = integratorPort;
+        this.obtainAccountGamePort = obtainAccountGamePort;
     }
 
     @Transactional
@@ -115,16 +122,39 @@ public class TransactionSchedule {
 
     }
 
-    @Scheduled(cron = "1/50 * * * * *")
+    @Scheduled(cron = "0 */15 * * * *")
     public void realmVerifySubscription() {
+        String transactionId = UUID.randomUUID().toString();
         List<SubscriptionEntity> subscriptions = subscriptionPort.findByActiveSubscription();
 
-        integratorPort.isPremiumRealm()
+        for (SubscriptionEntity subscription : subscriptions) {
+            Long userId = subscription.getUserId();
+            List<AccountGameEntity> accounts = obtainAccountGamePort.findByUserIdAndStatusIsTrue(
+                    userId, 0, MAX_ACCOUNTS_PER_USER, transactionId);
 
-        subscriptions.forEach(subscription -> {
-            subscription.setStatus(SubscriptionStatus.INACTIVE.getType());
-            subscriptionPort.save(subscription);
-        });
+            for (AccountGameEntity account : accounts) {
+                try {
+                    RealmEntity realm = account.getRealmId();
+                    if (realm == null || realm.getHost() == null || realm.getJwt() == null) {
+                        LOGGER.warn("[realmVerifySubscription] userId={} accountId={} realm/host/jwt null, skip",
+                                userId, account.getAccountId());
+                        continue;
+                    }
+                    String host = realm.getHost();
+                    String jwt = realm.getJwt();
+                    Long accountId = account.getAccountId();
 
+                    boolean isPremium = integratorPort.isPremiumRealm(host, jwt, accountId, transactionId);
+                    if (!isPremium) {
+                        integratorPort.createPremiumRealm(host, jwt, accountId, transactionId);
+                        LOGGER.debug("[realmVerifySubscription] createPremiumRealm userId={} accountId={} realm={}",
+                                userId, accountId, realm.getName());
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("[realmVerifySubscription] userId={} accountId={} error={}",
+                            userId, account.getAccountId(), e.getMessage());
+                }
+            }
+        }
     }
 }
