@@ -113,12 +113,42 @@ public class TransactionSchedule {
     @Transactional
     @Scheduled(cron = "1/50 * * * * *")
     public void verifySubscriptions() {
+        String transactionId = UUID.randomUUID().toString();
+
         List<SubscriptionEntity> subscriptions = subscriptionPort.findByExpirateSubscription();
 
-        subscriptions.forEach(subscription -> {
+        for (SubscriptionEntity subscription : subscriptions) {
+            Long userId = subscription.getUserId();
+            List<AccountGameEntity> accounts = obtainAccountGamePort.findByUserIdAndStatusIsTrue(
+                    userId, 0, MAX_ACCOUNTS_PER_USER, transactionId);
+
+            for (AccountGameEntity account : accounts) {
+                try {
+                    RealmEntity realm = account.getRealmId();
+                    if (realm == null || realm.getHost() == null || realm.getJwt() == null) {
+                        LOGGER.warn("[verifySubscriptions] userId={} accountId={} realm/host/jwt null, skip",
+                                userId, account.getAccountId());
+                        continue;
+                    }
+                    String host = realm.getHost();
+                    String jwt = realm.getJwt();
+                    Long accountId = account.getAccountId();
+
+                    boolean isPremium = integratorPort.isPremiumRealm(host, jwt, accountId, transactionId);
+                    if (isPremium) {
+                        integratorPort.updatePremiumRealm(host, jwt, accountId, false, transactionId);
+                        LOGGER.debug("[verifySubscriptions] createPremiumRealm userId={} accountId={} realm={}",
+                                userId, accountId, realm.getName());
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("[verifySubscriptions] userId={} accountId={} error={}",
+                            userId, account.getAccountId(), e.getMessage());
+                }
+            }
             subscription.setStatus(SubscriptionStatus.INACTIVE.getType());
             subscriptionPort.save(subscription);
-        });
+        }
+
 
     }
 
@@ -146,7 +176,7 @@ public class TransactionSchedule {
 
                     boolean isPremium = integratorPort.isPremiumRealm(host, jwt, accountId, transactionId);
                     if (!isPremium) {
-                        integratorPort.createPremiumRealm(host, jwt, accountId, transactionId);
+                        integratorPort.updatePremiumRealm(host, jwt, accountId, true, transactionId);
                         LOGGER.debug("[realmVerifySubscription] createPremiumRealm userId={} accountId={} realm={}",
                                 userId, accountId, realm.getName());
                     }

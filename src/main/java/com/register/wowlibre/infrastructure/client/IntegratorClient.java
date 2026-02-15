@@ -1427,11 +1427,13 @@ public class IntegratorClient {
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
 
-    public Void createPremiumRealm(String host, String jwt, Long accountId, String transactionId) {
+    public Void updatePremiumRealm(String host, String jwt, Long accountId, boolean status, String transactionId) {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<UpdateStatsRequest> entity = new HttpEntity<>(headers);
-        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/premium/%s", host, accountId))
+        String url = UriComponentsBuilder
+                .fromUriString(String.format("%s/api/premium/%d", host, accountId))
+                .queryParam("active", status)
                 .toUriString();
 
         try {

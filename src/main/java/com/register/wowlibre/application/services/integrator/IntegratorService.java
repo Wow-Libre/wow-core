@@ -409,8 +409,8 @@ public class IntegratorService implements IntegratorPort {
     }
 
     @Override
-    public void createPremiumRealm(String host, String jwt, Long accountId, String transactionId) {
-        integratorClient.createPremiumRealm(host, jwt, accountId, transactionId);
+    public void updatePremiumRealm(String host, String jwt, Long accountId, boolean status, String transactionId) {
+        integratorClient.updatePremiumRealm(host, jwt, accountId, status, transactionId);
     }
 
 }
