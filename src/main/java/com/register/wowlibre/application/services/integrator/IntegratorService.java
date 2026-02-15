@@ -403,4 +403,14 @@ public class IntegratorService implements IntegratorPort {
         return integratorClient.getRealmList(host, transactionId);
     }
 
+    @Override
+    public boolean isPremiumRealm(String host, String jwt, Long accountId, String transactionId) {
+        return integratorClient.isPremiumRealm(host, jwt, accountId, transactionId);
+    }
+
+    @Override
+    public void createPremiumRealm(String host, String jwt, Long accountId, String transactionId) {
+        integratorClient.createPremiumRealm(host, jwt, accountId, transactionId);
+    }
+
 }

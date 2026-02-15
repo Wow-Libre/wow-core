@@ -1,13 +1,11 @@
 package com.register.wowlibre.infrastructure.repositories.subscriptions;
 
-import com.register.wowlibre.domain.port.out.subscriptions.ObtainSubscription;
-import com.register.wowlibre.domain.port.out.subscriptions.SaveSubscription;
-import com.register.wowlibre.infrastructure.entities.transactions.SubscriptionEntity;
-import org.springframework.stereotype.Repository;
+import com.register.wowlibre.domain.port.out.subscriptions.*;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
+import org.springframework.stereotype.*;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.time.*;
+import java.util.*;
 
 @Repository
 public class JpaSubscriptionAdapter implements ObtainSubscription, SaveSubscription {
@@ -36,6 +34,11 @@ public class JpaSubscriptionAdapter implements ObtainSubscription, SaveSubscript
     @Override
     public List<SubscriptionEntity> findAll() {
         return (List<SubscriptionEntity>) subscriptionRepository.findAll();
+    }
+
+    @Override
+    public List<SubscriptionEntity> findByActiveSubscription() {
+        return subscriptionRepository.findByStatus("ACTIVE");
     }
 
     @Override

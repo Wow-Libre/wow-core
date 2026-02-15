@@ -182,6 +182,11 @@ public class SubscriptionService implements SubscriptionPort {
     }
 
     @Override
+    public List<SubscriptionEntity> findByActiveSubscription() {
+        return obtainSubscription.findByActiveSubscription();
+    }
+
+    @Override
     public void save(SubscriptionEntity subscription) {
         saveSubscription.save(subscription, "");
     }

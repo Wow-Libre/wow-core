@@ -110,4 +110,7 @@ public interface IntegratorPort {
 
     List<RealmlistDto> getRealmLists(String host, String transactionId);
 
+    boolean isPremiumRealm(String host, String jwt, Long accountId, String transactionId);
+
+    void createPremiumRealm(String host, String jwt, Long accountId, String transactionId);
 }
