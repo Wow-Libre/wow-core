@@ -20,6 +20,8 @@ public interface SubscriptionPort {
 
     List<SubscriptionEntity> findByExpirateSubscription();
 
+    List<SubscriptionEntity> findByActiveSubscription();
+
     void save(SubscriptionEntity subscription);
 
     SubscriptionEntity updateNextInvoice(Long userId, Long planId, String transactionId);

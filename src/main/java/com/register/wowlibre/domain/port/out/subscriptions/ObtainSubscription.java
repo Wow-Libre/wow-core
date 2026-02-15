@@ -1,6 +1,6 @@
 package com.register.wowlibre.domain.port.out.subscriptions;
 
-import com.register.wowlibre.infrastructure.entities.transactions.SubscriptionEntity;
+import com.register.wowlibre.infrastructure.entities.transactions.*;
 
 import java.util.*;
 
@@ -12,4 +12,6 @@ public interface ObtainSubscription {
     List<SubscriptionEntity> findByExpirateSubscription();
 
     List<SubscriptionEntity> findAll();
+
+    List<SubscriptionEntity> findByActiveSubscription();
 }

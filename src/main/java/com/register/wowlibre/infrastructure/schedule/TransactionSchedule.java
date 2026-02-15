@@ -2,6 +2,7 @@ package com.register.wowlibre.infrastructure.schedule;
 
 import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.machine.*;
 import com.register.wowlibre.domain.port.in.packages.*;
 import com.register.wowlibre.domain.port.in.subscriptions.*;
@@ -27,10 +28,11 @@ public class TransactionSchedule {
     private final SubscriptionPort subscriptionPort;
     private final WalletPort walletPort;
     private final MachinePort machinePort;
+    private final IntegratorPort integratorPort;
 
     public TransactionSchedule(ObtainTransaction obtainTransaction, SaveTransaction saveTransaction,
                                WowLibrePort wowLibrePort, PackagesPort packagesPort, SubscriptionPort subscriptionPort,
-                               WalletPort walletPort, MachinePort machinePort) {
+                               WalletPort walletPort, MachinePort machinePort, IntegratorPort integratorPort) {
         this.obtainTransaction = obtainTransaction;
         this.saveTransaction = saveTransaction;
         this.wowLibrePort = wowLibrePort;
@@ -38,6 +40,7 @@ public class TransactionSchedule {
         this.subscriptionPort = subscriptionPort;
         this.walletPort = walletPort;
         this.machinePort = machinePort;
+        this.integratorPort = integratorPort;
     }
 
     @Transactional
@@ -104,6 +107,19 @@ public class TransactionSchedule {
     @Scheduled(cron = "1/50 * * * * *")
     public void verifySubscriptions() {
         List<SubscriptionEntity> subscriptions = subscriptionPort.findByExpirateSubscription();
+
+        subscriptions.forEach(subscription -> {
+            subscription.setStatus(SubscriptionStatus.INACTIVE.getType());
+            subscriptionPort.save(subscription);
+        });
+
+    }
+
+    @Scheduled(cron = "1/50 * * * * *")
+    public void realmVerifySubscription() {
+        List<SubscriptionEntity> subscriptions = subscriptionPort.findByActiveSubscription();
+
+        integratorPort.isPremiumRealm()
 
         subscriptions.forEach(subscription -> {
             subscription.setStatus(SubscriptionStatus.INACTIVE.getType());

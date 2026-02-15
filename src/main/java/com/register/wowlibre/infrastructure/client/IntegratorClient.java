@@ -1393,4 +1393,72 @@ public class IntegratorClient {
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
 
+    public boolean isPremiumRealm(String host, String jwt, Long accountId, String transactionId) {
+        HttpHeaders headers = buildHeaders(transactionId, jwt);
+
+        HttpEntity<UpdateStatsRequest> entity = new HttpEntity<>(headers);
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/premium/%s", host, accountId))
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<Boolean>> response = restTemplate.exchange(url,
+                    HttpMethod.GET,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody()).getData();
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [isPremiumRealm] Client/Server Error: {}. Error updating character stats" +
+                            ". " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
+                    transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [isPremiumRealm] Unexpected Error: {}. An unexpected error occurred " +
+                            "during the transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
+
+    public Void createPremiumRealm(String host, String jwt, Long accountId, String transactionId) {
+        HttpHeaders headers = buildHeaders(transactionId, jwt);
+
+        HttpEntity<UpdateStatsRequest> entity = new HttpEntity<>(headers);
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/premium/%s", host, accountId))
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<Void>> response = restTemplate.exchange(url,
+                    HttpMethod.POST,
+                    entity, new ParameterizedTypeReference<>() {
+                    });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody()).getData();
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [createPremiumRealm] Client/Server Error: {}. Error updating character " +
+                            "stats" +
+                            ". " +
+                            "HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
+                    transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [createPremiumRealm] Unexpected Error: {}. An unexpected error occurred " +
+                            "during the transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
 }
