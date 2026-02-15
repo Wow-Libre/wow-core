@@ -1,6 +1,13 @@
 server:
   tomcat:
     uri-encoding: UTF-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+      force-request: true
+      force-response: true
 spring:
   jackson:
     property-naming-strategy: SNAKE_CASE
@@ -33,7 +40,7 @@ spring:
       idle-timeout: 30000
       connection-timeout: 30000
       pool-name: HikariPoolCore
-    url: ${DB_CORE_URL:jdbc:mysql://localhost:3306/platform}
+    url: ${DB_CORE_URL:jdbc:mysql://localhost:3306/platform?useUnicode=true&characterEncoding=UTF-8}
     username: ${DB_CORE_USERNAME:root}
     password: ${DB_CORE_PASSWORD:Wowlibre96@@}
     driver-class-name: com.mysql.cj.jdbc.Driver
