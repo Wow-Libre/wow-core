@@ -1,6 +1,7 @@
 package com.register.wowlibre.application.services.wallet;
 
-import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.exception.BadRequestException;
+import com.register.wowlibre.domain.exception.InternalException;
 import com.register.wowlibre.domain.port.in.user.*;
 import com.register.wowlibre.domain.port.in.wallet.*;
 import com.register.wowlibre.domain.port.out.wallet.*;
@@ -60,5 +61,19 @@ public class WalletService implements WalletPort {
 
         saveWallet.save(walletEntity);
         LOGGER.info("[WalletService] [addPoints] Points added successfully for transactionId: {}", transactionId);
+    }
+
+    @Override
+    public void deductPoints(Long userId, Long points, String transactionId) {
+        if (points == null || points <= 0) {
+            throw new BadRequestException("Points to deduct must be positive", transactionId);
+        }
+        Long current = getPoints(userId, transactionId);
+        if (current < points) {
+            LOGGER.warn("[WalletService] [deductPoints] Insufficient balance userId={} required={} current={}", userId, points, current);
+            throw new BadRequestException("Insufficient wallet points", transactionId);
+        }
+        addPoints(userId, -points, transactionId);
+        LOGGER.info("[WalletService] [deductPoints] Points deducted successfully for transactionId: {}", transactionId);
     }
 }
