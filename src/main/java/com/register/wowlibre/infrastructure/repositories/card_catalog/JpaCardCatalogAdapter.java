@@ -26,7 +26,7 @@ public class JpaCardCatalogAdapter implements ObtainCardCatalog {
         }
         List<CardCatalogEntity> entities = cardCatalogRepository.findByCodeIn(codes);
         return entities.stream()
-                .map(e -> new CardItemDto(e.getCode(), e.getImageUrl(), e.getDisplayName()))
+                .map(e -> new CardItemDto(e.getCode(), e.getImageUrl(), e.getDisplayName(), null))
                 .collect(Collectors.toList());
     }
 
@@ -40,7 +40,7 @@ public class JpaCardCatalogAdapter implements ObtainCardCatalog {
     @Override
     public List<CardItemDto> findAllForDisplay() {
         return cardCatalogRepository.findAll().stream()
-                .map(e -> new CardItemDto(e.getCode(), e.getImageUrl(), e.getDisplayName()))
+                .map(e -> new CardItemDto(e.getCode(), e.getImageUrl(), e.getDisplayName(), null))
                 .collect(Collectors.toList());
     }
 }

@@ -8,4 +8,6 @@ import java.util.List;
 public interface UserCardRepository extends JpaRepository<UserCardEntity, Long> {
 
     List<UserCardEntity> findByUserIdOrderByObtainedAtDesc(Long userId);
+
+    java.util.Optional<UserCardEntity> findByUserIdAndCardCode(Long userId, String cardCode);
 }

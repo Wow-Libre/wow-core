@@ -21,6 +21,9 @@ public class UserCardEntity {
     @Column(name = "card_code", nullable = false, length = 32)
     private String cardCode;
 
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity = 1;
+
     @Column(name = "obtained_at", updatable = false)
     private LocalDateTime obtainedAt;
 

@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Item de carta con código y URL de imagen (y opcional nombre).
- * La URL permite agregar/cambiar imágenes desde el backend sin actualizar la app.
+ * Item de carta con código, URL de imagen, nombre y opcional cantidad (copias que tiene el usuario).
+ * quantity es null en respuestas de catálogo; en "mis cartas" siempre >= 1.
  */
 @Data
 @NoArgsConstructor
@@ -16,4 +16,6 @@ public class CardItemDto {
     private String code;
     private String imageUrl;
     private String name;
+    /** Copias que tiene el usuario; null en catálogo. */
+    private Integer quantity;
 }

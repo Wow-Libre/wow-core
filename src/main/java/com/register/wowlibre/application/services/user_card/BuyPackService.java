@@ -6,9 +6,7 @@ import com.register.wowlibre.domain.exception.BadRequestException;
 import com.register.wowlibre.domain.port.in.user_card.BuyPackPort;
 import com.register.wowlibre.domain.port.in.wallet.WalletPort;
 import com.register.wowlibre.domain.port.out.user_card.ObtainCardCatalog;
-import com.register.wowlibre.domain.port.out.user_card.ObtainUserCards;
 import com.register.wowlibre.domain.port.out.user_card.SaveUserCards;
-import com.register.wowlibre.infrastructure.entities.UserCardEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,14 +22,11 @@ public class BuyPackService implements BuyPackPort {
 
     private final WalletPort walletPort;
     private final ObtainCardCatalog obtainCardCatalog;
-    private final ObtainUserCards obtainUserCards;
     private final SaveUserCards saveUserCards;
 
-    public BuyPackService(WalletPort walletPort, ObtainCardCatalog obtainCardCatalog,
-                         ObtainUserCards obtainUserCards, SaveUserCards saveUserCards) {
+    public BuyPackService(WalletPort walletPort, ObtainCardCatalog obtainCardCatalog, SaveUserCards saveUserCards) {
         this.walletPort = walletPort;
         this.obtainCardCatalog = obtainCardCatalog;
-        this.obtainUserCards = obtainUserCards;
         this.saveUserCards = saveUserCards;
     }
 
@@ -45,23 +40,14 @@ public class BuyPackService implements BuyPackPort {
         }
 
         List<String> drawnCodes = drawWeightedRandom(catalog, CARDS_PER_PACK);
-        List<String> existingCodes = obtainUserCards.findByUserId(userId, transactionId).stream()
-                .map(UserCardEntity::getCardCode)
+        saveUserCards.addOrIncrement(userId, drawnCodes);
+
+        java.util.Map<String, Long> countInPack = drawnCodes.stream()
+                .collect(Collectors.groupingBy(java.util.function.Function.identity(), Collectors.counting()));
+        List<CardItemDto> catalogItems = obtainCardCatalog.findByCodes(new ArrayList<>(countInPack.keySet()));
+        return catalogItems.stream()
+                .map(c -> new CardItemDto(c.getCode(), c.getImageUrl(), c.getName(), countInPack.get(c.getCode()).intValue()))
                 .collect(Collectors.toList());
-
-        List<UserCardEntity> toSave = new ArrayList<>();
-        for (String code : drawnCodes) {
-            if (!existingCodes.contains(code)) {
-                UserCardEntity e = new UserCardEntity();
-                e.setUserId(userId);
-                e.setCardCode(code);
-                toSave.add(e);
-                existingCodes.add(code);
-            }
-        }
-        saveUserCards.saveAll(toSave);
-
-        return obtainCardCatalog.findByCodes(drawnCodes);
     }
 
     /**

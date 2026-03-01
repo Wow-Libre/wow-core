@@ -10,4 +10,9 @@ import java.util.List;
 public interface SaveUserCards {
 
     void saveAll(List<UserCardEntity> entities);
+
+    /**
+     * Añade o incrementa cantidad por cada código (para compra de sobre o recepción de carta).
+     */
+    void addOrIncrement(Long userId, List<String> cardCodes);
 }

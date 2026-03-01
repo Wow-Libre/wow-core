@@ -37,7 +37,8 @@ public class UserCardsService implements UserCardsPort {
                     return new CardItemDto(
                             code,
                             catalog != null ? catalog.getImageUrl() : null,
-                            catalog != null ? catalog.getName() : null);
+                            catalog != null ? catalog.getName() : null,
+                            e.getQuantity() != null ? e.getQuantity() : 1);
                 })
                 .collect(Collectors.toList());
     }
