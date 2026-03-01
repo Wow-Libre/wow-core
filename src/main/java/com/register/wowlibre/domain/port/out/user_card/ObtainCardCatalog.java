@@ -19,4 +19,10 @@ public interface ObtainCardCatalog {
      * Devuelve todas las cartas con su probabilidad (1-100) para el sorteo al comprar un sobre.
      */
     List<CardWithProbabilityDto> findAllWithProbability();
+
+    /**
+     * Devuelve todo el catálogo (código, imagen, nombre) para que el cliente sepa cuántas cartas hay y su orden.
+     * Sin probabilidad; solo para visualización de slots.
+     */
+    List<CardItemDto> findAllForDisplay();
 }

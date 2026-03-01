@@ -36,4 +36,11 @@ public class JpaCardCatalogAdapter implements ObtainCardCatalog {
                 .map(e -> new CardWithProbabilityDto(e.getCode(), e.getProbability() != null ? e.getProbability() : 50))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<CardItemDto> findAllForDisplay() {
+        return cardCatalogRepository.findAll().stream()
+                .map(e -> new CardItemDto(e.getCode(), e.getImageUrl(), e.getDisplayName()))
+                .collect(Collectors.toList());
+    }
 }

@@ -41,4 +41,9 @@ public class UserCardsService implements UserCardsPort {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<CardItemDto> getCatalog() {
+        return obtainCardCatalog.findAllForDisplay();
+    }
 }

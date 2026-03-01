@@ -49,6 +49,19 @@ public class UserCardsController {
     }
 
     /**
+     * Devuelve todo el catálogo de cartas (código, imagen, nombre). Define cuántas cartas existen y su orden.
+     * No requiere autenticación.
+     */
+    @GetMapping("/catalog")
+    public ResponseEntity<GenericResponse<UserCardsDto>> getCatalog() {
+        List<CardItemDto> catalog = userCardsPort.getCatalog();
+        UserCardsDto data = new UserCardsDto(catalog);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(data, null).ok().build());
+    }
+
+    /**
      * Compra un sobre: descuenta 200 puntos del wallet y devuelve 3 cartas al azar según probabilidad del catálogo.
      * 400 si saldo insuficiente o catálogo vacío.
      */
