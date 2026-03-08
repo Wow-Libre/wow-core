@@ -83,38 +83,73 @@ Filename: "{app}\IniciarCore.bat"; Description: "Iniciar Wow Libre Core ahora"; 
 
 [Code]
 var
-  PageDB, PageServer, PageExtra: TInputQueryWizardPage;
+  PageDB, PageServer, PageMail, PageExtra, PageOptional: TInputQueryWizardPage;
 
 procedure InitializeWizard;
 begin
   { Página 1: Base de datos (API central) }
   PageDB := CreateInputQueryPage(wpSelectDir,
-    'Base de datos', 'MySQL del Core (plataforma central)',
-    'URL JDBC, usuario y contraseña de la base de datos del Core (application.yml: DB_CORE_*).');
-  PageDB.Add('URL JDBC (ej. jdbc:mysql://localhost:3306/platform):', False);
+    'Base de datos',
+    'Dónde se guarda la información de la plataforma',
+    'El Core necesita una base de datos MySQL para guardar usuarios, suscripciones, reinos y toda la información de la plataforma. Indique la dirección del servidor MySQL, el nombre de la base (ej. platform) y las credenciales para conectarse.');
+  PageDB.Add('URL de la base de datos (dirección del servidor MySQL + nombre de la base, ej. jdbc:mysql://localhost:3306/platform):', False);
   PageDB.Values[0] := 'jdbc:mysql://localhost:3306/platform?useUnicode=true&characterEncoding=UTF-8';
-  PageDB.Add('Usuario MySQL:', False);
+  PageDB.Add('Usuario de MySQL (el usuario con el que el Core se conecta a la base):', False);
   PageDB.Values[1] := 'root';
-  PageDB.Add('Contraseña MySQL:', True);
+  PageDB.Add('Contraseña de MySQL (contraseña del usuario anterior):', True);
   PageDB.Values[2] := '';
 
   { Página 2: Servidor }
   PageServer := CreateInputQueryPage(PageDB.ID,
-    'Servidor', 'Puerto y configuración del Core',
-    'Puerto de la API central (CORE_SERVER_PORT), secret JWT (CORE_JWT_SECRET_KEY) y dominio (HOST_DOMAIN).');
-  PageServer.Add('Puerto del Core (ej. 8091):', False);
+    'Servidor y seguridad',
+    'Puerto, tokens y URL del frontend',
+    'Aquí se configura en qué puerto escuchará la API del Core, la clave secreta con la que se firman los tokens de sesión (JWT) y la URL pública de su sitio o frontend, para que el Core sepa desde qué dominio se hacen las peticiones.');
+  PageServer.Add('Puerto del Core (número de puerto donde la API estará disponible, ej. 8091; los clientes/reinos se conectarán a este puerto):', False);
   PageServer.Values[0] := '8091';
-  PageServer.Add('Secret JWT (CORE_JWT_SECRET_KEY):', True);
+  PageServer.Add('Clave secreta JWT (se usa para firmar los tokens de sesión; debe ser larga y secreta; si la deja en blanco se usará una por defecto):', True);
   PageServer.Values[1] := '';
-  PageServer.Add('Dominio público / frontend (HOST_DOMAIN, ej. http://localhost:3000):', False);
+  PageServer.Add('Dominio o URL del frontend (URL pública de su web o app, ej. http://localhost:3000 o https://www.wowlibre.com; el Core la usa para enlaces y validaciones):', False);
   PageServer.Values[2] := 'http://localhost:3000';
 
-  { Página 3: CORS y opcionales }
-  PageExtra := CreateInputQueryPage(PageServer.ID,
-    'CORS y opcionales', 'Orígenes permitidos para CORS. El resto se puede editar después en .env',
-    'APP_CORS_ALLOWED_ORIGINS: orígenes separados por coma. Deja en blanco para usar el valor por defecto.');
-  PageExtra.Add('CORS allowed origins (ej. http://localhost:3000,http://127.0.0.1:3000):', False);
+  { Página 3: Correo (SMTP) }
+  PageMail := CreateInputQueryPage(PageServer.ID,
+    'Correo electrónico (SMTP)',
+    'Configuración para enviar emails a los usuarios',
+    'El Core puede enviar correos (registro, recuperar contraseña, notificaciones). Indique los datos del servidor de correo. Con Gmail use smtp.gmail.com, puerto 587 y una "contraseña de aplicación" (no la contraseña normal). Con otro proveedor use su host y puerto.');
+  PageMail.Add('Servidor de correo / Host SMTP (ej. smtp.gmail.com para Gmail, o el que le indique su proveedor):', False);
+  PageMail.Values[0] := 'smtp.gmail.com';
+  PageMail.Add('Puerto SMTP (587 suele ser para TLS; 465 para SSL; 25 sin cifrado):', False);
+  PageMail.Values[1] := '587';
+  PageMail.Add('Usuario / correo (la dirección de email que envía los mensajes):', False);
+  PageMail.Values[2] := '';
+  PageMail.Add('Contraseña (en Gmail use "contraseña de aplicación" desde la cuenta de Google):', True);
+  PageMail.Values[3] := '';
+
+  { Página 4: CORS }
+  PageExtra := CreateInputQueryPage(PageMail.ID,
+    'CORS (orígenes permitidos)',
+    'Qué sitios pueden llamar a la API del Core',
+    'Por seguridad, el navegador solo permite que ciertos orígenes (dominios) llamen a la API. Indique las URLs de su frontend o de los sitios que consumirán la API, separadas por coma. Así se evitan bloqueos cuando la web y la API están en dominios distintos.');
+  PageExtra.Add('Orígenes permitidos (URLs separadas por coma, ej. http://localhost:3000,https://www.wowlibre.com):', False);
   PageExtra.Values[0] := 'http://localhost:3000,http://127.0.0.1:3000';
+
+  { Página 5: Opcionales (firma, PayU, reCAPTCHA, Telegram) }
+  PageOptional := CreateInputQueryPage(PageExtra.ID,
+    'Opcionales (pagos, reCAPTCHA, Telegram)',
+    'Clave de firma, PayU, reCAPTCHA y bot de Telegram',
+    'Estas opciones puede dejarlas en blanco y editarlas después en el archivo .env de la carpeta de instalación. Clave de firma: para validar peticiones internas. PayU: URL de la pasarela de pagos. reCAPTCHA: clave de Google para evitar bots. Telegram: si habilita un bot, indique token y nombre de usuario.');
+  PageOptional.Add('Clave de firma de la aplicación (se usa para validar peticiones firmadas entre servicios; puede dejar el valor por defecto):', False);
+  PageOptional.Values[0] := 'wowLibreSecret';
+  PageOptional.Add('URL de la API PayU (pasarela de pagos; use la URL de sandbox para pruebas o la de producción cuando vaya a cobrar):', False);
+  PageOptional.Values[1] := 'https://sandbox.api.payulatam.com/reports-api/4.0/service.cgi';
+  PageOptional.Add('Clave secreta de Google reCAPTCHA (para proteger formularios de bots; obténgala en Google reCAPTCHA Admin):', False);
+  PageOptional.Values[2] := '';
+  PageOptional.Add('¿Bot de Telegram habilitado? (escriba true para activar notificaciones/consultas por Telegram, o false para desactivarlo):', False);
+  PageOptional.Values[3] := 'false';
+  PageOptional.Add('Token del bot de Telegram (lo obtiene al crear un bot con @BotFather en Telegram; déjelo en blanco si no usa bot):', False);
+  PageOptional.Values[4] := '';
+  PageOptional.Add('Nombre de usuario del bot de Telegram (ej. @WowLibre_bot; debe coincidir con el bot cuyo token puso arriba):', False);
+  PageOptional.Values[5] := '';
 end;
 
 function EnvLine(const Key, Value: String): String;
@@ -145,8 +180,23 @@ begin
     S := S + EnvLine('CORE_SERVER_PORT', PageServer.Values[0]);
     S := S + EnvLine('CORE_JWT_SECRET_KEY', JwtSecret);
     S := S + EnvLine('HOST_DOMAIN', PageServer.Values[2]);
+    S := S + EnvLine('CORE_GOOGLE_HOST', PageMail.Values[0]);
+    S := S + EnvLine('CORE_GOOGLE_PORT', PageMail.Values[1]);
+    S := S + EnvLine('CORE_GOOGLE_USERNAME', PageMail.Values[2]);
+    S := S + EnvLine('CORE_GOOGLE_PASSWORD', PageMail.Values[3]);
     if Trim(PageExtra.Values[0]) <> '' then
       S := S + EnvLine('APP_CORS_ALLOWED_ORIGINS', PageExtra.Values[0]);
+    if Trim(PageOptional.Values[0]) <> '' then
+      S := S + EnvLine('APP_SIGNATURE_SECRET_KEY', PageOptional.Values[0]);
+    if Trim(PageOptional.Values[1]) <> '' then
+      S := S + EnvLine('PAYU_API_URL', PageOptional.Values[1]);
+    if Trim(PageOptional.Values[2]) <> '' then
+      S := S + EnvLine('GOOGLE_API_SECRET', PageOptional.Values[2]);
+    S := S + EnvLine('TELEGRAM_BOT_ENABLED', PageOptional.Values[3]);
+    if Trim(PageOptional.Values[4]) <> '' then
+      S := S + EnvLine('TELEGRAM_BOT_TOKEN', PageOptional.Values[4]);
+    if Trim(PageOptional.Values[5]) <> '' then
+      S := S + EnvLine('TELEGRAM_BOT_USERNAME', PageOptional.Values[5]);
 
     EnvContent := AnsiString(S);
     SaveStringToFile(EnvPath, EnvContent, False);

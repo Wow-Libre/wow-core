@@ -27,8 +27,10 @@ Instalador para **Wow Libre Core** con asistente que configura base de datos, pu
 
 - **Directorio de instalación**
 - **Base de datos:** URL JDBC (`DB_CORE_URL`), usuario (`DB_CORE_USERNAME`) y contraseña (`DB_CORE_PASSWORD`) de MySQL
-- **Servidor:** Puerto del Core (`CORE_SERVER_PORT`, ej. 8091), Secret JWT (`CORE_JWT_SECRET_KEY`), dominio público (`HOST_DOMAIN`)
+- **Servidor:** Puerto del Core (`CORE_SERVER_PORT`), Secret JWT (`CORE_JWT_SECRET_KEY`), dominio público (`HOST_DOMAIN`)
+- **Correo (SMTP):** Host, puerto, usuario y contraseña (`CORE_GOOGLE_*`) para envío de emails
 - **CORS:** Orígenes permitidos (`APP_CORS_ALLOWED_ORIGINS`)
+- **Opcionales:** Clave de firma (`APP_SIGNATURE_SECRET_KEY`), URL PayU (`PAYU_API_URL`), reCAPTCHA (`GOOGLE_API_SECRET`), Telegram (habilitado, token, username)
 
 Al finalizar, en la carpeta de instalación quedan: el JAR, `.env` y `IniciarCore.bat`. El usuario ejecuta el `.bat` o el acceso directo para arrancar con `--spring.profiles.active=prod`.
 
@@ -36,17 +38,27 @@ Al finalizar, en la carpeta de instalación quedan: el JAR, `.env` y `IniciarCor
 
 Coinciden con `application.yml` (perfil `prod`):
 
-| Variable               | Descripción                          |
-|------------------------|--------------------------------------|
-| `DB_CORE_URL`          | URL JDBC de la base de datos         |
-| `DB_CORE_USERNAME`     | Usuario MySQL                        |
-| `DB_CORE_PASSWORD`     | Contraseña MySQL                     |
-| `CORE_SERVER_PORT`     | Puerto del servidor (ej. 8091)      |
-| `CORE_JWT_SECRET_KEY`  | Clave secreta para JWT               |
-| `HOST_DOMAIN`          | Dominio del frontend                 |
-| `APP_CORS_ALLOWED_ORIGINS` | Orígenes CORS permitidos (opcional) |
+| Variable                   | Descripción                              |
+|----------------------------|------------------------------------------|
+| `DB_CORE_URL`              | URL JDBC de la base de datos             |
+| `DB_CORE_USERNAME`         | Usuario MySQL                            |
+| `DB_CORE_PASSWORD`         | Contraseña MySQL                         |
+| `CORE_SERVER_PORT`         | Puerto del servidor (ej. 8091)           |
+| `CORE_JWT_SECRET_KEY`      | Clave secreta para JWT                   |
+| `HOST_DOMAIN`              | Dominio del frontend                     |
+| `CORE_GOOGLE_HOST`         | Host SMTP (ej. smtp.gmail.com)            |
+| `CORE_GOOGLE_PORT`         | Puerto SMTP (ej. 587)                    |
+| `CORE_GOOGLE_USERNAME`     | Usuario/email SMTP                       |
+| `CORE_GOOGLE_PASSWORD`     | Contraseña o contraseña de aplicación    |
+| `APP_CORS_ALLOWED_ORIGINS` | Orígenes CORS permitidos                 |
+| `APP_SIGNATURE_SECRET_KEY` | Clave de firma de la aplicación          |
+| `PAYU_API_URL`             | URL de la API PayU (sandbox/producción)  |
+| `GOOGLE_API_SECRET`        | Clave secreta reCAPTCHA                  |
+| `TELEGRAM_BOT_ENABLED`     | true/false para habilitar bot            |
+| `TELEGRAM_BOT_TOKEN`       | Token del bot de Telegram                |
+| `TELEGRAM_BOT_USERNAME`    | Username del bot (ej. @WowLibre_bot)     |
 
-Otras variables (mail, Telegram, etc.) se pueden añadir manualmente en `.env` después de instalar.
+Otras variables (`TELEGRAM_RATE_LIMIT_MAX`, `TELEGRAM_RATE_LIMIT_WINDOW_SEC`, `DD_SITE`, etc.) se pueden añadir manualmente en `.env` después de instalar.
 
 ## Icono opcional
 
