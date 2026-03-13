@@ -25,7 +25,7 @@ public class RealmsSchedule {
         this.saveRealmPort = saveRealmPort;
     }
 
-    @Scheduled(cron = "1 0/15 * * * *")
+    @Scheduled(cron = "*/20 * * * * *")
     public void LoginRealm() {
         final String transactionId = UUID.randomUUID().toString();
         List<RealmEntity> realms = obtainRealmPort.findByStatusIsTrue(transactionId);

@@ -477,7 +477,7 @@ create table platform.plans
     tax             VARCHAR(50)           NOT null,
     return_tax      VARCHAR(50)           NOT null,
     features        JSON                  null,
-    LANGUAGE        VARCHAR(20),
+    language        VARCHAR(20),
     primary key (id)
 );
 
@@ -701,3 +701,144 @@ CREATE TABLE platform.character_benefit_guild
 );
 
 
+-- Tablas para el minijuego Trivia del bot de Telegram.
+-- Ejecutar manualmente si usas ddl-auto: none.
+
+CREATE TABLE IF NOT EXISTS trivia_daily_usage
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id    BIGINT NOT NULL,
+    usage_date DATE   NOT NULL,
+    count      INT    NOT NULL DEFAULT 0,
+    UNIQUE KEY uk_user_date (user_id, usage_date)
+);
+
+CREATE TABLE IF NOT EXISTS trivia_daily_create
+(
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id    BIGINT NOT NULL,
+    usage_date DATE   NOT NULL,
+    count      INT    NOT NULL DEFAULT 0,
+    UNIQUE KEY uk_user_date (user_id, usage_date)
+);
+
+CREATE TABLE IF NOT EXISTS trivia_question
+(
+    id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
+    question_text      VARCHAR(500) NOT NULL,
+    option_a           VARCHAR(200) NOT NULL,
+    option_b           VARCHAR(200) NOT NULL,
+    option_c           VARCHAR(200) NOT NULL,
+    option_d           VARCHAR(200) NOT NULL,
+    correct_option     VARCHAR(1)   NOT NULL,
+    active             BOOLEAN      NOT NULL DEFAULT TRUE,
+    created_by_user_id BIGINT       NULL
+);
+
+CREATE TABLE IF NOT EXISTS trivia_question_rating
+(
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    question_id BIGINT  NOT NULL,
+    user_id     BIGINT  NOT NULL,
+    is_positive BOOLEAN NOT NULL,
+    UNIQUE KEY uk_question_user (question_id, user_id)
+);
+
+-- MySQL: id debe ser AUTO_INCREMENT para que Hibernate (GenerationType.IDENTITY) asigne el valor.
+CREATE TABLE IF NOT EXISTS platform.notifications
+(
+    id         BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title      VARCHAR(500) NOT NULL,
+    message    TEXT,
+    created_at TIMESTAMP    NULL
+);
+
+CREATE TABLE IF NOT EXISTS platform.notification_read
+(
+    id              BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    notification_id BIGINT NOT NULL,
+    user_id         BIGINT NOT NULL,
+    UNIQUE KEY uk_notification_user (notification_id, user_id),
+    CONSTRAINT fk_notification_read_notification
+        FOREIGN KEY (notification_id) REFERENCES platform.notifications (id) ON DELETE CASCADE
+);
+
+
+-- Battle pass: temporadas por reino, premios por nivel (1-80), reclamaciones por personaje/cuenta/reino
+CREATE TABLE IF NOT EXISTS platform.battle_pass_season
+(
+    id         BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    realm_id   INT          NOT NULL,
+    name       VARCHAR(255) NOT NULL,
+    start_date DATETIME     NOT NULL,
+    end_date   DATETIME     NOT NULL,
+    is_active  TINYINT(1) DEFAULT 1,
+    created_at DATETIME   DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_realm_dates (realm_id, start_date, end_date)
+);
+
+CREATE TABLE IF NOT EXISTS platform.battle_pass_reward
+(
+    id           BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    season_id    BIGINT       NOT NULL,
+    level        INT          NOT NULL,
+    name         VARCHAR(255) NOT NULL,
+    image_url    VARCHAR(512),
+    core_item_id INT          NOT NULL,
+    wowhead_id   INT          NULL,
+    sort_order   INT      DEFAULT 0,
+    created_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at   DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_season_level (season_id, level),
+    INDEX idx_season (season_id),
+    CONSTRAINT fk_bp_reward_season FOREIGN KEY (season_id) REFERENCES platform.battle_pass_season (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS platform.battle_pass_claim
+(
+    id           BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    season_id    BIGINT NOT NULL,
+    realm_id     INT    NOT NULL,
+    account_id   INT    NOT NULL,
+    character_id INT    NOT NULL,
+    reward_id    BIGINT NOT NULL,
+    claimed_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_character_reward (season_id, realm_id, account_id, character_id, reward_id),
+    INDEX idx_character_progress (season_id, realm_id, account_id, character_id),
+    CONSTRAINT fk_bp_claim_season FOREIGN KEY (season_id) REFERENCES platform.battle_pass_season (id),
+    CONSTRAINT fk_bp_claim_reward FOREIGN KEY (reward_id) REFERENCES platform.battle_pass_reward (id)
+);
+
+
+
+-- Catálogo de cartas: código, URL, nombre y probabilidad de salir (1-100) al comprar un sobre.
+-- Ejecutar PRIMERO (user_cards depende de esta tabla por FK).
+-- Ejemplo: mysql -u user -p platform < src/main/resources/db/card_catalog.sql
+CREATE TABLE IF NOT EXISTS platform.card_catalog
+(
+    code         VARCHAR(32)  NOT NULL PRIMARY KEY,
+    image_url    VARCHAR(512) NOT NULL,
+    display_name VARCHAR(128)          DEFAULT NULL,
+    probability  TINYINT      NOT NULL DEFAULT 50 COMMENT 'Probabilidad de salir en un sobre (1-100)',
+    created_at   DATETIME              DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- Cartas por usuario: cantidad de copias por (user_id, card_code). Permite duplicados y envío entre usuarios.
+-- quantity: copias que tiene el usuario (al comprar sobre repetida se incrementa; al enviar se decrementa).
+-- Si user_cards ya existía sin quantity: ALTER TABLE platform.user_cards ADD COLUMN quantity INT NOT NULL DEFAULT 1 AFTER card_code;
+-- Ejecutar DESPUÉS de card_catalog.sql (hay FK card_code -> card_catalog.code).
+
+
+CREATE TABLE IF NOT EXISTS platform.user_cards
+(
+    id          BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id     BIGINT      NOT NULL,
+    card_code   VARCHAR(32) NOT NULL,
+    quantity    INT         NOT NULL DEFAULT 1,
+    obtained_at DATETIME             DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_user_card (user_id, card_code),
+    INDEX idx_user_cards_user (user_id),
+    CONSTRAINT fk_user_cards_catalog FOREIGN KEY (card_code) REFERENCES platform.card_catalog (code) ON DELETE RESTRICT ON UPDATE CASCADE
+);

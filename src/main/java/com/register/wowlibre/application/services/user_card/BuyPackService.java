@@ -1,23 +1,20 @@
 package com.register.wowlibre.application.services.user_card;
 
-import com.register.wowlibre.domain.dto.user_card.CardItemDto;
-import com.register.wowlibre.domain.dto.user_card.CardWithProbabilityDto;
-import com.register.wowlibre.domain.exception.BadRequestException;
-import com.register.wowlibre.domain.port.in.user_card.BuyPackPort;
-import com.register.wowlibre.domain.port.in.wallet.WalletPort;
-import com.register.wowlibre.domain.port.out.user_card.ObtainCardCatalog;
-import com.register.wowlibre.domain.port.out.user_card.SaveUserCards;
-import org.springframework.stereotype.Service;
+import com.register.wowlibre.domain.dto.user_card.*;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.port.in.user_card.*;
+import com.register.wowlibre.domain.port.in.wallet.*;
+import com.register.wowlibre.domain.port.out.user_card.*;
+import org.springframework.stereotype.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.stream.*;
 
 @Service
 public class BuyPackService implements BuyPackPort {
 
-    private static final long PACK_COST_POINTS = 200L;
+    private static final long PACK_COST_POINTS = 50L;
     private static final int CARDS_PER_PACK = 3;
 
     private final WalletPort walletPort;
@@ -46,7 +43,8 @@ public class BuyPackService implements BuyPackPort {
                 .collect(Collectors.groupingBy(java.util.function.Function.identity(), Collectors.counting()));
         List<CardItemDto> catalogItems = obtainCardCatalog.findByCodes(new ArrayList<>(countInPack.keySet()));
         return catalogItems.stream()
-                .map(c -> new CardItemDto(c.getCode(), c.getImageUrl(), c.getName(), countInPack.get(c.getCode()).intValue()))
+                .map(c -> new CardItemDto(c.getCode(), c.getImageUrl(), c.getName(),
+                        countInPack.get(c.getCode()).intValue()))
                 .collect(Collectors.toList());
     }
 
