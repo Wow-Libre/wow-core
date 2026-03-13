@@ -74,6 +74,11 @@ h2/*.log.db
 # Spring Boot Repackaged JAR (if building a fat JAR)
 spring-boot-loader/
 
+# Installer output (Inno Setup), copied JAR and launcher .exe
+/installer/output/
+/installer/app/
+/installer/IniciarCore.exe
+
 # Local configuration files
 *.env
 *.local
