@@ -24,6 +24,10 @@ public class CardCatalogEntity {
     @Column(name = "probability", nullable = false)
     private Integer probability = 50;
 
+    /** Si está activa aparece en catálogo y en sorteos de sobres. */
+    @Column(name = "active", nullable = false)
+    private Boolean active = true;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

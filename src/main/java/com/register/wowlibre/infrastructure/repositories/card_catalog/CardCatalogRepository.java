@@ -7,4 +7,6 @@ import java.util.List;
 public interface CardCatalogRepository extends org.springframework.data.jpa.repository.JpaRepository<CardCatalogEntity, String> {
 
     List<CardCatalogEntity> findByCodeIn(List<String> codes);
+
+    List<CardCatalogEntity> findByActiveTrue();
 }

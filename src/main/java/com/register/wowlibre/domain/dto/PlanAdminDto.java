@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,4 +27,6 @@ public class PlanAdminDto {
 
   @JsonProperty("frequency_value")
   private Integer frequencyValue;
+
+  private List<String> features;
 }

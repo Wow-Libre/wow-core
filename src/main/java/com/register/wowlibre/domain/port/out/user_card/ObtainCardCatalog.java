@@ -1,5 +1,6 @@
 package com.register.wowlibre.domain.port.out.user_card;
 
+import com.register.wowlibre.domain.dto.user_card.CardCatalogAdminDto;
 import com.register.wowlibre.domain.dto.user_card.CardItemDto;
 import com.register.wowlibre.domain.dto.user_card.CardWithProbabilityDto;
 
@@ -25,4 +26,9 @@ public interface ObtainCardCatalog {
      * Sin probabilidad; solo para visualización de slots.
      */
     List<CardItemDto> findAllForDisplay();
+
+    /**
+     * Devuelve todo el catálogo para administración (incluye activas e inactivas).
+     */
+    List<CardCatalogAdminDto> findAllForAdmin(String transactionId);
 }
