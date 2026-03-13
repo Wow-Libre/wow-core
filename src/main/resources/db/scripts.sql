@@ -821,7 +821,8 @@ CREATE TABLE IF NOT EXISTS platform.card_catalog
     image_url    VARCHAR(512) NOT NULL,
     display_name VARCHAR(128)          DEFAULT NULL,
     probability  TINYINT      NOT NULL DEFAULT 50 COMMENT 'Probabilidad de salir en un sobre (1-100)',
-    created_at   DATETIME              DEFAULT CURRENT_TIMESTAMP
+    created_at   DATETIME              DEFAULT CURRENT_TIMESTAMP,
+    active boolean NOT NULL DEFAULT true
 );
 
 
