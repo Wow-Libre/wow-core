@@ -106,6 +106,7 @@ public class PlanService implements PlanPort {
         double discountedPrice = plan.getPrice() != null
                 ? plan.getPrice() * (1 - discountPct / 100.0)
                 : 0.0;
+        List<String> features = parseFeatures(plan.getFeatures());
         return new PlanAdminDto(
                 plan.getId(),
                 plan.getName(),
@@ -115,7 +116,8 @@ public class PlanService implements PlanPort {
                 discountedPrice,
                 plan.isStatus(),
                 plan.getFrequencyType(),
-                plan.getFrequencyValue()
+                plan.getFrequencyValue(),
+                features
         );
     }
 
@@ -128,7 +130,21 @@ public class PlanService implements PlanPort {
         entity.setStatus(request.getStatus() != null ? request.getStatus() : true);
         entity.setFrequencyType(request.getFrequencyType() != null ? request.getFrequencyType() : "MONTH");
         entity.setFrequencyValue(request.getFrequencyValue() != null ? request.getFrequencyValue() : 1);
+        if (request.getFeatures() != null) {
+            entity.setFeatures(serializeFeatures(request.getFeatures()));
+        }
         return entity;
+    }
+
+    private String serializeFeatures(List<String> features) {
+        if (features == null || features.isEmpty()) {
+            return "[]";
+        }
+        try {
+            return objectMapper.writeValueAsString(features);
+        } catch (Exception e) {
+            return "[]";
+        }
     }
 
     private void applyRequestToEntity(PlanAdminRequestDto request, PlansEntity entity) {

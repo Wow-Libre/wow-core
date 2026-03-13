@@ -100,8 +100,10 @@ public class SecurityConfiguration {
                                     "/api/interstitial/list",
                                     "/api/subscription/admin/list",
                                     "/api/plan/admin/**",
+                                    "/api/cards/admin/**",
                                     "/api/notifications/admin/**",
-                                    "/api/users/admin/**")
+                                    "/api/users/admin/**",
+                                    "/api/battle-pass/admin/**")
                             .hasAuthority(Rol.ADMIN.getName())
                             .requestMatchers(HttpMethod.POST,
                                     "/api/news",
