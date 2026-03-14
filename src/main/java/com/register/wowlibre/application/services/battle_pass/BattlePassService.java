@@ -1,29 +1,29 @@
 package com.register.wowlibre.application.services.battle_pass;
 
 import com.register.wowlibre.domain.dto.battle_pass.*;
-import com.register.wowlibre.domain.exception.InternalException;
-import com.register.wowlibre.domain.model.ItemQuantityModel;
-import com.register.wowlibre.domain.port.in.account_validation.AccountValidationPort;
-import com.register.wowlibre.domain.port.in.battle_pass.BattlePassPort;
-import com.register.wowlibre.domain.port.in.characters.CharactersPort;
-import com.register.wowlibre.domain.port.in.wowlibre.WowLibrePort;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.model.*;
+import com.register.wowlibre.domain.port.in.account_validation.*;
+import com.register.wowlibre.domain.port.in.battle_pass.*;
+import com.register.wowlibre.domain.port.in.characters.*;
+import com.register.wowlibre.domain.port.in.wowlibre.*;
 import com.register.wowlibre.domain.port.out.battle_pass.*;
 import com.register.wowlibre.infrastructure.entities.transactions.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.*;
+import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.*;
+import java.time.format.*;
+import java.util.*;
+import java.util.stream.*;
 
 @Service
 @RequiredArgsConstructor
 public class BattlePassService implements BattlePassPort {
 
     private static final DateTimeFormatter ISO_DATE_TIME = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-    private static final String BENEFIT_TYPE_BATTLE_PASS = "BATTLE_PASS";
+    private static final String BENEFIT_TYPE_BATTLE_PASS = "ITEM";
 
     private final ObtainBattlePassSeason obtainBattlePassSeason;
     private final SaveBattlePassSeason saveBattlePassSeason;
@@ -51,7 +51,8 @@ public class BattlePassService implements BattlePassPort {
     }
 
     @Override
-    public BattlePassProgressDto getProgress(Long realmId, Long accountId, Long characterId, Long seasonId, Long userId, String transactionId) {
+    public BattlePassProgressDto getProgress(Long realmId, Long accountId, Long characterId, Long seasonId,
+                                             Long userId, String transactionId) {
         accountValidationPort.verifyAccount(userId, accountId, realmId, transactionId);
         var character = charactersPort.getCharacter(userId, characterId, accountId, transactionId);
         int characterLevel = character != null && character.getLevel() != null ? character.getLevel() : 0;
@@ -87,11 +88,13 @@ public class BattlePassService implements BattlePassPort {
             throw new InternalException("Reward does not belong to this season", transactionId);
         }
 
-        if (obtainBattlePassClaim.existsClaim(request.getSeasonId(), request.getRealmId(), request.getAccountId(), request.getCharacterId(), request.getRewardId())) {
+        if (obtainBattlePassClaim.existsClaim(request.getSeasonId(), request.getRealmId(), request.getAccountId(),
+                request.getCharacterId(), request.getRewardId())) {
             throw new InternalException("Reward already claimed", transactionId);
         }
 
-        var character = charactersPort.getCharacter(userId, request.getCharacterId(), request.getAccountId(), transactionId);
+        var character = charactersPort.getCharacter(userId, request.getCharacterId(), request.getAccountId(),
+                transactionId);
         int characterLevel = character != null && character.getLevel() != null ? character.getLevel() : 0;
         if (characterLevel < reward.getLevel()) {
             throw new InternalException("Character level " + characterLevel + " is below required level " + reward.getLevel(), transactionId);
