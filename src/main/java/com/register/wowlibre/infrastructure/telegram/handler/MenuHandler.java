@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * Muestra el menú principal. Si el usuario está logueado muestra "Desconectarse";
- * si no, muestra "Login". Siempre muestra Realmlist y Trivia.
+ * si no, muestra "Login". Incluye Realmlist, suscripción y puntos.
  */
 @Component
 @Order(20)
@@ -25,8 +25,6 @@ public class MenuHandler implements TelegramCommandHandler {
     public static final String MENU_LOGIN = "Login";
     public static final String MENU_LOGOUT = "Desconectarse";
     public static final String MENU_REALMLIST = "Realmlist";
-    public static final String MENU_TRIVIA = "Trivia";
-    public static final String MENU_CREATE_QUESTION = "Crear pregunta";
     /** Opción llamativa para ver el saldo de puntos */
     public static final String MENU_MY_POINTS = "💰 Mis puntos";
 
@@ -50,12 +48,9 @@ public class MenuHandler implements TelegramCommandHandler {
         row1.add(new KeyboardButton(MENU_REALMLIST));
         rows.add(row1);
         KeyboardRow row2 = new KeyboardRow();
-        row2.add(new KeyboardButton(MENU_TRIVIA));
-        row2.add(new KeyboardButton(MENU_CREATE_QUESTION));
+        row2.add(new KeyboardButton(SubscriptionTelegramHandler.MENU_SUBSCRIPTION));
+        row2.add(new KeyboardButton(MENU_MY_POINTS));
         rows.add(row2);
-        KeyboardRow row3 = new KeyboardRow();
-        row3.add(new KeyboardButton(MENU_MY_POINTS));
-        rows.add(row3);
         ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(rows);
         keyboard.setResizeKeyboard(true);
         keyboard.setOneTimeKeyboard(false);
@@ -77,9 +72,8 @@ public class MenuHandler implements TelegramCommandHandler {
         long chatId = update.getMessage().getChatId();
         String text = update.getMessage().getText().trim();
 
-        // Login, Desconectarse, Realmlist, Trivia, Crear pregunta y Mis puntos los manejan otros handlers
         if (MENU_LOGIN.equalsIgnoreCase(text) || MENU_LOGOUT.equals(text)
-                || MENU_REALMLIST.equals(text) || MENU_TRIVIA.equals(text) || MENU_CREATE_QUESTION.equals(text)
+                || MENU_REALMLIST.equals(text) || SubscriptionTelegramHandler.MENU_SUBSCRIPTION.equals(text)
                 || MENU_MY_POINTS.equals(text)) {
             return false;
         }
@@ -90,8 +84,7 @@ public class MenuHandler implements TelegramCommandHandler {
         TelegramSession session = sessionStore.getOrCreate(chatId);
         String menuText = "Menú principal. Elige una opción:\n\n"
                 + "• Realmlist: ver reinos disponibles.\n"
-                + "• Trivia: responde preguntas (límite 10/día). +1 punto por acierto. Tras cada pregunta puedes valorar 👍/👎.\n"
-                + "• Crear pregunta: escribe una pregunta de trivia (A, B, C, D). +1 punto al publicarla. Límite 10/día. Si los usuarios votan 👎, se te descontarán 2 puntos por cada voto negativo.\n"
+                + "• 📋 Suscripción: tras hacer login, ver si tu suscripción está activa, plan y próxima renovación.\n"
                 + "• 💰 Mis puntos: ver tu saldo de puntos.";
         SendMessage.SendMessageBuilder builder = SendMessage.builder()
                 .chatId(chatId)

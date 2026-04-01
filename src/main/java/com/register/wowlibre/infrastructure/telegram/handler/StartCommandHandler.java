@@ -14,8 +14,8 @@ public class StartCommandHandler implements TelegramCommandHandler {
 
     private static final String CMD_START = "/start";
     private static final String MSG_WELCOME = "Bienvenido a WowLibre. Usa el menú:\n"
-            + "• Login / Realmlist / Trivia / Crear pregunta / 💰 Mis puntos.\n"
-            + "Trivia: 10 preguntas/día, +1 por acierto. Crear pregunta: +1 al publicar, -2 por cada voto 👎.";
+            + "• Login / Realmlist / 📋 Suscripción / 💰 Mis puntos.\n"
+            + "Tras el login podrás ver el detalle de tu suscripción y tus puntos.";
 
     private final TelegramSessionStore sessionStore;
 
