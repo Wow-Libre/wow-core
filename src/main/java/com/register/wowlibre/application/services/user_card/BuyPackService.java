@@ -14,7 +14,7 @@ import java.util.stream.*;
 @Service
 public class BuyPackService implements BuyPackPort {
 
-    private static final long PACK_COST_POINTS = 50L;
+    private static final long PACK_COST_POINTS = 3L;
     private static final int CARDS_PER_PACK = 3;
 
     private final WalletPort walletPort;
