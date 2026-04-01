@@ -119,6 +119,11 @@ public class SubscriptionService implements SubscriptionPort {
     }
 
     @Override
+    public Optional<SubscriptionEntity> findActiveSubscription(Long userId, String transactionId) {
+        return obtainSubscription.findByUserIdAndStatus(userId, SubscriptionStatus.ACTIVE.getType());
+    }
+
+    @Override
     public SubscriptionBenefitsDto benefits(Long userId, Long realmId, String language, String transactionId) {
 
         if (!isActiveSubscription(userId, transactionId)) {

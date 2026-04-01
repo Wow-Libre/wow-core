@@ -19,7 +19,8 @@ public class LoginHandler implements TelegramCommandHandler {
     private static final String CMD_LOGIN = "/login";
     private static final String MSG_ENTER_EMAIL = "Ingresa tu correo electrónico de la plataforma:";
     private static final String MSG_ENTER_PASSWORD = "Ingresa tu contraseña:";
-    private static final String MSG_LOGIN_SUCCESS = "Sesión iniciada correctamente. Bienvenido.";
+    private static final String MSG_LOGIN_SUCCESS = "Sesión iniciada correctamente. Bienvenido.\n"
+            + "Puedes usar 📋 Suscripción para ver tu plan y la próxima renovación.";
     private static final String MSG_LOGIN_ERROR = "Correo o contraseña incorrectos. Verifica e intenta de nuevo.";
     private static final String MSG_CANCEL = "Login cancelado.";
 

@@ -25,7 +25,7 @@ public class MyPointsHandler implements TelegramCommandHandler {
         🏆 Tienes %d puntos
         ═══════════════════════
         
-        Gana más jugando a la Trivia (+1 por acierto) o creando preguntas (+1 por publicar).
+        Los puntos se acumulan según las actividades de la plataforma.
         """;
     private static final String TRANSACTION_ID = "[TelegramBot][MisPuntos]";
 
