@@ -141,4 +141,44 @@ public class AccountGameController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(stats, transactionId).ok().build());
     }
+
+    @Operation(summary = "Preview realm link", description = "Checks characters on a realm for the user's linked " +
+            "game account_id (from an existing account_game row) and whether it is already linked to that realm")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Preview generated"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping(path = "/link/preview")
+    public ResponseEntity<GenericResponse<LinkRealmPreviewResponse>> previewLinkRealm(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestParam(name = PARAM_REALM_ID) final Long realmId,
+            @RequestParam(name = "source_account_game_id", required = false) final Long sourceAccountGameId) {
+
+        LinkRealmPreviewResponse preview =
+                accountGamePort.previewLinkRealm(userId, realmId, sourceAccountGameId, transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(preview, transactionId).ok().build());
+    }
+
+    @Operation(summary = "Link game account to another realm", description = "Creates account_game for the same " +
+            "account_id on another realm when the user already has at least one active link")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Linked successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @PostMapping(path = "/link")
+    public ResponseEntity<GenericResponse<Void>> linkRealm(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestBody @Valid LinkRealmRequestDto body) {
+
+        accountGamePort.linkRealm(userId, body.getRealmId(), body.getSourceAccountGameId(), transactionId);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new GenericResponseBuilder<Void>(transactionId).created().build());
+    }
 }

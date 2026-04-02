@@ -44,6 +44,12 @@ public class RealmEntity implements Serializable {
     @Column(name = "external_password")
     private String externalPassword;
     private String disclaimer;
+    /**
+     * Si es true, el reino aparece en el listado público para alta de cuenta de juego.
+     * Reinos sólo para vinculación (mismo auth / otro world) pueden dejarse en false.
+     */
+    @Column(name = "show_in_game_registration", nullable = false)
+    private boolean showInGameRegistration = true;
     @Column(name = "realmlist_id")
     private Long realmListId;
 }

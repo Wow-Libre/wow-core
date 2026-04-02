@@ -1,5 +1,6 @@
 package com.register.wowlibre.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.*;
@@ -31,4 +32,11 @@ public class RealmCreateDto {
     private String type;
     @NotNull
     private Long realmId;
+
+    /**
+     * Si es false, el reino no se ofrece en el alta de cuenta de juego (sí puede usarse para vinculación u otros flujos).
+     * Null se interpreta como true.
+     */
+    @JsonProperty("show_in_game_registration")
+    private Boolean showInGameRegistration;
 }

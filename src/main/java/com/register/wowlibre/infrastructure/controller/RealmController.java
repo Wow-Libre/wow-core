@@ -67,6 +67,18 @@ public class RealmController {
                 .body(new GenericResponseBuilder<>(serverList, transactionId).ok().build());
     }
 
+    /**
+     * Listado para el registro de cuenta de juego: sólo reinos con {@code show_in_game_registration = true}.
+     */
+    @GetMapping("/game-registration")
+    public ResponseEntity<GenericResponse<List<RealmDto>>> serversForGameRegistration(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId) {
+
+        final List<RealmDto> serverList = realmPort.findActiveForGameAccountRegistration(transactionId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(serverList, transactionId).ok().build());
+    }
+
     @GetMapping("/vdp")
     public ResponseEntity<GenericResponse<ServerVdpDto>> vdp(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,

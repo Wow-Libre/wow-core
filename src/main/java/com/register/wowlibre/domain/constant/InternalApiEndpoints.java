@@ -28,6 +28,7 @@ public class InternalApiEndpoints {
     private static final String[] REALM_ENDPOINTS = {
             "/api/realm/advertising/language",
             "/api/realm",
+            "/api/realm/game-registration",
             "/api/realm/key",
             "/api/realm/vdp"
     };

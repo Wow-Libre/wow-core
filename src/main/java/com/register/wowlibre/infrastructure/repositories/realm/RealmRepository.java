@@ -8,6 +8,8 @@ import java.util.*;
 public interface RealmRepository extends CrudRepository<RealmEntity, Long> {
     List<RealmEntity> findByStatusIsTrue();
 
+    List<RealmEntity> findByStatusIsTrueAndShowInGameRegistrationIsTrue();
+
     @Override
     List<RealmEntity> findAll();
 

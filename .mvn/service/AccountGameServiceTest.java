@@ -1,6 +1,7 @@
 package com.register.wowlibre.service;
 
 import com.register.wowlibre.application.services.account_game.*;
+import com.register.wowlibre.domain.dto.CharactersDto;
 import com.register.wowlibre.domain.dto.account_game.*;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.enums.*;
@@ -506,6 +507,131 @@ class AccountGameServiceTest extends BaseTest {
 
         verify(obtainAccountGamePort, never()).findByIdAndUserId(anyLong(), anyLong(), anyString());
         verify(saveAccountGamePort, never()).save(any(AccountGameEntity.class), anyString());
+    }
+
+    @Test
+    void previewLinkRealm_singleSource_success() {
+        long userId = 1L;
+        long targetRealmId = 2L;
+        String tx = "tx-link-preview";
+
+        UserEntity user = createSampleUserEntity();
+        when(userPort.findByUserId(userId, tx)).thenReturn(Optional.of(user));
+
+        RealmEntity sourceRealm = new RealmEntity();
+        sourceRealm.setId(1L);
+        sourceRealm.setStatus(true);
+        sourceRealm.setName("RealmA");
+        AccountGameEntity source = new AccountGameEntity();
+        source.setId(50L);
+        source.setAccountId(999L);
+        source.setStatus(true);
+        source.setRealmId(sourceRealm);
+        source.setUserId(user);
+        source.setGameEmail("g@mail.com");
+
+        when(obtainAccountGamePort.findAllByUserId(userId, tx)).thenReturn(List.of(source));
+        when(obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, 999L, targetRealmId, tx))
+                .thenReturn(Optional.empty());
+
+        RealmEntity targetRealm = new RealmEntity();
+        targetRealm.setId(targetRealmId);
+        targetRealm.setStatus(true);
+        targetRealm.setName("RealmB");
+        targetRealm.setHost("http://b");
+        targetRealm.setJwt("jwt");
+        when(realmPort.findById(targetRealmId, tx)).thenReturn(Optional.of(targetRealm));
+
+        CharactersDto chars = new CharactersDto();
+        chars.setTotalQuantity(2);
+        when(integratorPort.characters(eq("http://b"), eq("jwt"), eq(999L), eq(userId), eq(tx))).thenReturn(chars);
+
+        LinkRealmPreviewResponse preview = service.previewLinkRealm(userId, targetRealmId, null, tx);
+
+        assertTrue(preview.isCanLink());
+        assertFalse(preview.isAlreadyLinked());
+        assertTrue(preview.isHasCharacters());
+        assertEquals(2, preview.getCharacterCount());
+        assertEquals(999L, preview.getAccountId());
+        assertEquals("RealmB", preview.getRealmName());
+    }
+
+    @Test
+    void linkRealm_success_createsRowAndPoints() {
+        long userId = 1L;
+        long targetRealmId = 2L;
+        String tx = "tx-link";
+
+        UserEntity user = createSampleUserEntity();
+        when(userPort.findByUserId(userId, tx)).thenReturn(Optional.of(user));
+
+        RealmEntity sourceRealm = new RealmEntity();
+        sourceRealm.setId(1L);
+        sourceRealm.setStatus(true);
+        AccountGameEntity source = new AccountGameEntity();
+        source.setAccountId(777L);
+        source.setStatus(true);
+        source.setRealmId(sourceRealm);
+        source.setUserId(user);
+        when(obtainAccountGamePort.findAllByUserId(userId, tx)).thenReturn(List.of(source));
+
+        RealmEntity targetRealm = new RealmEntity();
+        targetRealm.setId(targetRealmId);
+        targetRealm.setStatus(true);
+        targetRealm.setHost("http://b");
+        targetRealm.setJwt("jwt");
+        when(realmPort.findById(targetRealmId, tx)).thenReturn(Optional.of(targetRealm));
+
+        when(obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, 777L, targetRealmId, tx))
+                .thenReturn(Optional.empty());
+        when(obtainAccountGamePort.findByUserIdAndRealmId(userId, targetRealmId, tx)).thenReturn(List.of());
+
+        AccountDetailResponse detail = new AccountDetailResponse(777L, "wowuser", "w@mail.com", "WOTLK", false,
+                "0", null, null, null, null, false, null, null, null);
+        when(integratorPort.account("http://b", "jwt", 777L, tx)).thenReturn(detail);
+
+        assertDoesNotThrow(() -> service.linkRealm(userId, targetRealmId, null, tx));
+
+        verify(saveAccountGamePort).save(argThat(e -> e.getAccountId().equals(777L)
+                && e.getRealmId().getId().equals(targetRealmId)
+                && e.isStatus()
+                && "wowuser".equals(e.getUsername())), eq(tx));
+        verify(machinePort).points(userId, 777L, targetRealmId, tx);
+    }
+
+    @Test
+    void linkRealm_alreadyLinked_throwsBadRequest() {
+        long userId = 1L;
+        String tx = "tx-link-dup";
+        UserEntity user = createSampleUserEntity();
+        when(userPort.findByUserId(userId, tx)).thenReturn(Optional.of(user));
+
+        RealmEntity sourceRealm = new RealmEntity();
+        sourceRealm.setStatus(true);
+        AccountGameEntity source = new AccountGameEntity();
+        source.setAccountId(1L);
+        source.setStatus(true);
+        source.setRealmId(sourceRealm);
+        source.setUserId(user);
+        when(obtainAccountGamePort.findAllByUserId(userId, tx)).thenReturn(List.of(source));
+
+        RealmEntity target = new RealmEntity();
+        target.setId(2L);
+        target.setStatus(true);
+        when(realmPort.findById(2L, tx)).thenReturn(Optional.of(target));
+        when(obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, 1L, 2L, tx))
+                .thenReturn(Optional.of(new AccountGameEntity()));
+
+        assertThrows(BadRequestException.class, () -> service.linkRealm(userId, 2L, null, tx));
+        verify(saveAccountGamePort, never()).save(any(), anyString());
+    }
+
+    @Test
+    void previewLinkRealm_noActiveLinks_throwsBadRequest() {
+        when(userPort.findByUserId(1L, "tx")).thenReturn(Optional.of(createSampleUserEntity()));
+        when(obtainAccountGamePort.findAllByUserId(1L, "tx")).thenReturn(List.of());
+
+        assertThrows(BadRequestException.class, () -> service.previewLinkRealm(1L, 2L, null, "tx"));
     }
 
 }

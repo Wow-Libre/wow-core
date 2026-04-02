@@ -16,6 +16,11 @@ public interface RealmPort {
 
     List<RealmDto> findByStatusIsTrue(String transactionId);
 
+    /**
+     * Rein activos marcados para aparecer en el alta de cuenta de juego (listado público).
+     */
+    List<RealmDto> findActiveForGameAccountRegistration(String transactionId);
+
     RealmModel findByNameAndVersionAndStatusIsTrue(String name, Integer expansionId, String transactionId);
 
     Optional<RealmEntity> findById(Long id, String transactionId);

@@ -256,4 +256,30 @@ public class SubscriptionService implements SubscriptionPort {
         );
     }
 
+    @Override
+    public CurrentSubscriptionEnvelopeDto getCurrentSubscriptionForUser(Long userId, String transactionId) {
+        Optional<SubscriptionEntity> sub = obtainSubscription.findByUserIdAndStatus(userId,
+                SubscriptionStatus.ACTIVE.getType());
+        if (sub.isEmpty()) {
+            return new CurrentSubscriptionEnvelopeDto(false, null);
+        }
+        return new CurrentSubscriptionEnvelopeDto(true, toCurrentSubscriptionDto(sub.get()));
+    }
+
+    private CurrentSubscriptionDto toCurrentSubscriptionDto(SubscriptionEntity s) {
+        var plan = s.getPlanId();
+        return new CurrentSubscriptionDto(
+                s.getId(),
+                s.getReferenceNumber(),
+                s.getStatus(),
+                plan != null ? plan.getName() : null,
+                plan != null ? plan.getPrice() : null,
+                plan != null ? plan.getCurrency() : null,
+                plan != null ? plan.getFrequencyType() : null,
+                plan != null ? plan.getFrequencyValue() : null,
+                s.getCreatedAt(),
+                s.getNextInvoiceDate()
+        );
+    }
+
 }
