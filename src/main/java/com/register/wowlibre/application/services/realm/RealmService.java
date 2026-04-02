@@ -104,6 +104,9 @@ public class RealmService implements RealmPort {
                     host, usernameRealm, passwordRealm, transactionId
             );
 
+            boolean showInGameRegistration = realmCreateDto.getShowInGameRegistration() == null
+                    || Boolean.TRUE.equals(realmCreateDto.getShowInGameRegistration());
+
             RealmModel serverDto = RealmModel.builder()
                     .name(realmName)
                     .emulator(realmCreateDto.getEmulator())
@@ -119,6 +122,7 @@ public class RealmService implements RealmPort {
                     .expirationDate(adjustExpirationDate(authToken.getExpirationDate()))
                     .refreshToken(authToken.getRefreshToken())
                     .status(true)
+                    .showInGameRegistration(showInGameRegistration)
                     .realmListId(realmCreateDto.getRealmId())
                     .realmlist(realmCreateDto.getRealmlist())
                     .webSite(realmCreateDto.getWebSite())
@@ -249,6 +253,13 @@ public class RealmService implements RealmPort {
     @Override
     public List<RealmDto> findByStatusIsTrue(String transactionId) {
         return findByStatusIsTrueServers(transactionId).stream().map(this::mapToModel).toList();
+    }
+
+    @Override
+    public List<RealmDto> findActiveForGameAccountRegistration(String transactionId) {
+        return obtainRealmPort.findByStatusIsTrueAndShowInGameRegistrationIsTrue(transactionId).stream()
+                .map(this::mapToModel)
+                .toList();
     }
 
     @Override

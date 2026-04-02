@@ -51,6 +51,17 @@ public class SubscriptionsController {
                 .body(new GenericResponseBuilder<>(pill, transactionId).created().build());
     }
 
+    @GetMapping("/current")
+    public ResponseEntity<GenericResponse<CurrentSubscriptionEnvelopeDto>> currentSubscriptionDetail(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId) {
+
+        CurrentSubscriptionEnvelopeDto envelope =
+                subscriptionPort.getCurrentSubscriptionForUser(userId, transactionId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<>(envelope, transactionId).ok().build());
+    }
+
     @GetMapping
     public ResponseEntity<GenericResponse<Boolean>> activeSubscription(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,

@@ -25,6 +25,11 @@ public class JpaRealmAdapter implements ObtainRealmPort, SaveRealmPort {
     }
 
     @Override
+    public List<RealmEntity> findByStatusIsTrueAndShowInGameRegistrationIsTrue(String transactionId) {
+        return realmRepository.findByStatusIsTrueAndShowInGameRegistrationIsTrue();
+    }
+
+    @Override
     public Optional<RealmEntity> findByNameAndExpansionAndStatusIsTrue(String name, Integer expansionId) {
         return realmRepository.findByNameAndExpansionIdAndStatusIsTrue(name, expansionId);
     }

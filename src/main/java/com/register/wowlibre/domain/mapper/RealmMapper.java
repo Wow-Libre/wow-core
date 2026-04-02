@@ -29,6 +29,7 @@ public class RealmMapper {
                 .refreshToken(server.getRefreshToken())
                 .realmListId(server.getRealmListId())
                 .realmlist(server.getRealmlist())
+                .showInGameRegistration(server.isShowInGameRegistration())
                 .build();
     }
 
@@ -58,6 +59,7 @@ public class RealmMapper {
         realmEntity.setExternalPassword(server.externalPassword);
         realmEntity.setExternalUsername(server.externalUsername);
         realmEntity.setRealmListId(server.realmListId);
+        realmEntity.setShowInGameRegistration(server.showInGameRegistration);
         return realmEntity;
     }
 

@@ -29,4 +29,6 @@ public interface SubscriptionPort {
     SubscriptionEntity updateNextInvoice(Long userId, Long planId, String transactionId);
 
     SubscriptionAdminListDto getSubscriptionAdminList(String transactionId);
+
+    CurrentSubscriptionEnvelopeDto getCurrentSubscriptionForUser(Long userId, String transactionId);
 }

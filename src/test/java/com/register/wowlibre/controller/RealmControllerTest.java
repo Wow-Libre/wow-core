@@ -75,6 +75,21 @@ class RealmControllerTest {
     }
 
     @Test
+    void serversForGameRegistration_returnsOkWithList() {
+        List<RealmDto> servers = List.of(new RealmDto());
+        when(realmPort.findActiveForGameAccountRegistration("tx")).thenReturn(servers);
+
+        ResponseEntity<GenericResponse<List<RealmDto>>> response =
+                controller.serversForGameRegistration("tx");
+
+        assertEquals(200, response.getStatusCode().value());
+        assertNotNull(response.getBody());
+        assertNotNull(response.getBody().getData());
+        assertEquals(1, response.getBody().getData().size());
+        verify(realmPort).findActiveForGameAccountRegistration("tx");
+    }
+
+    @Test
     void vdp_returnsOk() {
         Long serverId = 1L;
         Integer expansionId = 1;

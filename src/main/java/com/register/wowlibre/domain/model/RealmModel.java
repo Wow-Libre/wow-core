@@ -28,4 +28,6 @@ public class RealmModel {
     public String externalUsername;
     public Long userId;
     public Long realmListId;
+    @Builder.Default
+    public boolean showInGameRegistration = true;
 }

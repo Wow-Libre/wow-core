@@ -130,6 +130,7 @@ CREATE TABLE platform.realm
     avatar_url        TEXT,
     disclaimer        VARCHAR(80),
     status            BOOLEAN               NOT NULL DEFAULT true,
+    show_in_game_registration BOOLEAN       NOT NULL DEFAULT true,
 
     -- =====================================================
     -- AUDITORÍA
@@ -806,3 +807,6 @@ CREATE TABLE IF NOT EXISTS platform.user_cards
     INDEX idx_user_cards_user (user_id),
     CONSTRAINT fk_user_cards_catalog FOREIGN KEY (card_code) REFERENCES platform.card_catalog (code) ON DELETE RESTRICT ON UPDATE CASCADE
 );
+
+-- Reinos ya creados: añadir columna (ejecutar una vez en BBDD existentes; en instalaciones nuevas ya está en CREATE TABLE).
+-- ALTER TABLE platform.realm ADD COLUMN show_in_game_registration BOOLEAN NOT NULL DEFAULT TRUE;

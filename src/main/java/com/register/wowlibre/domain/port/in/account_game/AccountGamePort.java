@@ -19,4 +19,9 @@ public interface AccountGamePort {
     void deactivate(List<Long> id, Long userId, String transactionId);
 
     AccountGameStatsDto stats(Long userId, String transactionId);
+
+    LinkRealmPreviewResponse previewLinkRealm(Long userId, Long realmId, Long sourceAccountGameId,
+                                              String transactionId);
+
+    void linkRealm(Long userId, Long realmId, Long sourceAccountGameId, String transactionId);
 }

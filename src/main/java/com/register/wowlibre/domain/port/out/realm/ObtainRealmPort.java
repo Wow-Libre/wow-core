@@ -7,6 +7,8 @@ import java.util.*;
 public interface ObtainRealmPort {
     List<RealmEntity> findByStatusIsTrue(String transactionId);
 
+    List<RealmEntity> findByStatusIsTrueAndShowInGameRegistrationIsTrue(String transactionId);
+
     List<RealmEntity> findAll(String transactionId);
 
     Optional<RealmEntity> findByNameAndExpansionAndStatusIsTrue(String name, Integer expansionId);

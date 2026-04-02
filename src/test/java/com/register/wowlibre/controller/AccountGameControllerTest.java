@@ -3,6 +3,8 @@ package com.register.wowlibre.controller;
 import com.register.wowlibre.domain.dto.account_game.AccountGameDetailDto;
 import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
 import com.register.wowlibre.domain.dto.account_game.CreateAccountGameDto;
+import com.register.wowlibre.domain.dto.account_game.LinkRealmPreviewResponse;
+import com.register.wowlibre.domain.dto.account_game.LinkRealmRequestDto;
 import com.register.wowlibre.domain.dto.client.AccountBannedResponse;
 import com.register.wowlibre.domain.model.AccountGameModel;
 import com.register.wowlibre.domain.port.in.account_game.AccountGamePort;
@@ -173,5 +175,43 @@ class AccountGameControllerTest {
         // Assert
         assertThat(response.getStatusCode()).isEqualTo(org.springframework.http.HttpStatus.NO_CONTENT);
         verify(accountGamePort).account(userId, accountId, serverId, transactionId);
+    }
+
+    @Test
+    void shouldReturnLinkPreview() {
+        long userId = 1L;
+        long realmId = 5L;
+        String transactionId = "tx-link";
+        LinkRealmPreviewResponse preview = LinkRealmPreviewResponse.builder()
+                .realmId(realmId)
+                .realmName("R")
+                .accountId(10L)
+                .hasCharacters(true)
+                .characterCount(1)
+                .alreadyLinked(false)
+                .canLink(true)
+                .build();
+        when(accountGamePort.previewLinkRealm(userId, realmId, null, transactionId)).thenReturn(preview);
+
+        ResponseEntity<GenericResponse<LinkRealmPreviewResponse>> response =
+                controller.previewLinkRealm(transactionId, userId, realmId, null);
+
+        assertEquals(200, response.getStatusCode().value());
+        assertThat(response.getBody().getData().getAccountId()).isEqualTo(10L);
+        verify(accountGamePort).previewLinkRealm(userId, realmId, null, transactionId);
+    }
+
+    @Test
+    void shouldLinkRealm() {
+        long userId = 1L;
+        String transactionId = "tx-link-post";
+        LinkRealmRequestDto body = new LinkRealmRequestDto();
+        body.setRealmId(3L);
+        body.setSourceAccountGameId(99L);
+
+        ResponseEntity<GenericResponse<Void>> response = controller.linkRealm(transactionId, userId, body);
+
+        assertEquals(201, response.getStatusCode().value());
+        verify(accountGamePort).linkRealm(userId, 3L, 99L, transactionId);
     }
 }

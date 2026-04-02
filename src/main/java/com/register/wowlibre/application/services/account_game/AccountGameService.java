@@ -1,5 +1,6 @@
 package com.register.wowlibre.application.services.account_game;
 
+import com.register.wowlibre.domain.dto.CharactersDto;
 import com.register.wowlibre.domain.dto.account_game.*;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.enums.*;
@@ -17,6 +18,7 @@ import org.slf4j.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 @Service
 public class AccountGameService implements AccountGamePort {
@@ -219,6 +221,137 @@ public class AccountGameService implements AccountGamePort {
         return new AccountGameStatsDto(totalAccounts, totalRealms);
     }
 
+    @Override
+    public LinkRealmPreviewResponse previewLinkRealm(Long userId, Long realmId, Long sourceAccountGameId,
+                                                     String transactionId) {
+        requireUser(userId, transactionId);
+        AccountGameEntity source = resolveSourceAccountGame(userId, sourceAccountGameId, transactionId);
+        RealmEntity targetRealm = requireActiveRealm(realmId, transactionId);
+
+        final boolean alreadyLinked = obtainAccountGamePort
+                .findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, source.getAccountId(), realmId,
+                        transactionId)
+                .isPresent();
+
+        CharactersDto characters = integratorPort.characters(targetRealm.getHost(), targetRealm.getJwt(),
+                source.getAccountId(), userId, transactionId);
+        int characterCount = resolveCharacterCount(characters);
+        boolean hasCharacters = characterCount > 0;
+
+        boolean canLink = !alreadyLinked && targetRealm.isStatus();
+
+        return LinkRealmPreviewResponse.builder()
+                .realmId(targetRealm.getId())
+                .realmName(targetRealm.getName())
+                .accountId(source.getAccountId())
+                .hasCharacters(hasCharacters)
+                .characterCount(characterCount)
+                .alreadyLinked(alreadyLinked)
+                .canLink(canLink)
+                .build();
+    }
+
+    @Override
+    public void linkRealm(Long userId, Long realmId, Long sourceAccountGameId, String transactionId) {
+        requireUser(userId, transactionId);
+        AccountGameEntity source = resolveSourceAccountGame(userId, sourceAccountGameId, transactionId);
+        RealmEntity targetRealm = requireActiveRealm(realmId, transactionId);
+
+        if (obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, source.getAccountId(),
+                realmId, transactionId).isPresent()) {
+            LOGGER.warn("[AccountGameService] [linkRealm] Already linked - userId: {}, accountId: {}, realmId: {}, " +
+                    "transactionId: {}", userId, source.getAccountId(), realmId, transactionId);
+            throw new BadRequestException("This game account is already linked to this realm", transactionId);
+        }
+
+        final int existingOnTargetRealm =
+                obtainAccountGamePort.findByUserIdAndRealmId(userId, realmId, transactionId).size();
+        if (existingOnTargetRealm >= MAXIMUM_NUMBER_OF_ACCOUNTS_ALLOWED) {
+            LOGGER.error("[AccountGameService] [linkRealm] Maximum accounts per realm - userId: {}, realmId: {}, " +
+                    "transactionId: {}", userId, realmId, transactionId);
+            throw new InternalException("You cannot link more than 20 accounts per realm", transactionId);
+        }
+
+        AccountDetailResponse account = integratorPort.account(targetRealm.getHost(), targetRealm.getJwt(),
+                source.getAccountId(), transactionId);
+
+        AccountGameEntity linked = new AccountGameEntity();
+        linked.setAccountId(source.getAccountId());
+        linked.setRealmId(targetRealm);
+        linked.setUserId(source.getUserId());
+        linked.setUsername(account.username());
+        linked.setGameEmail(account.email() != null ? account.email() : source.getGameEmail());
+        linked.setStatus(true);
+        saveAccountGamePort.save(linked, transactionId);
+        machinePort.points(userId, source.getAccountId(), realmId, transactionId);
+    }
+
+    private void requireUser(Long userId, String transactionId) {
+        if (userPort.findByUserId(userId, transactionId).isEmpty()) {
+            LOGGER.error("[AccountGameService] [requireUser] User not found - userId: {}, transactionId: {}", userId,
+                    transactionId);
+            throw new UnauthorizedException("The client is not available or does not exist", transactionId);
+        }
+    }
+
+    private RealmEntity requireActiveRealm(Long realmId, String transactionId) {
+        Optional<RealmEntity> realm = realmPort.findById(realmId, transactionId);
+        if (realm.isEmpty() || !realm.get().isStatus()) {
+            LOGGER.error("[AccountGameService] [requireActiveRealm] Realm not found or inactive - realmId: {}, " +
+                    "transactionId: {}", realmId, transactionId);
+            throw new InternalException("The realm is not available", transactionId);
+        }
+        return realm.get();
+    }
+
+    private AccountGameEntity resolveSourceAccountGame(Long userId, Long sourceAccountGameId,
+                                                         String transactionId) {
+        if (sourceAccountGameId != null) {
+            Optional<AccountGameEntity> row =
+                    obtainAccountGamePort.findByIdAndUserId(sourceAccountGameId, userId, transactionId);
+            if (row.isEmpty() || !row.get().isStatus() || !row.get().getRealmId().isStatus()) {
+                LOGGER.error("[AccountGameService] [resolveSourceAccountGame] Invalid source row - userId: {}, " +
+                        "sourceAccountGameId: {}, transactionId: {}", userId, sourceAccountGameId, transactionId);
+                throw new BadRequestException("Invalid or inactive source account link", transactionId);
+            }
+            return row.get();
+        }
+
+        List<AccountGameEntity> candidates = obtainAccountGamePort.findAllByUserId(userId, transactionId).stream()
+                .filter(a -> a.isStatus() && a.getRealmId().isStatus())
+                .toList();
+
+        if (candidates.isEmpty()) {
+            LOGGER.error("[AccountGameService] [resolveSourceAccountGame] No active links - userId: {}, " +
+                    "transactionId: {}", userId, transactionId);
+            throw new BadRequestException("You must have at least one linked game account", transactionId);
+        }
+
+        Set<Long> distinctAccountIds = candidates.stream()
+                .map(AccountGameEntity::getAccountId)
+                .collect(Collectors.toSet());
+        if (distinctAccountIds.size() > 1) {
+            LOGGER.error("[AccountGameService] [resolveSourceAccountGame] Ambiguous account_id - userId: {}, " +
+                    "transactionId: {}", userId, transactionId);
+            throw new BadRequestException(
+                    "You have several game accounts; send source_account_game_id of the one to extend", transactionId);
+        }
+
+        return candidates.getFirst();
+    }
+
+    private static int resolveCharacterCount(CharactersDto characters) {
+        if (characters == null) {
+            return 0;
+        }
+        if (characters.getTotalQuantity() != null) {
+            return Math.max(0, characters.getTotalQuantity());
+        }
+        if (characters.getCharacters() == null) {
+            return 0;
+        }
+        return characters.getCharacters().size();
+    }
 
     private AccountGameModel mapToModel(AccountGameEntity accountGameEntity) {
         final boolean status = accountGameEntity.isStatus() && accountGameEntity.getRealmId().isStatus();
