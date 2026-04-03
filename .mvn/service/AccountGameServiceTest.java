@@ -510,7 +510,7 @@ class AccountGameServiceTest extends BaseTest {
     }
 
     @Test
-    void previewLinkRealm_singleSource_success() {
+    void previewLinkRealm_returnsLinkableAccounts_whenVinculatedHasCharacters() {
         long userId = 1L;
         long targetRealmId = 2L;
         String tx = "tx-link-preview";
@@ -521,18 +521,12 @@ class AccountGameServiceTest extends BaseTest {
         RealmEntity sourceRealm = new RealmEntity();
         sourceRealm.setId(1L);
         sourceRealm.setStatus(true);
-        sourceRealm.setName("RealmA");
         AccountGameEntity source = new AccountGameEntity();
         source.setId(50L);
         source.setAccountId(999L);
         source.setStatus(true);
         source.setRealmId(sourceRealm);
         source.setUserId(user);
-        source.setGameEmail("g@mail.com");
-
-        when(obtainAccountGamePort.findAllByUserId(userId, tx)).thenReturn(List.of(source));
-        when(obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, 999L, targetRealmId, tx))
-                .thenReturn(Optional.empty());
 
         RealmEntity targetRealm = new RealmEntity();
         targetRealm.setId(targetRealmId);
@@ -542,18 +536,76 @@ class AccountGameServiceTest extends BaseTest {
         targetRealm.setJwt("jwt");
         when(realmPort.findById(targetRealmId, tx)).thenReturn(Optional.of(targetRealm));
 
+        when(integratorPort.accountsVinculated("http://b", "jwt", userId, tx))
+                .thenReturn(List.of(new AccountsDetailVinculatedResponse(999L, "wowuser", "g@mail.com", "WOTLK")));
+        when(obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, 999L, targetRealmId, tx))
+                .thenReturn(Optional.empty());
+        when(obtainAccountGamePort.findByUserIdAndRealmId(userId, targetRealmId, tx)).thenReturn(List.of());
+        when(obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, 999L, tx))
+                .thenReturn(Optional.of(source));
+
         CharactersDto chars = new CharactersDto();
         chars.setTotalQuantity(2);
         when(integratorPort.characters(eq("http://b"), eq("jwt"), eq(999L), eq(userId), eq(tx))).thenReturn(chars);
 
-        LinkRealmPreviewResponse preview = service.previewLinkRealm(userId, targetRealmId, null, tx);
+        LinkRealmPreviewResponse preview = service.previewLinkRealm(userId, targetRealmId, tx);
 
-        assertTrue(preview.isCanLink());
-        assertFalse(preview.isAlreadyLinked());
-        assertTrue(preview.isHasCharacters());
-        assertEquals(2, preview.getCharacterCount());
-        assertEquals(999L, preview.getAccountId());
+        assertEquals(1, preview.getLinkableAccounts().size());
+        LinkRealmPreviewAccountDto row = preview.getLinkableAccounts().getFirst();
+        assertTrue(row.isCanLink());
+        assertEquals(999L, row.getAccountId());
+        assertEquals(50L, row.getSourceAccountGameId());
+        assertEquals("wowuser", row.getUsername());
+        assertEquals(2, row.getCharacterCount());
         assertEquals("RealmB", preview.getRealmName());
+    }
+
+    @Test
+    void previewLinkRealm_quotaExceeded_marksCanLinkFalse() {
+        long userId = 1L;
+        long targetRealmId = 2L;
+        String tx = "tx-quota";
+
+        UserEntity user = createSampleUserEntity();
+        when(userPort.findByUserId(userId, tx)).thenReturn(Optional.of(user));
+
+        RealmEntity sourceRealm = new RealmEntity();
+        sourceRealm.setStatus(true);
+        AccountGameEntity source = new AccountGameEntity();
+        source.setId(50L);
+        source.setAccountId(999L);
+        source.setStatus(true);
+        source.setRealmId(sourceRealm);
+        source.setUserId(user);
+
+        RealmEntity targetRealm = new RealmEntity();
+        targetRealm.setId(targetRealmId);
+        targetRealm.setStatus(true);
+        targetRealm.setName("RealmB");
+        targetRealm.setHost("http://b");
+        targetRealm.setJwt("jwt");
+        when(realmPort.findById(targetRealmId, tx)).thenReturn(Optional.of(targetRealm));
+
+        when(integratorPort.accountsVinculated("http://b", "jwt", userId, tx))
+                .thenReturn(List.of(new AccountsDetailVinculatedResponse(999L, "u", "e", "WOTLK")));
+        when(obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, 999L, targetRealmId, tx))
+                .thenReturn(Optional.empty());
+        List<AccountGameEntity> many = new ArrayList<>();
+        for (int i = 0; i < AccountGameService.MAXIMUM_NUMBER_OF_ACCOUNTS_ALLOWED; i++) {
+            many.add(new AccountGameEntity());
+        }
+        when(obtainAccountGamePort.findByUserIdAndRealmId(userId, targetRealmId, tx)).thenReturn(many);
+        when(obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, 999L, tx))
+                .thenReturn(Optional.of(source));
+
+        CharactersDto chars = new CharactersDto();
+        chars.setTotalQuantity(1);
+        when(integratorPort.characters(eq("http://b"), eq("jwt"), eq(999L), eq(userId), eq(tx))).thenReturn(chars);
+
+        LinkRealmPreviewResponse preview = service.previewLinkRealm(userId, targetRealmId, tx);
+
+        assertEquals(1, preview.getLinkableAccounts().size());
+        assertFalse(preview.getLinkableAccounts().getFirst().isCanLink());
     }
 
     @Test
@@ -627,11 +679,21 @@ class AccountGameServiceTest extends BaseTest {
     }
 
     @Test
-    void previewLinkRealm_noActiveLinks_throwsBadRequest() {
+    void previewLinkRealm_emptyVinculated_returnsEmptyList() {
         when(userPort.findByUserId(1L, "tx")).thenReturn(Optional.of(createSampleUserEntity()));
-        when(obtainAccountGamePort.findAllByUserId(1L, "tx")).thenReturn(List.of());
+        RealmEntity target = new RealmEntity();
+        target.setId(2L);
+        target.setStatus(true);
+        target.setName("R");
+        target.setHost("h");
+        target.setJwt("j");
+        when(realmPort.findById(2L, "tx")).thenReturn(Optional.of(target));
+        when(integratorPort.accountsVinculated("h", "j", 1L, "tx")).thenReturn(List.of());
 
-        assertThrows(BadRequestException.class, () -> service.previewLinkRealm(1L, 2L, null, "tx"));
+        LinkRealmPreviewResponse preview = service.previewLinkRealm(1L, 2L, "tx");
+
+        assertTrue(preview.getLinkableAccounts().isEmpty());
+        assertEquals("R", preview.getRealmName());
     }
 
 }

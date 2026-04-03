@@ -1463,4 +1463,41 @@ public class IntegratorClient {
 
         throw new InternalException("Unexpected transaction failure", transactionId);
     }
+
+
+    public List<AccountsDetailVinculatedResponse> getAccountsVinculated(String host, String jwt, Long userId,
+                                                                        String transactionId) {
+        HttpHeaders headers = buildHeaders(transactionId, jwt);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/account/%s", host, userId))
+                .toUriString();
+
+        try {
+            ResponseEntity<GenericResponse<List<AccountsDetailVinculatedResponse>>> response =
+                    restTemplate.exchange(url,
+                            HttpMethod.GET,
+                            entity, new ParameterizedTypeReference<>() {
+                            });
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return Objects.requireNonNull(response.getBody()).getData();
+            }
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [getAccountsVinculated] Client/Server Error: {}. Error updating " +
+                            "character stats  HTTP Status: {}, Response Body: {}",
+                    e.getMessage(), e.getStatusCode(), e.getResponseBodyAsString());
+            throw new InternalException(Objects.requireNonNull(e.getResponseBodyAs(GenericResponse.class)).getMessage(),
+                    transactionId);
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [getAccountsVinculated] Unexpected Error: {}. An unexpected error " +
+                            "occurred " +
+                            "during the transaction with ID: {}.",
+                    e.getMessage(), transactionId, e);
+            throw new InternalException("Unexpected transaction failure", transactionId);
+        }
+
+        throw new InternalException("Unexpected transaction failure", transactionId);
+    }
 }

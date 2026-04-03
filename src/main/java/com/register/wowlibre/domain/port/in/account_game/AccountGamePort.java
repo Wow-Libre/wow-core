@@ -20,8 +20,7 @@ public interface AccountGamePort {
 
     AccountGameStatsDto stats(Long userId, String transactionId);
 
-    LinkRealmPreviewResponse previewLinkRealm(Long userId, Long realmId, Long sourceAccountGameId,
-                                              String transactionId);
+    LinkRealmPreviewResponse previewLinkRealm(Long userId, Long realmId, String transactionId);
 
     void linkRealm(Long userId, Long realmId, Long sourceAccountGameId, String transactionId);
 }

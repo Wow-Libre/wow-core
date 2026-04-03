@@ -142,8 +142,9 @@ public class AccountGameController {
                 .body(new GenericResponseBuilder<>(stats, transactionId).ok().build());
     }
 
-    @Operation(summary = "Preview realm link", description = "Checks characters on a realm for the user's linked " +
-            "game account_id (from an existing account_game row) and whether it is already linked to that realm")
+    @Operation(summary = "Preview realm link", description = "Lists game accounts (from the integrator) that have " +
+            "characters on the target realm, are not yet linked in this app to that realm, and have a source " +
+            "account_game row elsewhere; includes source_account_game_id for POST /link")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Preview generated"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
@@ -153,11 +154,10 @@ public class AccountGameController {
     public ResponseEntity<GenericResponse<LinkRealmPreviewResponse>> previewLinkRealm(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_USER_ID) final Long userId,
-            @RequestParam(name = PARAM_REALM_ID) final Long realmId,
-            @RequestParam(name = "source_account_game_id", required = false) final Long sourceAccountGameId) {
+            @RequestParam(name = PARAM_REALM_ID) final Long realmId) {
 
         LinkRealmPreviewResponse preview =
-                accountGamePort.previewLinkRealm(userId, realmId, sourceAccountGameId, transactionId);
+                accountGamePort.previewLinkRealm(userId, realmId, transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(preview, transactionId).ok().build());

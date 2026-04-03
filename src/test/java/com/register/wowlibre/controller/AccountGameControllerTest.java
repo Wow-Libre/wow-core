@@ -3,6 +3,7 @@ package com.register.wowlibre.controller;
 import com.register.wowlibre.domain.dto.account_game.AccountGameDetailDto;
 import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
 import com.register.wowlibre.domain.dto.account_game.CreateAccountGameDto;
+import com.register.wowlibre.domain.dto.account_game.LinkRealmPreviewAccountDto;
 import com.register.wowlibre.domain.dto.account_game.LinkRealmPreviewResponse;
 import com.register.wowlibre.domain.dto.account_game.LinkRealmRequestDto;
 import com.register.wowlibre.domain.dto.client.AccountBannedResponse;
@@ -182,23 +183,29 @@ class AccountGameControllerTest {
         long userId = 1L;
         long realmId = 5L;
         String transactionId = "tx-link";
-        LinkRealmPreviewResponse preview = LinkRealmPreviewResponse.builder()
-                .realmId(realmId)
-                .realmName("R")
+        LinkRealmPreviewAccountDto accountRow = LinkRealmPreviewAccountDto.builder()
                 .accountId(10L)
+                .sourceAccountGameId(50L)
+                .username("player")
                 .hasCharacters(true)
                 .characterCount(1)
                 .alreadyLinked(false)
                 .canLink(true)
                 .build();
-        when(accountGamePort.previewLinkRealm(userId, realmId, null, transactionId)).thenReturn(preview);
+        LinkRealmPreviewResponse preview = LinkRealmPreviewResponse.builder()
+                .realmId(realmId)
+                .realmName("R")
+                .linkableAccounts(List.of(accountRow))
+                .build();
+        when(accountGamePort.previewLinkRealm(userId, realmId, transactionId)).thenReturn(preview);
 
         ResponseEntity<GenericResponse<LinkRealmPreviewResponse>> response =
-                controller.previewLinkRealm(transactionId, userId, realmId, null);
+                controller.previewLinkRealm(transactionId, userId, realmId);
 
         assertEquals(200, response.getStatusCode().value());
-        assertThat(response.getBody().getData().getAccountId()).isEqualTo(10L);
-        verify(accountGamePort).previewLinkRealm(userId, realmId, null, transactionId);
+        assertThat(response.getBody().getData().getLinkableAccounts()).hasSize(1);
+        assertThat(response.getBody().getData().getLinkableAccounts().getFirst().getAccountId()).isEqualTo(10L);
+        verify(accountGamePort).previewLinkRealm(userId, realmId, transactionId);
     }
 
     @Test

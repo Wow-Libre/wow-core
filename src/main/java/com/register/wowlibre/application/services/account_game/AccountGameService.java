@@ -1,7 +1,8 @@
 package com.register.wowlibre.application.services.account_game;
 
-import com.register.wowlibre.domain.dto.CharactersDto;
+import com.register.wowlibre.domain.dto.*;
 import com.register.wowlibre.domain.dto.account_game.*;
+import com.register.wowlibre.domain.dto.account_game.AccountsGameDto;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
@@ -52,6 +53,19 @@ public class AccountGameService implements AccountGamePort {
         this.userPort = userPort;
         this.integratorPort = integratorPort;
         this.machinePort = machinePort;
+    }
+
+    private static int resolveCharacterCount(CharactersDto characters) {
+        if (characters == null) {
+            return 0;
+        }
+        if (characters.getTotalQuantity() != null) {
+            return Math.max(0, characters.getTotalQuantity());
+        }
+        if (characters.getCharacters() == null) {
+            return 0;
+        }
+        return characters.getCharacters().size();
     }
 
     @Override
@@ -105,7 +119,6 @@ public class AccountGameService implements AccountGamePort {
         machinePort.points(userId, accountId, realmModel.id, transactionId);
     }
 
-
     @Override
     public AccountsGameDto accounts(Long userId, int page, int size, String searchUsername, String realmName,
                                     String transactionId) {
@@ -138,7 +151,6 @@ public class AccountGameService implements AccountGamePort {
         return new AccountsGameDto(accountsGame, totalAccounts);
     }
 
-
     @Override
     public AccountsGameDto accounts(Long userId, Long realmId, String transactionId) {
 
@@ -147,7 +159,6 @@ public class AccountGameService implements AccountGamePort {
 
         return new AccountsGameDto(accountsGame, (long) accountsGame.size());
     }
-
 
     @Override
     public AccountGameDetailDto account(Long userId, Long accountId, Long realmId, String transactionId) {
@@ -222,32 +233,53 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
-    public LinkRealmPreviewResponse previewLinkRealm(Long userId, Long realmId, Long sourceAccountGameId,
-                                                     String transactionId) {
+    public LinkRealmPreviewResponse previewLinkRealm(Long userId, Long realmId, String transactionId) {
         requireUser(userId, transactionId);
-        AccountGameEntity source = resolveSourceAccountGame(userId, sourceAccountGameId, transactionId);
+
         RealmEntity targetRealm = requireActiveRealm(realmId, transactionId);
 
-        final boolean alreadyLinked = obtainAccountGamePort
-                .findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, source.getAccountId(), realmId,
-                        transactionId)
-                .isPresent();
+        List<AccountsDetailVinculatedResponse> accountsCreatedVinculated =
+                integratorPort.accountsVinculated(targetRealm.getHost(), targetRealm.getJwt(), userId, transactionId);
 
-        CharactersDto characters = integratorPort.characters(targetRealm.getHost(), targetRealm.getJwt(),
-                source.getAccountId(), userId, transactionId);
-        int characterCount = resolveCharacterCount(characters);
-        boolean hasCharacters = characterCount > 0;
+        List<AccountsDetailVinculatedResponse> accountsNotVinculated = accountsCreatedVinculated.stream()
+                .filter(account -> obtainAccountGamePort
+                        .findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, account.id(), realmId, transactionId)
+                        .isEmpty())
+                .toList();
 
-        boolean canLink = !alreadyLinked && targetRealm.isStatus();
+        final int existingOnTargetRealm =
+                obtainAccountGamePort.findByUserIdAndRealmId(userId, realmId, transactionId).size();
+        final boolean quotaExceeded = existingOnTargetRealm >= MAXIMUM_NUMBER_OF_ACCOUNTS_ALLOWED;
+
+        List<LinkRealmPreviewAccountDto> linkableAccounts = new ArrayList<>();
+        for (AccountsDetailVinculatedResponse account : accountsNotVinculated) {
+            CharactersDto characters = integratorPort.characters(targetRealm.getHost(), targetRealm.getJwt(),
+                    account.id(), userId, transactionId);
+            int characterCount = resolveCharacterCount(characters);
+            if (characterCount <= 0) {
+                continue;
+            }
+            Optional<AccountGameEntity> sourceRow =
+                    obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, account.id(), transactionId);
+            if (sourceRow.isEmpty()) {
+                continue;
+            }
+            boolean canLink = !quotaExceeded && targetRealm.isStatus();
+            linkableAccounts.add(LinkRealmPreviewAccountDto.builder()
+                    .accountId(account.id())
+                    .sourceAccountGameId(sourceRow.get().getId())
+                    .username(account.username())
+                    .hasCharacters(true)
+                    .characterCount(characterCount)
+                    .alreadyLinked(false)
+                    .canLink(canLink)
+                    .build());
+        }
 
         return LinkRealmPreviewResponse.builder()
                 .realmId(targetRealm.getId())
                 .realmName(targetRealm.getName())
-                .accountId(source.getAccountId())
-                .hasCharacters(hasCharacters)
-                .characterCount(characterCount)
-                .alreadyLinked(alreadyLinked)
-                .canLink(canLink)
+                .linkableAccounts(linkableAccounts)
                 .build();
     }
 
@@ -305,7 +337,7 @@ public class AccountGameService implements AccountGamePort {
     }
 
     private AccountGameEntity resolveSourceAccountGame(Long userId, Long sourceAccountGameId,
-                                                         String transactionId) {
+                                                       String transactionId) {
         if (sourceAccountGameId != null) {
             Optional<AccountGameEntity> row =
                     obtainAccountGamePort.findByIdAndUserId(sourceAccountGameId, userId, transactionId);
@@ -338,19 +370,6 @@ public class AccountGameService implements AccountGamePort {
         }
 
         return candidates.getFirst();
-    }
-
-    private static int resolveCharacterCount(CharactersDto characters) {
-        if (characters == null) {
-            return 0;
-        }
-        if (characters.getTotalQuantity() != null) {
-            return Math.max(0, characters.getTotalQuantity());
-        }
-        if (characters.getCharacters() == null) {
-            return 0;
-        }
-        return characters.getCharacters().size();
     }
 
     private AccountGameModel mapToModel(AccountGameEntity accountGameEntity) {

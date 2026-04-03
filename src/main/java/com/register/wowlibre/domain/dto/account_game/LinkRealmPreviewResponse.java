@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,17 +18,10 @@ public class LinkRealmPreviewResponse {
     private Long realmId;
     @JsonProperty("realm_name")
     private String realmName;
-    @JsonProperty("account_id")
-    private Long accountId;
-    @JsonProperty("has_characters")
-    private boolean hasCharacters;
-    @JsonProperty("character_count")
-    private int characterCount;
-    @JsonProperty("already_linked")
-    private boolean alreadyLinked;
     /**
-     * Se puede confirmar la vinculación (reino activo y aún no hay fila para esta cuenta en este reino).
+     * Cuentas con personajes en el reino destino que aún no están vinculadas en la web a ese reino.
      */
-    @JsonProperty("can_link")
-    private boolean canLink;
+    @Builder.Default
+    @JsonProperty("linkable_accounts")
+    private List<LinkRealmPreviewAccountDto> linkableAccounts = new ArrayList<>();
 }
