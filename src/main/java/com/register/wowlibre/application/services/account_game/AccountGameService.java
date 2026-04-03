@@ -266,6 +266,7 @@ public class AccountGameService implements AccountGamePort {
                     .username(account.username())
                     .hasCharacters(true)
                     .characterCount(characterCount)
+                    .sourceAccountGameId(account.id())
                     .alreadyLinked(false)
                     .canLink(canLink)
                     .build());
@@ -280,14 +281,20 @@ public class AccountGameService implements AccountGamePort {
 
     @Override
     public void linkRealm(Long userId, Long realmId, Long sourceAccountGameId, String transactionId) {
-        requireUser(userId, transactionId);
-        AccountGameEntity source = resolveSourceAccountGame(userId, sourceAccountGameId, transactionId);
+        Optional<UserEntity> user = userPort.findByUserId(userId, transactionId);
+
+        if (user.isEmpty()) {
+            LOGGER.error("[AccountGameService] [linkRealm] User not found - userId: {}, transactionId: {}", userId,
+                    transactionId);
+            throw new UnauthorizedException("The client is not available or does not exist", transactionId);
+        }
+
         RealmEntity targetRealm = requireActiveRealm(realmId, transactionId);
 
-        if (obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, source.getAccountId(),
+        if (obtainAccountGamePort.findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, sourceAccountGameId,
                 realmId, transactionId).isPresent()) {
             LOGGER.warn("[AccountGameService] [linkRealm] Already linked - userId: {}, accountId: {}, realmId: {}, " +
-                    "transactionId: {}", userId, source.getAccountId(), realmId, transactionId);
+                    "transactionId: {}", userId, sourceAccountGameId, realmId, transactionId);
             throw new BadRequestException("This game account is already linked to this realm", transactionId);
         }
 
@@ -300,17 +307,17 @@ public class AccountGameService implements AccountGamePort {
         }
 
         AccountDetailResponse account = integratorPort.account(targetRealm.getHost(), targetRealm.getJwt(),
-                source.getAccountId(), transactionId);
+                sourceAccountGameId, transactionId);
 
         AccountGameEntity linked = new AccountGameEntity();
-        linked.setAccountId(source.getAccountId());
+        linked.setAccountId(account.id());
         linked.setRealmId(targetRealm);
-        linked.setUserId(source.getUserId());
+        linked.setUserId(user.get());
         linked.setUsername(account.username());
-        linked.setGameEmail(account.email() != null ? account.email() : source.getGameEmail());
+        linked.setGameEmail(account.email() != null ? account.email() : user.get().getEmail());
         linked.setStatus(true);
         saveAccountGamePort.save(linked, transactionId);
-        machinePort.points(userId, source.getAccountId(), realmId, transactionId);
+        machinePort.points(userId, account.id(), realmId, transactionId);
     }
 
     private void requireUser(Long userId, String transactionId) {
