@@ -142,8 +142,9 @@ public class AccountGameController {
                 .body(new GenericResponseBuilder<>(stats, transactionId).ok().build());
     }
 
-    @Operation(summary = "Preview realm link", description = "Checks characters on a realm for the user's linked " +
-            "game account_id (from an existing account_game row) and whether it is already linked to that realm")
+    @Operation(summary = "Preview realm link", description = "Lists game accounts (from the integrator) that have " +
+            "characters on the target realm, are not yet linked in this app to that realm, and have a source " +
+            "account_game row elsewhere; includes source_account_game_id for POST /link")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Preview generated"),
             @ApiResponse(responseCode = "400", description = "Bad request"),

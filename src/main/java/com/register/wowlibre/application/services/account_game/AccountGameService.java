@@ -247,41 +247,39 @@ public class AccountGameService implements AccountGamePort {
                         .isEmpty())
                 .toList();
 
+        final int existingOnTargetRealm =
+                obtainAccountGamePort.findByUserIdAndRealmId(userId, realmId, transactionId).size();
+        final boolean quotaExceeded = existingOnTargetRealm >= MAXIMUM_NUMBER_OF_ACCOUNTS_ALLOWED;
 
-        List<AccountsDetailVinculatedResponse> accountsByCharacters =
-                accountsNotVinculated.stream().filter(accounts -> integratorPort.characters(targetRealm.getHost(),
-                        targetRealm.getJwt(),
-                        accounts.id(), userId, transactionId).getTotalQuantity() > 0
-                ).toList();
-
-        if (accountsByCharacters.isEmpty()) {
-
-            return LinkRealmPreviewResponse.builder()
-                    .realmId(targetRealm.getId())
-                    .realmName(targetRealm.getName())
-                    .accountId(null)
-                    .hasCharacters(false)
-                    .characterCount(0)
+        List<LinkRealmPreviewAccountDto> linkableAccounts = new ArrayList<>();
+        for (AccountsDetailVinculatedResponse account : accountsNotVinculated) {
+            CharactersDto characters = integratorPort.characters(targetRealm.getHost(), targetRealm.getJwt(),
+                    account.id(), userId, transactionId);
+            int characterCount = resolveCharacterCount(characters);
+            if (characterCount <= 0) {
+                continue;
+            }
+            Optional<AccountGameEntity> sourceRow =
+                    obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, account.id(), transactionId);
+            if (sourceRow.isEmpty()) {
+                continue;
+            }
+            boolean canLink = !quotaExceeded && targetRealm.isStatus();
+            linkableAccounts.add(LinkRealmPreviewAccountDto.builder()
+                    .accountId(account.id())
+                    .sourceAccountGameId(sourceRow.get().getId())
+                    .username(account.username())
+                    .hasCharacters(true)
+                    .characterCount(characterCount)
                     .alreadyLinked(false)
-                    .canLink(true)
-                    .build();
+                    .canLink(canLink)
+                    .build());
         }
-
-        CharactersDto characters = integratorPort.characters(targetRealm.getHost(), targetRealm.getJwt(),
-                source.getAccountId(), userId, transactionId);
-        int characterCount = resolveCharacterCount(characters);
-        boolean hasCharacters = characterCount > 0;
-
-        boolean canLink = !alreadyLinked && targetRealm.isStatus();
 
         return LinkRealmPreviewResponse.builder()
                 .realmId(targetRealm.getId())
                 .realmName(targetRealm.getName())
-                .accountId(source.getAccountId())
-                .hasCharacters(hasCharacters)
-                .characterCount(characterCount)
-                .alreadyLinked(alreadyLinked)
-                .canLink(canLink)
+                .linkableAccounts(linkableAccounts)
                 .build();
     }
 
