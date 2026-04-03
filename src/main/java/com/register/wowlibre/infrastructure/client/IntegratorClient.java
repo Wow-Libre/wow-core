@@ -1470,7 +1470,7 @@ public class IntegratorClient {
         HttpHeaders headers = buildHeaders(transactionId, jwt);
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
-        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/account/%s", host, userId))
+        String url = UriComponentsBuilder.fromUriString(String.format("%s/api/account/%s/all", host, userId))
                 .toUriString();
 
         try {
