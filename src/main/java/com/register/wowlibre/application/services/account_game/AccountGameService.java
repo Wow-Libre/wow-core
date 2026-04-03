@@ -259,15 +259,10 @@ public class AccountGameService implements AccountGamePort {
             if (characterCount <= 0) {
                 continue;
             }
-            Optional<AccountGameEntity> sourceRow =
-                    obtainAccountGamePort.findByUserIdAndAccountIdAndStatusIsTrue(userId, account.id(), transactionId);
-            if (sourceRow.isEmpty()) {
-                continue;
-            }
+
             boolean canLink = !quotaExceeded && targetRealm.isStatus();
             linkableAccounts.add(LinkRealmPreviewAccountDto.builder()
                     .accountId(account.id())
-                    .sourceAccountGameId(sourceRow.get().getId())
                     .username(account.username())
                     .hasCharacters(true)
                     .characterCount(characterCount)
