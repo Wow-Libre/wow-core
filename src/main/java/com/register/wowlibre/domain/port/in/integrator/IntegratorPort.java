@@ -113,4 +113,7 @@ public interface IntegratorPort {
     boolean isPremiumRealm(String host, String jwt, Long accountId, String transactionId);
 
     void updatePremiumRealm(String host, String jwt, Long accountId, boolean status, String transactionId);
+
+    List<AccountsDetailVinculatedResponse> accountsVinculated(String host, String jwt, Long userId,
+                                                              String transactionId);
 }

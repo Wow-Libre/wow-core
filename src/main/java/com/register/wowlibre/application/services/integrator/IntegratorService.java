@@ -413,4 +413,10 @@ public class IntegratorService implements IntegratorPort {
         integratorClient.updatePremiumRealm(host, jwt, accountId, status, transactionId);
     }
 
+    @Override
+    public List<AccountsDetailVinculatedResponse> accountsVinculated(String host, String jwt, Long userId,
+                                                                     String transactionId) {
+        return integratorClient.getAccountsVinculated(host, jwt, userId, transactionId);
+    }
+
 }

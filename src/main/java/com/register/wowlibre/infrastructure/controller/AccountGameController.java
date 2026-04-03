@@ -153,11 +153,10 @@ public class AccountGameController {
     public ResponseEntity<GenericResponse<LinkRealmPreviewResponse>> previewLinkRealm(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
             @RequestHeader(name = HEADER_USER_ID) final Long userId,
-            @RequestParam(name = PARAM_REALM_ID) final Long realmId,
-            @RequestParam(name = "source_account_game_id", required = false) final Long sourceAccountGameId) {
+            @RequestParam(name = PARAM_REALM_ID) final Long realmId) {
 
         LinkRealmPreviewResponse preview =
-                accountGamePort.previewLinkRealm(userId, realmId, sourceAccountGameId, transactionId);
+                accountGamePort.previewLinkRealm(userId, realmId, transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<>(preview, transactionId).ok().build());
