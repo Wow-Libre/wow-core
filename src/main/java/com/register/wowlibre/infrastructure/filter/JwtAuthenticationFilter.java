@@ -58,17 +58,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            RequestWrapper requestWrapper = new RequestWrapper(request);
-            ResponseWrapper responseWrapper = new ResponseWrapper(response);
-
             final String jwt = authHeader.substring(7);
             final String email = jwtPort.extractUsername(jwt);
             final Long userId = jwtPort.extractUserId(jwt);
 
-            requestWrapper.setHeader(HEADER_EMAIL, email);
-            requestWrapper.setHeader(HEADER_USER_ID, String.valueOf(userId));
-            requestWrapper.setHeader(HEADER_IP_ADDRESS, clientIp);
-            requestWrapper.setHeader(HEADER_TRANSACTION_ID, transactionId);
+            /*
+             * multipart/form-data: no usar RequestWrapper (lee todo el body en el constructor).
+             * Si se consume el stream aquí, DispatcherServlet no puede parsear partes y MultipartFile llega vacío.
+             */
+            String contentType = request.getContentType();
+            boolean multipart = StringUtils.isNotBlank(contentType)
+                    && StringUtils.startsWithIgnoreCase(contentType, MediaType.MULTIPART_FORM_DATA_VALUE);
+            HttpServletRequest requestWrapper;
+            if (multipart) {
+                HeaderMutatingRequestWrapper w = new HeaderMutatingRequestWrapper(request);
+                w.setHeader(HEADER_EMAIL, email);
+                w.setHeader(HEADER_USER_ID, String.valueOf(userId));
+                w.setHeader(HEADER_IP_ADDRESS, clientIp);
+                w.setHeader(HEADER_TRANSACTION_ID, transactionId);
+                requestWrapper = w;
+            } else {
+                RequestWrapper rw = new RequestWrapper(request);
+                rw.setHeader(HEADER_EMAIL, email);
+                rw.setHeader(HEADER_USER_ID, String.valueOf(userId));
+                rw.setHeader(HEADER_IP_ADDRESS, clientIp);
+                rw.setHeader(HEADER_TRANSACTION_ID, transactionId);
+                requestWrapper = rw;
+            }
+
+            ResponseWrapper responseWrapper = new ResponseWrapper(response);
             if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 if (jwtPort.isTokenValid(jwt)) {

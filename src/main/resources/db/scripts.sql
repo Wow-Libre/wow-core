@@ -808,3 +808,20 @@ CREATE TABLE IF NOT EXISTS platform.user_cards
     CONSTRAINT fk_user_cards_catalog FOREIGN KEY (card_code) REFERENCES platform.card_catalog (code) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- Staging de migración de personajes desde dumps del addon (Base64 JSON o Lua CHDMP_DATA).
+CREATE TABLE IF NOT EXISTS platform.character_migration_staging
+(
+    id                 BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id            BIGINT                DEFAULT NULL,
+    realm_id           BIGINT       NOT NULL,
+    character_name     VARCHAR(80)           DEFAULT NULL,
+    character_guid     VARCHAR(50)           DEFAULT NULL,
+    raw_data           JSON         NOT NULL,
+    status             ENUM ('PENDING', 'PROCESSING', 'COMPLETED', 'FAILED') NOT NULL DEFAULT 'PENDING',
+    validation_errors  TEXT                  DEFAULT NULL,
+    created_at         DATETIME              DEFAULT CURRENT_TIMESTAMP,
+    updated_at         DATETIME              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_cms_realm_created (realm_id, created_at),
+    CONSTRAINT fk_cms_realm FOREIGN KEY (realm_id) REFERENCES platform.realm (id) ON DELETE CASCADE
+);
+

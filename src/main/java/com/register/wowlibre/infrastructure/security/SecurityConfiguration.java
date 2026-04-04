@@ -103,7 +103,8 @@ public class SecurityConfiguration {
                                     "/api/cards/admin/**",
                                     "/api/notifications/admin/**",
                                     "/api/users/admin/**",
-                                    "/api/battle-pass/admin/**")
+                                    "/api/battle-pass/admin/**",
+                                    "/api/character-migration/admin/**")
                             .hasAuthority(Rol.ADMIN.getName())
                             .requestMatchers(HttpMethod.POST,
                                     "/api/news",
