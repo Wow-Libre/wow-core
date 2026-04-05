@@ -1,6 +1,7 @@
 package com.register.wowlibre.infrastructure.client;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.character_migration.WowLibreClientMigrationApprovedPayloadDto;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.model.*;
@@ -1499,5 +1500,34 @@ public class IntegratorClient {
         }
 
         throw new InternalException("Unexpected transaction failure", transactionId);
+    }
+
+    /**
+     * POST interno en wow-libre-client. No lanza: el PATCH de estado en core ya se persistió.
+     */
+    public void characterMigrationApproved(String host, String jwt,
+                                           WowLibreClientMigrationApprovedPayloadDto body, String transactionId) {
+        HttpHeaders headers = buildHeaders(transactionId, jwt);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<WowLibreClientMigrationApprovedPayloadDto> entity = new HttpEntity<>(body, headers);
+        String url = String.format("%s/api/internal/migration/character-approved", host);
+        try {
+            ResponseEntity<GenericResponse<Void>> response = restTemplate.exchange(url, HttpMethod.POST, entity,
+                    new ParameterizedTypeReference<>() {
+                    });
+            if (response.getStatusCode().is2xxSuccessful()) {
+                LOGGER.info("[IntegratorClient] [characterMigrationApproved] OK migrationId={} tx={}",
+                        body.getMigrationId(), transactionId);
+                return;
+            }
+            LOGGER.warn("[IntegratorClient] [characterMigrationApproved] Status {} migrationId={} tx={}",
+                    response.getStatusCode(), body.getMigrationId(), transactionId);
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            LOGGER.error("[IntegratorClient] [characterMigrationApproved] HTTP {} migrationId={} tx={} body={}",
+                    e.getStatusCode(), body.getMigrationId(), transactionId, e.getResponseBodyAsString());
+        } catch (Exception e) {
+            LOGGER.error("[IntegratorClient] [characterMigrationApproved] migrationId={} tx={}",
+                    body.getMigrationId(), transactionId, e);
+        }
     }
 }

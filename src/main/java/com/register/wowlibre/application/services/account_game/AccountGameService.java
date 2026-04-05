@@ -69,9 +69,9 @@ public class AccountGameService implements AccountGamePort {
     }
 
     @Override
-    public void create(Long userId, String realmName, Integer expansionId, String username,
-                       String gameMail, String password,
-                       String transactionId) {
+    public AccountGameEntity create(Long userId, String realmName, Integer expansionId, String username,
+                                    String gameMail, String password,
+                                    String transactionId) {
 
         final Optional<UserEntity> userModel = userPort.findByUserId(userId, transactionId);
 
@@ -117,6 +117,7 @@ public class AccountGameService implements AccountGamePort {
         accountGameEntity.setGameEmail(gameEMail);
         saveAccountGamePort.save(accountGameEntity, transactionId);
         machinePort.points(userId, accountId, realmModel.id, transactionId);
+        return accountGameEntity;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.register.wowlibre.application.services.integrator;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.character_migration.WowLibreClientMigrationApprovedPayloadDto;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.dto.guilds.*;
 import com.register.wowlibre.domain.exception.*;
@@ -417,6 +418,13 @@ public class IntegratorService implements IntegratorPort {
     public List<AccountsDetailVinculatedResponse> accountsVinculated(String host, String jwt, Long userId,
                                                                      String transactionId) {
         return integratorClient.getAccountsVinculated(host, jwt, userId, transactionId);
+    }
+
+    @Override
+    public void notifyCharacterMigrationApproved(String host, String jwt,
+                                                 WowLibreClientMigrationApprovedPayloadDto payload,
+                                                 String transactionId) {
+        integratorClient.characterMigrationApproved(host, jwt, payload, transactionId);
     }
 
 }

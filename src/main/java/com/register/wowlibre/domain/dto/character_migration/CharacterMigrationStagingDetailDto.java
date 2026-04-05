@@ -15,6 +15,8 @@ public class CharacterMigrationStagingDetailDto {
     private Long realmId;
     private String characterName;
     private String characterGuid;
+    /** Usuario de cuenta de juego solicitado por el jugador (la contraseña no se expone). */
+    private String targetGameAccountUsername;
     private CharacterMigrationStagingStatus status;
     private String validationErrors;
     private JsonNode rawData;

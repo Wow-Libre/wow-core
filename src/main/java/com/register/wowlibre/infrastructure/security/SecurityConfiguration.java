@@ -67,6 +67,7 @@ public class SecurityConfiguration {
                 HttpMethod.GET.name(),
                 HttpMethod.POST.name(),
                 HttpMethod.PUT.name(),
+                HttpMethod.PATCH.name(),
                 HttpMethod.OPTIONS.name(),
                 HttpMethod.DELETE.name()));
         corsConfiguration.setAllowedHeaders(Arrays.asList(
@@ -92,6 +93,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(request -> {
                     String[] publicEndpoints = combinePublicEndpoints();
                     request.requestMatchers(publicEndpoints).permitAll()
+                            // CORS preflight sin Authorization: debe pasar antes de reglas por rol
+                            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                             .requestMatchers("/api/realm/**",
                                     "/api/resources/create/faq",
                                     "/api/resources/delete/faq",

@@ -34,6 +34,10 @@ public class CharacterMigrationStagingEntity implements Serializable {
     @Column(name = "character_guid", length = 50)
     private String characterGuid;
 
+    /** Nombre de usuario deseado para la cuenta de juego en el reino destino; la contraseña la genera el backend al aprobar. */
+    @Column(name = "target_game_account_username", length = 20)
+    private String targetGameAccountUsername;
+
     @Column(name = "raw_data", columnDefinition = "JSON", nullable = false)
     private String rawData;
 

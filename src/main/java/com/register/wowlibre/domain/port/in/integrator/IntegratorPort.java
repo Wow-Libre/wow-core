@@ -1,6 +1,7 @@
 package com.register.wowlibre.domain.port.in.integrator;
 
 import com.register.wowlibre.domain.dto.*;
+import com.register.wowlibre.domain.dto.character_migration.WowLibreClientMigrationApprovedPayloadDto;
 import com.register.wowlibre.domain.dto.client.*;
 import com.register.wowlibre.domain.dto.guilds.*;
 import com.register.wowlibre.domain.model.*;
@@ -116,4 +117,11 @@ public interface IntegratorPort {
 
     List<AccountsDetailVinculatedResponse> accountsVinculated(String host, String jwt, Long userId,
                                                               String transactionId);
+
+    /**
+     * Notifica a wow-libre-client una migración aprobada ({@code COMPLETED}) con el dump persistido en core.
+     * No debe lanzar excepción al caller: errores HTTP solo se registran en logs.
+     */
+    void notifyCharacterMigrationApproved(String host, String jwt, WowLibreClientMigrationApprovedPayloadDto payload,
+                                          String transactionId);
 }

@@ -1,23 +1,17 @@
 package com.register.wowlibre.infrastructure.controller;
 
-import com.register.wowlibre.domain.dto.character_migration.CharacterMigrationStatusUpdateDto;
-import com.register.wowlibre.domain.dto.character_migration.CharacterMigrationStagingDetailDto;
-import com.register.wowlibre.domain.dto.character_migration.CharacterMigrationStagingListDto;
-import com.register.wowlibre.domain.exception.BadRequestException;
-import com.register.wowlibre.domain.port.in.character_migration.CharacterMigrationStagingPort;
-import com.register.wowlibre.domain.shared.GenericResponse;
-import com.register.wowlibre.domain.shared.GenericResponseBuilder;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import com.register.wowlibre.domain.dto.character_migration.*;
+import com.register.wowlibre.domain.exception.*;
+import com.register.wowlibre.domain.port.in.character_migration.*;
+import com.register.wowlibre.domain.shared.*;
+import jakarta.validation.*;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.*;
 
-import java.util.List;
+import java.util.*;
 
-import static com.register.wowlibre.domain.constant.Constants.HEADER_TRANSACTION_ID;
-import static com.register.wowlibre.domain.constant.Constants.HEADER_USER_ID;
+import static com.register.wowlibre.domain.constant.Constants.*;
 
 @RestController
 @RequestMapping("/api/character-migration")
@@ -30,19 +24,33 @@ public class CharacterMigrationStagingController {
     }
 
     /**
-     * Carga de dump por usuario autenticado (cuenta web). Misma lógica que admin/upload.
+     * Orígenes de migración activos (realmlist) para el selector en Cuentas.
+     */
+    @GetMapping("/me/allowed-sources")
+    public ResponseEntity<GenericResponse<List<CharacterMigrationAllowedSourceOptionDto>>> userAllowedSources(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) String transactionId) {
+        List<CharacterMigrationAllowedSourceOptionDto> list =
+                characterMigrationStagingPort.listActiveAllowedSources(transactionId);
+        return ResponseEntity.ok(new GenericResponseBuilder<>(list, transactionId).ok().build());
+    }
+
+    /**
+     * Carga de dump por usuario autenticado (cuenta web).
      */
     @PostMapping(value = "/me/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<GenericResponse<CharacterMigrationStagingDetailDto>> userUpload(
             @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) String transactionId,
             @RequestHeader(name = HEADER_USER_ID) Long userId,
             @RequestParam(name = "realm_id") Long realmId,
+            @RequestParam(name = "allowed_source_id", required = false) Long allowedSourceId,
+            @RequestParam(name = "target_game_account_username") String targetGameAccountUsername,
             @RequestParam("file") MultipartFile file) throws Exception {
         if (file == null || file.isEmpty()) {
-            throw new BadRequestException("Archivo requerido (campo multipart 'file')", transactionId != null ? transactionId : "");
+            throw new BadRequestException("Archivo requerido (campo multipart 'file')", transactionId != null ?
+                    transactionId : "");
         }
         CharacterMigrationStagingDetailDto created = characterMigrationStagingPort.uploadFromFile(
-                userId, realmId, file.getBytes(), transactionId);
+                userId, realmId, allowedSourceId, file.getBytes(), targetGameAccountUsername, transactionId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new GenericResponseBuilder<>(created, transactionId).created().build());
     }
@@ -58,21 +66,6 @@ public class CharacterMigrationStagingController {
         List<CharacterMigrationStagingListDto> list =
                 characterMigrationStagingPort.listForUser(userId, realmId, transactionId);
         return ResponseEntity.ok(new GenericResponseBuilder<>(list, transactionId).ok().build());
-    }
-
-    @PostMapping(value = "/admin/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<GenericResponse<CharacterMigrationStagingDetailDto>> adminUpload(
-            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) String transactionId,
-            @RequestHeader(name = HEADER_USER_ID) Long userId,
-            @RequestParam(name = "realm_id") Long realmId,
-            @RequestParam("file") MultipartFile file) throws Exception {
-        if (file == null || file.isEmpty()) {
-            throw new BadRequestException("Archivo requerido (campo multipart 'file')", transactionId != null ? transactionId : "");
-        }
-        CharacterMigrationStagingDetailDto created = characterMigrationStagingPort.uploadFromFile(
-                userId, realmId, file.getBytes(), transactionId);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new GenericResponseBuilder<>(created, transactionId).created().build());
     }
 
     @GetMapping("/admin/list")
