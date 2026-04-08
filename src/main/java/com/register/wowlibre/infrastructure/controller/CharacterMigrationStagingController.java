@@ -1,6 +1,7 @@
 package com.register.wowlibre.infrastructure.controller;
 
 import com.register.wowlibre.domain.dto.character_migration.*;
+import com.register.wowlibre.domain.enums.*;
 import com.register.wowlibre.domain.exception.*;
 import com.register.wowlibre.domain.port.in.character_migration.*;
 import com.register.wowlibre.domain.shared.*;
@@ -43,16 +44,35 @@ public class CharacterMigrationStagingController {
             @RequestHeader(name = HEADER_USER_ID) Long userId,
             @RequestParam(name = "realm_id") Long realmId,
             @RequestParam(name = "allowed_source_id", required = false) Long allowedSourceId,
-            @RequestParam(name = "target_game_account_username") String targetGameAccountUsername,
+            @RequestParam(name = "target_account_mode", required = false, defaultValue = "CREATE_NEW")
+            String targetAccountModeRaw,
+            @RequestParam(name = "target_game_account_username", required = false) String targetGameAccountUsername,
+            @RequestParam(name = "target_existing_account_id", required = false) Long targetExistingAccountId,
             @RequestParam("file") MultipartFile file) throws Exception {
         if (file == null || file.isEmpty()) {
-            throw new BadRequestException("Archivo requerido (campo multipart 'file')", transactionId != null ?
+            throw new BadRequestException("File is required (multipart field 'file')", transactionId != null ?
                     transactionId : "");
         }
+        CharacterMigrationTargetAccountMode targetAccountMode = parseTargetAccountMode(targetAccountModeRaw,
+                transactionId);
         CharacterMigrationStagingDetailDto created = characterMigrationStagingPort.uploadFromFile(
-                userId, realmId, allowedSourceId, file.getBytes(), targetGameAccountUsername, transactionId);
+                userId, realmId, allowedSourceId, file.getBytes(), targetAccountMode, targetGameAccountUsername,
+                targetExistingAccountId, transactionId);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new GenericResponseBuilder<>(created, transactionId).created().build());
+    }
+
+    private static CharacterMigrationTargetAccountMode parseTargetAccountMode(String raw, String transactionId) {
+        if (raw == null || raw.isBlank()) {
+            return CharacterMigrationTargetAccountMode.CREATE_NEW;
+        }
+        String normalized = raw.strip().toUpperCase(Locale.ROOT).replace('-', '_');
+        try {
+            return CharacterMigrationTargetAccountMode.valueOf(normalized);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid target_account_mode: use CREATE_NEW or USE_EXISTING",
+                    transactionId != null ? transactionId : "");
+        }
     }
 
     /**

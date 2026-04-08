@@ -15,14 +15,23 @@ public interface CharacterMigrationStagingPort {
     /**
      * Subida de dump (ruta {@code /me/upload}). {@code adminUserId} es el usuario autenticado dueño de la solicitud.
      *
-     * @param allowedSourceId obligatorio si hay al menos un origen activo en {@code
-     * character_migration_allowed_source};
-     *                        debe coincidir con {@code ginf.realmlist} del dump (sin distinguir mayúsculas).
-     * @param targetGameAccountUsername nombre de usuario de la cuenta de juego en el reino destino (5–20 caracteres).
+     * @param allowedSourceId           obligatorio si hay al menos un origen activo en {@code
+     *                                  character_migration_allowed_source};
+     *                                  debe coincidir con {@code ginf.realmlist} del dump (sin distinguir mayúsculas).
+     * @param targetAccountMode           {@link CharacterMigrationTargetAccountMode#CREATE_NEW} to create a game
+     *                                    account with {@code targetGameAccountUsername}; {@link
+     *                                    CharacterMigrationTargetAccountMode#USE_EXISTING} to attach to an account the
+     *                                    user already has on this realm ({@code targetExistingAccountId} = emulator
+     *                                    {@code account_id}).
+     * @param targetGameAccountUsername   required when {@code targetAccountMode} is {@code CREATE_NEW} (5–20 chars).
+     * @param targetExistingAccountId     required when {@code targetAccountMode} is {@code USE_EXISTING}.
      */
     CharacterMigrationStagingDetailDto uploadFromFile(
-            Long adminUserId, Long realmId, Long allowedSourceId, byte[] fileBytes,
-            String targetGameAccountUsername, String tx);
+            Long userId, Long realmId, Long allowedSourceId, byte[] fileBytes,
+            CharacterMigrationTargetAccountMode targetAccountMode,
+            String targetGameAccountUsername,
+            Long targetExistingAccountId,
+            String tx);
 
     List<CharacterMigrationStagingListDto> listByRealm(Long realmId, String tx);
 

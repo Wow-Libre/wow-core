@@ -816,6 +816,8 @@ CREATE TABLE IF NOT EXISTS platform.character_migration_staging
     realm_id           BIGINT       NOT NULL,
     character_name     VARCHAR(80)           DEFAULT NULL,
     character_guid     VARCHAR(50)           DEFAULT NULL,
+    target_account_mode VARCHAR(32) NOT NULL DEFAULT 'CREATE_NEW' COMMENT 'CREATE_NEW | USE_EXISTING',
+    target_existing_account_id BIGINT         DEFAULT NULL COMMENT 'Emulator account_id when USE_EXISTING',
     target_game_account_username VARCHAR(20) DEFAULT NULL COMMENT 'Usuario cuenta de juego deseado; password generada al COMPLETED',
     raw_data           JSON         NOT NULL,
     status             ENUM ('PENDING', 'PROCESSING', 'COMPLETED', 'FAILED') NOT NULL DEFAULT 'PENDING',
@@ -826,12 +828,7 @@ CREATE TABLE IF NOT EXISTS platform.character_migration_staging
     CONSTRAINT fk_cms_realm FOREIGN KEY (realm_id) REFERENCES platform.realm (id) ON DELETE CASCADE
 );
 
--- Si la tabla ya existía sin esta columna:
--- ALTER TABLE platform.character_migration_staging
---     ADD COLUMN target_game_account_username VARCHAR(20) NULL COMMENT 'Usuario cuenta de juego deseado; password generada al COMPLETED' AFTER character_guid;
 
--- Orígenes permitidos: valor de ginf.realmlist del dump del addon. Solo se acepta migración si coincide (activo).
--- Si no hay filas activas, la validación de realmlist se omite (compatibilidad con entornos sin configurar).
 CREATE TABLE IF NOT EXISTS platform.character_migration_allowed_source
 (
     id              BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -844,7 +841,4 @@ CREATE TABLE IF NOT EXISTS platform.character_migration_allowed_source
     INDEX idx_cmas_active (active)
 );
 
--- Ejemplo (ajustar o eliminar según entorno):
--- INSERT INTO platform.character_migration_allowed_source (realmlist_host, display_name, active)
--- VALUES ('play.wowlibre.com', 'WoW Libre producción', true);
 

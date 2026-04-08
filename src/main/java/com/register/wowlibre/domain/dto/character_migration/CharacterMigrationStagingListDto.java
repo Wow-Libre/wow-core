@@ -1,6 +1,7 @@
 package com.register.wowlibre.domain.dto.character_migration;
 
 import com.register.wowlibre.domain.enums.CharacterMigrationStagingStatus;
+import com.register.wowlibre.domain.enums.CharacterMigrationTargetAccountMode;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,6 +23,8 @@ public class CharacterMigrationStagingListDto {
     private String characterName;
     /** En JSON: {@code character_guid}. */
     private String characterGuid;
+    private CharacterMigrationTargetAccountMode targetAccountMode;
+    private Long targetExistingAccountId;
     /** En JSON: {@code target_game_account_username}. */
     private String targetGameAccountUsername;
     private CharacterMigrationStagingStatus status;

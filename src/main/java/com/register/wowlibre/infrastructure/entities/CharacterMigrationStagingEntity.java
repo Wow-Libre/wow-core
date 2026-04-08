@@ -1,6 +1,7 @@
 package com.register.wowlibre.infrastructure.entities;
 
 import com.register.wowlibre.domain.enums.CharacterMigrationStagingStatus;
+import com.register.wowlibre.domain.enums.CharacterMigrationTargetAccountMode;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +35,21 @@ public class CharacterMigrationStagingEntity implements Serializable {
     @Column(name = "character_guid", length = 50)
     private String characterGuid;
 
-    /** Nombre de usuario deseado para la cuenta de juego en el reino destino; la contraseña la genera el backend al aprobar. */
+    /**
+     * Whether to create a new game account or use an existing one on approval.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "target_account_mode", nullable = false, length = 32)
+    private CharacterMigrationTargetAccountMode targetAccountMode = CharacterMigrationTargetAccountMode.CREATE_NEW;
+
+    /**
+     * When {@link #targetAccountMode} is {@link CharacterMigrationTargetAccountMode#USE_EXISTING}, the emulator
+     * {@code account_id} (column {@code account_game.account_id}).
+     */
+    @Column(name = "target_existing_account_id")
+    private Long targetExistingAccountId;
+
+    /** Desired game username for new accounts; for existing accounts, copied from the linked account for display. */
     @Column(name = "target_game_account_username", length = 20)
     private String targetGameAccountUsername;
 

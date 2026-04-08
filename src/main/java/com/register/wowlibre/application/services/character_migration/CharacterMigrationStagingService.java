@@ -9,12 +9,12 @@ import com.register.wowlibre.domain.port.in.account_game.*;
 import com.register.wowlibre.domain.port.in.character_migration.*;
 import com.register.wowlibre.domain.port.in.integrator.*;
 import com.register.wowlibre.domain.port.in.realm.*;
+import com.register.wowlibre.domain.port.in.subscriptions.*;
 import com.register.wowlibre.domain.port.in.user.*;
+import com.register.wowlibre.domain.port.out.account_game.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.repositories.character_migration.*;
-import com.register.wowlibre.infrastructure.util.*;
 import lombok.extern.slf4j.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
@@ -26,11 +26,13 @@ import java.util.*;
 @Slf4j
 public class CharacterMigrationStagingService implements CharacterMigrationStagingPort {
 
-    /**
-     * Alineado con {@link com.register.wowlibre.domain.dto.account_game.CreateAccountGameDto#getUsername()}.
-     */
     private static final int TARGET_GAME_USERNAME_MIN_LEN = 5;
     private static final int TARGET_GAME_USERNAME_MAX_LEN = 20;
+
+    /**
+     * Max completed character migrations per user when there is no active subscription.
+     */
+    private static final int MAX_COMPLETED_MIGRATIONS_WITHOUT_SUBSCRIPTION = 1;
 
     private final CharacterMigrationStagingRepository repository;
     private final CharacterMigrationAllowedSourceRepository allowedSourceRepository;
@@ -38,8 +40,9 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
     private final IntegratorPort integratorPort;
     private final ObjectMapper objectMapper;
     private final AccountGamePort accountGamePort;
+    private final ObtainAccountGamePort obtainAccountGamePort;
     private final UserPort userPort;
-    private final RandomString migrationGameAccountPasswordGenerator;
+    private final SubscriptionPort subscriptionPort;
 
     public CharacterMigrationStagingService(CharacterMigrationStagingRepository repository,
                                             CharacterMigrationAllowedSourceRepository allowedSourceRepository,
@@ -47,17 +50,18 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
                                             IntegratorPort integratorPort,
                                             ObjectMapper objectMapper,
                                             AccountGamePort accountGamePort,
+                                            ObtainAccountGamePort obtainAccountGamePort,
                                             UserPort userPort,
-                                            @Qualifier("resetPasswordString")
-                                            RandomString migrationGameAccountPasswordGenerator) {
+                                            SubscriptionPort subscriptionPort) {
         this.repository = repository;
         this.allowedSourceRepository = allowedSourceRepository;
         this.realmPort = realmPort;
         this.integratorPort = integratorPort;
         this.objectMapper = objectMapper;
         this.accountGamePort = accountGamePort;
+        this.obtainAccountGamePort = obtainAccountGamePort;
         this.userPort = userPort;
-        this.migrationGameAccountPasswordGenerator = migrationGameAccountPasswordGenerator;
+        this.subscriptionPort = subscriptionPort;
     }
 
     @Override
@@ -77,14 +81,45 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
     @Override
     @Transactional
     public CharacterMigrationStagingDetailDto uploadFromFile(
-            Long adminUserId, Long realmId, Long allowedSourceId, byte[] fileBytes,
-            String targetGameAccountUsername, String tx) {
+            Long userId, Long realmId, Long allowedSourceId, byte[] fileBytes,
+            CharacterMigrationTargetAccountMode targetAccountMode,
+            String targetGameAccountUsername,
+            Long targetExistingAccountId,
+            String transactionId) {
+
         if (fileBytes == null || fileBytes.length == 0) {
-            throw new BadRequestException("Archivo requerido", "");
+            throw new BadRequestException("The migration file is required", transactionId);
         }
-        String gameUsername = validateAndNormalizeTargetGameAccountUsername(targetGameAccountUsername);
-        RealmEntity realm = realmPort.findById(realmId, tx)
-                .orElseThrow(() -> new InternalException("Reino no encontrado: " + realmId, ""));
+
+        assertUserMaySubmitMigration(userId, transactionId);
+
+        CharacterMigrationTargetAccountMode mode = targetAccountMode != null
+                ? targetAccountMode
+                : CharacterMigrationTargetAccountMode.CREATE_NEW;
+
+        RealmEntity realm = realmPort.findById(realmId, transactionId)
+                .orElseThrow(() -> new InternalException("The kingdom to migrate to is not available " + realmId,
+                        transactionId));
+
+        String resolvedGameUsername;
+        Long resolvedExistingAccountId = null;
+        if (mode == CharacterMigrationTargetAccountMode.USE_EXISTING) {
+            if (targetExistingAccountId == null) {
+                throw new BadRequestException(
+                        "When using an existing game account, target_existing_account_id is required.", transactionId);
+            }
+            AccountGameEntity owned = obtainAccountGamePort
+                    .findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(userId, targetExistingAccountId, realmId,
+                            transactionId)
+                    .orElseThrow(() -> new BadRequestException(
+                            "The selected game account was not found, is inactive, or does not belong to you on this "
+                                    + "realm.",
+                            transactionId));
+            resolvedGameUsername = owned.getUsername();
+            resolvedExistingAccountId = owned.getAccountId();
+        } else {
+            resolvedGameUsername = validateAndNormalizeTargetGameAccountUsername(targetGameAccountUsername);
+        }
 
         String text = new String(fileBytes, StandardCharsets.UTF_8);
 
@@ -99,16 +134,16 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
         try {
             root = objectMapper.readTree(jsonString);
         } catch (Exception e) {
-            throw new BadRequestException("El contenido decodificado no es JSON válido: " + e.getMessage(), "");
+            throw new BadRequestException("The decoded content is not valid JSON: " + e.getMessage(), "");
         }
 
-        validateSourceRealmlist(root, allowedSourceId, tx);
+        validateSourceRealmlist(root, allowedSourceId, transactionId);
 
         String canonicalJson;
         try {
             canonicalJson = objectMapper.writeValueAsString(root);
         } catch (Exception e) {
-            throw new BadRequestException("No se pudo serializar el JSON", "");
+            throw new BadRequestException("Could not serialize the JSON", "");
         }
 
         String characterName = null;
@@ -126,80 +161,105 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
         }
 
         CharacterMigrationStagingEntity entity = new CharacterMigrationStagingEntity();
-        entity.setUserId(adminUserId);
+        entity.setUserId(userId);
         entity.setRealm(realm);
         entity.setCharacterName(characterName);
         entity.setCharacterGuid(characterGuid);
-        entity.setTargetGameAccountUsername(gameUsername);
+        entity.setTargetAccountMode(mode);
+        entity.setTargetExistingAccountId(resolvedExistingAccountId);
+        entity.setTargetGameAccountUsername(resolvedGameUsername);
         entity.setRawData(canonicalJson);
         entity.setStatus(CharacterMigrationStagingStatus.PENDING);
         entity.setValidationErrors(null);
 
         CharacterMigrationStagingEntity saved = repository.save(entity);
-        log.info("[{}] Migración staging creada id={} realmId={}", tx, saved.getId(), realmId);
         return toDetailDto(saved, root);
+    }
+
+    /**
+     * Enforces one pending migration per user and a cap on completed migrations without subscription.
+     */
+    private void assertUserMaySubmitMigration(Long userId, String transactionId) {
+        if (repository.existsByUserIdAndStatus(userId, CharacterMigrationStagingStatus.PENDING)) {
+            throw new BadRequestException(
+                    "You already have a character migration request pending; wait until it is processed.",
+                    transactionId);
+        }
+        if (!subscriptionPort.isActiveSubscription(userId, transactionId)) {
+            long completed = repository.countByUserIdAndStatus(userId, CharacterMigrationStagingStatus.COMPLETED);
+            if (completed >= MAX_COMPLETED_MIGRATIONS_WITHOUT_SUBSCRIPTION) {
+                throw new BadRequestException(
+                        "Without an active subscription you may complete at most "
+                                + MAX_COMPLETED_MIGRATIONS_WITHOUT_SUBSCRIPTION + " character migrations.",
+                        transactionId);
+            }
+        }
     }
 
     private String validateAndNormalizeTargetGameAccountUsername(String raw) {
         if (raw == null || raw.isBlank()) {
             throw new BadRequestException(
-                    "Indicá el nombre de usuario de la cuenta de juego que querés en el reino (entre "
-                            + TARGET_GAME_USERNAME_MIN_LEN + " y " + TARGET_GAME_USERNAME_MAX_LEN + " caracteres).",
+                    "Provide the game account username you want on the realm (between "
+                            + TARGET_GAME_USERNAME_MIN_LEN + " and " + TARGET_GAME_USERNAME_MAX_LEN + " characters).",
                     "");
         }
         String s = raw.strip();
         if (s.length() < TARGET_GAME_USERNAME_MIN_LEN || s.length() > TARGET_GAME_USERNAME_MAX_LEN) {
             throw new BadRequestException(
-                    "El nombre de usuario de la cuenta de juego debe tener entre " + TARGET_GAME_USERNAME_MIN_LEN
-                            + " y " + TARGET_GAME_USERNAME_MAX_LEN + " caracteres.", "");
+                    "The game account username must be between " + TARGET_GAME_USERNAME_MIN_LEN
+                            + " and " + TARGET_GAME_USERNAME_MAX_LEN + " characters.",
+                    "");
         }
         return s;
     }
 
     /**
-     * Si hay orígenes activos: exige {@code allowedSourceId}, que el registro exista y que
-     * {@code ginf.realmlist} coincida con ese origen (sin distinguir mayúsculas).
+     * When active sources exist: requires {@code allowedSourceId}, that the row
+     * exists, and that
+     * {@code ginf.realmlist} matches that source (case-insensitive).
      */
     private void validateSourceRealmlist(JsonNode root, Long allowedSourceId, String tx) {
         long allowedCount = allowedSourceRepository.countByActiveTrue();
         if (allowedCount == 0) {
-            log.warn("[{}] Sin orígenes en character_migration_allowed_source: se omite validación de ginf.realmlist",
+            log.warn("[{}] No rows in character_migration_allowed_source: skipping ginf.realmlist validation",
                     tx);
             return;
         }
         if (allowedSourceId == null) {
             throw new BadRequestException(
-                    "Debés indicar el servidor de origen de la migración (allowed_source_id).", "");
+                    "You must specify the migration source server (allowed_source_id).", "");
         }
         CharacterMigrationAllowedSourceEntity chosen = allowedSourceRepository
                 .findByIdAndActiveTrue(allowedSourceId)
                 .orElseThrow(() -> new BadRequestException(
-                        "El servidor de origen seleccionado no existe o no está disponible.", ""));
+                        "The selected source server does not exist or is not available.", ""));
 
         JsonNode ginf = root.get("ginf");
         if (ginf == null || !ginf.isObject()) {
             throw new BadRequestException(
-                    "El dump no incluye el bloque ginf necesario para validar el origen de la migración.", "");
+                    "The dump does not include the ginf block required to validate the migration source.", "");
         }
         JsonNode realmlistNode = ginf.get("realmlist");
         if (realmlistNode == null || realmlistNode.isNull() || realmlistNode.asText("").isBlank()) {
             throw new BadRequestException(
-                    "El dump no incluye ginf.realmlist; no se puede validar el servidor de origen.", "");
+                    "The dump does not include ginf.realmlist; the source server cannot be validated.", "");
         }
         String hostFromDump = realmlistNode.asText().strip();
         String expected = chosen.getRealmlistHost() != null ? chosen.getRealmlistHost().strip() : "";
         if (expected.isEmpty() || !hostFromDump.equalsIgnoreCase(expected)) {
             throw new BadRequestException(
-                    "El dump no coincide con el origen elegido: ginf.realmlist es \"" + hostFromDump
-                            + "\" pero indicaste el origen \"" + expected
-                            + "\". Elegí el servidor del que venís o generá el dump en ese realmlist.", "");
+                    "The dump does not match the selected source: ginf.realmlist is \"" + hostFromDump
+                            + "\" but you selected source \"" + expected
+                            + "\". Choose the server you are migrating from or generate the dump against that " +
+                            "realmlist.",
+                    "");
         }
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CharacterMigrationStagingListDto> listByRealm(Long realmId, String tx) {
-        realmPort.findById(realmId, tx).orElseThrow(() -> new InternalException("Reino no encontrado: " + realmId, ""));
+        realmPort.findById(realmId, tx).orElseThrow(() -> new InternalException("Realm not found: " + realmId, ""));
         return repository.findByRealm_IdOrderByCreatedAtDesc(realmId).stream()
                 .map(this::toListDto)
                 .toList();
@@ -210,8 +270,7 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
     public List<CharacterMigrationStagingListDto> listForUser(Long userId, Long realmId, String tx) {
         List<CharacterMigrationStagingEntity> rows;
         if (realmId != null) {
-            realmPort.findById(realmId, tx).orElseThrow(() -> new InternalException("Reino no encontrado: " + realmId
-                    , ""));
+            realmPort.findById(realmId, tx).orElseThrow(() -> new InternalException("Realm not found: " + realmId, ""));
             rows = repository.findByRealmIdAndUserIdWithRealmOrderByCreatedAtDesc(realmId, userId);
         } else {
             rows = repository.findAllByUserIdWithRealmOrderByCreatedAtDesc(userId);
@@ -223,12 +282,12 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
     @Transactional(readOnly = true)
     public CharacterMigrationStagingDetailDto getDetail(Long id, Long realmId, String tx) {
         CharacterMigrationStagingEntity entity = repository.findByIdAndRealm_Id(id, realmId)
-                .orElseThrow(() -> new BadRequestException("Registro no encontrado", ""));
+                .orElseThrow(() -> new BadRequestException("Record not found", ""));
         JsonNode root;
         try {
             root = objectMapper.readTree(entity.getRawData());
         } catch (Exception e) {
-            log.warn("[{}] raw_data inválido para id={}", tx, id, e);
+            log.warn("[{}] Invalid raw_data for id={}", tx, id, e);
             root = objectMapper.createObjectNode();
         }
         return toDetailDto(entity, root);
@@ -238,30 +297,45 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
     @Transactional
     public CharacterMigrationStagingDetailDto updateStatus(Long id, Long realmId,
                                                            CharacterMigrationStagingStatus status, String tx) {
-        RealmEntity realm = realmPort.findById(realmId, tx).orElseThrow(() -> new InternalException("Reino no " +
-                "encontrado: " + realmId, ""));
+        RealmEntity realm = realmPort.findById(realmId, tx).orElseThrow(() -> new InternalException("Realm not " +
+                "found: " + realmId, ""));
 
         CharacterMigrationStagingEntity characterMigrationStaging = repository.findByIdAndRealm_Id(id, realmId)
-                .orElseThrow(() -> new BadRequestException("Registro no encontrado", ""));
+                .orElseThrow(() -> new BadRequestException("Record not found", ""));
         characterMigrationStaging.setStatus(status);
-        CharacterMigrationStagingEntity saved = repository.save(characterMigrationStaging);
-
 
         if (status == CharacterMigrationStagingStatus.COMPLETED) {
-            UserEntity userRequest =
-                    userPort.findByUserId(characterMigrationStaging.getUserId(), tx).orElseThrow(() -> new InternalException(
-                            "Usuario no  encontrado: " + characterMigrationStaging.getUserId(), tx));
+            CharacterMigrationTargetAccountMode targetMode = characterMigrationStaging.getTargetAccountMode() != null
+                    ? characterMigrationStaging.getTargetAccountMode()
+                    : CharacterMigrationTargetAccountMode.CREATE_NEW;
+            Long accountIdForIntegrator;
+            if (targetMode == CharacterMigrationTargetAccountMode.USE_EXISTING) {
+                if (characterMigrationStaging.getTargetExistingAccountId() == null) {
+                    throw new InternalException("Migration request is missing target_existing_account_id.", tx);
+                }
+                accountIdForIntegrator = obtainAccountGamePort
+                        .findByUserIdAndAccountIdAndRealmIdAndStatusIsTrue(characterMigrationStaging.getUserId(),
+                                characterMigrationStaging.getTargetExistingAccountId(), realmId, tx)
+                        .map(AccountGameEntity::getAccountId)
+                        .orElseThrow(() -> new InternalException(
+                                "Target game account is no longer available for this migration.", tx));
+            } else {
+                UserEntity userRequest = userPort.findByUserId(characterMigrationStaging.getUserId(), tx)
+                        .orElseThrow(() -> new InternalException(
+                                "User not found: " + characterMigrationStaging.getUserId(), tx));
+                AccountGameEntity accountGame = accountGamePort.create(characterMigrationStaging.getUserId(),
+                        realm.getName(), realm.getExpansionId(),
+                        characterMigrationStaging.getTargetGameAccountUsername(), userRequest.getEmail(),
+                        characterMigrationStaging.getTargetGameAccountUsername() + "wowlibre", tx);
+                accountIdForIntegrator = accountGame.getAccountId();
+            }
 
-            String generatedPassword = migrationGameAccountPasswordGenerator.nextString();
-            AccountGameEntity accountGame = accountGamePort.create(characterMigrationStaging.getUserId(),
-                    realm.getName(), realm.getExpansionId(),
-                    characterMigrationStaging.getTargetGameAccountUsername(), userRequest.getEmail(),
-                    "sebastian", tx);
-
-            WowLibreClientMigrationApprovedPayloadDto payload = buildMigrationApprovedPayload(saved,
-                    accountGame.getAccountId(), realmId, realm.getEmulator());
+            WowLibreClientMigrationApprovedPayloadDto payload = buildMigrationApprovedPayload(characterMigrationStaging,
+                    accountIdForIntegrator, realmId, realm.getEmulator());
             integratorPort.notifyCharacterMigrationApproved(realm.getHost(), realm.getJwt(), payload, tx);
         }
+
+        CharacterMigrationStagingEntity saved = repository.save(characterMigrationStaging);
 
         JsonNode root;
         try {
@@ -272,15 +346,15 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
         return toDetailDto(saved, root);
     }
 
-
-    private WowLibreClientMigrationApprovedPayloadDto buildMigrationApprovedPayload(CharacterMigrationStagingEntity saved,
-                                                                                    Long accountId, Long realmId,
-                                                                                    String emulator) {
+    private WowLibreClientMigrationApprovedPayloadDto buildMigrationApprovedPayload(
+            CharacterMigrationStagingEntity saved,
+            Long accountId, Long realmId,
+            String emulator) {
         CharacterMigrationDumpDto dump;
         try {
             dump = objectMapper.readValue(saved.getRawData(), CharacterMigrationDumpDto.class);
         } catch (Exception e) {
-            log.warn("raw_data inválido para payload integrador id={}", saved.getId(), e);
+            log.warn("Invalid raw_data for integrator payload id={}", saved.getId(), e);
             dump = CharacterMigrationDumpDto.builder().build();
         }
         if (dump == null) {
@@ -310,6 +384,10 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
                 .realmId(e.getRealm() != null ? e.getRealm().getId() : null)
                 .characterName(e.getCharacterName())
                 .characterGuid(e.getCharacterGuid())
+                .targetAccountMode(e.getTargetAccountMode() != null
+                        ? e.getTargetAccountMode()
+                        : CharacterMigrationTargetAccountMode.CREATE_NEW)
+                .targetExistingAccountId(e.getTargetExistingAccountId())
                 .targetGameAccountUsername(e.getTargetGameAccountUsername())
                 .status(e.getStatus())
                 .createdAt(e.getCreatedAt())
@@ -324,6 +402,10 @@ public class CharacterMigrationStagingService implements CharacterMigrationStagi
                 .realmId(e.getRealm() != null ? e.getRealm().getId() : null)
                 .characterName(e.getCharacterName())
                 .characterGuid(e.getCharacterGuid())
+                .targetAccountMode(e.getTargetAccountMode() != null
+                        ? e.getTargetAccountMode()
+                        : CharacterMigrationTargetAccountMode.CREATE_NEW)
+                .targetExistingAccountId(e.getTargetExistingAccountId())
                 .targetGameAccountUsername(e.getTargetGameAccountUsername())
                 .status(e.getStatus())
                 .validationErrors(e.getValidationErrors())

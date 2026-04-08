@@ -1,5 +1,6 @@
 package com.register.wowlibre.infrastructure.repositories.character_migration;
 
+import com.register.wowlibre.domain.enums.CharacterMigrationStagingStatus;
 import com.register.wowlibre.infrastructure.entities.CharacterMigrationStagingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CharacterMigrationStagingRepository extends JpaRepository<CharacterMigrationStagingEntity, Long> {
+
+    boolean existsByUserIdAndStatus(Long userId, CharacterMigrationStagingStatus status);
+
+    long countByUserIdAndStatus(Long userId, CharacterMigrationStagingStatus status);
 
     List<CharacterMigrationStagingEntity> findByRealm_IdOrderByCreatedAtDesc(Long realmId);
 
