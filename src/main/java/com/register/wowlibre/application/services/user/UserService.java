@@ -16,6 +16,7 @@ import com.register.wowlibre.domain.shared.*;
 import com.register.wowlibre.infrastructure.config.*;
 import com.register.wowlibre.infrastructure.entities.*;
 import com.register.wowlibre.infrastructure.util.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.crypto.password.*;
@@ -310,6 +311,23 @@ public class UserService implements UserPort {
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
+        saveUserPort.save(user, transactionId);
+    }
+
+    @Override
+    public void updateAvatarUrl(Long userId, String avatarUrl, String transactionId) {
+        final Optional<UserEntity> userFound = findByUserId(userId, transactionId);
+        if (userFound.isEmpty() || !userFound.get().getStatus()) {
+            throw new InternalException("It was not possible to update the avatar", transactionId);
+        }
+
+        final String trimmed = StringUtils.trimToEmpty(avatarUrl);
+        if (trimmed.isEmpty() || !(trimmed.startsWith("http://") || trimmed.startsWith("https://"))) {
+            throw new InternalException("Avatar URL is invalid", transactionId);
+        }
+
+        UserEntity user = userFound.get();
+        user.setAvatarUrl(trimmed);
         saveUserPort.save(user, transactionId);
     }
 

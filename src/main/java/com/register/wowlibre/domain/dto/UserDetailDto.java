@@ -8,6 +8,7 @@ import java.time.*;
 @Builder
 public class UserDetailDto {
     private Long id;
+    private String avatar;
     private String country;
     private LocalDate dateOfBirth;
     private String firstName;

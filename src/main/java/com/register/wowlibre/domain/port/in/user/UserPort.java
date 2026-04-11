@@ -28,5 +28,7 @@ public interface UserPort {
 
     void changePassword(Long userId, String password, String newPassword, String transactionId);
 
+    void updateAvatarUrl(Long userId, String avatarUrl, String transactionId);
+
 
 }

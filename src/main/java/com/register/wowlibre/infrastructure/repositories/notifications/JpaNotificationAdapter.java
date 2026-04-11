@@ -29,6 +29,11 @@ public class JpaNotificationAdapter implements ObtainNotification, ManageNotific
     }
 
     @Override
+    public List<NotificationEntity> findVisibleForUser(Long userId, String transactionId) {
+        return notificationRepository.findVisibleForUser(userId);
+    }
+
+    @Override
     public Set<Long> findReadNotificationIdsByUserId(Long userId, String transactionId) {
         return notificationReadRepository.findByUserId(userId).stream()
                 .map(NotificationReadEntity::getNotificationId)

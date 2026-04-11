@@ -10,6 +10,11 @@ public interface ObtainNotification {
 
     List<NotificationEntity> findAllOrderByCreatedAtDesc(String transactionId);
 
+    /**
+     * Notificaciones que debe ver un usuario: globales (sin destinatario) + las dirigidas a él.
+     */
+    List<NotificationEntity> findVisibleForUser(Long userId, String transactionId);
+
     /** IDs of notifications that this user has marked as read. */
     Set<Long> findReadNotificationIdsByUserId(Long userId, String transactionId);
 
