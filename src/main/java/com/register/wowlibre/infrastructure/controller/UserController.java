@@ -95,6 +95,7 @@ public class UserController {
         UserDetailDto userResponse = userPort.findByUserId(userId, transactionId)
                 .map(model -> UserDetailDto.builder()
                         .id(model.getId())
+                        .avatar(model.getAvatarUrl())
                         .country(model.getCountry())
                         .dateOfBirth(model.getDateOfBirth())
                         .firstName(model.getFirstName())
@@ -212,6 +213,26 @@ public class UserController {
 
         userPort.changePassword(userId, changePassword.getPassword(),
                 changePassword.getNewPassword(), transactionId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new GenericResponseBuilder<Void>(transactionId).ok().build());
+    }
+
+    @PutMapping(path = "/avatar")
+    @Operation(
+            summary = "Update user avatar",
+            description = "Updates the avatar URL for the authenticated user.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Avatar updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request - Invalid avatar URL"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<GenericResponse<Void>> updateAvatar(
+            @RequestHeader(name = HEADER_TRANSACTION_ID, required = false) final String transactionId,
+            @RequestHeader(name = HEADER_USER_ID) final Long userId,
+            @RequestBody @Valid UpdateAvatarUserDto payload) {
+
+        userPort.updateAvatarUrl(userId, payload.getAvatarUrl(), transactionId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new GenericResponseBuilder<Void>(transactionId).ok().build());

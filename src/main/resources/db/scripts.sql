@@ -711,11 +711,17 @@ DROP TABLE IF EXISTS trivia_daily_create;
 -- MySQL: id debe ser AUTO_INCREMENT para que Hibernate (GenerationType.IDENTITY) asigne el valor.
 CREATE TABLE IF NOT EXISTS platform.notifications
 (
-    id         BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    title      VARCHAR(500) NOT NULL,
-    message    TEXT,
-    created_at TIMESTAMP    NULL
+    id                  BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    title               VARCHAR(500) NOT NULL,
+    message             TEXT,
+    created_at          TIMESTAMP    NULL,
+    recipient_user_id   BIGINT       NULL,
+    INDEX idx_notifications_recipient (recipient_user_id)
 );
+
+-- Bases ya creadas antes de recipient_user_id: ejecutar una vez si falla el arranque por columna ausente.
+-- ALTER TABLE platform.notifications ADD COLUMN recipient_user_id BIGINT NULL;
+-- CREATE INDEX idx_notifications_recipient ON platform.notifications (recipient_user_id);
 
 CREATE TABLE IF NOT EXISTS platform.notification_read
 (
@@ -806,5 +812,57 @@ CREATE TABLE IF NOT EXISTS platform.user_cards
     UNIQUE KEY uk_user_card (user_id, card_code),
     INDEX idx_user_cards_user (user_id),
     CONSTRAINT fk_user_cards_catalog FOREIGN KEY (card_code) REFERENCES platform.card_catalog (code) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- =========================================================
+-- Red social (feed): publicaciones, multimedia, likes, comentarios
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS platform.social_post
+(
+    id         BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id    BIGINT       NOT NULL,
+    content    TEXT         NOT NULL,
+    created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME              DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME     NULL,
+    INDEX idx_social_post_user_created (user_id, created_at DESC),
+    CONSTRAINT fk_social_post_user FOREIGN KEY (user_id) REFERENCES platform.user (id)
+);
+
+CREATE TABLE IF NOT EXISTS platform.social_post_media
+(
+    id          BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    post_id     BIGINT       NOT NULL,
+    url         VARCHAR(1024) NOT NULL,
+    sort_order  INT          NOT NULL DEFAULT 0,
+    created_at  DATETIME              DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_social_media_post (post_id),
+    CONSTRAINT fk_social_media_post FOREIGN KEY (post_id) REFERENCES platform.social_post (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS platform.social_post_like
+(
+    id         BIGINT   NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    post_id    BIGINT   NOT NULL,
+    user_id    BIGINT   NOT NULL,
+    created_at DATETIME          DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_social_like_post_user (post_id, user_id),
+    INDEX idx_social_like_post (post_id),
+    CONSTRAINT fk_social_like_post FOREIGN KEY (post_id) REFERENCES platform.social_post (id) ON DELETE CASCADE,
+    CONSTRAINT fk_social_like_user FOREIGN KEY (user_id) REFERENCES platform.user (id)
+);
+
+CREATE TABLE IF NOT EXISTS platform.social_post_comment
+(
+    id         BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    post_id    BIGINT        NOT NULL,
+    user_id    BIGINT        NOT NULL,
+    content    VARCHAR(2000) NOT NULL,
+    created_at DATETIME               DEFAULT CURRENT_TIMESTAMP,
+    deleted_at DATETIME      NULL,
+    INDEX idx_social_comment_post_created (post_id, created_at),
+    CONSTRAINT fk_social_comment_post FOREIGN KEY (post_id) REFERENCES platform.social_post (id) ON DELETE CASCADE,
+    CONSTRAINT fk_social_comment_user FOREIGN KEY (user_id) REFERENCES platform.user (id)
 );
 

@@ -26,7 +26,7 @@ public class NotificationService implements NotificationPort {
 
     @Override
     public List<NotificationDto> findByUserId(Long userId, boolean unreadOnly, String transactionId) {
-        List<NotificationEntity> all = obtainNotification.findAllOrderByCreatedAtDesc(transactionId);
+        List<NotificationEntity> all = obtainNotification.findVisibleForUser(userId, transactionId);
         Set<Long> readIds = obtainNotification.findReadNotificationIdsByUserId(userId, transactionId);
         List<NotificationEntity> list = unreadOnly
                 ? all.stream().filter(n -> !readIds.contains(n.getId())).toList()
@@ -45,7 +45,7 @@ public class NotificationService implements NotificationPort {
 
     @Override
     public void markAllAsRead(Long userId, String transactionId) {
-        List<NotificationEntity> all = obtainNotification.findAllOrderByCreatedAtDesc(transactionId);
+        List<NotificationEntity> all = obtainNotification.findVisibleForUser(userId, transactionId);
         Set<Long> readIds = obtainNotification.findReadNotificationIdsByUserId(userId, transactionId);
         List<Long> unreadIds = all.stream()
                 .map(NotificationEntity::getId)
